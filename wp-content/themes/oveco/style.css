@@ -1,367 +1,225 @@
-/*
-Theme Name: Oveco
-Description: Thème WordPress moderne avec Timber/Twig. Architecture clean et performante.
-Version: 1.0.0
-Author: Votre Nom
-Text Domain: oveco
-Requires at least: 5.0
-Tested up to: 6.3
-Requires PHP: 7.4
-License: GPL v2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
-*/
+@charset "UTF-8";
+:root {
+  --color-bg: #ffffff;
+  --color-text: #121212;
+  --color-accent: #048B9A;
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --radius: 12px;
+}
 
-/* ==========================================================================
-   Reset & Base Styles
-   ========================================================================== */
+/* Reset léger et base typographique */
+html {
+  box-sizing: border-box;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*, *::before, *::after {
+  box-sizing: inherit;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #fff;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
 }
 
 a {
-    text-decoration: none;
-    color: #0073aa;
-    transition: color 0.3s ease;
+  color: var(--color-accent);
+  text-decoration: none;
 }
 
-a:hover {
-    color: #005a87;
-}
-
-/* ==========================================================================
-   Layout
-   ========================================================================== */
-
+/* Layout de base */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-3);
 }
 
-.site {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+.site-header, .site-footer {
+  background: var(--color-accent);
+  color: #fff;
+  padding: var(--space-3) 0;
 }
 
-.site-main {
-    flex: 1;
-    padding: 40px 0;
+/* Import des composants */
+/* ===================================
+   Homepage Styles - Témoignages et Projets
+   =================================== */
+.testimonials-section, .projects-section {
+  padding: 3rem 0;
+  margin: 2rem 0;
 }
 
-/* ==========================================================================
-   Header
-   ========================================================================== */
-
-.site-header {
-    background: #fff;
-    border-bottom: 1px solid #eee;
-    padding: 20px 0;
+.testimonials-section {
+  background: #f8f9fa;
 }
 
-.site-header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.testimonials-section h1, .projects-section h1 {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2.5rem;
+  color: #333;
 }
 
-.site-branding {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.site-logo {
-    max-height: 50px;
-}
-
-.site-title {
-    font-size: 1.8rem;
-    margin: 0;
-}
-
-.site-title a {
-    color: #333;
-}
-
-.site-description {
-    color: #666;
-    font-size: 0.9rem;
-    margin: 0;
-}
-
-/* Navigation */
-.main-navigation ul {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-    margin: 0;
-}
-
-.main-navigation a {
-    font-weight: 500;
-    padding: 10px 0;
-}
-
-/* ==========================================================================
-   Content
-   ========================================================================== */
-
-/* Sections */
-section {
-    padding: 60px 0;
-}
-
-section h2 {
-    text-align: center;
-    font-size: 2.2rem;
-    margin-bottom: 50px;
-    color: #333;
-}
-
-/* Testimonials Featured */
-.testimonials-featured {
-    background: #f8f9fa;
-}
-
-.testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-
-/* Testimonials All */
-.testimonials-all {
-    background: white;
+.testimonials-list, .projects-list {
+  display: grid;
+  gap: 2rem;
+  margin-top: 1rem;
 }
 
 .testimonials-list {
-    max-width: 800px;
-    margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
 }
 
-.testimonials-cta {
-    text-align: center;
-    margin-top: 40px;
+.projects-list {
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
 }
 
-/* Posts Grid */
-.posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
-    margin-bottom: 40px;
+.testimonial-item, .project-item {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.post-item,
-.post-card {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.testimonial-item:hover, .project-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.post-item:hover,
-.post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+.testimonial-item h3, .project-item h3 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.3rem;
 }
 
-.post-thumbnail img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+.testimonial-content {
+  margin-bottom: 2rem;
+  line-height: 1.8;
+  font-style: italic;
+  color: #444;
+  font-size: 1.1rem;
 }
 
-.post-content {
-    padding: 20px;
+.project-content {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  color: #555;
 }
 
-.post-title,
-.post-card h3 {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
+.testimonial-author {
+  border-top: 2px solid #eee;
+  padding-top: 1.5rem;
 }
 
-.post-title a,
-.post-card h3 a {
-    color: #333;
+.client-name {
+  margin: 0.3rem 0;
+  color: #333;
+  font-size: 1.2rem;
 }
 
-.post-meta {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 15px;
+.client-position {
+  margin: 0.3rem 0;
+  color: #666;
+  font-style: italic;
+  font-size: 1rem;
 }
 
-.post-meta span:not(:last-child)::after {
-    content: " • ";
-    margin: 0 5px;
+.client-company {
+  margin: 0.3rem 0;
+  color: #888;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
-.post-excerpt {
-    color: #555;
-    margin-bottom: 15px;
+.project-meta {
+  margin: 1.5rem 0;
+  padding: 1.5rem 0;
+  border-top: 2px solid #eee;
 }
 
-.read-more {
-    color: #0073aa;
-    font-weight: 500;
+.project-client {
+  margin: 0.8rem 0;
+  color: #666;
+  font-size: 1rem;
 }
 
-/* CTA Section */
-.cta {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    text-align: center;
+.project-tags {
+  margin: 1rem 0;
+  color: #666;
 }
 
-.cta h2 {
-    color: white;
-    margin-bottom: 20px;
+.tag {
+  display: inline-block;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  color: #1976d2;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  margin: 0.3rem 0.4rem 0.3rem 0;
+  font-weight: 600;
+  transition: transform 0.2s ease;
 }
 
-.cta p {
-    font-size: 1.1rem;
-    margin-bottom: 30px;
-    opacity: 0.9;
+.tag:hover {
+  transform: scale(1.05);
 }
 
-/* Buttons */
-.btn {
-    display: inline-block;
-    padding: 12px 30px;
-    border-radius: 6px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
+.project-url {
+  margin: 1.5rem 0 0 0;
+  text-align: center;
 }
 
-.btn-primary {
-    background: #0073aa;
-    color: white;
+.project-url a {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 0.8rem 1.8rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-.btn-primary:hover {
-    background: #005a87;
-    transform: translateY(-2px);
+.project-url a:hover {
+  background: linear-gradient(135deg, #5a6fd8, #6a4190);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
-
-/* No Posts */
-.no-posts {
-    text-align: center;
-    padding: 60px 20px;
-}
-
-.no-posts h2 {
-    margin-bottom: 15px;
-    color: #666;
-}
-
-/* ==========================================================================
-   Footer
-   ========================================================================== */
-
-.site-footer {
-    background: #f8f8f8;
-    border-top: 1px solid #eee;
-    padding: 30px 0;
-    margin-top: auto;
-}
-
-.site-footer .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.site-info {
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.footer-navigation ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    margin: 0;
-}
-
-.footer-navigation a {
-    color: #666;
-    font-size: 0.9rem;
-}
-
-/* ==========================================================================
-   Pagination
-   ========================================================================== */
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 40px;
-}
-
-.pagination a,
-.pagination span {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    color: #0073aa;
-}
-
-.pagination .current {
-    background: #0073aa;
-    color: #fff;
-    border-color: #0073aa;
-}
-
-/* ==========================================================================
-   Responsive
-   ========================================================================== */
 
 @media (max-width: 768px) {
-    .site-header .container {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .main-navigation ul {
-        gap: 20px;
-    }
-    
-    .posts-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .site-footer .container {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-    }
-    
-    .footer-navigation ul {
-        justify-content: center;
-    }
+  .testimonials-list, .projects-list {
+    grid-template-columns: 1fr;
+  }
+  .testimonials-section h1, .projects-section h1 {
+    font-size: 2rem;
+  }
+  .testimonial-item, .project-item {
+    padding: 1.5rem;
+  }
+}
+/* Composants de base */
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: var(--space-3);
 }
 
+.button {
+  display: inline-block;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=style.css.map */

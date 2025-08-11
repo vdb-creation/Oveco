@@ -1,0 +1,468 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<main class="projects-archive">
+    <!-- En-tête de l'archive -->
+    <header class="archive-header">
+        <div class="container">
+            <h1>Portfolio de projets</h1>
+            <p class="archive-description">Découvrez nos réalisations clients</p>
+        </div>
+    </header>
+    
+    <!-- Filtres -->
+    <section class="projects-filters">
+        <div class="container">
+            <div class="filters-wrapper">
+                <!-- Filtre par priorité -->
+                <div class="filter-group">
+                    <label for="priority-filter">Priorité :</label>
+                    <select id="priority-filter" class="filter-select">
+                        <option value="">Toutes les priorités</option>
+                        <option value="tres-haute">Très haute</option>
+                        <option value="haute">Haute</option>
+                        <option value="moyenne">Moyenne</option>
+                        <option value="normale">Normale</option>
+                    </select>
+                </div>
+                
+                <!-- Filtre par tags -->
+                <div class="filter-group">
+                    <label for="tags-filter">Tags :</label>
+                    <select id="tags-filter" class="filter-select">
+                        <option value="">Tous les tags</option>
+                        {% for tag in all_tags %}
+                            <option value="{{ tag.slug }}">{{ tag.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Filtre par statut -->
+                <div class="filter-group">
+                    <label for="status-filter">Statut :</label>
+                    <select id="status-filter" class="filter-select">
+                        <option value="">Tous les statuts</option>
+                        <option value="termine">Terminé</option>
+                        <option value="en-cours">En cours</option>
+                        <option value="en-maintenance">En maintenance</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Grille des projets -->
+    <section class="projects-grid-section">
+        <div class="container">
+            {% if projects %}
+                <div class="projects-grid" id="projects-container">
+                    {% for project in projects %}
+                        <article class="project-card" 
+                                 data-priority="{{ project.priority ? project.priority.slug : '' }}"
+                                 data-tags="{% for tag in project.tags %}{{ tag.slug }}{% if not loop.last %} {% endif %}{% endfor %}"
+                                 data-status="{{ project.status }}">
+                            
+                            <!-- Image du projet -->
+                            {% if project.thumbnail %}
+                                <div class="project-image">
+                                    <a href="{{ project.link }}">
+                                        <img src="{{ project.thumbnail.src }}" alt="{{ project.title }}">
+                                    </a>
+                                    {% if project.priority %}
+                                        <span class="priority-badge priority-{{ project.priority.slug }}">
+                                            {{ project.priority.name }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Contenu de la carte -->
+                            <div class="project-card-content">
+                                <h3 class="project-title">
+                                    <a href="{{ project.link }}">{{ project.title }}</a>
+                                </h3>
+                                
+                                {% if project.excerpt %}
+                                    <p class="project-excerpt">{{ project.excerpt }}</p>
+                                {% endif %}
+                                
+                                <!-- Métadonnées -->
+                                <div class="project-meta">
+                                    {% if project.client %}
+                                        <span class="project-client">
+                                            <strong>Client:</strong> {{ project.client }}
+                                        </span>
+                                    {% endif %}
+                                    
+                                    {% if project.date %}
+                                        <span class="project-date">
+                                            <strong>Date:</strong> {{ project.date | date('F Y') }}
+                                        </span>
+                                    {% endif %}
+                                    
+                                    {% if project.status %}
+                                        <span class="project-status status-{{ project.status }}">
+                                            {% if project.status == 'en-cours' %}
+                                                🔄 En cours
+                                            {% elseif project.status == 'termine' %}
+                                                ✅ Terminé
+                                            {% elseif project.status == 'en-maintenance' %}
+                                                🔧 Maintenance
+                                            {% elseif project.status == 'archive' %}
+                                                📦 Archivé
+                                            {% else %}
+                                                {{ project.status }}
+                                            {% endif %}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Tags -->
+                                {% if project.tags %}
+                                    <div class="project-tags">
+                                        {% for tag in project.tags %}
+                                            <span class="tag">{{ tag.name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Liens -->
+                                <div class="project-actions">
+                                    <a href="{{ project.link }}" class="btn-primary">Voir le projet</a>
+                                    {% if project.url %}
+                                        <a href="{{ project.url }}" target="_blank" class="btn-secondary">Site web</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+                
+                <!-- Message si aucun projet trouvé après filtrage -->
+                <div id="no-projects-message" class="no-projects" style="display: none;">
+                    <p>Aucun projet ne correspond aux filtres sélectionnés.</p>
+                </div>
+            {% else %}
+                <div class="no-projects">
+                    <p>Aucun projet disponible pour le moment.</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<style>
+.projects-archive {
+    margin-top: 2rem;
+}
+
+.archive-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.archive-header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.archive-description {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.projects-filters {
+    background: #f8f9fa;
+    padding: 2rem 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.filters-wrapper {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.filter-select {
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background: white;
+    min-width: 150px;
+}
+
+.projects-grid-section {
+    padding: 4rem 0;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.project-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.project-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image img {
+    transform: scale(1.05);
+}
+
+.priority-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+}
+
+.priority-tres-haute {
+    background: #dc3545;
+}
+
+.priority-haute {
+    background: #fd7e14;
+}
+
+.priority-moyenne {
+    background: #ffc107;
+    color: #212529;
+}
+
+.priority-normale {
+    background: #28a745;
+}
+
+.project-card-content {
+    padding: 1.5rem;
+}
+
+.project-title {
+    margin-bottom: 1rem;
+}
+
+.project-title a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.project-title a:hover {
+    color: #667eea;
+}
+
+.project-excerpt {
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.project-meta {
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.project-meta > span {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #666;
+}
+
+.project-tags {
+    margin: 1rem 0;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background: #e9ecef;
+    color: #495057;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.project-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5a6fd8;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.no-projects {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+    font-style: italic;
+}
+
+.status-en-cours {
+    color: #007bff;
+}
+
+.status-termine {
+    color: #28a745;
+}
+
+.status-en-maintenance {
+    color: #ffc107;
+}
+
+.status-archive {
+    color: #6c757d;
+}
+
+@media (max-width: 768px) {
+    .archive-header h1 {
+        font-size: 2rem;
+    }
+    
+    .filters-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const priorityFilter = document.getElementById('priority-filter');
+    const tagsFilter = document.getElementById('tags-filter');
+    const statusFilter = document.getElementById('status-filter');
+    const projectsContainer = document.getElementById('projects-container');
+    const noProjectsMessage = document.getElementById('no-projects-message');
+    
+    function filterProjects() {
+        const selectedPriority = priorityFilter.value;
+        const selectedTag = tagsFilter.value;
+        const selectedStatus = statusFilter.value;
+        
+        const projectCards = projectsContainer.querySelectorAll('.project-card');
+        let visibleCount = 0;
+        
+        projectCards.forEach(card => {
+            const cardPriority = card.dataset.priority;
+            const cardTags = card.dataset.tags.split(' ');
+            const cardStatus = card.dataset.status;
+            
+            let showCard = true;
+            
+            // Filtre priorité
+            if (selectedPriority && cardPriority !== selectedPriority) {
+                showCard = false;
+            }
+            
+            // Filtre tags
+            if (selectedTag && !cardTags.includes(selectedTag)) {
+                showCard = false;
+            }
+            
+            // Filtre statut
+            if (selectedStatus && cardStatus !== selectedStatus) {
+                showCard = false;
+            }
+            
+            if (showCard) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        
+        // Afficher/masquer le message "aucun projet"
+        if (visibleCount === 0) {
+            noProjectsMessage.style.display = 'block';
+            projectsContainer.style.display = 'none';
+        } else {
+            noProjectsMessage.style.display = 'none';
+            projectsContainer.style.display = 'grid';
+        }
+    }
+    
+    // Ajouter les événements de filtrage
+    priorityFilter.addEventListener('change', filterProjects);
+    tagsFilter.addEventListener('change', filterProjects);
+    statusFilter.addEventListener('change', filterProjects);
+});
+</script>
+{% endblock %}

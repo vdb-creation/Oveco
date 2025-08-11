@@ -30,6 +30,8 @@ require_once get_template_directory() . '/inc/menus.php';
 require_once get_template_directory() . '/inc/enqueue.php';
 require_once get_template_directory() . '/inc/testimonials.php';
 require_once get_template_directory() . '/inc/testimonials-helpers.php';
+require_once get_template_directory() . '/inc/projects.php';
+require_once get_template_directory() . '/inc/projects-helpers.php';
 
 // Utilitaires (si le fichier existe)
 if (file_exists(get_template_directory() . '/inc/utils.php')) {
@@ -75,8 +77,17 @@ add_action('after_setup_theme', function() {
     if (function_exists('oveco_register_testimonial_priority_taxonomy')) {
         oveco_register_testimonial_priority_taxonomy();
     }
+    if (function_exists('oveco_register_project_tags_taxonomy')) {
+        oveco_register_project_tags_taxonomy();
+    }
+    if (function_exists('oveco_register_project_priority_taxonomy')) {
+        oveco_register_project_priority_taxonomy();
+    }
     if (function_exists('oveco_create_default_testimonial_priorities')) {
         oveco_create_default_testimonial_priorities();
+    }
+    if (function_exists('oveco_create_default_project_priorities')) {
+        oveco_create_default_project_priorities();
     }
 });
 
@@ -103,6 +114,12 @@ add_action('after_switch_theme', function() {
     }
     if (function_exists('oveco_register_projects_cpt')) {
         oveco_register_projects_cpt();
+    }
+    if (function_exists('oveco_register_project_tags_taxonomy')) {
+        oveco_register_project_tags_taxonomy();
+    }
+    if (function_exists('oveco_register_project_priority_taxonomy')) {
+        oveco_register_project_priority_taxonomy();
     }
     
     // Recharger immédiatement

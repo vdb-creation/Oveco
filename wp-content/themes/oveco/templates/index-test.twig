@@ -17,6 +17,12 @@
                     <div class="testimonials-list">
                         {% for testimonial in testimonials %}
                             <div class="testimonial-item">
+                                {% if testimonial.priority_value %}
+                                    <span class="priority-badge priority-{{ testimonial.priority_value }}">
+                                        {{ testimonial.priority_value|title }}
+                                    </span>
+                                {% endif %}
+                                
                                 <div class="testimonial-content">
                                     {{ testimonial.content }}
                                 </div>
