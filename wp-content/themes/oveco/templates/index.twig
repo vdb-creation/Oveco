@@ -1,51 +1,75 @@
 {% extends "base.twig" %}
 
 {% block content %}
-    <div class="content-area">
-        {% if posts %}
-            <div class="posts-grid">
-                {% for post in posts %}
-                    <article class="post-item">
-                        {% if post.thumbnail %}
-                            <div class="post-thumbnail">
-                                <a href="{{ post.link }}">
-                                    <img src="{{ post.thumbnail.src }}" alt="{{ post.thumbnail.alt }}">
-                                </a>
+    <div class="home-page">
+        
+        {# Section Hero #}
+        <section class="hero">
+            <div class="container">
+                <h1>{{ site.name }}</h1>
+                <p class="hero-description">{{ site.description }}</p>
+            </div>
+        </section>
+
+        {# Section Témoignages Vedettes (Haute priorité) #}
+        {% if testimonials_featured %}
+        <section class="testimonials-featured">
+            <div class="container">
+                <h2>testimonials test</h2>
+                <div class="testimonials-grid">
+                    {% for testimonial in testimonials_featured %}
+                        <div class="testimonial-simple">
+                            <div class="testimonial-content">
+                                {{ testimonial.content }}
                             </div>
-                        {% endif %}
-                        
-                        <div class="post-content">
-                            <h2 class="post-title">
-                                <a href="{{ post.link }}">{{ post.title }}</a>
-                            </h2>
-                            
-                            <div class="post-meta">
-                                <span class="post-date">{{ post.post_date|date('d F Y') }}</span>
-                                {% if post.author %}
-                                    <span class="post-author">par {{ post.author.name }}</span>
+                            <div class="testimonial-author">
+                                <strong>{{ testimonial.author }}</strong>
+                                {% if testimonial.company %}
+                                    <br>{{ testimonial.company }}
+                                {% endif %}
+                                {% if testimonial.position %}
+                                    <br><em>{{ testimonial.position }}</em>
                                 {% endif %}
                             </div>
-                            
-                            <div class="post-excerpt">
-                                {{ post.excerpt }}
-                            </div>
-                            
-                            <a href="{{ post.link }}" class="read-more">Lire la suite</a>
                         </div>
-                    </article>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
-
-            {% if pagination %}
-                <nav class="pagination">
-                    {{ pagination }}
-                </nav>
-            {% endif %}
-        {% else %}
-            <div class="no-posts">
-                <h2>Aucun article trouvé</h2>
-                <p>Il n'y a actuellement aucun contenu publié.</p>
-            </div>
+        </section>
         {% endif %}
+
+        {# Section Articles récents #}
+        {% if posts %}
+        <section class="recent-posts">
+            <div class="container">
+                <h2>Derniers articles</h2>
+                <div class="posts-grid">
+                    {% for post in posts %}
+                        <article class="post-card">
+                            {% if post.thumbnail %}
+                                <div class="post-thumbnail">
+                                    <a href="{{ post.link }}">
+                                        <img src="{{ post.thumbnail.src('medium') }}" 
+                                             alt="{{ post.thumbnail.alt }}" />
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <div class="post-content">
+                                <h3><a href="{{ post.link }}">{{ post.title }}</a></h3>
+                                <p class="post-excerpt">{{ post.excerpt }}</p>
+                                <div class="post-meta">
+                                    <span class="post-date">{{ post.post_date|date('d F Y') }}</span>
+                                    {% if post.author %}
+                                        <span class="post-author">par {{ post.author.name }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
     </div>
 {% endblock %}

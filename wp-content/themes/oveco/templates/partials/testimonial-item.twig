@@ -1,0 +1,46 @@
+{# Template pour un témoignage en format liste #}
+<article class="testimonial-item {{ testimonial.priority ? 'testimonial-item--' ~ testimonial.priority.slug : '' }}">
+    <div class="testimonial-item__content">
+        <blockquote class="testimonial__quote">
+            {{ testimonial.content|nl2br }}
+        </blockquote>
+        
+        <div class="testimonial-item__meta">
+            <div class="testimonial__client">
+                {% if testimonial.thumbnail %}
+                    <img src="{{ testimonial.thumbnail.src('thumbnail') }}" 
+                         alt="{{ testimonial.client_name }}"
+                         class="testimonial__avatar">
+                {% endif %}
+                
+                <div class="testimonial__details">
+                    {% if testimonial.client_name %}
+                        <cite class="testimonial__author">{{ testimonial.client_name }}</cite>
+                    {% endif %}
+                    
+                    {% if testimonial.client_position or testimonial.client_company %}
+                        <span class="testimonial__company">
+                            {% if testimonial.client_position %}{{ testimonial.client_position }}{% endif %}
+                            {% if testimonial.client_position and testimonial.client_company %}, {% endif %}
+                            {% if testimonial.client_company %}{{ testimonial.client_company }}{% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if show_rating and testimonial.rating %}
+                <div class="testimonial__rating">
+                    {{ testimonial.stars_html|raw }}
+                </div>
+            {% endif %}
+            
+            {% if show_project and testimonial.linked_project %}
+                <div class="testimonial__project">
+                    <a href="{{ testimonial.linked_project.link }}">
+                        Voir le projet: {{ testimonial.linked_project.title }}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</article>
