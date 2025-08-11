@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html {{ site.language_attributes }}>
+<head>
+    <meta charset="{{ site.charset }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if title %}{{ title }} - {{ site.name }}{% else %}{{ site.name }} - {{ site.description }}{% endif %}</title>
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+    <link rel="pingback" href="{{ site.pingback_url }}">
+    {{ function('wp_head') }}
+</head>
+
+<body class="{{ body_class }}">
+    <div id="page" class="site">
+        <header id="masthead" class="site-header">
+            <div class="container">
+                <div class="site-branding">
+                    {% if site.logo %}
+                        <img src="{{ site.logo }}" alt="{{ site.name }}" class="site-logo">
+                    {% endif %}
+                    <h1 class="site-title">
+                        <a href="{{ site.url }}" rel="home">{{ site.name }}</a>
+                    </h1>
+                    {% if site.description %}
+                        <p class="site-description">{{ site.description }}</p>
+                    {% endif %}
+                </div>
+
+                <nav id="site-navigation" class="main-navigation">
+                    {% if menu.primary %}
+                        {{ menu.primary }}
+                    {% endif %}
+                </nav>
+            </div>
+        </header>
+
+        <main id="main" class="site-main">
+            <div class="container">
+                {% block content %}
+                    {# Le contenu sera inséré ici par les templates enfants #}
+                {% endblock %}
+            </div>
+        </main>
+
+        <footer id="colophon" class="site-footer">
+            <div class="container">
+                <div class="site-info">
+                    <p>&copy; {{ "now"|date("Y") }} {{ site.name }}. Tous droits réservés.</p>
+                </div>
+                
+                {% if menu.footer %}
+                    <nav class="footer-navigation">
+                        {{ menu.footer }}
+                    </nav>
+                {% endif %}
+            </div>
+        </footer>
+    </div>
+
+    {{ function('wp_footer') }}
+</body>
+</html>

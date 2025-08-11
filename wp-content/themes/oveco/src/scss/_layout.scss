@@ -1,0 +1,12 @@
+/* Layout de base */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-3);
+}
+.site-header, .site-footer {
+  background: var(--color-accent);
+  color: #fff;
+  padding: var(--space-3) 0;
+}
+

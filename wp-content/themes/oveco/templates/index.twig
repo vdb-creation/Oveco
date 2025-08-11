@@ -1,0 +1,51 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <div class="content-area">
+        {% if posts %}
+            <div class="posts-grid">
+                {% for post in posts %}
+                    <article class="post-item">
+                        {% if post.thumbnail %}
+                            <div class="post-thumbnail">
+                                <a href="{{ post.link }}">
+                                    <img src="{{ post.thumbnail.src }}" alt="{{ post.thumbnail.alt }}">
+                                </a>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="post-content">
+                            <h2 class="post-title">
+                                <a href="{{ post.link }}">{{ post.title }}</a>
+                            </h2>
+                            
+                            <div class="post-meta">
+                                <span class="post-date">{{ post.post_date|date('d F Y') }}</span>
+                                {% if post.author %}
+                                    <span class="post-author">par {{ post.author.name }}</span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="post-excerpt">
+                                {{ post.excerpt }}
+                            </div>
+                            
+                            <a href="{{ post.link }}" class="read-more">Lire la suite</a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+
+            {% if pagination %}
+                <nav class="pagination">
+                    {{ pagination }}
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="no-posts">
+                <h2>Aucun article trouvé</h2>
+                <p>Il n'y a actuellement aucun contenu publié.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

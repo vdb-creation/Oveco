@@ -1,0 +1,52 @@
+# WordPress Core
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/xmlrpc.php
+/readme.html
+/license.txt
+
+# Configuration
+wp-config.php
+.htaccess
+
+# Uploads et cache
+/wp-content/uploads/
+/wp-content/cache/
+/wp-content/upgrade/
+
+# Logs
+*.log
+/wp-content/debug.log
+
+# Plugins (sauf si custom)
+/wp-content/plugins/
+!/wp-content/plugins/.gitkeep
+
+# Thèmes (sauf le nôtre)
+/wp-content/themes/twenty*/
+
+# Node modules et build
+node_modules/
+/wp-content/themes/oveco/node_modules/
+*.min.css
+*.min.js
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+/.idea/
+/.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Composer vendor (doit être versionné pour ce projet)
+# vendor/
+
+# Divers
+*.zip
+*.tar.gz
