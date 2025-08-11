@@ -1,0 +1,31 @@
+{# Template partiel pour afficher les témoignages via shortcode #}
+<section class="testimonials testimonials--{{ layout }}">
+    {% if layout == 'grid' %}
+        <div class="testimonials__grid">
+            {% for testimonial in testimonials %}
+                {% include 'partials/testimonial-card.twig' with {'testimonial': testimonial} %}
+            {% endfor %}
+        </div>
+    {% elseif layout == 'slider' %}
+        <div class="testimonials__slider" data-slider="testimonials">
+            <div class="slider__track">
+                {% for testimonial in testimonials %}
+                    <div class="slider__slide">
+                        {% include 'partials/testimonial-card.twig' with {'testimonial': testimonial} %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="slider__controls">
+                <button class="slider__prev" aria-label="Témoignage précédent">‹</button>
+                <button class="slider__next" aria-label="Témoignage suivant">›</button>
+            </div>
+            <div class="slider__dots"></div>
+        </div>
+    {% else %}
+        <div class="testimonials__list">
+            {% for testimonial in testimonials %}
+                {% include 'partials/testimonial-item.twig' with {'testimonial': testimonial} %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>

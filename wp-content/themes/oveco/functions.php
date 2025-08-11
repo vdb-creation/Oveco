@@ -21,13 +21,15 @@ if (file_exists(ABSPATH . 'vendor/autoload.php')) {
     require_once ABSPATH . 'vendor/autoload.php';
 }
 
-// Initialisation Timber
-$timber = new \Timber\Timber();
+// Initialisation Timber v2 - Méthode correcte
+\Timber\Timber::init();
 
 // Modules du thème
 require_once get_template_directory() . '/inc/setup.php';
 require_once get_template_directory() . '/inc/menus.php';
 require_once get_template_directory() . '/inc/enqueue.php';
+require_once get_template_directory() . '/inc/testimonials.php';
+require_once get_template_directory() . '/inc/testimonials-helpers.php';
 
 // Utilitaires (si le fichier existe)
 if (file_exists(get_template_directory() . '/inc/utils.php')) {
@@ -40,12 +42,12 @@ if (file_exists(get_template_directory() . '/inc/utils.php')) {
 add_filter('timber/context', function($context) {
     // Menus
     $context['menu'] = [
-        'primary' => Timber::get_menu('primary'),
-        'footer' => Timber::get_menu('footer')
+        'primary' => \Timber\Timber::get_menu('primary'),
+        'footer' => \Timber\Timber::get_menu('footer')
     ];
     
-    // Informations du site
-    $context['site'] = Timber::get_site();
+    // Informations du site - Timber v2
+    $context['site'] = new \Timber\Site();
     
     return $context;
 });
@@ -56,5 +58,54 @@ add_filter('timber/context', function($context) {
 add_filter('timber/locations', function($paths) {
     $paths[] = get_template_directory() . '/templates';
     return $paths;
+});
+
+/**
+ * Force l'enregistrement des Custom Post Types au chargement du thème
+ * Garantit que les menus apparaissent dans l'admin
+ */
+add_action('after_setup_theme', function() {
+    // Forcer l'exécution des fonctions d'enregistrement
+    if (function_exists('oveco_register_testimonials_cpt')) {
+        oveco_register_testimonials_cpt();
+    }
+    if (function_exists('oveco_register_projects_cpt')) {
+        oveco_register_projects_cpt();
+    }
+    if (function_exists('oveco_register_testimonial_priority_taxonomy')) {
+        oveco_register_testimonial_priority_taxonomy();
+    }
+    if (function_exists('oveco_create_default_testimonial_priorities')) {
+        oveco_create_default_testimonial_priorities();
+    }
+});
+
+/**
+ * S'assurer que les permaliens sont rechargés
+ */
+add_action('init', function() {
+    if (get_option('oveco_flush_rewrite_rules')) {
+        flush_rewrite_rules();
+        delete_option('oveco_flush_rewrite_rules');
+    }
+});
+
+/**
+ * Activation du thème - Actions à effectuer
+ */
+add_action('after_switch_theme', function() {
+    // Marquer pour recharger les permaliens
+    add_option('oveco_flush_rewrite_rules', true);
+    
+    // Forcer l'enregistrement immédiat
+    if (function_exists('oveco_register_testimonials_cpt')) {
+        oveco_register_testimonials_cpt();
+    }
+    if (function_exists('oveco_register_projects_cpt')) {
+        oveco_register_projects_cpt();
+    }
+    
+    // Recharger immédiatement
+    flush_rewrite_rules();
 });
 

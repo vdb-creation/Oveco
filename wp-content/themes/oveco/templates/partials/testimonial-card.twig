@@ -1,0 +1,74 @@
+{# Template pour une carte de témoignage #}
+<article class="testimonial-card {{ testimonial.priority ? 'testimonial-card--' ~ testimonial.priority.slug : '' }}">
+    <div class="testimonial-card__inner">
+        {# Quote du témoignage #}
+        <div class="testimonial-card__quote">
+            <blockquote class="testimonial__content">
+                {{ testimonial.content|nl2br }}
+            </blockquote>
+        </div>
+        
+        {# Informations client #}
+        <div class="testimonial-card__client">
+            {% if testimonial.thumbnail %}
+                <div class="testimonial__avatar">
+                    <img src="{{ testimonial.thumbnail.src('thumbnail') }}" 
+                         alt="{{ testimonial.client_name }}"
+                         class="testimonial__photo">
+                </div>
+            {% endif %}
+            
+            <div class="testimonial__info">
+                {% if testimonial.client_name %}
+                    <h3 class="testimonial__name">{{ testimonial.client_name }}</h3>
+                {% endif %}
+                
+                {% if testimonial.client_position or testimonial.client_company %}
+                    <p class="testimonial__position">
+                        {% if testimonial.client_position %}{{ testimonial.client_position }}{% endif %}
+                        {% if testimonial.client_position and testimonial.client_company %} chez {% endif %}
+                        {% if testimonial.client_company %}
+                            {% if testimonial.client_website %}
+                                <a href="{{ testimonial.client_website }}" target="_blank" rel="noopener">
+                                    {{ testimonial.client_company }}
+                                </a>
+                            {% else %}
+                                {{ testimonial.client_company }}
+                            {% endif %}
+                        {% endif %}
+                    </p>
+                {% endif %}
+                
+                {# Note si activée #}
+                {% if show_rating and testimonial.rating %}
+                    <div class="testimonial__rating" aria-label="Note: {{ testimonial.rating }} étoiles sur 5">
+                        {{ testimonial.stars_html|raw }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        {# Projet lié si activé #}
+        {% if show_project and testimonial.linked_project %}
+            <div class="testimonial-card__project">
+                <a href="{{ testimonial.linked_project.link }}" class="testimonial__project-link">
+                    {% if testimonial.linked_project.thumbnail %}
+                        <img src="{{ testimonial.linked_project.thumbnail }}" 
+                             alt="{{ testimonial.linked_project.title }}"
+                             class="testimonial__project-thumb">
+                    {% endif %}
+                    <span class="testimonial__project-title">
+                        Projet: {{ testimonial.linked_project.title }}
+                    </span>
+                </a>
+            </div>
+        {% endif %}
+        
+        {# Badge de priorité #}
+        {% if testimonial.priority and testimonial.priority.slug == 'haute' %}
+            <div class="testimonial-card__badge">
+                <span class="badge badge--priority">Témoignage mis en avant</span>
+            </div>
+        {% endif %}
+    </div>
+</article>
