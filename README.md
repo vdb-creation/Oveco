@@ -1,158 +1,138 @@
-# 🌱 Oveco
+# Oveco – Site Web WordPress
 
-Projet WordPress avec thème personnalisé utilisant Timber/Twig pour une architecture moderne et maintenable.
+## 📌 Contexte
+Oveco est une PME belge fondée en 2019, spécialisée dans les techniques spéciales du bâtiment.  
+Le site a pour objectif de présenter :
+- Les expertises (énergies renouvelables, confort thermique, électricité & traitement de l’eau).
+- Les projets réalisés (avec filtres et tri dynamique).
+- Les témoignages clients liés aux projets.
+- Les valeurs et la philosophie de l’entreprise.
 
-## 📁 Structure du Projet
-
-```
-Oveco/
-├── wp-content/
-│   └── themes/
-│       └── oveco/           # Thème personnalisé principal
-│           ├── functions.php     # Fonctions et hooks WordPress
-│           ├── index.php         # Template principal
-│           ├── header.php        # En-tête du site
-│           ├── footer.php        # Pied de page
-│           ├── style.css         # Styles CSS principaux
-│           ├── inc/              # Fonctions PHP organisées
-│           └── src/              # Assets sources (JS, SCSS, etc.)
-├── vendor/                  # Dépendances Composer (Timber, etc.)
-├── composer.json           # Configuration des dépendances
-├── wp-config.php          # Configuration WordPress
-└── README.md              # Ce fichier
-```
-
-## 🚀 Installation
-
-### Prérequis
-- XAMPP (Apache + MySQL + PHP)
-- Composer
-
-### 1. Configuration de l'environnement
-
-1. **Démarrer XAMPP** :
-   - Lancez XAMPP Control Panel
-   - Démarrez Apache et MySQL
-
-2. **Base de données** :
-   - Ouvrez [phpMyAdmin](http://localhost/phpmyadmin)
-   - Créez une base de données `oveco_local`
-
-### 2. Installation WordPress
-
-1. Accédez à [http://localhost/oveco](http://localhost/oveco)
-2. Suivez l'assistant d'installation WordPress
-3. Utilisez ces paramètres de base de données :
-   - **Nom de la base** : `oveco_local`
-   - **Utilisateur** : `root`
-   - **Mot de passe** : (vide)
-   - **Hôte** : `localhost`
-
-### 3. Activation du thème
-
-1. Connectez-vous à l'administration WordPress
-2. Allez dans **Apparence > Thèmes**
-3. Activez le thème **Oveco**
-
-## 🛠️ Développement
-
-### Architecture Clean
-
-Ce projet suit une architecture WordPress moderne :
-
-- **Timber/Twig** : Templates séparés de la logique PHP
-- **Composer** : Gestion des dépendances
-- **Structure modulaire** : Code organisé et maintenable
-
-### Thème Oveco
-
-Le thème principal se trouve dans `wp-content/themes/oveco/` :
-
-```php
-// functions.php - Point d'entrée principal
-<?php
-// Initialisation Timber
-require_once get_template_directory() . '/vendor/autoload.php';
-
-// Configuration du thème
-add_action('after_setup_theme', function() {
-    // Support des fonctionnalités WordPress
-    add_theme_support('post-thumbnails');
-    add_theme_support('menus');
-    
-    // Enregistrement des menus
-    register_nav_menus([
-        'primary' => 'Menu principal',
-        'footer' => 'Menu pied de page'
-    ]);
-});
-```
-
-### Développement avec Timber
-
-Timber permet d'utiliser Twig pour les templates :
-
-```php
-// index.php
-<?php
-$context = Timber::context();
-$context['posts'] = Timber::get_posts();
-Timber::render('index.twig', $context);
-```
-
-```twig
-{# templates/index.twig #}
-{% extends "base.twig" %}
-
-{% block content %}
-    {% for post in posts %}
-        <article>
-            <h2>{{ post.title }}</h2>
-            <div>{{ post.content }}</div>
-        </article>
-    {% endfor %}
-{% endblock %}
-```
-
-## 🔧 Configuration
-
-### Environnements
-
-- **Local** : Configuration actuelle (XAMPP)
-- **Production** : Migration vers Hostinger possible plus tard
-
-### Base de données
-
-Configuration actuelle dans `wp-config.php` :
-```php
-define( 'DB_NAME', 'oveco_local' );
-define( 'DB_USER', 'root' );
-define( 'DB_PASSWORD', '' );
-define( 'DB_HOST', 'localhost' );
-```
-
-## 🎯 Objectifs du Projet
-
-1. **Architecture propre** : Code organisé et maintenable
-2. **Performance** : Optimisé pour la rapidité
-3. **Extensibilité** : Facilement modifiable et extensible
-4. **Bonnes pratiques** : Respect des standards WordPress
-
-## 📚 Documentation Supplémentaire
-
-- `README-config.md` : Configuration détaillée et historique technique
-- [Documentation Timber](https://timber.github.io/docs/) : Guide officiel Timber/Twig
-- [Codex WordPress](https://codex.wordpress.org/) : Documentation WordPress
-
-## 🤝 Contribution
-
-Pour contribuer au projet :
-
-1. Respectez l'architecture existante
-2. Suivez les standards de codage WordPress
-3. Documentez vos modifications
-4. Testez en local avant toute modification
+Le développement est fait sur **WordPress**, sans page builder, avec un **thème personnalisé**.  
+À terme, Timber/Twig et ACF seront intégrés pour plus de flexibilité, mais on commence par un thème minimal.
 
 ---
 
-**Oveco** - Thème WordPress moderne avec Timber/Twig
+## 🎯 Objectifs techniques
+- Code **100% sur Hostinger** → pas besoin de XAMPP/MAMP.
+- Base de données **commune** pour tous les développeurs.
+- Versionnement Git **uniquement pour le thème** (`/wp-content/themes/oveco`).
+- Édition du code via **VS Code + SSH**.
+
+---
+
+## 🛠 Stack technique
+- **Hébergement** : Hostinger (Apache, PHP 8+, MySQL).
+- **CMS** : WordPress.
+- **Gestion de code** : GitHub (repo privé `oveco-theme`).
+- **Éditeur recommandé** : VS Code (extension *Remote-SSH*).
+- **Collaboration** : Git (`pull` avant modification, `push` après).
+
+---
+
+## 🚀 Mise en route
+
+### 1. Pré-requis
+- Un compte GitHub avec accès au repo `oveco-theme`.
+- Une clé SSH ajoutée sur Hostinger (via hPanel > SSH Access).
+- VS Code installé + extension *Remote - SSH*.
+
+---
+
+### 2. Connexion au serveur
+1. Ouvrir VS Code.
+2. Installer et activer l’extension **Remote - SSH**.
+3. Configurer la connexion :
+```
+
+Host oveco-hostinger
+HostName \[HOSTINGER\_HOST]
+User \[USERNAME]
+Port \[PORT]
+IdentityFile \~/.ssh/id\_rsa
+
+```
+4. Se connecter :  
+**Remote-SSH: Connect to Host...** → `oveco-hostinger`.
+
+---
+
+### 3. Structure des fichiers
+```
+
+public\_html/                ← Racine WordPress
+wp-admin/                  ← Core WP
+wp-includes/               ← Core WP
+wp-content/
+themes/
+oveco/                 ← Thème custom (versionné sur GitHub)
+style.css
+functions.php
+index.php
+plugins/                  ← Plugins installés (non versionnés)
+wp-config.php               ← Config WP (non versionné)
+
+````
+
+---
+
+### 4. Workflow Git
+
+#### **Cloner le thème (première fois)**
+```bash
+cd public_html/wp-content/themes
+git clone git@github.com:ORG/oveco-theme.git oveco
+cd oveco
+````
+
+#### **Travailler sur le projet**
+
+1. **Toujours** récupérer la dernière version :
+
+   ```bash
+   git pull
+   ```
+2. Modifier le code dans VS Code.
+3. Enregistrer et envoyer :
+
+   ```bash
+   git add .
+   git commit -m "feat: description courte"
+   git push
+   ```
+
+#### **Créer une nouvelle fonctionnalité (optionnel)**
+
+```bash
+git checkout -b feat/nouvelle-section
+# travailler...
+git push -u origin feat/nouvelle-section
+```
+
+Ouvrir une Pull Request sur GitHub pour fusionner dans `main`.
+
+---
+
+### 5. Règles de collaboration
+
+* **Pas d’uploads, plugins ou fichiers core WP dans Git** → uniquement le thème.
+* Toujours `git pull` avant de commencer à coder.
+* Commits courts et explicites (`feat:`, `fix:`, `chore:`).
+* Tester sur le site en ligne avant de push en prod.
+
+---
+
+## 📅 Évolutions prévues
+
+* Intégration Timber/Twig pour une structure de templates claire.
+* Création d’un MU-plugin `oveco-core` (CPT, taxonomies, ACF).
+* Filtres AJAX pour la page projets.
+* Optimisation performance (cache, WebP).
+* Amélioration SEO & accessibilité.
+
+---
+
+## 👥 Équipe
+
+* **Valentin** – Développement & direction technique.
+* **Romain** – Développement.
