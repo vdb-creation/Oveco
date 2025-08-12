@@ -1,4 +1,10 @@
 /* Import des composants */
+@use 'components/navbar';
+@use 'components/footer';
+@use 'components/hero';
+@use 'components/oveco';
+@use 'components/expertise';
+@use 'components/partners';
 @use 'components/testimonials';
 @use 'components/homepage';
 

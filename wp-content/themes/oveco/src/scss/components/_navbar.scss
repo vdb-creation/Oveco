@@ -1,0 +1,266 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+.navbar {
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+
+    &__container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 clamp(1rem, 4vw, 2rem);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 80px;
+        
+        @include mobile {
+            min-height: 70px;
+            padding: 0 1rem;
+        }
+    }
+
+    &__brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+
+        .brand__logo-img {
+            height: clamp(35px, 4vw, 45px);
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(51, 71, 73, 0.1));
+            
+            @include mobile {
+                height: 32px;
+            }
+        }
+
+        .brand__text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        //TODO Si l'image ne se charge pas afficher le texte de manière plus proéminente
+        &:has(.brand__logo-img[style*="display:none"]) .brand__text,
+        &:not(:has(.brand__logo-img)) .brand__text {
+            align-items: center;
+            
+            .brand__logo {
+                font-size: clamp(1.75rem, 3vw, 2.195rem);
+            }
+        }
+
+        .brand__logo {
+            color: $color-secondary;
+            font-family: $font-family-primary;
+            font-weight: $font-weight-semibold;
+            font-size: clamp(1.5rem, 2.5vw, 2.195rem);
+            line-height: 1;
+            text-decoration: none;
+        }
+
+        .brand__tagline {
+            color: $color-accent;
+            font-family: $font-family-primary;
+            font-weight: $font-weight-semibold;
+            font-size: clamp(0.5rem, 1.2vw, 0.726rem);
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    /* ========================================
+       NAVIGATION MENU
+       ======================================== */
+    &__menu {
+        display: flex;
+        align-items: center;
+        gap: clamp(1.5rem, 3vw, 2.0625rem); 
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        @include tablet {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            background: $color-white;
+            flex-direction: column;
+            padding: 2rem 1rem;
+            gap: 1.5rem;
+            transform: translateY(-100vh);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(51, 71, 73, 0.15);
+
+            &.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        @include mobile {
+            top: 70px;
+        }
+    }
+
+    &__link {
+        color: $color-text;
+        font-family: $font-family-primary;
+        font-weight: $font-weight-regular;
+        font-size: 1rem; 
+        line-height: 1.875; 
+        text-decoration: none;
+        white-space: nowrap;
+
+        &:hover,
+        &:focus {
+            color: $color-accent;
+        }
+
+        &.active {
+            color: $color-accent;
+            font-weight: $font-weight-semibold;
+        }
+
+        @include tablet {
+            font-size: 1.125rem;
+            padding: 0.5rem 0;
+        }
+    }
+
+    /* ========================================
+       CTA BUTTON
+       ======================================== */
+    &__cta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        @include tablet {
+            margin-top: 1rem;
+        }
+    }
+
+    &__btn {
+        @include cta-button;
+    }
+
+    /* ========================================
+       MOBILE TOGGLE BUTTON
+       ======================================== */
+    &__toggle {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 32px;
+        height: 32px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 1002;
+
+        @include tablet {
+            display: flex;
+        }
+
+        span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: $color-secondary;
+            transform-origin: center;
+
+            &:not(:last-child) {
+                margin-bottom: 6px;
+            }
+        }
+
+        &.active {
+            span {
+                &:nth-child(1) {
+                    transform: rotate(45deg) translateY(8px);
+                }
+
+                &:nth-child(2) {
+                    opacity: 0;
+                    transform: scale(0);
+                }
+
+                &:nth-child(3) {
+                    transform: rotate(-45deg) translateY(-8px);
+                }
+            }
+        }
+
+        &:hover {
+            span {
+                background: $color-accent;
+            }
+        }
+    }
+
+    /* ========================================
+       ACCESSIBILITY
+       ======================================== */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+    }
+
+    /* Focus visible */
+    &__link:focus-visible,
+    &__btn:focus-visible {
+        outline: 2px solid $color-accent;
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+.navbar-spacer {
+    height: 80px;
+    
+    @include mobile {
+        height: 70px;
+    }
+}
+
+/* Overlay pour mobile menu */
+.navbar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+
+    &.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    @include desktop {
+        display: none;
+    }
+}

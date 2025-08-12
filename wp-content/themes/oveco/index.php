@@ -1,3 +1,4 @@
+<link rel="shortcut icon" href="./assets/icons/favicon.png" type="image/x-icon">
 <?php
 if (!defined('ABSPATH')) exit;
 

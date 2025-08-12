@@ -1,0 +1,10 @@
+<svg width="116" height="116" viewBox="0 0 116 116" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<path d="M93.961 55.7035L77.4551 24.2613L77.5723 23.5316L49.4297 28.1928L25.3791 42.7922L24.7854 46.4891L27.2881 49.2363L31.7414 47.6063L28.2959 69.058L22.2992 71.2883L22.0896 76.943L58.9103 96.2296L88.8281 87.6621L89.7656 81.8249L84.8325 78.9868L88.0435 58.9944L93.6642 57.552L93.961 55.7035Z" fill="#FFFEF8"/>
+<rect width="100.898" height="100.898" transform="matrix(-0.987346 -0.158581 -0.158581 0.987346 115.824 16.2026)" fill="url(#pattern0_127_1776)"/>
+<defs>
+<pattern id="pattern0_127_1776" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_127_1776" transform="scale(0.000976562)"/>
+</pattern>
+<image xlink:href="./maison.png" transform="scale(0.000976562)"/>
+</defs>
+</svg>

@@ -1,0 +1,214 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* ========================================
+   OVECO SECTION
+   ======================================== */
+.oveco-section {
+    padding: 6rem 0;
+    background: $color-white;
+
+    @include mobile {
+        padding: 4rem 0;
+    }
+}
+
+.oveco {
+    // Reset des margins sur tous les éléments de titre dans cette section
+    h2, h3, p {
+        margin: 0 !important;
+    }
+
+    &__container {
+        justify-content: flex-start;
+        align-items: center;
+        gap: 130px;
+        display: flex;
+
+        @include tablet {
+            flex-direction: column;
+            gap: 4rem;
+            text-align: center;
+        }
+
+        @include mobile {
+            gap: 3rem;
+        }
+    }
+
+    &__content {
+        width: 458px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 21px;
+        display: flex;
+
+        @include tablet {
+            width: 100%;
+            max-width: 600px;
+            align-items: center;
+        }
+
+        @include mobile {
+            gap: 1.5rem;
+        }
+    }
+
+    &__header {
+        align-self: stretch;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 6px;
+        display: flex;
+
+        @include tablet {
+            align-items: center;
+        }
+    }
+
+    &__subtitle {
+        @include heading-3;
+        align-self: stretch;
+        color: $color-text;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+        letter-spacing: 0.12rem; // 1.92px
+        margin: 0 !important;
+
+        @include tablet {
+            text-align: center;
+        }
+    }
+
+    &__title {
+        @include heading-2;
+        align-self: stretch;
+        color: $color-secondary;
+        margin: 0 !important;
+
+        @include tablet {
+            text-align: center;
+        }
+    }
+
+    &__description {
+        @include text-body;
+        align-self: stretch;
+        color: $color-text;
+        margin: 0 !important;
+
+        @include tablet {
+            text-align: center;
+        }
+    }
+
+    &__link {
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+        display: flex;
+        text-decoration: none;
+
+        span {
+            color: $color-accent;
+            font-size: 1rem; // 16px
+            font-family: $font-family-primary;
+            font-weight: $font-weight-bold;
+            line-height: 1.2rem; // 19.20px
+        }
+    }
+
+    &__arrow {
+        width: 16px;
+        height: 14px;
+    }
+
+    &__visual {
+        width: 452px;
+        height: 562px;
+        position: relative;
+
+        @include tablet {
+            width: 100%;
+            max-width: 452px;
+            height: auto;
+            aspect-ratio: 452 / 562;
+        }
+
+        @include mobile {
+            max-width: 350px;
+        }
+    }
+
+    &__main-image {
+        width: 362px;
+        height: 435.49px;
+        left: 45px;
+        top: 63.26px;
+        position: absolute;
+        overflow: hidden;
+        border-radius: 40.83px;
+        background: linear-gradient(0deg, rgba(2, 139, 154, 0.05) 0%, rgba(2, 139, 154, 0.05) 100%);
+        background-blend-mode: color, normal;
+        object-fit: cover;
+
+        @include tablet {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+
+    &__decoration {
+        &--white {
+            width: 69.76px;
+            height: 74.74px;
+            left: 410.73px;
+            top: 527.70px;
+            position: absolute;
+            transform: rotate(-171deg);
+            transform-origin: top left;
+            background: $color-white;
+
+            @include tablet {
+                display: none;
+            }
+        }
+    }
+
+    &__icon {
+        position: absolute;
+
+        &--house {
+            width: 100.90px;
+            height: 100.90px;
+            left: 330.82px;
+            top: 427.82px;
+            transform-origin: top left;
+
+            @include tablet {
+                display: none;
+            }
+        }
+
+        &--pencil {
+            width: 104px;
+            height: 104px;
+            left: 8px;
+            top: 61px;
+
+            @include tablet {
+                left: 50%;
+                transform: translateX(-50%);
+                margin-left: -180px;
+            }
+
+            @include mobile {
+                width: 80px;
+                height: 80px;
+                margin-left: -140px;
+            }
+        }
+    }
+}

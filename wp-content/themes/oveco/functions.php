@@ -51,8 +51,21 @@ add_filter('timber/context', function($context) {
     // Informations du site - Timber v2
     $context['site'] = new \Timber\Site();
     
+    // Logo du site
+    $context['logo_url'] = get_template_directory_uri() . '/assets/imgs/logo/image.png';
+    
+    // URL des assets pour les templates
+    $context['assets_url'] = get_template_directory_uri() . '/assets';
+    
     return $context;
 });
+
+/**
+ * Fonction utilitaire pour obtenir l'URL du logo
+ */
+function oveco_get_logo_url() {
+    return get_template_directory_uri() . '/assets/imgs/logo/image.png';
+}
 
 /**
  * Configuration des emplacements Timber
