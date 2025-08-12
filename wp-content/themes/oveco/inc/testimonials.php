@@ -75,43 +75,6 @@ function oveco_register_testimonials_cpt() {
 add_action('init', 'oveco_register_testimonials_cpt', 0);
 
 /**
- * Enregistrement du Custom Post Type Projets (pour liaison)
- */
-function oveco_register_projects_cpt() {
-    $labels = array(
-        'name'                  => 'Projets',
-        'singular_name'         => 'Projet',
-        'menu_name'             => 'Projets',
-        'name_admin_bar'        => 'Projet',
-        'add_new_item'          => 'Ajouter un nouveau projet',
-        'edit_item'             => 'Modifier le projet',
-        'view_item'             => 'Voir le projet',
-        'all_items'             => 'Tous les projets',
-        'search_items'          => 'Rechercher des projets',
-        'not_found'             => 'Aucun projet trouvé',
-    );
-
-    $args = array(
-        'label'                 => 'Projet',
-        'description'           => 'Portfolio de projets clients',
-        'labels'                => $labels,
-        'supports'              => array('title', 'editor', 'thumbnail', 'excerpt'),
-        'hierarchical'          => false,
-        'public'                => true,
-        'show_ui'               => true,
-        'show_in_menu'          => true,
-        'menu_position'         => 25,
-        'menu_icon'             => 'dashicons-portfolio',
-        'has_archive'           => 'projets',
-        'show_in_rest'          => true,
-        'rewrite'               => array('slug' => 'projet'),
-    );
-
-    register_post_type('project', $args);
-}
-add_action('init', 'oveco_register_projects_cpt', 0);
-
-/**
  * Taxonomie de priorité pour les témoignages
  */
 function oveco_register_testimonial_priority_taxonomy() {

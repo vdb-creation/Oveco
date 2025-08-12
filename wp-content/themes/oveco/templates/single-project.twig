@@ -1,0 +1,301 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<main class="project-single">
+    <article class="project">
+        <!-- En-tête du projet -->
+        <header class="project-header">
+            <div class="container">
+                <div class="project-meta">
+                    {% if project.client %}
+                        <span class="project-client">{{ project.client }}</span>
+                    {% endif %}
+                    {% if project.date %}
+                        <time class="project-date">{{ project.date | date('F Y') }}</time>
+                    {% endif %}
+                    {% if project.status %}
+                        <span class="project-status status-{{ project.status }}">
+                            {% if project.status == 'en-cours' %}
+                                🔄 En cours
+                            {% elseif project.status == 'termine' %}
+                                ✅ Terminé
+                            {% elseif project.status == 'en-maintenance' %}
+                                🔧 En maintenance
+                            {% elseif project.status == 'archive' %}
+                                📦 Archivé
+                            {% else %}
+                                {{ project.status }}
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+                
+                <h1 class="project-title">{{ project.title }}</h1>
+                
+                {% if project.excerpt %}
+                    <div class="project-excerpt">
+                        {{ project.excerpt }}
+                    </div>
+                {% endif %}
+                
+                <!-- Tags et priorité -->
+                <div class="project-taxonomies">
+                    {% if project.tags %}
+                        <div class="project-tags">
+                            {% for tag in project.tags %}
+                                <span class="tag">{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    {% if project.priority %}
+                        <div class="project-priority priority-{{ project.priority.slug }}">
+                            <span class="priority-label">{{ project.priority.name }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Liens -->
+                {% if project.url %}
+                    <div class="project-links">
+                        <a href="{{ project.url }}" target="_blank" class="project-link">
+                            🔗 Voir le projet
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </header>
+        
+        <!-- Image principale -->
+        {% if project.thumbnail %}
+            <div class="project-featured-image">
+                <img src="{{ project.thumbnail.src }}" alt="{{ project.title }}" class="featured-image">
+            </div>
+        {% endif %}
+        
+        <!-- Contenu principal -->
+        <div class="project-content">
+            <div class="container">
+                <div class="project-description">
+                    {{ project.content }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Témoignages liés -->
+        {% if testimonials %}
+            <section class="project-testimonials">
+                <div class="container">
+                    <h3>Témoignages client</h3>
+                    <div class="testimonials-grid">
+                        {% for testimonial in testimonials %}
+                            {% include 'testimonial-card.twig' %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+    </article>
+    
+    <!-- Navigation entre projets -->
+    <nav class="project-navigation">
+        <div class="container">
+            {% if prev_project %}
+                <a href="{{ prev_project.link }}" class="nav-prev">
+                    ← {{ prev_project.title }}
+                </a>
+            {% endif %}
+            {% if next_project %}
+                <a href="{{ next_project.link }}" class="nav-next">
+                    {{ next_project.title }} →
+                </a>
+            {% endif %}
+        </div>
+    </nav>
+</main>
+
+<style>
+.project-single {
+    margin-top: 2rem;
+}
+
+.project-header {
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+}
+
+.project-meta {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.project-meta > * {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.project-title {
+    font-size: 3rem;
+    margin: 1rem 0;
+    font-weight: 700;
+}
+
+.project-excerpt {
+    font-size: 1.2rem;
+    margin: 1.5rem 0;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.project-taxonomies {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.project-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+}
+
+.project-priority {
+    display: flex;
+    align-items: center;
+}
+
+.priority-label {
+    background: #ffd700;
+    color: #333;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.project-links {
+    margin-top: 2rem;
+}
+
+.project-link {
+    display: inline-block;
+    background: white;
+    color: #667eea;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+}
+
+.project-link:hover {
+    transform: translateY(-2px);
+}
+
+.project-featured-image {
+    margin: 3rem 0;
+    text-align: center;
+}
+
+.featured-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.project-content {
+    padding: 3rem 0;
+}
+
+.project-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+}
+
+.project-testimonials {
+    background: #f8f9fa;
+    padding: 4rem 0;
+}
+
+.project-testimonials h3 {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2rem;
+    color: #333;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.project-navigation {
+    padding: 2rem 0;
+    border-top: 1px solid #eee;
+}
+
+.project-navigation .container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-prev,
+.nav-next {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-prev:hover,
+.nav-next:hover {
+    background-color: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+    .project-title {
+        font-size: 2rem;
+    }
+    
+    .project-meta {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .project-taxonomies {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .project-navigation .container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+</style>
+{% endblock %}
