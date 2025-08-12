@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) exit;
 try {
     $context = \Timber\Timber::context();
     
-    // Récupérer les témoignages directement avec Timber (plus fiable)
+    // Récupérer les témoignages directement avec Timber
     $testimonials_raw = \Timber\Timber::get_posts([
         'post_type' => 'testimonial',
         'posts_per_page' => -1,
