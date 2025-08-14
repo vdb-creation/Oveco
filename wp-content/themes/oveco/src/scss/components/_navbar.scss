@@ -80,10 +80,11 @@
     &__menu {
         display: flex;
         align-items: center;
-        gap: clamp(1.5rem, 3vw, 2.0625rem); 
+    gap: clamp(1.5rem, 3vw, 2.0625rem); 
         list-style: none;
         margin: 0;
         padding: 0;
+    flex: 1 1 auto; /* Permet au menu d'occuper l'espace central */
 
         @include tablet {
             position: fixed;
@@ -92,7 +93,7 @@
             right: 0;
             background: $color-white;
             flex-direction: column;
-            padding: 2rem 1rem;
+            padding: 2rem 1rem 3rem;
             gap: 1.5rem;
             transform: translateY(-100vh);
             opacity: 0;
@@ -107,8 +108,25 @@
             }
         }
 
-        @include mobile {
+    @include mobile {
             top: 70px;
+        }
+    }
+
+    /* Wrapper pour centrer les liens */
+    &__links {
+        display: flex;
+        align-items: center;
+        gap: clamp(1.5rem, 3vw, 2.0625rem);
+        margin-inline: auto; /* centre le groupe au milieu */
+
+        @include tablet {
+            width: 100%;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 1.25rem;
+            margin: 0; /* reset des marges auto en mobile */
         }
     }
 
@@ -144,14 +162,20 @@
         display: flex;
         align-items: center;
         gap: 1rem;
-
+        
         @include tablet {
+            width: 100%;
             margin-top: 1rem;
+            justify-content: center;
         }
     }
 
     &__btn {
         @include cta-button;
+        @include tablet {
+            width: 100%;
+            text-align: center;
+        }
     }
 
     /* ========================================
@@ -263,4 +287,9 @@
     @include desktop {
         display: none;
     }
+}
+
+/* Empêcher le scroll du body quand le menu mobile est ouvert */
+body.no-scroll {
+    overflow: hidden;
 }

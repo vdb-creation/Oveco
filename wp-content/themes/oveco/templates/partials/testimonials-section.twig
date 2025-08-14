@@ -1,0 +1,70 @@
+{# Testimonials Section #}
+<section class="testimonials-section" id="temoignages" itemscope itemtype="https://schema.org/ItemList">
+  <div class="testimonials">
+    <div class="testimonials__container">
+      <header class="testimonials__header">
+        <div class="testimonials__header-content">
+          <p class="testimonials__subtitle">Qu’est-ce qui s’en dit ?</p>
+          <h2 class="testimonials__title" id="temoignages-title">Ce sont plus que des projets, ce sont des collaborations</h2>
+          <p class="testimonials__description">Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero</p>
+          <a href="#temoignages-complets" class="testimonials__link" aria-label="Voir tous les témoignages">
+            <span>En savoir plus</span>
+            <svg class="testimonials__link-arrow" width="10" height="9" viewBox="0 0 10 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M1 4.5H9M9 4.5L5.5 1M9 4.5L5.5 8" stroke="#048B9A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+        <div class="testimonials__navigation" role="navigation" aria-label="Navigation des témoignages">
+          <button class="testimonials__nav-btn testimonials__nav-btn--prev" aria-label="Témoignage précédent" type="button">
+            <svg width="11" height="21" viewBox="0 0 11 21" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10 1L1 10.5L10 20" stroke="#FFFEF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="testimonials__nav-btn testimonials__nav-btn--next" aria-label="Témoignage suivant" type="button">
+            <svg width="11" height="21" viewBox="0 0 11 21" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M1 1L10 10.5L1 20" stroke="#FFFEF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="testimonials__grid" role="list" aria-labelledby="temoignages-title">
+        {% include 'partials/components/card.twig' with {
+          image: assets_url ~ '/imgs/maison-toit.png',
+          type: 'Photovoltaïque',
+          client: 'Particulier',
+          title: "Je ne réalisais pas l’empleure du projet",
+          description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero',
+          url: '#temoignage-1'
+        } %}
+
+        {% include 'partials/components/card.twig' with {
+          image: assets_url ~ '/imgs/maison-toit-2.png',
+          type: 'Éolien',
+          client: 'Entreprise',
+          title: "Je ne réalisais pas l’empleure du projet",
+          description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero',
+          url: '#temoignage-2'
+        } %}
+
+        {% include 'partials/components/card.twig' with {
+          image: assets_url ~ '/imgs/maison-build.png',
+          type: 'Géothermie',
+          client: 'Collectivité',
+          title: "Je ne réalisais pas l’empleure du projet",
+          description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero',
+          url: '#temoignage-3'
+        } %}
+
+        {% include 'partials/components/card.twig' with {
+          image: assets_url ~ '/imgs/architrech.png',
+          type: 'Hybride',
+          client: 'Particulier',
+          title: "Je ne réalisais pas l’empleure du projet",
+          description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero',
+          url: '#temoignage-4'
+        } %}
+      </div>
+    </div>
+  </div>
+</section>

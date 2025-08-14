@@ -12,6 +12,13 @@ add_action('wp_enqueue_scripts', function () {
 
   if ($js) {
     wp_enqueue_script('oveco-main', $js, [], null, true);
+  } else {
+    // Fallback: charge le JS brut en dev si le manifest n'est pas présent
+    $js_path = get_stylesheet_directory() . '/src/js/main.js';
+    if (file_exists($js_path)) {
+      $js_url = get_stylesheet_directory_uri() . '/src/js/main.js';
+      wp_enqueue_script('oveco-main', $js_url, [], wp_get_theme()->get('Version'), true);
+    }
   }
 });
 

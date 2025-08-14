@@ -139,3 +139,29 @@ add_action('after_switch_theme', function() {
     flush_rewrite_rules();
 });
 
+/**
+ * Crée la page "Réalisations" (slug: works) si elle n'existe pas
+ */
+function oveco_ensure_works_page_exists() {
+    if (get_page_by_path('works')) {
+        return; // déjà présente
+    }
+    $page_id = wp_insert_post([
+        'post_title'   => 'Réalisations',
+        'post_name'    => 'works',
+        'post_status'  => 'publish',
+        'post_type'    => 'page',
+        'post_content' => '',
+    ]);
+}
+
+// Créer à l’activation du thème
+add_action('after_switch_theme', function() {
+    oveco_ensure_works_page_exists();
+});
+
+// Vérifier à l'init au cas où (environnement de dev)
+add_action('init', function() {
+    oveco_ensure_works_page_exists();
+});
+

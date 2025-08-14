@@ -1,0 +1,50 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<main class="work-page" id="work">
+  <section class="work-hero" aria-labelledby="work-hero-title">
+    <div class="container work-hero__inner">
+      <div class="work-hero__content">
+        <div class="work-hero__heading">
+          <p class="work-hero__subtitle">Type du projet</p>
+          <h1 class="work-hero__title" id="work-hero-title">Création d’un habitat groupé en autoconstruction</h1>
+        </div>
+        <p class="work-hero__desc">Description courte du projet en question ipsum dolor sit amet consectetur adipiscing elit tortor eu egestas morbi sem vulputate etiam facilisis pellentesque ut quis.</p>
+        <a href="{{ site.url }}#contact" class="work-hero__cta">Nous contacter</a>
+      </div>
+
+      <div class="work-hero__media" aria-hidden="true">
+        <figure class="work-hero__image">
+          <img src="{{ assets_url }}/imgs/maison-toit.png" alt="Illustration de réalisation" loading="lazy">
+        </figure>
+        <div class="work-hero__deco work-hero__deco--bg"></div>
+        <img class="work-hero__icon work-hero__icon--house" src="{{ assets_url }}/icons/maison.png" alt="" loading="lazy">
+        <img class="work-hero__icon work-hero__icon--pencil" src="{{ assets_url }}/icons/crayon.png" alt="" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  {# Section Compétences #}
+  {% include "partials/competences-section.twig" %}
+
+   {# Section Oveco #}
+  {% include "partials/oveco-section.twig" %}
+
+  {# Section Stats #}
+  {% include "partials/stats-section.twig" %}
+
+  {# Section Gallery #}
+  {% include "partials/gallery-section.twig" with { gallery: gallery } %}
+
+  {# Section Projects #}
+  {% include "partials/projects-section.twig" %}
+
+  {# Section Contact #}
+  {% include "partials/contact-section.twig" %}
+
+
+
+
+
+</main>
+{% endblock %}

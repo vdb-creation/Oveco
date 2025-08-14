@@ -1,4 +1,4 @@
-<nav class="navbar" id="navbar">
+<nav class="navbar" id="navbar" role="navigation" aria-label="Navigation principale">
     <div class="navbar__container">
         <!-- Brand/Logo -->
         <a href="{{ site.url }}" class="navbar__brand">
@@ -10,19 +10,21 @@
 
         <!-- Navigation Menu -->
         <div class="navbar__menu" id="navbarMenu">
-            <a href="/qui-sommes-nous" class="navbar__link">Qui sommes nous ?</a>
-            <a href="/auto-construction" class="navbar__link">L'auto-construction</a>
-            <a href="/competences" class="navbar__link">Compétences</a>
-            <a href="/realisations" class="navbar__link">Réalisations</a>
-        </div>
+            <div class="navbar__links">
+                <a href="/qui-sommes-nous" class="navbar__link">Qui sommes nous ?</a>
+                <a href="/auto-construction" class="navbar__link">L'auto-construction</a>
+                <a href="/competences" class="navbar__link">Compétences</a>
+                <a href="{{ site.url }}/works" class="navbar__link">Réalisations</a>
+            </div>
 
-        <!-- CTA Button -->
-        <div class="navbar__cta">
-            <a href="/contact" class="navbar__btn">Nous contacter</a>
+            <!-- CTA Button (dans le menu pour le mobile) -->
+            <div class="navbar__cta">
+                <a href="/contact" class="navbar__btn">Nous contacter</a>
+            </div>
         </div>
 
         <!-- Mobile Toggle -->
-        <button class="navbar__toggle" id="navbarToggle" aria-label="Toggle navigation">
+        <button class="navbar__toggle" id="navbarToggle" type="button" aria-label="Ouvrir le menu" aria-controls="navbarMenu" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
@@ -30,17 +32,27 @@
     </div>
 </nav>
 
+<!-- Overlay pour fermeture du menu sur mobile -->
+<div class="navbar-overlay" id="navbarOverlay" hidden></div>
+
 <script>
 // JavaScript pour le menu mobile et interactions
 document.addEventListener('DOMContentLoaded', function() {
     const navbar = document.getElementById('navbar');
     const toggle = document.getElementById('navbarToggle');
     const menu = document.getElementById('navbarMenu');
+    const overlay = document.getElementById('navbarOverlay');
+    const body = document.body;
 
     // Toggle mobile menu
     toggle.addEventListener('click', function() {
+        const willOpen = !toggle.classList.contains('active');
         toggle.classList.toggle('active');
         menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+        overlay.hidden = !overlay.classList.contains('active');
+        body.classList.toggle('no-scroll', willOpen);
+        toggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
     });
 
     // Close mobile menu when clicking on a link
@@ -48,8 +60,44 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.classList.contains('navbar__link')) {
             toggle.classList.remove('active');
             menu.classList.remove('active');
+            overlay.classList.remove('active');
+            overlay.hidden = true;
+            body.classList.remove('no-scroll');
+            toggle.setAttribute('aria-expanded', 'false');
         }
     });
+
+    // Close when clicking overlay
+    overlay.addEventListener('click', function() {
+        toggle.classList.remove('active');
+        menu.classList.remove('active');
+        overlay.classList.remove('active');
+        overlay.hidden = true;
+        body.classList.remove('no-scroll');
+        toggle.setAttribute('aria-expanded', 'false');
+    });
+
+    // Close on ESC
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && toggle.classList.contains('active')) {
+            toggle.click();
+        }
+    });
+
+    // Reset state on resize to desktop
+    const mqDesktop = window.matchMedia('(min-width: 1025px)');
+    const onResize = () => {
+        if (mqDesktop.matches) {
+            toggle.classList.remove('active');
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+            overlay.hidden = true;
+            body.classList.remove('no-scroll');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    };
+    window.addEventListener('resize', onResize);
+    mqDesktop.addEventListener?.('change', onResize);
 
     // Navbar scroll effect (optional)
     window.addEventListener('scroll', function() {

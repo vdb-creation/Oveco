@@ -1,0 +1,27 @@
+<section class="gallery" aria-labelledby="gallery-title">
+  <div class="container gallery__container">
+    <header class="gallery__header">
+      <p class="gallery__subtitle">Galerie</p>
+      <h2 class="gallery__title" id="gallery-title">Quelques photos du projet</h2>
+    </header>
+
+    {% set default_gallery = [
+      { src: assets_url ~ '/imgs/Charpantier.png', alt: 'Charpantier', mod: 'a' },
+      { src: assets_url ~ '/imgs/maison-build.png', alt: 'Maison en construction', mod: 'b' },
+      { src: assets_url ~ '/imgs/plan.png', alt: 'Plan du projet', mod: 'c' },
+      { src: assets_url ~ '/imgs/cie.png', alt: "Compagnie d'électricité", mod: 'd' }
+    ] %}
+
+    {% set items = gallery is defined and gallery|length > 0 ? gallery : default_gallery %}
+
+    <ul class="gallery__grid" role="list">
+      {% for item in items %}
+        <li class="gallery__item" role="listitem">
+          <figure class="gallery__figure gallery__figure--{{ item.mod }}">
+            <img class="gallery__image gallery__image--{{ item.mod }}" src="{{ item.src }}" alt="{{ item.alt }}" loading="lazy">
+          </figure>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>

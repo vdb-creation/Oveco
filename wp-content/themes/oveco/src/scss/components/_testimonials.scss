@@ -1,1 +1,102 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* ========================================
+   TESTIMONIALS SECTION (reuse projects styles)
+   ======================================== */
+.testimonials-section {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  background: #FFFEF8;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonials {
+  &__container {
+    width: 100%;
+    max-width: 1589px;
+    padding: 57px 109px;
+    display: flex;
+    flex-direction: column;
+    gap: 89px;
+    box-sizing: border-box;
+
+    @media (max-width: 1400px) { padding: 50px 80px; gap: 70px; }
+    @media (max-width: 1200px) { padding: 45px 60px; gap: 60px; }
+    @media (max-width: 1024px) { padding: 40px 40px; gap: 50px; }
+    @include tablet { padding: 35px 2rem; gap: 40px; }
+    @include mobile { padding: 30px 1rem; gap: 35px; }
+  }
+
+  &__header {
+    width: 100%;
+    max-width: 1219px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    @include tablet { flex-direction: column; align-items: flex-start; gap: 30px; }
+  }
+
+  &__header-content {
+    width: 493px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  &__subtitle {
+    color: #5C6D6F;
+    font-size: 19.2px;
+    font-family: $font-family-primary;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 20px;
+    letter-spacing: 1.92px;
+    margin: 0;
+  }
+
+  &__title {
+    color: #334749;
+    font-size: 39.81px;
+    font-family: $font-family-primary;
+    font-weight: 800;
+    line-height: 47.77px;
+    margin: 0;
+  }
+
+  &__description {
+    color: #5C6D6F;
+    font-size: 16px;
+    font-family: $font-family-primary;
+    font-weight: 400;
+    line-height: 28.8px;
+    margin: 0;
+  }
+
+  &__link { display: inline-flex; gap: 6px; text-decoration: none; }
+  &__link-arrow { width: 10px; height: 8.57px; }
+
+  &__navigation { width: 400px; display: flex; justify-content: flex-end; align-items: center; gap: 28px; }
+  &__nav-btn {
+    width: 64px; height: 64px; background: #334749; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    svg { width: 11px; height: 21px; }
+  }
+
+  &__grid {
+    display: flex; align-items: center; gap: 12px; width: 100%; overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; cursor: grab; touch-action: pan-x pinch-zoom;
+    /* hidden scrollbar */
+    scrollbar-width: none; -ms-overflow-style: none; &::-webkit-scrollbar { display:none; width:0; height:0; }
+    /* trailing padding to not cut the last card */
+    padding-right: 109px;
+    @media (max-width: 1400px){ gap:10px; padding-right:80px; }
+    @media (max-width: 1200px){ padding-right:60px; }
+    @media (max-width: 1024px){ padding-right:40px; }
+    @include tablet { padding-right: 2rem; }
+    @include mobile { padding-right: 1rem; }
+  }
+}
 //TODO Pour plus tard

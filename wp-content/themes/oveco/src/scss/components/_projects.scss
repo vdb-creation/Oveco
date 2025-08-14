@@ -1,0 +1,465 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* ========================================
+   PROJECTS SECTION
+   ======================================== */
+.projects-section {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    background: #FFFEF8;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    display: flex;
+}
+
+.projects {
+    &__container {
+        width: 100%;
+        max-width: 1589px;
+        padding: 57px 109px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 89px;
+        display: flex;
+        box-sizing: border-box;
+
+        @media (max-width: 1400px) {
+            padding: 50px 80px;
+            gap: 70px;
+        }
+
+        @media (max-width: 1200px) {
+            padding: 45px 60px;
+            gap: 60px;
+        }
+
+        @media (max-width: 1024px) {
+            padding: 40px 40px;
+            gap: 50px;
+        }
+
+        @include tablet {
+            padding: 35px 2rem;
+            gap: 40px;
+        }
+
+        @include mobile {
+            padding: 30px 1rem;
+            gap: 35px;
+        }
+    }
+
+    &__header {
+        width: 100%;
+        max-width: 1219px;
+        justify-content: space-between;
+        align-items: flex-end;
+        display: flex;
+
+        @include tablet {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 30px;
+        }
+    }
+
+    &__header-content {
+        width: 589px;
+        max-width: 100%;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 11px;
+        display: flex;
+
+        @include tablet {
+            width: 100%;
+        }
+    }
+
+    &__subtitle {
+        color: #5C6D6F;
+        font-size: 19.20px;
+        font-family: $font-family-primary;
+        font-weight: 700;
+        text-transform: uppercase;
+        line-height: 20px;
+        letter-spacing: 1.92px;
+        margin: 0;
+
+        @include tablet {
+            font-size: 17px;
+            letter-spacing: 1.5px;
+        }
+
+        @include mobile {
+            font-size: 15px;
+            line-height: 18px;
+            letter-spacing: 1.2px;
+        }
+    }
+
+    &__title {
+        align-self: stretch;
+        color: #334749;
+        font-size: 39.81px;
+        font-family: $font-family-primary;
+        font-weight: 800;
+        line-height: 47.77px;
+        margin: 0;
+
+        @include tablet {
+            font-size: 32px;
+            line-height: 38px;
+        }
+
+        @include mobile {
+            font-size: 26px;
+            line-height: 30px;
+        }
+    }
+
+    &__description {
+        align-self: stretch;
+        color: #334749;
+        font-size: 16px;
+        font-family: $font-family-primary;
+        font-weight: 400;
+        line-height: 28.80px;
+        margin: 0;
+
+        @include tablet {
+            font-size: 15px;
+            line-height: 26px;
+        }
+
+        @include mobile {
+            font-size: 14px;
+            line-height: 24px;
+        }
+    }
+
+    &__link {
+        justify-content: flex-start;
+        align-items: flex-end;
+        gap: 6px;
+        display: flex;
+        text-decoration: none;
+    transition: none;
+
+        &:focus {
+            outline: 2px solid #048B9A;
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        span {
+            color: #048B9A;
+            font-size: 16px;
+            font-family: $font-family-primary;
+            font-weight: 700;
+            line-height: 19.20px;
+            text-align: center;
+        }
+    }
+
+    &__link-arrow {
+        width: 10px;
+        height: 8.57px;
+        flex-shrink: 0;
+    }
+
+    &__navigation {
+        width: 400px;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 28px;
+        display: flex;
+
+        @include tablet {
+            width: auto;
+            justify-content: flex-start;
+        }
+    }
+
+    &__nav-btn {
+        width: 64px;
+        height: 64px;
+        background: #334749;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: none;
+        position: relative;
+
+        /* Pas d'effets hover/active */
+
+        &:focus {
+            outline: 2px solid #048B9A;
+            outline-offset: 4px;
+        }
+
+    /* Les SVG intégrés pointent déjà dans la bonne direction */
+
+        svg {
+            width: 11px;
+            height: 21px;
+        }
+    }
+
+    &__grid {
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+        display: flex;
+        width: 100%;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        /* Carrousel sans barre de défilement visible */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+        &::-webkit-scrollbar { /* Chrome/Safari */
+            display: none;
+            width: 0;
+            height: 0;
+            background: transparent;
+        }
+    /* Scroll snap désactivé pour permettre des cartes partiellement visibles */
+    cursor: grab;
+    touch-action: pan-x pinch-zoom; /* permet le drag horizontal sans conflit */
+        /* Espace en fin de carrousel pour afficher entièrement la dernière carte */
+        padding-right: 109px;
+
+        @media (max-width: 1400px) {
+            gap: 10px;
+            padding-right: 80px;
+        }
+
+        @media (max-width: 1200px) {
+            padding-right: 60px;
+        }
+
+        @media (max-width: 1024px) {
+            padding-right: 40px;
+        }
+
+        /* On garde le défilement horizontal aussi sur tablette/mobile */
+        @include tablet {
+            padding-right: 2rem;
+        }
+
+        @include mobile {
+            padding-right: 1rem;
+        }
+    }
+
+    &__card {
+        width: 388px;
+        height: 548px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        flex-shrink: 0;
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
+        padding: 18px 18px 30px;
+        gap: 17px;
+        box-sizing: border-box;
+    transition: none;
+
+        @media (max-width: 1400px) {
+            width: 350px;
+            height: 500px;
+        }
+
+        @media (max-width: 1200px) {
+            width: 320px;
+            height: 450px;
+        }
+
+        @include tablet {
+            width: 100%;
+            max-width: 400px;
+            height: 500px;
+        }
+
+        @include mobile {
+            height: 450px;
+        }
+    }
+
+    &__card-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 1;
+    }
+
+    &__card-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(13deg, rgba(51, 71, 73, 0) 0%, rgba(51, 71, 73, 0.90) 100%), 
+                    linear-gradient(189deg, rgba(255, 249, 237, 0) 0%, rgba(255, 249, 237, 0.73) 58%, #FFF9ED 100%), 
+                    rgba(255, 255, 227, 0.01);
+    backdrop-filter: blur(3.50px);
+        z-index: 2;
+    }
+
+    &__card-content {
+        position: relative;
+        z-index: 3;
+        align-self: stretch;
+        height: 451px;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+        display: flex;
+    }
+
+    &__card-header {
+        align-self: flex-end;
+    }
+
+    &__card-type {
+        color: #FFFEF8;
+        font-size: 14px;
+        font-family: 'DM Sans', $font-family-primary;
+        font-weight: 700;
+        text-transform: uppercase;
+        line-height: 22px;
+        letter-spacing: 1.40px;
+    }
+
+    &__card-info {
+        align-self: stretch;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    gap: 4px;
+        display: flex;
+    }
+
+    &__card-client {
+        color: #5C6D6F;
+        font-size: 14px;
+        font-family: $font-family-primary;
+        font-weight: 700;
+        text-transform: uppercase;
+        line-height: 22px;
+        letter-spacing: 1.40px;
+        margin: 0;
+    user-select: none;
+    }
+
+    &__card-title {
+        align-self: stretch;
+        color: #334749;
+        font-size: 27.65px;
+        font-family: $font-family-primary;
+        font-weight: 800;
+        line-height: 30.42px;
+        margin: 0;
+    user-select: none;
+
+        @media (max-width: 1200px) {
+            font-size: 24px;
+            line-height: 27px;
+        }
+
+        @include mobile {
+            font-size: 22px;
+            line-height: 25px;
+        }
+    }
+
+    &__card-description {
+        align-self: stretch;
+        color: #334749;
+        font-size: 16px;
+        font-family: $font-family-primary;
+        font-weight: 400;
+        line-height: 22.40px;
+        margin: 0;
+        user-select: none;
+    }
+
+    &__card-footer {
+        position: relative;
+        z-index: 3;
+        padding-top: 12px;
+        justify-content: flex-start;
+        align-items: flex-end;
+        gap: 6px;
+        display: flex;
+    }
+
+    &__card-link {
+        justify-content: flex-start;
+        align-items: flex-end;
+        gap: 6px;
+        display: flex;
+        text-decoration: none;
+        transition: none;
+
+        &:focus {
+            outline: 2px solid #048B9A;
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        span {
+            color: #048B9A;
+            font-size: 16px;
+            font-family: $font-family-primary;
+            font-weight: 700;
+            line-height: 19.20px;
+            text-align: center;
+            user-select: none;
+        }
+    }
+
+    &__card-arrow {
+        width: 10px;
+        height: 8.57px;
+        flex-shrink: 0;
+    }
+}
+
+// Amélioration accessibilité
+@media (prefers-reduced-motion: reduce) {
+    .projects__card,
+    .projects__nav-btn,
+    .projects__link,
+    .projects__card-link {
+        transition: none !important;
+    }
+}
+
+/* État de saisie pendant le drag */
+.projects__grid.is-grabbing {
+    cursor: grabbing;
+}
+
+/* Texte non sélectionnable pour éviter les highlights pendant le drag */
+.projects__card-type {
+    user-select: none;
+}

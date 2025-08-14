@@ -1,0 +1,55 @@
+<section class="competences" aria-labelledby="competences-title">
+  <div class="container competences__container">
+    <header class="competences__header">
+      <p class="competences__subtitle">Nom du client</p>
+      <h2 class="competences__title" id="competences-title">Titre narratif</h2>
+      <p class="competences__description">
+        Description narrative<br>
+        Description courte ipsum dolor sit amet consectetur adipiscing elit tortor eu egestas morbi sem vulputate etiam facilisis pellentesque ut quis.<br>
+        Description courte ipsum dolor sit amet consectetur adipiscing elit tortor eu egestas morbi sem vulputate etiam facilisis pellentesque ut quis.
+      </p>
+    </header>
+
+    {% set default_competences = [
+      {
+        image: assets_url ~ '/icons/clim.png',
+        title: 'Compétence 1',
+        url: site.url ~ '/expertise#clim'
+      },
+      {
+        image: assets_url ~ '/icons/eolienne.png',
+        title: 'Compétence 2',
+        url: site.url ~ '/expertise#eolienne'
+      },
+      {
+        image: assets_url ~ '/icons/elec.png',
+        title: 'Compétence 3',
+        url: site.url ~ '/expertise#electricite'
+      },
+      {
+        image: assets_url ~ '/icons/personne.png',
+        title: 'Compétence 4',
+        url: site.url ~ '/expertise#accompagnement'
+      }
+    ] %}
+
+    {% set items = competences is defined and competences|length > 0 ? competences : default_competences %}
+
+    <ul class="competences__grid" role="list">
+      {% for c in items %}
+        <li class="competences__item" role="listitem">
+          <figure class="competences__figure">
+            <img class="competences__image" src="{{ c.image }}" alt="{{ c.title }}" width="168" height="168" loading="lazy">
+            <figcaption class="visually-hidden">{{ c.title }}</figcaption>
+          </figure>
+          <div class="competences__body">
+            <h3 class="competences__name">{{ c.title }}</h3>
+            <a class="competences__link" href="{{ c.url ?? '#' }}" aria-label="En savoir plus sur {{ c.title }}">
+              <span>En savoir plus</span>
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>

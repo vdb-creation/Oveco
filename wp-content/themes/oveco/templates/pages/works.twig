@@ -1,0 +1,19 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<main class="works-page" id="works">
+  {% include 'partials/works-hero.twig' with {
+    id: 'works-hero-title',
+    subtitle: 'Nos réalisations',
+    title: 'Des projets qui ont du sens',
+    desc: 'Explorez une sélection de réalisations menées avec nos clients: conception, autoconstruction, et énergies renouvelables.',
+    cta: { label: 'Nous contacter', url: site.url ~ '#contact' },
+    media_left: { src: assets_url ~ '/imgs/maison-toit.png', alt: 'Maison avec panneaux solaires' },
+    media_right: { src: assets_url ~ '/imgs/maison-build.png', alt: 'Chantier de construction', overlay: true }
+  } %}
+
+  {# Ici, on peut réutiliser les composants: competences, stats, gallery si souhaité #}
+  {% include "partials/projects-section.twig" %}
+  {% include "partials/contact-section.twig" %}
+</main>
+{% endblock %}

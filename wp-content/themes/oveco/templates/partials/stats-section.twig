@@ -1,0 +1,37 @@
+<section class="stats" aria-labelledby="stats-title">
+  <div class="container stats__container">
+    <h2 id="stats-title" class="stats__title visually-hidden">Statistiques du projet</h2>
+
+    {% set default_stats = [
+      {
+        value: '+ de 45',
+        label: 'panneaux solaires',
+        desc: 'Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero'
+      },
+      {
+        value: '+ de 30',
+        label: 'éoliennes',
+        desc: 'Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero'
+      },
+      {
+        value: '+ de 60',
+        label: 'batteries de stockage',
+        desc: 'Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero'
+      }
+    ] %}
+
+    {% set items = stats is defined and stats|length > 0 ? stats : default_stats %}
+
+    <ul class="stats__grid" role="list">
+      {% for s in items %}
+        <li class="stats__item" role="listitem">
+          <div class="stats__content">
+            <h1 class="stats__value">{{ s.value }}</h1>
+            <h3 class="stats__label">{{ s.label }}</h3>
+            <p class="stats__desc">{{ s.desc }}</p>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>

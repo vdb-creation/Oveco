@@ -1,0 +1,168 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* ==============================
+   Contact Section
+   ============================== */
+.contact-section {
+  width: 100%;
+  background: $color-white;
+  display: flex;
+  justify-content: center;
+  padding: 80px 24px; // section vertical padding
+
+  @media (min-width: 1200px) { padding: 120px 24px; }
+}
+
+.contact {
+  &__container {
+    width: 100%;
+    max-width: 1219px;
+    display: grid;
+    grid-template-columns: 1fr 616px;
+    gap: 40px;
+    align-items: start;
+
+    @media (max-width: 1100px) {
+    grid-template-columns: 1fr;
+    }
+  }
+
+  // Left info column
+  &__info {
+    width: 100%;
+    max-width: 502.17px;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  &__info-header { display: flex; flex-direction: column; gap: 16px; }
+
+  &__subtitle {
+    color: #5C6D6F;
+    font-size: 19.2px;
+    font-family: $font-family-primary;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 20px;
+    letter-spacing: 1.92px;
+    margin: 0;
+  }
+
+  &__title {
+    color: #334749;
+    font-size: 39.81px;
+    font-family: $font-family-primary;
+    font-weight: 800;
+    line-height: 47.77px;
+    margin: 0;
+  }
+
+  &__description {
+    color: #5C6D6F;
+    font-size: 16px;
+    font-family: $font-family-primary;
+    font-weight: 400;
+    line-height: 28.8px;
+    margin: 0;
+  }
+
+  &__list { display: flex; flex-direction: column; gap: 24px; margin: 0; padding: 0; list-style: none; }
+  &__item { display: inline-flex; align-items: center; gap: 6px; }
+  &__text { color: #5C6D6F; font-size: 19.2px; font-family: $font-family-primary; font-weight: 400; line-height: 28.8px; }
+  &__link { text-decoration: none; font-size: 19.2px; line-height: 28.8px; font-family: $font-family-primary; font-weight: 400; }
+  &__link--accent { color: #048B9A; }
+
+  // Simple CSS icons to match the outlines in the mock
+  &__item-icon {
+    width: 20px; height: 20px; position: relative; display: inline-block;
+    &::before, &::after { content: ''; position: absolute; border: 1.4px solid #048B9A; border-radius: 2px; }
+    /* Mail: envelope */
+    &::before { width: 16.67px; height: 6.91px; left: 1.67px; top: 3.87px; border-bottom: none; }
+    &::after { width: 16.67px; height: 10.42px; left: 1.67px; top: 5.95px; border-top: none; }
+  }
+  &__item-icon--phone {
+    &::before, &::after { border-color: #048B9A; }
+    &::before { width: 16.67px; height: 16.67px; left: 1.67px; top: 1.37px; border: 1.4px solid #048B9A; }
+    &::after { display: none; }
+  }
+  &__item-icon--location {
+    &::before, &::after { border-color: #5C6D6F; }
+    &::before { width: 13.72px; height: 16.67px; left: 3.14px; top: 1.67px; border: 1.4px solid #5C6D6F; border-radius: 7px; }
+    &::after { width: 6.86px; height: 6.86px; left: 6.57px; top: 5.10px; border: 1.4px solid #5C6D6F; border-radius: 50%; }
+  }
+  &__panel {
+    width: 616px;
+    min-height: 682px;
+    background: rgba(51, 71, 73, 0.10);
+    border-radius: 25px;
+    position: relative;
+    padding: 65px 40px 40px 40px;
+    box-sizing: border-box;
+  }
+
+  &__header { margin-bottom: 32px; }
+
+  &__panel .contact__title {
+    color: #334749;
+    @include heading-2;
+    margin: 0;
+  }
+
+  &__form { display: flex; flex-direction: column; gap: 32px; }
+
+  &__groups {
+    display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;
+  }
+
+  &__col {
+    display: inline-flex; flex-direction: column; gap: 32px; align-items: flex-start;
+  }
+
+  &__field { display: flex; flex-direction: column; gap: 12px; }
+
+  &__label {
+    color: #334749;
+    font-family: 'DM Sans', $font-family-primary;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 18px;
+    margin: 0; padding: 0;
+  }
+
+  &__input {
+    width: 256px; height: 72px; border-radius: 50px; border: none; outline: none;
+    background: rgba(255, 254, 248, 0.75);
+    padding: 21.5px 24px; box-sizing: border-box;
+    color: #5C6D6F; font-size: 16px; font-family: $font-family-primary; line-height: 28.8px; font-weight: 400;
+  }
+
+  &__field--message { width: 100%; }
+  &__textarea {
+    width: 100%; max-width: 536px; border-radius: 20px; border: none; outline: none;
+    background: #FFFEF8;
+    padding: 24px; box-sizing: border-box;
+    color: #5C6D6F; font-size: 16px; font-family: $font-family-primary; line-height: 28.8px; font-weight: 400;
+    min-height: 172px; // 24 top + 100 content + 24 bottom
+    resize: vertical;
+  }
+
+  &__actions { display: flex; justify-content: flex-end; }
+
+  &__submit {
+    @include cta-button;
+  }
+}
+
+/* Responsive fine-tuning */
+@media (max-width: 640px) {
+  .contact {
+    &__panel { width: 100%; padding: 40px 20px; }
+    &__groups { gap: 16px; }
+    &__col { gap: 24px; }
+    &__input { width: min(100%, 420px); height: 64px; }
+    &__textarea { max-width: 100%; }
+    &__actions { justify-content: center; }
+  }
+}
