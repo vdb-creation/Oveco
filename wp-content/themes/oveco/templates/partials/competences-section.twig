@@ -1,13 +1,11 @@
 <section class="competences" aria-labelledby="competences-title">
   <div class="container competences__container">
     <header class="competences__header">
-      <p class="competences__subtitle">Nom du client</p>
-      <h2 class="competences__title" id="competences-title">Titre narratif</h2>
-      <p class="competences__description">
-        Description narrative<br>
-        Description courte ipsum dolor sit amet consectetur adipiscing elit tortor eu egestas morbi sem vulputate etiam facilisis pellentesque ut quis.<br>
-        Description courte ipsum dolor sit amet consectetur adipiscing elit tortor eu egestas morbi sem vulputate etiam facilisis pellentesque ut quis.
-      </p>
+      <p class="competences__subtitle">{{ competences_subtitle ?? 'Nom du client' }}</p>
+      <h2 class="competences__title" id="competences-title">{{ competences_title ?? 'Titre narratif' }}</h2>
+      {% if competences_description %}
+        <p class="competences__description">{{ competences_description }}</p>
+      {% endif %}
     </header>
 
     {% set default_competences = [
@@ -39,7 +37,7 @@
       {% for c in items %}
         <li class="competences__item" role="listitem">
           <figure class="competences__figure">
-            <img class="competences__image" src="{{ c.image }}" alt="{{ c.title }}" width="168" height="168" loading="lazy">
+            <img class="competences__image" src="{{ c.image ?? (assets_url ~ '/icons/elec.png') }}" alt="{{ c.title }}" width="168" height="168" loading="lazy">
             <figcaption class="visually-hidden">{{ c.title }}</figcaption>
           </figure>
           <div class="competences__body">

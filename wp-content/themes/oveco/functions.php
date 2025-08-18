@@ -32,6 +32,7 @@ require_once get_template_directory() . '/inc/testimonials.php';
 require_once get_template_directory() . '/inc/testimonials-helpers.php';
 require_once get_template_directory() . '/inc/projects.php';
 require_once get_template_directory() . '/inc/projects-helpers.php';
+require_once get_template_directory() . '/inc/projects-fields.php';
 
 // Utilitaires (si le fichier existe)
 if (file_exists(get_template_directory() . '/inc/utils.php')) {
@@ -112,6 +113,8 @@ add_action('init', function() {
         flush_rewrite_rules();
         delete_option('oveco_flush_rewrite_rules');
     }
+
+    // La réécriture /work/{slug}/ est gérée par le CPT (rewrite slug)
 });
 
 /**
@@ -138,6 +141,8 @@ add_action('after_switch_theme', function() {
     // Recharger immédiatement
     flush_rewrite_rules();
 });
+
+// Suppression de la redirection 301 pour éviter les boucles; le CPT pointe déjà sur /work/{slug}/
 
 /**
  * Crée la page "Réalisations" (slug: works) si elle n'existe pas

@@ -7,7 +7,22 @@
   background-repeat: repeat-x;
   background-position: center top;
   background-size: auto;
-  padding: 72px 75px; /* top/bottom 72 comme la maquette donnée */
+  padding: 150px 75px; /* top/bottom 72 comme la maquette donnée */
+  position: relative; /* pour le pseudo-élément */
+
+  /* Étendre visuellement la grille sous la section sans créer d'espace */
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -120px; /* dépasse sous la section */
+    height: 120px; /* hauteur d'extension */
+    background-image: inherit;
+    background-repeat: repeat-x;
+    background-position: center top;
+    background-size: auto;
+    pointer-events: none;
+    z-index: 0; /* derrière le contenu */
+  }
 
   &__inner {
     width: 100%;
@@ -17,6 +32,8 @@
     align-items: center;
     justify-content: center;
     gap: 63px;
+  position: relative;
+  z-index: 1; /* au-dessus du ::after */
   }
 
   &__side {
@@ -52,15 +69,30 @@
     &__inner { gap: 40px; }
   }
   @media (max-width: 1024px) {
-    &__inner { flex-direction: column; }
-    &__content { width: 100%; }
-    &__figure { width: min(100%, 320px); height: auto; aspect-ratio: 266 / 320; }
-    &__side { &--left, &--right { padding: 0; } }
+    /* Passer en grille: texte sur la 1ère ligne (2 colonnes), images côte à côte en dessous */
+    &__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        'content content'
+        'left right';
+      column-gap: 24px;
+      row-gap: 24px;
+      justify-items: center;
+    }
+    &__content { width: 100%; grid-area: content; }
+    &__side { 
+      &--left { grid-area: left; padding: 0; transform: translateY(-12px); }
+      &--right { grid-area: right; padding: 0; transform: translateY(12px); }
+    }
+    &__figure { width: 100%; max-width: 320px; height: auto; aspect-ratio: 266 / 320; }
   }
   @include mobile {
     padding: 32px 16px;
     &__subtitle { font-size: 16px; line-height: 18px; }
     &__title { font-size: 36px; line-height: 44px; }
     &__desc { font-size: 16px; line-height: 24px; }
+    &::after { bottom: -100px; height: 100px; }
   }
 }

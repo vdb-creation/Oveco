@@ -22,12 +22,13 @@ foreach ($projects as $p) {
     $tags = wp_get_post_terms($p->ID, 'project_tag');
     $type = !empty($tags) && !is_wp_error($tags) ? $tags[0]->name : '';
 
+    $hero_img = get_post_meta($p->ID, '_project_hero_image', true);
     $cards[] = [
-        'image'       => isset($p->thumbnail) && $p->thumbnail ? $p->thumbnail->src : '',
+        'image'       => !empty($hero_img) ? $hero_img : (isset($p->thumbnail) && $p->thumbnail ? $p->thumbnail->src : ''),
         'type'        => $type,
         'client'      => get_post_meta($p->ID, '_project_client', true),
         'title'       => $p->title,
-        'url'         => $p->link,
+    'url'         => trailingslashit(home_url('/work/' . $p->slug)),
     ];
 }
 

@@ -3646,8 +3646,24 @@ body.no-scroll {
   background-repeat: repeat-x;
   background-position: center top;
   background-size: auto;
-  padding: 72px 75px; /* top/bottom 72 comme la maquette donnée */
+  padding: 150px 75px; /* top/bottom 72 comme la maquette donnée */
+  position: relative; /* pour le pseudo-élément */
+  /* Étendre visuellement la grille sous la section sans créer d'espace */
   /* Responsive */
+}
+.works-hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -120px; /* dépasse sous la section */
+  height: 120px; /* hauteur d'extension */
+  background-image: inherit;
+  background-repeat: repeat-x;
+  background-position: center top;
+  background-size: auto;
+  pointer-events: none;
+  z-index: 0; /* derrière le contenu */
 }
 .works-hero__inner {
   width: 100%;
@@ -3657,6 +3673,8 @@ body.no-scroll {
   align-items: center;
   justify-content: center;
   gap: 63px;
+  position: relative;
+  z-index: 1; /* au-dessus du ::after */
 }
 .works-hero__side {
   display: flex;
@@ -3775,19 +3793,37 @@ body.no-scroll {
   }
 }
 @media (max-width: 1024px) {
+  .works-hero {
+    /* Passer en grille: texte sur la 1ère ligne (2 colonnes), images côte à côte en dessous */
+  }
   .works-hero__inner {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas: "content content" "left right";
+    column-gap: 24px;
+    row-gap: 24px;
+    justify-items: center;
   }
   .works-hero__content {
     width: 100%;
+    grid-area: content;
+  }
+  .works-hero__side--left {
+    grid-area: left;
+    padding: 0;
+    transform: translateY(-12px);
+  }
+  .works-hero__side--right {
+    grid-area: right;
+    padding: 0;
+    transform: translateY(12px);
   }
   .works-hero__figure {
-    width: min(100%, 320px);
+    width: 100%;
+    max-width: 320px;
     height: auto;
     aspect-ratio: 266/320;
-  }
-  .works-hero__side--left, .works-hero__side--right {
-    padding: 0;
   }
 }
 @media (max-width: 480px) {
@@ -3805,6 +3841,144 @@ body.no-scroll {
   .works-hero__desc {
     font-size: 16px;
     line-height: 24px;
+  }
+  .works-hero::after {
+    bottom: -100px;
+    height: 100px;
+  }
+}
+
+.works-search {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 42px 24px;
+  background: #FFFEF8;
+  /* NAV: recherche + tags */
+  /* GRID: cartes projets (2 par ligne) */
+  /* Chaque cellule contient une carte réutilisable */
+  /* Réduction à 1 colonne sur mobile */
+}
+.works-search__container {
+  width: 100%;
+  max-width: 1219px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.works-search__nav {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.works-search__form {
+  padding: 14px 24px;
+  background: #FFFEF8;
+  border-radius: 50px;
+  outline: 1.5px solid #5C6D6F;
+  outline-offset: -1.5px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.works-search__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+.works-search__control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.works-search__input {
+  width: clamp(260px, 36vw, 371px);
+  border: none;
+  background: transparent;
+  color: #334749;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 18px;
+  outline: none;
+}
+.works-search__input::placeholder {
+  color: #5C6D6F;
+  opacity: 1;
+}
+.works-search__icon {
+  display: inline-flex;
+}
+.works-search__tags {
+  width: min(100%, 480px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.works-search__chip {
+  padding: 6px 12px;
+  background: #FFFEF8;
+  border-radius: 18px;
+  outline: 1px solid #5C6D6F;
+  outline-offset: -1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border: none;
+}
+.works-search__chip.is-selected {
+  background: #5C6D6F;
+  outline-color: #FFFEF8;
+}
+.works-search__chip.is-selected .works-search__chip-label {
+  color: #FFF9ED;
+}
+.works-search__chip-label {
+  color: #5C6D6F;
+  font-size: 14px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 18px;
+}
+.works-search__grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  /* Rendre les cartes plus larges sur cette page: elles doivent remplir toute la colonne */
+  /* Évite les overflow internes hérités du carrousel */
+}
+.works-search__grid .projects__card {
+  width: 100%;
+  max-width: none;
+}
+.works-search__grid .projects__card-content {
+  height: auto; /* laisse la hauteur s'adapter au contenu si nécessaire */
+  min-height: 420px; /* garde une présence visuelle confortable */
+}
+@media (max-width: 768px) {
+  .works-search__nav {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .works-search__form {
+    width: 100%;
+  }
+  .works-search__tags {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .works-search__grid {
+    grid-template-columns: 1fr;
   }
 }
 

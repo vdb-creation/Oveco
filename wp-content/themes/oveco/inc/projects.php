@@ -58,14 +58,14 @@ function oveco_register_projects_cpt() {
         'show_in_admin_bar'     => true,
         'show_in_nav_menus'     => true,
         'can_export'            => true,
-        'has_archive'           => 'projets',
+    'has_archive'           => 'works',
         'exclude_from_search'   => false,
         'publicly_queryable'    => true,
         'capability_type'       => 'post',
         'show_in_rest'          => true,
         'rest_base'             => 'projets',
         'rewrite'               => array(
-            'slug'       => 'projet',
+            'slug'       => 'work',
             'with_front' => false,
         ),
     );

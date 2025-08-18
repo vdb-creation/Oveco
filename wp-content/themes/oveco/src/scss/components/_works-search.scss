@@ -1,0 +1,134 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+.works-search {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 42px 24px;
+  background: $color-white;
+
+  &__container {
+    width: 100%;
+    max-width: 1219px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* NAV: recherche + tags */
+  &__nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  &__form {
+    padding: 14px 24px;
+    background: #FFFEF8;
+    border-radius: 50px;
+    outline: 1.5px solid #5C6D6F;
+    outline-offset: -1.5px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__label {
+    position: absolute;
+    width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); border: 0;
+  }
+
+  &__control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__input {
+    width: clamp(260px, 36vw, 371px);
+    border: none;
+    background: transparent;
+    color: #334749;
+    font-family: $font-family-primary;
+    font-size: 16px;
+    line-height: 18px;
+    outline: none;
+
+    &::placeholder {
+      color: #5C6D6F;
+      opacity: 1;
+    }
+  }
+
+  &__icon { display: inline-flex; }
+
+  &__tags {
+    width: min(100%, 480px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  &__chip {
+    padding: 6px 12px;
+    background: #FFFEF8;
+    border-radius: 18px;
+    outline: 1px solid #5C6D6F;
+    outline-offset: -1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border: none;
+
+    &.is-selected {
+      background: #5C6D6F;
+      outline-color: #FFFEF8;
+
+      .works-search__chip-label { color: #FFF9ED; }
+    }
+  }
+
+  &__chip-label {
+    color: #5C6D6F;
+    font-size: 14px;
+    font-family: $font-family-primary;
+    font-weight: 400;
+    line-height: 18px;
+  }
+
+  /* GRID: cartes projets (2 par ligne) */
+  &__grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+
+    /* Rendre les cartes plus larges sur cette page: elles doivent remplir toute la colonne */
+    .projects__card {
+      width: 100%;
+      max-width: none;
+    }
+
+    /* Évite les overflow internes hérités du carrousel */
+    .projects__card-content {
+      height: auto; /* laisse la hauteur s'adapter au contenu si nécessaire */
+      min-height: 420px; /* garde une présence visuelle confortable */
+    }
+  }
+
+  /* Chaque cellule contient une carte réutilisable */
+
+  /* Réduction à 1 colonne sur mobile */
+  @media (max-width: 768px) {
+    &__nav { flex-direction: column; align-items: stretch; }
+    &__form { width: 100%; }
+    &__tags { width: 100%; justify-content: flex-start; }
+    &__grid { grid-template-columns: 1fr; }
+  }
+}

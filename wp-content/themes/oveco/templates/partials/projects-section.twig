@@ -31,37 +31,23 @@
             </header>
 
             <div class="projects__grid" role="list" aria-labelledby="projets-title">
-                {% include 'partials/components/card.twig' with {
-                    image: assets_url ~ '/imgs/maison-toit.png',
-                    type: 'Photovoltaïque',
-                    client: 'Particulier',
-                    title: 'Installation photovoltaïque résidentielle complète',
-                    url: '#projet-1'
-                } %}
+                {# Prépare une liste source: projects (si fourni par le contrôleur) sinon fallback depuis helper #}
+                {% set source_projects = projects is defined and projects|length > 0 ? projects : [] %}
+                {% if source_projects is empty and function('oveco_get_recent_projects') %}
+                    {% set source_projects = function('oveco_get_recent_projects', 8) %}
+                {% endif %}
 
-                {% include 'partials/components/card.twig' with {
-                    image: assets_url ~ '/imgs/maison-toit-2.png',
-                    type: 'Éolien',
-                    client: 'Entreprise',
-                    title: 'Système éolien pour bâtiment industriel',
-                    url: '#projet-2'
-                } %}
-
-                {% include 'partials/components/card.twig' with {
-                    image: assets_url ~ '/imgs/maison-build.png',
-                    type: 'Géothermie',
-                    client: 'Collectivité',
-                    title: 'Installation géothermique pour complexe municipal',
-                    url: '#projet-3'
-                } %}
-
-                {% include 'partials/components/card.twig' with {
-                    image: assets_url ~ '/imgs/architrech.png',
-                    type: 'Hybride',
-                    client: 'Particulier',
-                    title: 'Solution énergétique hybride pour villa moderne',
-                    url: '#projet-4'
-                } %}
+                {% for p in source_projects %}
+                    {% set primary_tag = p.tags is defined and p.tags ? p.tags|first.name : '' %}
+                    {% set hero_img = function('get_post_meta', p.id, '_project_hero_image', true) %}
+                    {% include 'partials/components/card.twig' with {
+                        image: hero_img ?: (p.thumbnail ? p.thumbnail.src : (assets_url ~ '/imgs/maison-toit.png')),
+                        type: primary_tag,
+                        client: p.client ?? '',
+                        title: p.title,
+                        url: site.url ~ '/work/' ~ p.slug
+                    } %}
+                {% endfor %}
             </div>
         </div>
     </div>

@@ -20,7 +20,7 @@
       }
     ] %}
 
-    {% set items = stats is defined and stats|length > 0 ? stats : default_stats %}
+  {% set items = stats is defined and stats|length > 0 ? stats : default_stats %}
 
     <ul class="stats__grid" role="list">
       {% for s in items %}
@@ -28,7 +28,7 @@
           <div class="stats__content">
             <h1 class="stats__value">{{ s.value }}</h1>
             <h3 class="stats__label">{{ s.label }}</h3>
-            <p class="stats__desc">{{ s.desc }}</p>
+            {% if s.desc %}<p class="stats__desc">{{ s.desc }}</p>{% endif %}
           </div>
         </li>
       {% endfor %}

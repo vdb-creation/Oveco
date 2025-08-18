@@ -14,12 +14,12 @@
         <!-- Navbar Component -->
         {% include "partials/navbar.twig" %}
 
-        <!-- Main Content -->
-        <main id="main" class="site-main">
+    <!-- Main Content -->
+    <div id="main" class="site-main" role="main">
             {% block content %}
                 {# Le contenu sera inséré ici par les templates enfants #}
             {% endblock %}
-        </main>
+    </div>
 
         <!-- Footer Component -->
         {% include "partials/footer.twig" %}
