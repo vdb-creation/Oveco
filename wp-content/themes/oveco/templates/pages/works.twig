@@ -2,6 +2,10 @@
 
 {% block content %}
 <main class="works-page" id="works">
+  {# Zone éditable depuis Gutenberg s'il y a du contenu sur la page 'Réalisations' #}
+  {% if post is defined and post and post.content %}
+    <div class="works-page__intro is-gutenberg">{{ post.content }}</div>
+  {% endif %}
   {% include 'partials/works-hero.twig' with {
     id: 'works-hero-title',
     subtitle: 'Nos réalisations',

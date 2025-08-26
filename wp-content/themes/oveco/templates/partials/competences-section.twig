@@ -42,9 +42,13 @@
           </figure>
           <div class="competences__body">
             <h3 class="competences__name">{{ c.title }}</h3>
-            <a class="competences__link" href="{{ c.url ?? '#' }}" aria-label="En savoir plus sur {{ c.title }}">
-              <span>En savoir plus</span>
-            </a>
+            {% if c.description %}
+              <p class="competences__description-item">{{ c.description }}</p>
+            {% else %}
+              <a class="competences__link" href="{{ c.url ?? '#' }}" aria-label="En savoir plus sur {{ c.title }}">
+                <span>En savoir plus</span>
+              </a>
+            {% endif %}
           </div>
         </li>
       {% endfor %}

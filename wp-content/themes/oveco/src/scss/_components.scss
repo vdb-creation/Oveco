@@ -18,6 +18,12 @@
 @use 'components/gallery';
 @use 'components/homepage';
 
+/* Composants Gutenberg */
+@use 'components/project-card';
+@use 'components/section-hero';
+@use 'components/listing-grid';
+@use 'components/call-to-action';
+
 /* Composants de base */
 .card {
   background: #fff;

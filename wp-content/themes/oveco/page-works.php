@@ -7,6 +7,8 @@
 if (!defined('ABSPATH')) { exit; }
 
 $context = \Timber\Timber::context();
+// Récupérer la page courante pour utiliser son contenu Gutenberg
+$context['post'] = \Timber\Timber::get_post();
 
 // Récupération des projets
 $projects = \Timber\Timber::get_posts([

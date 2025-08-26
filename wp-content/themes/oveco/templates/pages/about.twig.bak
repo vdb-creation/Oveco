@@ -1,0 +1,26 @@
+Backup of about.twig before fixing corruption
+
+--- FILE START ---
+
+{# Page À propos - About #}
+{% extends "base.twig"%}   {# Section Oveco #}
+  {% include "partials/text_image-section.twig" with {
+    section_subtitle: "L'équipe",
+    section_title: "Des ingénieurs engagés,<br/>proches du terrain", 
+    section_description: "Chez Oveco, la technique s'incarne sur le terrain.<br/>Nos fondateurs combinent expertise académique, expérience d'installation et pédagogie pour accompagner chaque projet avec rigueur.",
+    titre_section: true,
+    subtitle: "L'ingénieur",
+    title: "Olivier Haerlingen",
+    description: "Ingénieur industriel et professeur de thermodynamique, Olivier conçoit des systèmes techniques sur mesure et assure leur cohérence énergétique.<br/>Il pilote les projets avec une attention particulière à la performance globale et au confort.",
+    link: { label: "Nous contacter", url: site.url ~ '#contact' },
+    image: { src: assets_url ~ '/imgs/maison-build.png', alt: 'Olivier Haerlingen' },
+    reverse: false,
+    duplicate: true,
+    subtitle2: "Le concepteur",
+    title2: "Vincent Claessens",
+    description2: "Ingénieur électromécanicien et professeur en conception mécanique, Vincent est un homme de terrain.<br/>Il combine conception, installation et formation avec un sens pratique affûté et une passion pour l'innovation sobre.",
+    link2: { label: "Nous contacter", url: site.url ~ '#contact' },
+    image2: { src: assets_url ~ '/imgs/maison-build.png', alt: 'Vincent Claessens' }
+  } {% block content %}
+
+--- FILE END ---

@@ -1,6 +1,10 @@
 {% extends "base.twig" %}
-
 {% block content %}
+    {% if post is defined and post and post.content %}
+        <div class="home-page home-page--gutenberg">
+            {{ post.content }}
+        </div>
+    {% else %}
     <div class="home-page">
         <section class="hero">
             <div class="container">
@@ -27,10 +31,15 @@
         <div class="speration"></div>
 
         {# Section Oveco #}
-        {% include "partials/oveco-section.twig" %}
-
-        {# Section Oveco #}
-        {% include "partials/oveco-section.twig" %}
+          {% include "partials/text_image-section.twig" with {
+            subtitle: "L’équipe",
+            title: "Des ingénieurs engagés,<br/>proches du terrain",
+            description: "Chez Oveco, la technique s’incarne sur le terrain. Nos fondateurs combinent expertise académique…",
+            link: { label: "En savoir plus", url: site.url ~ '#about' },
+            image: { src: assets_url ~ '/imgs/maison-build.png', alt: 'Réalisation Oveco' },
+            titre_section: true,
+            duplicate: false,
+        } %}
 
         {# Section Expertise #}
         {% include "partials/expertise-section.twig" %}
@@ -47,18 +56,13 @@
         {# Section Testimonials #}
         {% include "partials/testimonials-section.twig" %}
 
-        {# Section Partners #}
-        {% include "partials/partners-section.twig" %}
-
         {# Section Certifications #}
         {% include "partials/certifications-section.twig" %}
-
-        {# Section Oveco #}
-        {% include "partials/oveco-section.twig" %}
 
         {# Section Contact #}
         {% include "partials/contact-section.twig" %}
 
         
     </div>
+    {% endif %}
 {% endblock %}

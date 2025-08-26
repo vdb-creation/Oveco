@@ -139,7 +139,10 @@
         @include heading-1;
         align-self: stretch;
         text-align: center;
-        color: $color-secondary;
+        
+        & {
+            color: $color-secondary;
+        }
     }
 
     &__description {

@@ -1,4 +1,3 @@
-<link rel="shortcut icon" href="./assets/icons/favicon.png" type="image/x-icon">
 <?php
 if (!defined('ABSPATH')) exit;
 
@@ -53,7 +52,31 @@ try {
         $project->tags = wp_get_post_terms($project->ID, 'project_tag');
     }
     
-    \Timber\Timber::render('index.twig', $context);
+    // Déterminer le template à utiliser
+    $templates = ['index.twig'];
+    
+    // Si c'est une page spécifique
+    if (is_page()) {
+        $page_slug = get_post_field('post_name', get_queried_object_id());
+        
+        // Templates spécifiques par slug
+        switch ($page_slug) {
+            case 'about':
+                $templates = ['pages/about.twig', 'page.twig', 'index.twig'];
+                break;
+            case 'works':
+                $templates = ['pages/works.twig', 'page.twig', 'index.twig'];
+                break;
+            case 'accueil':
+                $templates = ['index.twig'];
+                break;
+            default:
+                $templates = ['page.twig', 'index.twig'];
+                break;
+        }
+    }
+    
+    \Timber\Timber::render($templates, $context);
 } catch (Exception $e) {
     echo "<!DOCTYPE html><html><head><title>Erreur</title></head><body>";
     echo "<h1>Erreur Template</h1>";

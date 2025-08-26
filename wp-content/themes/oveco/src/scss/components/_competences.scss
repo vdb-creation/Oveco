@@ -126,6 +126,21 @@
     &:focus-visible { outline: 2px solid #048B9A; outline-offset: 2px; border-radius: 2px; }
   }
 
+  &__description-item {
+    width: 364px;
+    text-align: center;
+    color: #5C6D6F;
+    font-size: 16px;
+    font-family: $font-family-primary;
+    font-weight: 400;
+    line-height: 28.8px;
+    margin: 0;
+    
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+
   /* Responsive */
   @media (max-width: 1200px) {
     &__grid { grid-template-columns: repeat(2, 1fr); gap: 40px; row-gap: 32px; }

@@ -11,204 +11,315 @@
     @include mobile {
         padding: 4rem 0;
     }
-}
 
-.oveco {
     // Reset des margins sur tous les éléments de titre dans cette section
     h2, h3, p {
         margin: 0 !important;
     }
 
-    &__container {
-        justify-content: flex-start;
+    // Container principal pour les blocs dupliqués
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+// HEADER DE SECTION (centré)
+.oveco__section-header {
+    align-self: stretch;
+    padding-left: 109px;
+    padding-right: 109px;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+    margin-bottom: 4rem;
+
+    @include tablet {
+        padding-left: 2rem;
+        padding-right: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    @include mobile {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-bottom: 2rem;
+    }
+}
+
+.oveco__section-content {
+    width: 706.82px;
+    max-width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+}
+
+.oveco__section-subtitle {
+    text-align: center;
+    color: $color-text;
+    font-size: 19.20px;
+    font-family: $font-family-primary;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    line-height: 20px;
+    letter-spacing: 1.92px;
+    margin: 0 !important;
+}
+
+.oveco__section-title {
+    align-self: stretch;
+    text-align: center;
+    color: $color-secondary;
+    font-size: 39.81px;
+    font-family: $font-family-primary;
+    font-weight: 800;
+    line-height: 47.77px;
+    margin: 0 !important;
+
+    @include mobile {
+        font-size: 28px;
+        line-height: 34px;
+    }
+}
+
+.oveco__section-description {
+    align-self: stretch;
+    text-align: center;
+    color: $color-text;
+    font-size: 16px;
+    font-family: $font-family-primary;
+    font-weight: $font-weight-regular;
+    line-height: 28.80px;
+    margin: 0 !important;
+}
+
+.oveco__container {
+    justify-content: space-between;
+    align-items: center;
+    gap: 130px;
+    display: flex;
+    margin-bottom: 0;
+
+    // Espacement entre les containers en mode duplicate
+    & + & {
+        margin-top: 8rem;
+        
+        @include tablet {
+            margin-top: 6rem;
+        }
+        
+        @include mobile {
+            margin-top: 4rem;
+        }
+    }
+
+    &.is-reverse {
+        flex-direction: row-reverse;
+    }
+
+    @include tablet {
+        flex-direction: column;
+        gap: 4rem;
+        text-align: center;
+
+        &.is-reverse {
+            flex-direction: column-reverse;
+        }
+    }
+
+    @include mobile {
+        gap: 3rem;
+    }
+}
+
+.oveco__content {
+    width: 458px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 21px;
+    display: flex;
+
+    @include tablet {
+        width: 100%;
+        max-width: 600px;
         align-items: center;
-        gap: 130px;
-        display: flex;
-
-        @include tablet {
-            flex-direction: column;
-            gap: 4rem;
-            text-align: center;
-        }
-
-        @include mobile {
-            gap: 3rem;
-        }
     }
 
-    &__content {
-        width: 458px;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 21px;
-        display: flex;
-
-        @include tablet {
-            width: 100%;
-            max-width: 600px;
-            align-items: center;
-        }
-
-        @include mobile {
-            gap: 1.5rem;
-        }
+    @include mobile {
+        gap: 1.5rem;
     }
+}
 
-    &__header {
-        align-self: stretch;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 6px;
-        display: flex;
+.oveco__header {
+    align-self: stretch;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 6px;
+    display: flex;
 
-        @include tablet {
-            align-items: center;
-        }
+    @include tablet {
+        align-items: center;
     }
+}
 
-    &__subtitle {
-        @include heading-3;
-        align-self: stretch;
-        color: $color-text;
+.oveco__subtitle {
+    @include heading-3;
+    align-self: stretch;
+    color: $color-text;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.12rem; // 1.92px
+    margin: 0 !important;
+
+    @include tablet {
+        text-align: center;
+    }
+}
+
+.oveco__title {
+    @include heading-2;
+    align-self: stretch;
+    color: $color-secondary;
+    margin: 0 !important;
+
+    @include tablet {
+        text-align: center;
+    }
+}
+
+.oveco__description {
+    @include text-body;
+    align-self: stretch;
+    color: $color-text;
+    margin: 0 !important;
+
+    @include tablet {
+        text-align: center;
+    }
+}
+
+.oveco__link {
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+    text-decoration: none;
+
+    span {
+        color: $color-accent;
+        font-size: 1rem; // 16px
+        font-family: $font-family-primary;
         font-weight: $font-weight-bold;
-        text-transform: uppercase;
-        letter-spacing: 0.12rem; // 1.92px
-        margin: 0 !important;
+        line-height: 1.2rem; // 19.20px
+    }
+}
 
-        @include tablet {
-            text-align: center;
-        }
+.oveco__arrow {
+    width: 16px;
+    height: 14px;
+}
+
+.oveco__visual {
+    width: 452px;
+    height: 562px;
+    position: relative;
+
+    @include tablet {
+        width: 100%;
+        max-width: 452px;
+        height: auto;
+        aspect-ratio: 452 / 562;
     }
 
-    &__title {
-        @include heading-2;
-        align-self: stretch;
-        color: $color-secondary;
-        margin: 0 !important;
+    @include mobile {
+        max-width: 350px;
+    }
+}
 
-        @include tablet {
-            text-align: center;
-        }
+.oveco__main-image {
+    width: 362px;
+    height: 435.49px;
+    left: 45px;
+    top: 63.26px;
+    position: absolute;
+    overflow: hidden;
+    border-radius: 40.83px;
+    background: linear-gradient(0deg, rgba(2, 139, 154, 0.05) 0%, rgba(2, 139, 154, 0.05) 100%);
+    background-blend-mode: color, normal;
+    object-fit: cover;
+    // Responsive image sizing
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 362 / 472;
+
+    @include tablet {
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 362px;
     }
 
-    &__description {
-        @include text-body;
-        align-self: stretch;
-        color: $color-text;
-        margin: 0 !important;
-
-        @include tablet {
-            text-align: center;
-        }
+    @include mobile {
+        max-width: 280px;
     }
+}
 
-    &__link {
-        justify-content: flex-start;
-        align-items: center;
-        gap: 10px;
-        display: flex;
-        text-decoration: none;
-
-        span {
-            color: $color-accent;
-            font-size: 1rem; // 16px
-            font-family: $font-family-primary;
-            font-weight: $font-weight-bold;
-            line-height: 1.2rem; // 19.20px
-        }
-    }
-
-    &__arrow {
-        width: 16px;
-        height: 14px;
-    }
-
-    &__visual {
-        width: 452px;
-        height: 562px;
-        position: relative;
-
-        @include tablet {
-            width: 100%;
-            max-width: 452px;
-            height: auto;
-            aspect-ratio: 452 / 562;
-        }
-
-        @include mobile {
-            max-width: 350px;
-        }
-    }
-
-    &__main-image {
-        width: 362px;
-        height: 435.49px;
-        left: 45px;
-        top: 63.26px;
+.oveco__decoration {
+    &--white {
+        width: 69.76px;
+        height: 74.74px;
+        left: 410.73px;
+        top: 527.70px;
         position: absolute;
-        overflow: hidden;
-        border-radius: 40.83px;
-        background: linear-gradient(0deg, rgba(2, 139, 154, 0.05) 0%, rgba(2, 139, 154, 0.05) 100%);
-        background-blend-mode: color, normal;
-        object-fit: cover;
+        transform: rotate(-171deg);
+        transform-origin: top left;
+        background: $color-white;
+
+        @include tablet {
+            display: none;
+        }
+    }
+}
+
+.oveco__icon {
+    position: absolute;
+
+    &--house {
+        width: 100.90px;
+        height: 100.90px;
+        left: 330.82px;
+        top: 427.82px;
+        transform-origin: top left;
+
+        @include tablet {
+            display: none;
+        }
+    }
+
+    &--pencil {
+        width: 104px;
+        height: 104px;
+        left: 8px;
+        top: 61px;
 
         @include tablet {
             left: 50%;
             transform: translateX(-50%);
-        }
-    }
-
-    &__decoration {
-        &--white {
-            width: 69.76px;
-            height: 74.74px;
-            left: 410.73px;
-            top: 527.70px;
-            position: absolute;
-            transform: rotate(-171deg);
-            transform-origin: top left;
-            background: $color-white;
-
-            @include tablet {
-                display: none;
-            }
-        }
-    }
-
-    &__icon {
-        position: absolute;
-
-        &--house {
-            width: 100.90px;
-            height: 100.90px;
-            left: 330.82px;
-            top: 427.82px;
-            transform-origin: top left;
-
-            @include tablet {
-                display: none;
-            }
+            margin-left: -180px;
         }
 
-        &--pencil {
-            width: 104px;
-            height: 104px;
-            left: 8px;
-            top: 61px;
-
-            @include tablet {
-                left: 50%;
-                transform: translateX(-50%);
-                margin-left: -180px;
-            }
-
-            @include mobile {
-                width: 80px;
-                height: 80px;
-                margin-left: -140px;
-            }
+        @include mobile {
+            width: 80px;
+            height: 80px;
+            margin-left: -140px;
         }
     }
 }
