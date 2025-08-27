@@ -7,19 +7,34 @@
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
             {% endif %}
         </a>
+    
+            {% set _about_page = function('get_page_by_path', 'about') %}
+            {% set about_url = _about_page ? function('get_permalink', _about_page.ID) : site.url ~ '/about' %}
+
+            {% set _auto_page = function('get_page_by_path', 'auto-construction') %}
+            {% set auto_url = _auto_page ? function('get_permalink', _auto_page.ID) : site.url ~ '/auto-construction' %}
+
+            {% set _competences_page = function('get_page_by_path', 'competences') %}
+            {% set competences_url = _competences_page ? function('get_permalink', _competences_page.ID) : site.url ~ '/competences' %}
+
+            {% set _works_page = function('get_page_by_path', 'works') %}
+            {% set works_url = _works_page ? function('get_permalink', _works_page.ID) : site.url ~ '/works' %}
+
+            {% set _contact_page = function('get_page_by_path', 'contact') %}
+            {% set contact_url = _contact_page ? function('get_permalink', _contact_page.ID) : site.url ~ '/contact' %}
 
         <!-- Navigation Menu -->
         <div class="navbar__menu" id="navbarMenu">
             <div class="navbar__links">
-                <a href="/qui-sommes-nous" class="navbar__link">Qui sommes nous ?</a>
-                <a href="/auto-construction" class="navbar__link">L'auto-construction</a>
-                <a href="/competences" class="navbar__link">Compétences</a>
-                <a href="{{ site.url }}/works" class="navbar__link">Réalisations</a>
+                <a href="{{ about_url }}" class="navbar__link">Qui sommes nous ?</a>
+                <a href="{{ auto_url }}" class="navbar__link">L'auto-construction</a>
+                <a href="{{ competences_url }}" class="navbar__link">Compétences</a>
+                <a href="{{ works_url }}" class="navbar__link">Réalisations</a>
             </div>
 
             <!-- CTA Button (dans le menu pour le mobile) -->
             <div class="navbar__cta">
-                <a href="/contact" class="navbar__btn">Nous contacter</a>
+                <a href="{{ contact_url }}" class="navbar__btn">Nous contacter</a>
             </div>
         </div>
 
