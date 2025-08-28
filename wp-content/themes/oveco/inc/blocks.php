@@ -15,12 +15,10 @@ if (!defined('ABSPATH')) {
  */
 add_filter('block_type_metadata_settings', function ($settings, $metadata) {
     if (!empty($metadata['render'])) {
-        $template_path = wp_normalize_path(
-            realpath(
-                dirname($metadata['file']) . '/' .
-                remove_block_asset_path_prefix($metadata['render'])
-            )
-        );
+        $relative = remove_block_asset_path_prefix($metadata['render']);
+        $file = dirname($metadata['file']) . '/' . $relative;
+        $resolved = file_exists($file) ? realpath($file) : $file;
+        $template_path = wp_normalize_path($resolved);
 
         if (str_ends_with($template_path, '.twig')) {
             $settings['render_callback'] = function ($attributes, $content, $block) use ($template_path) {
@@ -82,17 +80,19 @@ add_filter('block_type_metadata_settings', function ($settings, $metadata) {
  */
 add_action('init', function() {
     if (function_exists('register_block_type')) {
-        // Enregistrer le bloc project-card
-        register_block_type(get_theme_file_path('src/blocks/project-card'));
-        
-        // Enregistrer le bloc section-hero
-        register_block_type(get_theme_file_path('src/blocks/section-hero'));
-        
-        // Enregistrer le bloc listing-grid
-        register_block_type(get_theme_file_path('src/blocks/listing-grid'));
-        
-        // Enregistrer le bloc call-to-action
-        register_block_type(get_theme_file_path('src/blocks/call-to-action'));
+        $blocks = [
+            'project-card',
+            'section-hero',
+            'listing-grid',
+            'call-to-action',
+            'test-hero'
+        ];
+        foreach ($blocks as $block) {
+            $dir = get_theme_file_path('src/blocks/' . $block);
+            if (file_exists($dir . '/block.json')) {
+                register_block_type($dir);
+            }
+        }
     }
 });
 
@@ -100,69 +100,31 @@ add_action('init', function() {
  * Enqueue les scripts et styles des blocs pour l'éditeur
  */
 add_action('enqueue_block_editor_assets', function() {
-    // Script pour l'éditeur du bloc project-card
-    wp_enqueue_script(
-        'oveco-project-card-editor',
-        get_template_directory_uri() . '/src/blocks/project-card/edit.js',
-        [
-            'wp-blocks',
-            'wp-element',
-            'wp-editor',
-            'wp-block-editor',
-            'wp-components',
-            'wp-i18n'
-        ],
-        filemtime(get_template_directory() . '/src/blocks/project-card/edit.js'),
-        true
-    );
-    
-    // Script pour l'éditeur du bloc section-hero
-    wp_enqueue_script(
-        'oveco-section-hero-editor',
-        get_template_directory_uri() . '/src/blocks/section-hero/edit.js',
-        [
-            'wp-blocks',
-            'wp-element',
-            'wp-editor',
-            'wp-block-editor',
-            'wp-components',
-            'wp-i18n'
-        ],
-        filemtime(get_template_directory() . '/src/blocks/section-hero/edit.js'),
-        true
-    );
-    
-    // Script pour l'éditeur du bloc listing-grid
-    wp_enqueue_script(
-        'oveco-listing-grid-editor',
-        get_template_directory_uri() . '/src/blocks/listing-grid/edit.js',
-        [
-            'wp-blocks',
-            'wp-element',
-            'wp-editor',
-            'wp-block-editor',
-            'wp-components',
-            'wp-i18n'
-        ],
-        filemtime(get_template_directory() . '/src/blocks/listing-grid/edit.js'),
-        true
-    );
-    
-    // Script pour l'éditeur du bloc call-to-action
-    wp_enqueue_script(
-        'oveco-call-to-action-editor',
-        get_template_directory_uri() . '/src/blocks/call-to-action/edit.js',
-        [
-            'wp-blocks',
-            'wp-element',
-            'wp-editor',
-            'wp-block-editor',
-            'wp-components',
-            'wp-i18n'
-        ],
-        filemtime(get_template_directory() . '/src/blocks/call-to-action/edit.js'),
-        true
-    );
+    $blocks = [
+        'project-card',
+        'section-hero',
+        'listing-grid',
+        'call-to-action'
+    ];
+    foreach ($blocks as $block) {
+        $edit_js = get_template_directory() . '/src/blocks/' . $block . '/edit.js';
+        if (file_exists($edit_js)) {
+            wp_enqueue_script(
+                'oveco-' . $block . '-editor',
+                get_template_directory_uri() . '/src/blocks/' . $block . '/edit.js',
+                [
+                    'wp-blocks',
+                    'wp-element',
+                    'wp-editor',
+                    'wp-block-editor',
+                    'wp-components',
+                    'wp-i18n'
+                ],
+                filemtime($edit_js),
+                true
+            );
+        }
+    }
 });
 
 /**
@@ -174,23 +136,49 @@ add_action('wp_enqueue_scripts', function() {
 });
 
 /**
+ * Catégorie de blocs personnalisée "Oveco" (uniquement pour la page test)
+ */
+add_filter('block_categories_all', function(array $categories, $context) {
+    // WP_Block_Editor_Context est attendu en 2e argument
+    $post = is_object($context) && property_exists($context, 'post') ? $context->post : null;
+    if (!$post || ($post->post_type ?? '') !== 'page') {
+        return $categories;
+    }
+    $slug = is_object($post) ? ($post->post_name ?? null) : null;
+    $slug = $slug ?: get_post_field('post_name', $post);
+    if ($slug !== 'test') {
+        return $categories;
+    }
+    $exists = array_filter($categories, function($cat) { return isset($cat['slug']) && $cat['slug'] === 'oveco'; });
+    if (!$exists) {
+        $categories[] = [
+            'slug'  => 'oveco',
+            'title' => __('Oveco', 'oveco'),
+        ];
+    }
+    return $categories;
+}, 10, 2);
+
+/**
  * Limiter les blocs disponibles aux pages autorisées
  */
 add_filter('allowed_block_types_all', function($allowed_blocks, $context) {
-    // Autoriser tous les blocs par défaut
-    if (is_array($allowed_blocks)) {
+    // Si pas de contexte, conserver le comportement par défaut
+    if (!isset($context->post)) {
         return $allowed_blocks;
     }
-    
-    // Si pas de contexte, autoriser tous les blocs
-    if (!isset($context->post)) {
-        return true;
-    }
-    
+
     $post = $context->post;
-    
-    // Blocs autorisés pour les pages
-    if ($post->post_type === 'page') {
+
+    // Blocs autorisés uniquement pour la page avec le slug "test"
+    if ($post && ($post->post_type ?? '') === 'page') {
+        $slug = is_object($post) ? ($post->post_name ?? null) : null;
+        $slug = $slug ?: get_post_field('post_name', $post);
+        if ($slug !== 'test') {
+            // En dehors de la page test, ne pas restreindre davantage ici
+            return $allowed_blocks;
+        }
+        // Sur la page test, retourner explicitement la whitelist
         return [
             // Blocs de base
             'core/paragraph',
@@ -198,12 +186,15 @@ add_filter('allowed_block_types_all', function($allowed_blocks, $context) {
             'core/image',
             'core/gallery',
             'core/list',
+            'core/list-item',
             'core/quote',
             'core/button',
             'core/buttons',
             'core/columns',
             'core/column',
             'core/group',
+            'core/html',
+            'core/freeform',
             'core/spacer',
             'core/separator',
             
@@ -212,9 +203,25 @@ add_filter('allowed_block_types_all', function($allowed_blocks, $context) {
             'oveco/section-hero',
             'oveco/listing-grid',
             'oveco/call-to-action'
+            , 'oveco/test-hero'
         ];
     }
     
-    // Pour les autres post types, garder la configuration par défaut
-    return true;
+    // Pour les autres post types, garder la configuration passée
+    return $allowed_blocks;
 }, 10, 2);
+
+// Note: Ne pas utiliser should_load_block_editor_scripts_and_styles ici car ce filtre
+// ne reçoit qu’un seul argument ($should_load) dans WordPress. Nous n’en avons pas
+// besoin pour nos restrictions spécifiques à la page "test".
+
+/**
+ * Catégorie de patterns personnalisés "Oveco"
+ */
+add_action('init', function() {
+    if (function_exists('register_block_pattern_category')) {
+        register_block_pattern_category('oveco', [
+            'label' => __('Oveco', 'oveco'),
+        ]);
+    }
+});

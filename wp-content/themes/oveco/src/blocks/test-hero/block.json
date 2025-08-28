@@ -1,0 +1,20 @@
+{
+  "apiVersion": 2,
+  "name": "oveco/test-hero",
+  "title": "Test – Hero (Twig)",
+  "category": "oveco",
+  "icon": "layout",
+  "description": "Bloc de test Hero rendu via Timber/Twig.",
+  "keywords": ["hero", "test", "oveco"],
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "anchor": true
+  },
+  "attributes": {
+    "subtitle": { "type": "string", "default": "Sous-titre de la section" },
+    "title": { "type": "string", "default": "Titre principal accrocheur" },
+    "description": { "type": "string", "default": "Une courte description pour expliquer la valeur de votre offre." }
+  },
+  "render": "test-hero.twig"
+}

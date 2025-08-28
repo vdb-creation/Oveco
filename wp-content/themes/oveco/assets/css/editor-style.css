@@ -1,0 +1,10 @@
+/* Styles éditeur Gutenberg pour la page TEST
+   - On importe la feuille du thème pour l’homogénéité
+   - On ajoute quelques ajustements pour l’éditeur si nécessaire
+*/
+@import url("../../style.css");
+
+/* Canvas de l’éditeur (ajustements à ajouter ici si nécessaire) */
+
+/* Exemple: si certains resets du thème s’appliquent mal dans l’éditeur, corriger ici */
+/* .editor-styles-wrapper .wp-block { max-width: none; } */

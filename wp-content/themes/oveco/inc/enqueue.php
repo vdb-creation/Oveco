@@ -36,3 +36,41 @@ add_action('wp_enqueue_scripts', function () {
   }
 });
 
+/**
+ * Injecter le style du thème dans l'éditeur de blocs UNIQUEMENT pour la page "test".
+ * On utilise le filtre block_editor_settings_all afin de charger la feuille dans la zone de contenu (iframe du canvas quand actif).
+ */
+add_filter('block_editor_settings_all', function(array $settings, $context) {
+  // Contexte d'édition disponible ?
+  if (!isset($context->post)) {
+    return $settings;
+  }
+
+  $post = $context->post;
+  if (! $post || ($post->post_type ?? '') !== 'page') {
+    return $settings;
+  }
+
+  $slug = is_object($post) ? ($post->post_name ?? null) : null;
+  $slug = $slug ?: get_post_field('post_name', $post);
+  if ($slug !== 'test') {
+    return $settings;
+  }
+
+  // Récupère l'URL du CSS front du thème
+  $css_url = oveco_manifest_url('src/scss/main.scss');
+  if (!$css_url) {
+    $css_url = get_stylesheet_uri(); // fallback: style.css
+  }
+
+  if (!empty($css_url)) {
+    if (!isset($settings['styles']) || !is_array($settings['styles'])) {
+      $settings['styles'] = [];
+    }
+    // Ajoute la feuille de style du thème au canvas de l'éditeur
+    $settings['styles'][] = [ 'src' => $css_url ];
+  }
+
+  return $settings;
+}, 10, 2);
+

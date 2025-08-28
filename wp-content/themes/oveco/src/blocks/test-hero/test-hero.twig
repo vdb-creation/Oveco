@@ -1,0 +1,13 @@
+{% set a = attributes %}
+<div {{ wrapper_attributes|raw }}>
+  <div class="hero__container">
+    <div class="hero__content">
+      <div class="hero__header">
+        <p class="hero__subtitle">{{ a.subtitle }}</p>
+        <h1 class="hero__title">{{ a.title }}</h1>
+      </div>
+      <p class="hero__description">{{ a.description }}</p>
+      <a href="#" class="hero__cta">Découvrir nos services</a>
+    </div>
+  </div>
+</div>

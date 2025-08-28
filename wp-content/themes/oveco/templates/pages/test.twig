@@ -1,12 +1,9 @@
-{# Page À propos - About #}
 {% extends "base.twig" %}
 
 {% block content %}
-<div class="about-page">
-  <div class="page-body is-gutenberg">
+<div class="page-body is-gutenberg">
   {% if post.post_content %}
     {{ fn('the_content') }}
   {% endif %}
-  </div>
 </div>
 {% endblock %}

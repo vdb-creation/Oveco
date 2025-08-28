@@ -4518,6 +4518,80 @@ body.no-scroll {
   border-radius: 60px 60px 0px 0px;
 }
 
+/* Simple styles for /test page, following global design */
+.test-page {
+  padding: 4rem 0;
+  background: #FFFEF8;
+}
+.test-page .test-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+@media (max-width: 768px) {
+  .test-page .test-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.test-page .test-grid h2 {
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif !important;
+  font-feature-settings: "liga" 1, "kern" 1 !important;
+  font-optical-sizing: auto !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: antialiased !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0.1em !important;
+  margin-bottom: 0.5rem !important;
+  text-transform: uppercase;
+  color: #334749;
+  margin-bottom: 0.5rem;
+}
+.test-page .test-grid p {
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif !important;
+  font-feature-settings: "liga" 1, "kern" 1 !important;
+  font-optical-sizing: auto !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: antialiased !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.8 !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 1rem !important;
+  color: #5C6D6F;
+}
+.test-page h1 {
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif !important;
+  font-feature-settings: "liga" 1, "kern" 1 !important;
+  font-optical-sizing: auto !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: antialiased !important;
+  font-size: 2.986rem !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 1.5rem !important;
+  color: #334749;
+}
+@media (max-width: 768px) {
+  .test-page h1 {
+    font-size: calc(2.986rem * 0.8);
+  }
+}
+@media (max-width: 480px) {
+  .test-page h1 {
+    font-size: calc(2.986rem * 0.65);
+  }
+}
+.test-page .container {
+  max-width: 1100px;
+}
+
 /* Composants Gutenberg */
 /* ================================
    PROJECT CARD COMPONENT - BEM

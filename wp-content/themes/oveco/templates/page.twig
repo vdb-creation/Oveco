@@ -10,11 +10,9 @@
             </header>
         {% endif %}
         
-        {% if post.post_content %}
-            <div class="page-body">
-                {{ post.post_content }}
-            </div>
-        {% endif %}
+        <div class="page-body">
+            {{ fn('the_content') }}
+        </div>
     </div>
 </div>
 {% endblock %}
