@@ -194,9 +194,21 @@
     }
 
     &__icon {
+        /* figure.wp-block-image qui enveloppe l'img */
         width: 168px;
         height: 168px;
-        mix-blend-mode: multiply;
+        margin: 0; /* reset figure */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+            display: block;
+            mix-blend-mode: multiply;
+        }
 
         @include tablet {
             width: 140px;
@@ -262,52 +274,44 @@
     }
 
     &__cta {
-        padding: 18px 30px;
-        background: #334749;
-        border-radius: 30px;
+        display: flex;
         justify-content: center;
         align-items: center;
-        gap: 8px;
-        display: flex;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        
-        &:hover {
-            background: #2a3a3c;
-            transform: translateY(-2px);
-        }
 
-        &:focus {
-            outline: 2px solid #048B9A;
-            outline-offset: 2px;
-        }
-
-        @include tablet {
-            padding: 16px 28px;
-        }
-
-        @include mobile {
-            padding: 14px 24px;
-            width: 100%;
-            max-width: 280px;
-        }
-        
-        span {
-            text-align: center;
+        .wp-block-button__link {
+            padding: 18px 30px;
+            background: #334749;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
             color: #FFFEF8;
             font-size: 19.20px;
             font-family: $font-family-primary;
             font-weight: 700;
             line-height: 23.04px;
 
+            &:hover {
+                background: #2a3a3c;
+                transform: translateY(-2px);
+            }
+
+            &:focus {
+                outline: 2px solid #048B9A;
+                outline-offset: 2px;
+            }
+
             @include tablet {
+                padding: 16px 28px;
                 font-size: 17px;
                 line-height: 20px;
             }
 
             @include mobile {
+                padding: 14px 24px;
                 font-size: 16px;
                 line-height: 19px;
+                width: 100%;
+                max-width: 280px;
             }
         }
     }

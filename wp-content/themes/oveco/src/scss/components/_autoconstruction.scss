@@ -355,10 +355,24 @@
     }
 
     &__service-image {
+        /* Figure wrapper (Gutenberg wp-block-image) */
         width: 287px;
         height: 161px;
         border-radius: 24px;
-        object-fit: cover;
+        overflow: hidden;
+
+        /* Si le markup est une vraie .wp-block-image avec notre classe */
+        &.wp-block-image {
+            margin: 0; /* supprimer margin par défaut des figures Gutenberg */
+        }
+
+        /* Image interne */
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
 
         @media (max-width: 1150px) {
             width: 250px;
@@ -380,6 +394,10 @@
             max-width: 287px;
             height: auto;
             aspect-ratio: 287/161;
+
+            img {
+                height: 100%;
+            }
         }
 
         @media (max-width: 769px) {
@@ -394,6 +412,10 @@
             max-width: 287px;
             height: auto;
             aspect-ratio: 287/161;
+
+            img {
+                height: 100%;
+            }
         }
     }
 
@@ -500,66 +522,68 @@
     }
 
     &__cta {
-        padding: 18px 30px;
-        background: #334749;
-        border-radius: 30px;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
+        /* Conteneur de boutons Gutenberg */
         display: flex;
-        text-decoration: none;
-        transition: all 0.3s ease;
+        width: 100%;
+        justify-content: center; /* centre horizontalement */
+        align-items: center;
+        flex-wrap: nowrap; /* évite le passage à la ligne */
+        text-align: center; /* fallback */
 
-        &:hover {
-            background: #2a3a3c;
-            transform: translateY(-2px);
-        }
-
-        &:focus {
-            outline: 2px solid #048B9A;
-            outline-offset: 4px;
-        }
-
-        span {
-            text-align: center;
+        /* Bouton Gutenberg interne */
+        .wp-block-button__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 18px 30px;
+            background: #334749;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
             color: #FFFEF8;
             font-size: 19.20px;
             font-family: $font-family-primary;
             font-weight: 700;
             line-height: 23.04px;
+
+            &:hover {
+                background: #2a3a3c;
+                transform: translateY(-2px);
+            }
+
+            &:focus {
+                outline: 2px solid #048B9A;
+                outline-offset: 4px;
+            }
         }
 
         @media (max-width: 1024px) {
-            padding: 17px 28px;
-            
-            span {
+            .wp-block-button__link {
+                padding: 17px 28px;
                 font-size: 18px;
                 line-height: 21px;
             }
         }
 
         @media (max-width: 900px) {
-            padding: 16px 26px;
-            
-            span {
+            .wp-block-button__link {
+                padding: 16px 26px;
                 font-size: 17px;
                 line-height: 20px;
             }
         }
 
         @include tablet {
-            padding: 15px 24px;
-            
-            span {
+            .wp-block-button__link {
+                padding: 15px 24px;
                 font-size: 16px;
                 line-height: 19px;
             }
         }
 
         @include mobile {
-            padding: 14px 20px;
-            
-            span {
+            .wp-block-button__link {
+                padding: 14px 20px;
                 font-size: 15px;
                 line-height: 18px;
             }

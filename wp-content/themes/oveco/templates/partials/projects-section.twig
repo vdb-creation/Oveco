@@ -30,25 +30,42 @@
                 </div>
             </header>
 
-            <div class="projects__grid" role="list" aria-labelledby="projets-title">
-                {# Prépare une liste source: projects (si fourni par le contrôleur) sinon fallback depuis helper #}
-                {% set source_projects = projects is defined and projects|length > 0 ? projects : [] %}
-                {% if source_projects is empty and function('oveco_get_recent_projects') %}
-                    {% set source_projects = function('oveco_get_recent_projects', 8) %}
-                {% endif %}
+                        <div class="projects__grid" role="list" aria-labelledby="projets-title">
+                                {# Source de données alignée sur la page Works: on construit un tableau `cards` si non fourni #}
+                                {% if cards is not defined or cards|length == 0 %}
+                                    {% set wp_projects = function('get_posts', {
+                                        'post_type': 'project',
+                                        'posts_per_page': -1,
+                                        'post_status': 'publish'
+                                    }) %}
+                                    {% set cards = [] %}
+                                    {% for p in wp_projects %}
+                                        {% set tags = function('wp_get_post_terms', p.ID, 'project_tag') %}
+                                        {% set type = tags and tags|length > 0 ? tags[0].name : '' %}
+                                        {% set hero_img = function('get_post_meta', p.ID, '_project_hero_image', true) %}
+                                        {% set image = hero_img ?: function('get_the_post_thumbnail_url', p.ID, 'large') %}
+                                        {% set cards = cards|merge([{
+                                            image: image ?: (assets_url ~ '/imgs/maison-toit.png'),
+                                            type: type,
+                                            client: function('get_post_meta', p.ID, '_project_client', true),
+                                            title: p.post_title,
+                                            url: function('trailingslashit', function('home_url', '/work/' ~ p.post_name))
+                                        }]) %}
+                                    {% endfor %}
+                                {% endif %}
 
-                {% for p in source_projects %}
-                    {% set primary_tag = p.tags is defined and p.tags ? p.tags|first.name : '' %}
-                    {% set hero_img = function('get_post_meta', p.id, '_project_hero_image', true) %}
-                    {% include 'partials/components/card.twig' with {
-                        image: hero_img ?: (p.thumbnail ? p.thumbnail.src : (assets_url ~ '/imgs/maison-toit.png')),
-                        type: primary_tag,
-                        client: p.client ?? '',
-                        title: p.title,
-                        url: site.url ~ '/work/' ~ p.slug
-                    } %}
-                {% endfor %}
-            </div>
+                                {% for c in cards %}
+                                    {% include 'partials/components/card.twig' with {
+                                        image: c.image,
+                                        type: c.type,
+                                        client: c.client,
+                                        title: c.title,
+                                        url: c.url
+                                    } %}
+                                {% else %}
+                                    <p>Aucun projet a été ajouter</p>
+                                {% endfor %}
+                        </div>
         </div>
     </div>
 </section>

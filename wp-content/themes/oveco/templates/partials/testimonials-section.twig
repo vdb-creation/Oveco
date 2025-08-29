@@ -29,41 +29,16 @@
       </header>
 
       <div class="testimonials__grid" role="list" aria-labelledby="temoignages-title">
-        {% include 'partials/components/card.twig' with {
-          image: assets_url ~ '/imgs/maison-toit.png',
-          type: 'Photovoltaïque',
-          client: 'Particulier',
-          title: "Je ne réalisais pas l’empleure du projet",
-          description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero',
-          url: '#temoignage-1'
-        } %}
+        {% set testimonials = all_testimonials is defined and all_testimonials|length > 0 ? all_testimonials : [] %}
+        {% if testimonials is empty and function('oveco_get_top_rated_testimonials') %}
+          {% set testimonials = function('oveco_enrich_testimonials', function('oveco_get_top_rated_testimonials', 4)) %}
+        {% endif %}
 
-        {% include 'partials/components/card.twig' with {
-          image: assets_url ~ '/imgs/maison-toit-2.png',
-          type: 'Éolien',
-          client: 'Entreprise',
-          title: "Je ne réalisais pas l’empleure du projet",
-          description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero',
-          url: '#temoignage-2'
-        } %}
-
-        {% include 'partials/components/card.twig' with {
-          image: assets_url ~ '/imgs/maison-build.png',
-          type: 'Géothermie',
-          client: 'Collectivité',
-          title: "Je ne réalisais pas l’empleure du projet",
-          description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero',
-          url: '#temoignage-3'
-        } %}
-
-        {% include 'partials/components/card.twig' with {
-          image: assets_url ~ '/imgs/architrech.png',
-          type: 'Hybride',
-          client: 'Particulier',
-          title: "Je ne réalisais pas l’empleure du projet",
-          description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero',
-          url: '#temoignage-4'
-        } %}
+        {% for t in testimonials %}
+          {% include 'partials/testimonial-card.twig' with { testimonial: t } %}
+        {% else %}
+          <p>Aucun témoignages a été ajouter</p>
+        {% endfor %}
       </div>
     </div>
   </div>

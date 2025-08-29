@@ -214,6 +214,14 @@
     display: flex;
     text-decoration: none;
 
+    /* L’ancre interne doit aussi être en flex pour aligner le texte et la flèche */
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+    }
+
     span {
         color: $color-accent;
         font-size: 1rem; // 16px
@@ -246,29 +254,34 @@
 }
 
 .oveco__main-image {
-    width: 362px;
-    height: 435.49px;
+    /* Conteneur de l'image principale (figure.wp-block-image) */
+    position: absolute;
     left: 45px;
     top: 63.26px;
-    position: absolute;
+    width: 362px; /* largeur de référence desktop */
+    aspect-ratio: 362 / 435.49; /* conserve les proportions au redimensionnement */
+    margin: 0; /* reset figure default margin */
     overflow: hidden;
     border-radius: 40.83px;
     background: linear-gradient(0deg, rgba(2, 139, 154, 0.05) 0%, rgba(2, 139, 154, 0.05) 100%);
     background-blend-mode: color, normal;
-    object-fit: cover;
-    // Responsive image sizing
-    max-width: 100%;
-    height: auto;
-    aspect-ratio: 362 / 472;
+
+    /* L'image interne remplit entièrement le cadre, sans déformation */
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
 
     @include tablet {
         left: 50%;
         transform: translateX(-50%);
-        max-width: 362px;
+        width: min(100%, 362px);
     }
 
     @include mobile {
-        max-width: 280px;
+        width: 280px; /* contrainte mobile */
     }
 }
 

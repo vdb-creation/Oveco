@@ -1,0 +1,22 @@
+{
+  "apiVersion": 2,
+  "name": "oveco/projects-grid",
+  "title": "Projets – Grille (dynamique)",
+  "category": "widgets",
+  "icon": "portfolio",
+  "description": "Grille de projets affichée automatiquement depuis le CPT ‘project’.",
+  "keywords": ["projets", "portfolio", "works", "grille"],
+  "supports": {
+    "html": false,
+    "anchor": true
+  },
+  "attributes": {
+    "subtitle": { "type": "string", "default": "Nos réalisations" },
+    "title": { "type": "string", "default": "Ce sont plus que des projets, ce sont des collaborations" },
+    "description": { "type": "string", "default": "Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero" },
+    "linkText": { "type": "string", "default": "En savoir plus" },
+    "linkUrl": { "type": "string", "default": "/works" },
+    "count": { "type": "number", "default": 6 }
+  },
+  "render": "../../templates/blocks/projects-grid.twig"
+}

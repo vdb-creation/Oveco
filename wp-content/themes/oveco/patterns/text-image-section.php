@@ -59,9 +59,15 @@ $assets = get_stylesheet_directory_uri() . '/assets';
 
       <!-- wp:group {"className":"oveco__visual"} -->
       <div class="wp-block-group oveco__visual">
-        <img src="<?= esc_url( $assets ); ?>/imgs/maison-build.png" alt="Réalisation Oveco" loading="lazy" width="362" height="472" class="oveco__main-image" />
-        <img src="<?= esc_url( $assets ); ?>/icons/maison.png" alt="" class="oveco__icon oveco__icon--house" aria-hidden="true" />
-        <img src="<?= esc_url( $assets ); ?>/icons/crayon.png" alt="" class="oveco__icon oveco__icon--pencil" aria-hidden="true" />
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"oveco__main-image"} -->
+        <figure class="wp-block-image size-full oveco__main-image"><img src="<?= esc_url( $assets ); ?>/imgs/maison-build.png" alt="Réalisation Oveco"/></figure>
+        <!-- /wp:image -->
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"oveco__icon oveco__icon--house"} -->
+        <figure class="wp-block-image size-full oveco__icon oveco__icon--house"><img src="<?= esc_url( $assets ); ?>/icons/maison.png" alt=""/></figure>
+        <!-- /wp:image -->
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"oveco__icon oveco__icon--pencil"} -->
+        <figure class="wp-block-image size-full oveco__icon oveco__icon--pencil"><img src="<?= esc_url( $assets ); ?>/icons/crayon.png" alt=""/></figure>
+        <!-- /wp:image -->
       </div>
       <!-- /wp:group -->
     </div>

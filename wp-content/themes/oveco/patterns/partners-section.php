@@ -32,14 +32,24 @@ $assets = get_stylesheet_directory_uri() . '/assets';
 
   <!-- wp:group {"className":"partners__logos","layout":{"type":"flex","orientation":"horizontal","justifyContent":"center","flexWrap":"wrap"}} -->
       <div class="wp-block-group partners__logos" aria-label="Liste de nos partenaires industriels">
-        <!-- wp:html -->
-        <img src="<?= esc_url( $assets ); ?>/icons/Google.svg" alt="Google - Partenaire technologique" class="partners__logo" loading="lazy" />
-        <img src="<?= esc_url( $assets ); ?>/icons/Facebook.svg" alt="Facebook - Partenaire digital" class="partners__logo" loading="lazy" />
-        <img src="<?= esc_url( $assets ); ?>/icons/Youtube.svg" alt="Youtube - Partenaire média" class="partners__logo" loading="lazy" />
-        <img src="<?= esc_url( $assets ); ?>/icons/Pinterest.svg" alt="Pinterest - Partenaire créatif" class="partners__logo" loading="lazy" />
-        <img src="<?= esc_url( $assets ); ?>/icons/Twitch.svg" alt="Twitch - Partenaire streaming" class="partners__logo" loading="lazy" />
-        <img src="<?= esc_url( $assets ); ?>/icons/Webflow.svg" alt="Webflow - Partenaire design" class="partners__logo" loading="lazy" />
-        <!-- /wp:html -->
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"partners__logo"} -->
+        <figure class="wp-block-image size-full partners__logo"><img src="<?= esc_url( $assets ); ?>/icons/Google.svg" alt="Google - Partenaire technologique"/></figure>
+        <!-- /wp:image -->
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"partners__logo"} -->
+        <figure class="wp-block-image size-full partners__logo"><img src="<?= esc_url( $assets ); ?>/icons/Facebook.svg" alt="Facebook - Partenaire digital"/></figure>
+        <!-- /wp:image -->
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"partners__logo"} -->
+        <figure class="wp-block-image size-full partners__logo"><img src="<?= esc_url( $assets ); ?>/icons/Youtube.svg" alt="Youtube - Partenaire média"/></figure>
+        <!-- /wp:image -->
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"partners__logo"} -->
+        <figure class="wp-block-image size-full partners__logo"><img src="<?= esc_url( $assets ); ?>/icons/Pinterest.svg" alt="Pinterest - Partenaire créatif"/></figure>
+        <!-- /wp:image -->
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"partners__logo"} -->
+        <figure class="wp-block-image size-full partners__logo"><img src="<?= esc_url( $assets ); ?>/icons/Twitch.svg" alt="Twitch - Partenaire streaming"/></figure>
+        <!-- /wp:image -->
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"partners__logo"} -->
+        <figure class="wp-block-image size-full partners__logo"><img src="<?= esc_url( $assets ); ?>/icons/Webflow.svg" alt="Webflow - Partenaire design"/></figure>
+        <!-- /wp:image -->
       </div>
       <!-- /wp:group -->
     </div>

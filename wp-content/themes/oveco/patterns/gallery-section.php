@@ -25,30 +25,41 @@ $assets = get_stylesheet_directory_uri() . '/assets';
     </header>
     <!-- /wp:group -->
 
-    <!-- wp:html -->
-    <ul class="gallery__grid" role="list">
-      <li class="gallery__item" role="listitem">
-        <figure class="gallery__figure gallery__figure--a">
-          <img class="gallery__image gallery__image--a" src="<?= esc_url( $assets ); ?>/imgs/Charpantier.png" alt="Charpantier" loading="lazy">
-        </figure>
-      </li>
-      <li class="gallery__item" role="listitem">
-        <figure class="gallery__figure gallery__figure--b">
-          <img class="gallery__image gallery__image--b" src="<?= esc_url( $assets ); ?>/imgs/maison-build.png" alt="Maison en construction" loading="lazy">
-        </figure>
-      </li>
-      <li class="gallery__item" role="listitem">
-        <figure class="gallery__figure gallery__figure--c">
-          <img class="gallery__image gallery__image--c" src="<?= esc_url( $assets ); ?>/imgs/plan.png" alt="Plan du projet" loading="lazy">
-        </figure>
-      </li>
-      <li class="gallery__item" role="listitem">
-        <figure class="gallery__figure gallery__figure--d">
-          <img class="gallery__image gallery__image--d" src="<?= esc_url( $assets ); ?>/imgs/cie.png" alt="Compagnie d'électricité" loading="lazy">
-        </figure>
-      </li>
-    </ul>
-    <!-- /wp:html -->
+    <!-- wp:group {"className":"gallery__grid"} -->
+    <div class="wp-block-group gallery__grid" role="list">
+      <!-- wp:group {"className":"gallery__item"} -->
+      <div class="wp-block-group gallery__item" role="listitem">
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"gallery__figure gallery__figure--a"} -->
+        <figure class="wp-block-image size-full gallery__figure gallery__figure--a"><img src="<?= esc_url( $assets ); ?>/imgs/Charpantier.png" alt="Charpantier"/></figure>
+        <!-- /wp:image -->
+      </div>
+      <!-- /wp:group -->
+
+      <!-- wp:group {"className":"gallery__item"} -->
+      <div class="wp-block-group gallery__item" role="listitem">
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"gallery__figure gallery__figure--b"} -->
+        <figure class="wp-block-image size-full gallery__figure gallery__figure--b"><img src="<?= esc_url( $assets ); ?>/imgs/maison-build.png" alt="Maison en construction"/></figure>
+        <!-- /wp:image -->
+      </div>
+      <!-- /wp:group -->
+
+      <!-- wp:group {"className":"gallery__item"} -->
+      <div class="wp-block-group gallery__item" role="listitem">
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"gallery__figure gallery__figure--c"} -->
+        <figure class="wp-block-image size-full gallery__figure gallery__figure--c"><img src="<?= esc_url( $assets ); ?>/imgs/plan.png" alt="Plan du projet"/></figure>
+        <!-- /wp:image -->
+      </div>
+      <!-- /wp:group -->
+
+      <!-- wp:group {"className":"gallery__item"} -->
+      <div class="wp-block-group gallery__item" role="listitem">
+        <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"gallery__figure gallery__figure--d"} -->
+        <figure class="wp-block-image size-full gallery__figure gallery__figure--d"><img src="<?= esc_url( $assets ); ?>/imgs/cie.png" alt="Compagnie d'électricité"/></figure>
+        <!-- /wp:image -->
+      </div>
+      <!-- /wp:group -->
+    </div>
+    <!-- /wp:group -->
   </div>
   <!-- /wp:group -->
 </section>

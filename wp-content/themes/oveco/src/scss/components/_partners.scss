@@ -164,9 +164,23 @@
     }
 
     &__logo {
-        display: block;
+        /* Figure du logo */
+        margin: 0; /* reset figure */
+        width: 140px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         transition: all 0.3s ease;
         filter: grayscale(100%);
+
+        /* L'image remplit la boîte sans déformation */
+        img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+            display: block;
+        }
 
         &:hover {
             opacity: 0.8;
@@ -180,15 +194,15 @@
             border-radius: 4px;
         }
 
-        // Responsive sizing pour les logos
+        // Responsive sizing fixe (boîte)
         @include tablet {
-            max-width: 80px;
-            height: auto;
+            width: 120px;
+            height: 50px;
         }
 
         @include mobile {
-            max-width: 60px;
-            height: auto;
+            width: 100px;
+            height: 40px;
         }
     }
 }

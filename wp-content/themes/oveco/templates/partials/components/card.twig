@@ -1,26 +1,31 @@
-{# Generic Card Partial #}
-{# Props: image (url), type (string), client (string), title (string), url (string), description (optional string) #}
-<article class="projects__card" role="listitem" itemscope itemtype="https://schema.org/CreativeWork">
-  <div class="projects__card-image" style="background-image: url('{{ image }}');" role="img" aria-label="{{ title|e }}"></div>
-  <div class="projects__card-overlay"></div>
+{# Generic Card Partial (Projects/Testimonials) #}
+{# Props: image (url), type (string), client (string), title (string), url (string), description (optional string), cta_label (string) #}
+<article class="projects__card" role="listitem" itemscope itemtype="https://schema.org/CreativeWork" style="background-image: url('{{ image }}');">
+  <meta itemprop="image" content="{{ image }}" />
+  <div class="projects__card-overlay" aria-hidden="true"></div>
+
+  {# Le type est placé hors du contenu pour l'ancrer en haut à droite de la carte #}
+  <div class="projects__card-header">
+    <span class="projects__card-type" itemprop="genre">{{ type|default('Type de projet') }}</span>
+  </div>
+
   <div class="projects__card-content">
-    <div class="projects__card-header">
-      {% if type %}<span class="projects__card-type" itemprop="genre">{{ type }}</span>{% endif %}
-    </div>
+
     <div class="projects__card-info">
       {% if client %}<p class="projects__card-client">{{ client }}</p>{% endif %}
       {% if title %}<h3 class="projects__card-title" itemprop="name">{{ title }}</h3>{% endif %}
       {% if description %}<p class="projects__card-description">{{ description }}</p>{% endif %}
     </div>
   </div>
+
+  {% if url %}
   <footer class="projects__card-footer">
-    {% if url %}
       <a href="{{ url }}" class="projects__card-link" itemprop="url" aria-label="Voir les détails: {{ title|e }}">
-        <span>Voir le projet</span>
+        <span>{{ cta_label|default('Voir le projet') }}</span>
         <svg class="projects__card-arrow" width="10" height="9" viewBox="0 0 10 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M1 4.5H9M9 4.5L5.5 1M9 4.5L5.5 8" stroke="#048B9A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
-    {% endif %}
   </footer>
+  {% endif %}
 </article>

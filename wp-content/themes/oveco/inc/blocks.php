@@ -85,6 +85,7 @@ add_action('init', function() {
             'section-hero',
             'listing-grid',
             'call-to-action',
+            'projects-grid',
             'test-hero'
         ];
         foreach ($blocks as $block) {
@@ -198,11 +199,21 @@ add_filter('allowed_block_types_all', function($allowed_blocks, $context) {
             'core/spacer',
             'core/separator',
             
+            // Spectra (Ultimate Addons for Gutenberg) - sélection restreinte
+            'uagb/container',
+            'uagb/columns',
+            'uagb/column',
+            'uagb/image',
+            'uagb/buttons',
+            'uagb/button',
+            'uagb/advanced-heading',
+
             // Blocs personnalisés Oveco
             'oveco/project-card',
             'oveco/section-hero',
             'oveco/listing-grid',
-            'oveco/call-to-action'
+            'oveco/call-to-action',
+            'oveco/projects-grid'
             , 'oveco/test-hero'
         ];
     }

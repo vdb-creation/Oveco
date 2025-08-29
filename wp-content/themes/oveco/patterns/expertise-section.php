@@ -36,7 +36,9 @@ $assets = get_stylesheet_directory_uri() . '/assets';
   <div class="wp-block-columns expertise__grid" aria-label="Liste de nos expertises">
           <!-- wp:column {"className":"expertise__card"} -->
           <div class="wp-block-column expertise__card">
-            <img src="<?= esc_url( $assets ); ?>/icons/eolienne.png" alt="Icône énergies renouvelables - pompes à chaleur et panneaux solaires" class="expertise__icon" loading="lazy" width="168" height="168" />
+            <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"expertise__icon"} -->
+            <figure class="wp-block-image size-full expertise__icon"><img src="<?= esc_url( $assets ); ?>/icons/eolienne.png" alt="Icône énergies renouvelables - pompes à chaleur et panneaux solaires" loading="lazy" /></figure>
+            <!-- /wp:image -->
             <!-- wp:group {"className":"expertise__card-content"} -->
             <div class="wp-block-group expertise__card-content">
               <!-- wp:heading {"level":4,"className":"expertise__card-title"} -->
@@ -52,7 +54,9 @@ $assets = get_stylesheet_directory_uri() . '/assets';
 
           <!-- wp:column {"className":"expertise__card"} -->
           <div class="wp-block-column expertise__card">
-            <img src="<?= esc_url( $assets ); ?>/icons/clim.png" alt="Icône confort thermique - systèmes de chauffage et ventilation" class="expertise__icon" loading="lazy" width="168" height="168" />
+            <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"expertise__icon"} -->
+            <figure class="wp-block-image size-full expertise__icon"><img src="<?= esc_url( $assets ); ?>/icons/clim.png" alt="Icône confort thermique - systèmes de chauffage et ventilation" loading="lazy" /></figure>
+            <!-- /wp:image -->
             <!-- wp:group {"className":"expertise__card-content"} -->
             <div class="wp-block-group expertise__card-content">
               <!-- wp:heading {"level":4,"className":"expertise__card-title"} -->
@@ -68,7 +72,9 @@ $assets = get_stylesheet_directory_uri() . '/assets';
 
           <!-- wp:column {"className":"expertise__card"} -->
           <div class="wp-block-column expertise__card">
-            <img src="<?= esc_url( $assets ); ?>/icons/elec.png" alt="Icône électricité - installation électrique et traitement de l'eau" class="expertise__icon" loading="lazy" width="168" height="168" />
+            <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"expertise__icon"} -->
+            <figure class="wp-block-image size-full expertise__icon"><img src="<?= esc_url( $assets ); ?>/icons/elec.png" alt="Icône électricité - installation électrique et traitement de l'eau" loading="lazy" /></figure>
+            <!-- /wp:image -->
             <!-- wp:group {"className":"expertise__card-content"} -->
             <div class="wp-block-group expertise__card-content">
               <!-- wp:heading {"level":4,"className":"expertise__card-title"} -->

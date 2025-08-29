@@ -78,11 +78,20 @@
     gap: 24px;
   }
 
-  &__figure { margin: 0; }
-
-  &__image {
+  &__figure {
+    margin: 0;
     width: 168px;
     height: 168px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Image d'icône: taille fixe, quelle que soit l'image (même si is-resized) */
+  &__figure img,
+  &__image {
+    width: 100% !important;
+    height: 100% !important;
     object-fit: contain;
     display: block;
   }

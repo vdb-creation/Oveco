@@ -1,74 +1,43 @@
-{# Template Logique & style #}
-<article class="testimonial-card {{ testimonial.priority ? 'testimonial-card--' ~ testimonial.priority.slug : '' }}">
-    <div class="testimonial-card__inner">
-        {# Quote du témoignage #}
-        <div class="testimonial-card__quote">
-            <blockquote class="testimonial__content">
-                {{ testimonial.content|nl2br }}
-            </blockquote>
+{# Carte Témoignage harmonisée avec la carte Projet #}
+{% set bg_image = testimonial.thumbnail ? testimonial.thumbnail.src('large') : assets_url ~ '/imgs/maison-toit.png' %}
+<article class="projects__card projects__card--testimonial {{ testimonial.priority ? 'is-' ~ testimonial.priority.slug : '' }}" role="listitem"
+                 itemscope itemtype="https://schema.org/Review"
+                 style="background-image: url('{{ bg_image }}');">
+    <meta itemprop="image" content="{{ bg_image }}" />
+    <div class="projects__card-overlay" aria-hidden="true"></div>
+
+    <div class="projects__card-content">
+        <div class="projects__card-header">
+            <span class="projects__card-type">Témoignage</span>
         </div>
-        
-        {# Informations client #}
-        <div class="testimonial-card__client">
-            {% if testimonial.thumbnail %}
-                <div class="testimonial__avatar">
-                    <img src="{{ testimonial.thumbnail.src('thumbnail') }}" 
-                         alt="{{ testimonial.client_name }}"
-                         class="testimonial__photo">
-                </div>
+
+        <div class="projects__card-info">
+            {% if testimonial.client_company or testimonial.client_position %}
+                <p class="projects__card-client">
+                    {% if testimonial.client_position %}{{ testimonial.client_position }}{% endif %}
+                    {% if testimonial.client_position and testimonial.client_company %} chez {% endif %}
+                    {% if testimonial.client_company %}{{ testimonial.client_company }}{% endif %}
+                </p>
             {% endif %}
-            
-            <div class="testimonial__info">
-                {% if testimonial.client_name %}
-                    <h3 class="testimonial__name">{{ testimonial.client_name }}</h3>
-                {% endif %}
-                
-                {% if testimonial.client_position or testimonial.client_company %}
-                    <p class="testimonial__position">
-                        {% if testimonial.client_position %}{{ testimonial.client_position }}{% endif %}
-                        {% if testimonial.client_position and testimonial.client_company %} chez {% endif %}
-                        {% if testimonial.client_company %}
-                            {% if testimonial.client_website %}
-                                <a href="{{ testimonial.client_website }}" target="_blank" rel="noopener">
-                                    {{ testimonial.client_company }}
-                                </a>
-                            {% else %}
-                                {{ testimonial.client_company }}
-                            {% endif %}
-                        {% endif %}
-                    </p>
-                {% endif %}
-                
-                {# Note si activée #}
-                {% if show_rating and testimonial.rating %}
-                    <div class="testimonial__rating" aria-label="Note: {{ testimonial.rating }} étoiles sur 5">
-                        {{ testimonial.stars_html|raw }}
-                    </div>
-                {% endif %}
-            </div>
+            {% if testimonial.client_name %}
+                <h3 class="projects__card-title" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <span itemprop="name">{{ testimonial.client_name }}</span>
+                </h3>
+            {% endif %}
+            {% if testimonial.content %}
+                <p class="projects__card-description" itemprop="reviewBody">{{ testimonial.content|striptags|truncate(160) }}</p>
+            {% endif %}
         </div>
-        
-        {# Projet lié si activé #}
-        {% if show_project and testimonial.linked_project %}
-            <div class="testimonial-card__project">
-                <a href="{{ testimonial.linked_project.link }}" class="testimonial__project-link">
-                    {% if testimonial.linked_project.thumbnail %}
-                        <img src="{{ testimonial.linked_project.thumbnail }}" 
-                             alt="{{ testimonial.linked_project.title }}"
-                             class="testimonial__project-thumb">
-                    {% endif %}
-                    <span class="testimonial__project-title">
-                        Projet: {{ testimonial.linked_project.title }}
-                    </span>
-                </a>
-            </div>
-        {% endif %}
-        
-        {# Badge de priorité #}
-        {% if testimonial.priority and testimonial.priority.slug == 'haute' %}
-            <div class="testimonial-card__badge">
-                <span class="badge badge--priority">Témoignage mis en avant</span>
-            </div>
-        {% endif %}
     </div>
+
+    <footer class="projects__card-footer">
+        {# Lien prioritaire vers le projet lié s'il existe, sinon vers le témoignage #}
+        {% set linked_url = testimonial.linked_project and testimonial.linked_project.link ? testimonial.linked_project.link : testimonial.link %}
+        <a href="{{ linked_url }}" class="projects__card-link" itemprop="url" aria-label="Voir le projet lié à {{ testimonial.client_name }}">
+            <span>Voir le projet</span>
+            <svg class="projects__card-arrow" width="10" height="9" viewBox="0 0 10 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M1 4.5H9M9 4.5L5.5 1M9 4.5L5.5 8" stroke="#048B9A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </footer>
 </article>

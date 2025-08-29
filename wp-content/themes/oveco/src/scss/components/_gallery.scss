@@ -69,6 +69,13 @@
     position: relative;
     overflow: hidden;
   }
+  /* Compat: .wp-block-image wrapper doit hériter du style de la figure BEM */
+  &__figure.wp-block-image,
+  .wp-block-image.gallery__figure {
+    width: 539px;
+    margin: 0;
+    overflow: hidden;
+  }
 
   /* Heights + radius per design */
   &__figure--a { height: 359px; border-radius: 12px; }

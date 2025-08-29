@@ -145,12 +145,13 @@
     }
 
     &__link {
-        justify-content: flex-start;
-        align-items: flex-end;
-        gap: 6px;
-        display: flex;
+        /* Texte + flèche sur une seule ligne */
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         text-decoration: none;
-    transition: none;
+        white-space: nowrap;
+        transition: none;
 
         &:focus {
             outline: 2px solid #048B9A;
@@ -216,127 +217,138 @@
     }
 
     &__grid {
-        justify-content: flex-start;
-        align-items: center;
-        gap: 12px;
-        display: flex;
+        /* Grille de 3 colonnes en desktop qui se stack sur mobile */
+    display: grid;
+    grid-template-columns: repeat(3, minmax(388px, 1fr));
+        gap: 24px;
         width: 100%;
-        overflow-x: auto;
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-        /* Carrousel sans barre de défilement visible */
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE/Edge */
-        &::-webkit-scrollbar { /* Chrome/Safari */
-            display: none;
-            width: 0;
-            height: 0;
-            background: transparent;
-        }
-    /* Scroll snap désactivé pour permettre des cartes partiellement visibles */
-    cursor: grab;
-    touch-action: pan-x pinch-zoom; /* permet le drag horizontal sans conflit */
-        /* Espace en fin de carrousel pour afficher entièrement la dernière carte */
-        padding-right: 109px;
+        align-items: stretch;
 
-        @media (max-width: 1400px) {
-            gap: 10px;
-            padding-right: 80px;
+        /* Cartes internes: prendre toute la largeur de la colonne, garder le ratio */
+        > .projects__card {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 388/548;
         }
+        > .projects__card .projects__card-content { height: auto; }
+    /* Garder le ratio des cartes dans Works (remplit la colonne en largeur, ratio 388/548) */
+    .works-search__grid .projects__card {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 388/548;
+        min-width: 0; /* override le min-width:388px global pour épouser la colonne */
+    }
+    .works-search__grid .projects__card-content {
+        height: auto;
+        min-height: 0; /* supprime l'effet qui remonte le contenu */
+        justify-content: flex-end; /* colle le contenu en bas, comme dans la section projets */
+    }
 
-        @media (max-width: 1200px) {
-            padding-right: 60px;
+        /* Chaque colonne Gutenberg agit comme une carte */
+        > .wp-block-column {
+            background: #FFF;
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+
+            /* Image en haut de carte */
+            > figure.wp-block-image {
+                margin: 0;
+                width: 100%;
+                aspect-ratio: 388/280;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    display: block;
+                }
+            }
+
+            /* Contenu texte de la carte */
+            .projects__card-info {
+                padding: 18px;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
         }
 
         @media (max-width: 1024px) {
-            padding-right: 40px;
-        }
-
-        /* On garde le défilement horizontal aussi sur tablette/mobile */
-        @include tablet {
-            padding-right: 2rem;
+            grid-template-columns: repeat(2, minmax(300px, 1fr));
+            gap: 16px;
         }
 
         @include mobile {
-            padding-right: 1rem;
+            grid-template-columns: 1fr;
+            gap: 14px;
         }
     }
 
     &__card {
+        /* Carte conforme au design fourni */
         width: 388px;
         height: 548px;
+        padding: 18px 18px 30px 18px;
         position: relative;
         overflow: hidden;
         border-radius: 24px;
-        flex-shrink: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         display: inline-flex;
         flex-direction: column;
         justify-content: flex-end;
         align-items: flex-start;
-        padding: 18px 18px 30px;
         gap: 17px;
-        box-sizing: border-box;
-    transition: none;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.04);
 
-        @media (max-width: 1400px) {
-            width: 350px;
-            height: 500px;
-        }
-
-        @media (max-width: 1200px) {
-            width: 320px;
-            height: 450px;
-        }
-
-        @include tablet {
-            width: 100%;
-            max-width: 400px;
-            height: 500px;
-        }
-
-        @include mobile {
-            height: 450px;
-        }
-    }
-
-    &__card-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        z-index: 1;
+    min-width: 388px;
+    @media (max-width: 1400px) { min-width: 360px; }
+    @media (max-width: 1200px) { min-width: 320px; height: auto; aspect-ratio: 388/548; }
+        @include mobile { width: min(100%, 360px); }
     }
 
     &__card-overlay {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(13deg, rgba(51, 71, 73, 0) 0%, rgba(51, 71, 73, 0.90) 100%), 
-                    linear-gradient(189deg, rgba(255, 249, 237, 0) 0%, rgba(255, 249, 237, 0.73) 58%, #FFF9ED 100%), 
-                    rgba(255, 255, 227, 0.01);
-    backdrop-filter: blur(3.50px);
-        z-index: 2;
+        inset: 0;
+        /* Gradients avec espace transparent entre les deux et opacités réduites */
+        background:
+            linear-gradient(13deg,
+                rgba(51, 71, 73, 0) 0%,
+                rgba(51, 71, 73, 0) 58%, /* bande transparente centrale */
+                rgba(51, 71, 73, 0.65) 88%,
+                rgba(51, 71, 73, 0.65) 100%
+            ),
+            linear-gradient(189deg,
+                rgba(255, 249, 237, 0) 0%,
+                rgba(255, 249, 237, 0) 40%, /* bande transparente centrale */
+                rgba(255, 249, 237, 0.45) 70%,
+                rgba(255, 249, 237, 0.45) 100%
+            );
+        pointer-events: none;
     }
 
     &__card-content {
-        position: relative;
-        z-index: 3;
         align-self: stretch;
-        height: 451px;
+        height: 451px; /* conformément au style inline fourni */
+        display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: flex-end;
-        display: flex;
+        position: static; /* pour que le header absolu s'ancre à la carte entière */
+        z-index: 1;
+        @media (max-width: 1200px) { height: auto; gap: 14px; }
     }
 
+    /* Le type doit être en haut à droite */
     &__card-header {
-        align-self: flex-end;
+        position: absolute;
+        top: 18px; /* coin haut droit de la carte */
+        right: 18px;
+        z-index: 2;
+        text-align: right;
     }
 
     &__card-type {
@@ -347,15 +359,15 @@
         text-transform: uppercase;
         line-height: 22px;
         letter-spacing: 1.40px;
-    }
+        text-align: right;
+        display: inline-block;
+      }
 
     &__card-info {
         align-self: stretch;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-    gap: 4px;
         display: flex;
+        flex-direction: column;
+        gap: 6px;
     }
 
     &__card-client {
@@ -367,7 +379,6 @@
         line-height: 22px;
         letter-spacing: 1.40px;
         margin: 0;
-    user-select: none;
     }
 
     &__card-title {
@@ -378,54 +389,35 @@
         font-weight: 800;
         line-height: 30.42px;
         margin: 0;
-    user-select: none;
-
-        @media (max-width: 1200px) {
-            font-size: 24px;
-            line-height: 27px;
-        }
-
-        @include mobile {
-            font-size: 22px;
-            line-height: 25px;
-        }
     }
 
     &__card-description {
         align-self: stretch;
         color: #334749;
-        font-size: 16px;
+        font-size: 14px;
         font-family: $font-family-primary;
         font-weight: 400;
-        line-height: 22.40px;
+        line-height: 21px;
         margin: 0;
-        user-select: none;
     }
 
     &__card-footer {
-        position: relative;
-        z-index: 3;
         padding-top: 12px;
+        display: inline-flex;
         justify-content: flex-start;
         align-items: flex-end;
         gap: 6px;
-        display: flex;
+        position: relative;
+        z-index: 2;
     }
 
     &__card-link {
-        justify-content: flex-start;
+        display: flex;
         align-items: flex-end;
         gap: 6px;
-        display: flex;
         text-decoration: none;
         transition: none;
-
-        &:focus {
-            outline: 2px solid #048B9A;
-            outline-offset: 4px;
-            border-radius: 4px;
-        }
-
+        &:focus { outline: 2px solid #048B9A; outline-offset: 4px; border-radius: 4px; }
         span {
             color: #048B9A;
             font-size: 16px;
@@ -433,15 +425,10 @@
             font-weight: 700;
             line-height: 19.20px;
             text-align: center;
-            user-select: none;
         }
     }
 
-    &__card-arrow {
-        width: 10px;
-        height: 8.57px;
-        flex-shrink: 0;
-    }
+    &__card-arrow { width: 10px; height: 8.57px; flex-shrink: 0; }
 }
 
 // Amélioration accessibilité

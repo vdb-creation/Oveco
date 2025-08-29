@@ -16,11 +16,9 @@ $assets = get_stylesheet_directory_uri() . '/assets';
   <div class="wp-block-group container works-hero__inner">
     <!-- wp:group {"className":"works-hero__side works-hero__side--left"} -->
     <div class="wp-block-group works-hero__side works-hero__side--left" aria-hidden="true">
-      <!-- wp:html -->
-      <figure class="works-hero__figure">
-        <img class="works-hero__image" src="<?= esc_url( $assets ); ?>/imgs/maison-toit.png" alt="" loading="lazy">
-      </figure>
-      <!-- /wp:html -->
+      <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"works-hero__figure"} -->
+      <figure class="wp-block-image size-full works-hero__figure"><img class="works-hero__image" src="<?= esc_url( $assets ); ?>/imgs/maison-toit.png" alt=""/></figure>
+      <!-- /wp:image -->
     </div>
     <!-- /wp:group -->
 
@@ -51,11 +49,9 @@ $assets = get_stylesheet_directory_uri() . '/assets';
 
     <!-- wp:group {"className":"works-hero__side works-hero__side--right"} -->
     <div class="wp-block-group works-hero__side works-hero__side--right" aria-hidden="true">
-      <!-- wp:html -->
-      <figure class="works-hero__figure works-hero__figure--overlay">
-        <img class="works-hero__image" src="<?= esc_url( $assets ); ?>/imgs/maison-build.png" alt="" loading="lazy">
-      </figure>
-      <!-- /wp:html -->
+      <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"works-hero__figure works-hero__figure--overlay"} -->
+      <figure class="wp-block-image size-full works-hero__figure works-hero__figure--overlay"><img class="works-hero__image" src="<?= esc_url( $assets ); ?>/imgs/maison-build.png" alt=""/></figure>
+      <!-- /wp:image -->
     </div>
     <!-- /wp:group -->
   </div>

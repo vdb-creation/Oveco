@@ -44,7 +44,14 @@
   }
 
   &__figure {
-    width: 266px; height: 320px; position: relative; overflow: hidden; border-radius: 30px;
+    /* Forcer les dimensions côté éditeur et front */
+    width: 266px !important;
+    height: 320px !important;
+    position: relative;
+    overflow: hidden;
+    border-radius: 30px;
+    margin: 0;
+    display: block;
     &--overlay::after {
       content: '';
       position: absolute; inset: 0;
@@ -52,7 +59,23 @@
       pointer-events: none;
     }
   }
-  &__image { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Compat: quand Gutenberg wrap en .wp-block-image, garder les dimensions */
+  &__figure.wp-block-image,
+  .wp-block-image.works-hero__figure {
+    width: 266px !important;
+    height: 320px !important;
+  }
+  &__image { width: 100% !important; height: 100% !important; object-fit: cover; object-position: center; display: block; }
+
+  /* Compatibilité wrapper Gutenberg: assure l’img en 100% du figure */
+  &__figure.wp-block-image img,
+  .wp-block-image.works-hero__figure img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
 
   &__content {
     width: 656px; display: inline-flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 18px;
@@ -86,7 +109,13 @@
       &--left { grid-area: left; padding: 0; transform: translateY(-12px); }
       &--right { grid-area: right; padding: 0; transform: translateY(12px); }
     }
-    &__figure { width: 100%; max-width: 320px; height: auto; aspect-ratio: 266 / 320; }
+  &__figure {
+    width: 100%;
+    max-width: 320px;
+    /* garder une hauteur calculée via ratio au lieu de height:auto */
+    height: auto;
+    aspect-ratio: 266 / 320;
+  }
   }
   @include mobile {
     padding: 32px 16px;
