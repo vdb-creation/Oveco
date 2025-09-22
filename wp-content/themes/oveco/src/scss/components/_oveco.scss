@@ -5,12 +5,10 @@
    OVECO SECTION
    ======================================== */
 .oveco-section {
-    padding: clamp(48px, 8vw, 96px) 0;
+    padding: 0;
     background: $color-white;
 
-    @include mobile {
-        padding: 4rem 0;
-    }
+    // Plus de padding spécifique en mobile
 
     // Reset des margins sur tous les éléments de titre dans cette section
     h2, h3, p {
@@ -19,6 +17,13 @@
 
     // Container principal pour les blocs dupliqués (complète le container global)
     .container { display: flex; flex-direction: column; align-items: stretch; }
+}
+
+// Renforcer la spécificité contre les styles de blocs WP qui pourraient injecter un padding
+.wp-block-group.oveco-section,
+section.oveco-section,
+.wp-block-group .oveco-section {
+    padding: 0 !important;
 }
 
 // HEADER DE SECTION (centré)

@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Init all carousels (projects, testimonials, etc.)
   document.querySelectorAll('.projects__grid, .testimonials__grid').forEach(initCarouselForGrid);
+
+  // Init mouse follower for hero section
+  initMouseFollower();
 });
 
 function initCarouselForGrid(grid) {
@@ -128,4 +131,78 @@ function initCarouselForGrid(grid) {
   nextBtn && nextBtn.addEventListener('keydown', onKey);
 
   // Snapping désactivé pour permettre des cartes partiellement visibles
+}
+
+/**
+ * Initialize mouse follower circle for hero section
+ */
+function initMouseFollower() {
+  const follower = document.getElementById('mouseFollower');
+  const heroSection = document.querySelector('.hero');
+
+  if (!follower || !heroSection) return;
+
+  // Ensure CSS transform centers the circle
+  follower.style.transform = 'translate(-50%, -50%)';
+
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let insideHero = false;
+
+  // Récupère le pas de grille depuis les variables CSS de .hero
+  const style = getComputedStyle(heroSection);
+  const step = Math.max(8, parseFloat(style.getPropertyValue('--hero-grid-step') || '48')); // px
+  const offsetX = parseFloat(style.getPropertyValue('--hero-grid-offset-x') || '0');
+  const offsetY = parseFloat(style.getPropertyValue('--hero-grid-offset-y') || '0');
+
+  const ease = 0.15; // smoothing factor
+
+  function animate() {
+    // ease towards the target
+    currentX += (targetX - currentX) * ease;
+    currentY += (targetY - currentY) * ease;
+
+    // apply as left/top relative to hero (keeps center via translate(-50%, -50%))
+    follower.style.left = currentX + 'px';
+    follower.style.top = currentY + 'px';
+
+    // show/hide based on whether mouse is inside hero and viewport is desktop
+    if (window.innerWidth > 768 && insideHero) {
+      if (follower.style.opacity !== '1') follower.style.opacity = '1';
+    } else {
+      if (follower.style.opacity !== '0') follower.style.opacity = '0';
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  // Run animation loop
+  animate();
+
+  // Écoute uniquement dans le hero et snap au maillage
+  heroSection.addEventListener('mousemove', (e) => {
+    const rect = heroSection.getBoundingClientRect();
+    const relX = e.clientX - rect.left; // position relative au hero
+    const relY = e.clientY - rect.top;
+
+    insideHero = relX >= 0 && relX <= rect.width && relY >= 0 && relY <= rect.height;
+
+    if (!insideHero) return;
+
+    // Appliquer l’offset éventuel puis snapper sur la grille
+    const snappedX = Math.round((relX - offsetX) / step) * step + offsetX;
+    const snappedY = Math.round((relY - offsetY) / step) * step + offsetY;
+
+    targetX = snappedX;
+    targetY = snappedY;
+  }, { passive: true });
+
+  // Hide on resize for small screens
+  window.addEventListener('resize', () => {
+    if (window.innerWidth <= 768) {
+      follower.style.opacity = '0';
+    }
+  });
 }
