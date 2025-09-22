@@ -21,7 +21,6 @@
           {% set hero_img = project_hero_image is defined and project_hero_image ? project_hero_image : (project and project.thumbnail ? project.thumbnail.src : (assets_url ~ '/imgs/maison-toit.png')) %}
           <img src="{{ hero_img }}" alt="Image du projet {{ project.title|e }}" loading="lazy">
         </figure>
-        <div class="work-hero__deco work-hero__deco--bg"></div>
         <img class="work-hero__icon work-hero__icon--house" src="{{ assets_url }}/icons/maison.png" alt="" loading="lazy">
         <img class="work-hero__icon work-hero__icon--pencil" src="{{ assets_url }}/icons/crayon.png" alt="" loading="lazy">
       </div>
@@ -32,7 +31,15 @@
   {% include "partials/competences-section.twig" %}
 
    {# Section Oveco #}
-  {% include "partials/text_image-section.twig" %}
+  {% include "partials/text_image-section.twig" with {
+    subtitle: "Notre approche",
+    title: "Une expertise technique<br/>au service de vos projets",
+    description: "Chaque projet est unique et mérite une approche personnalisée. Notre équipe d'ingénieurs combine savoir-faire technique et proximité client pour transformer vos idées en réalisations concrètes.",
+    link: { label: "Découvrir notre équipe", url: site.url ~ '#about' },
+    image: { src: assets_url ~ '/imgs/maison-build.png', alt: 'Équipe Oveco en action' },
+    titre_section: false,
+    duplicate: false,
+  } %}
 
   {# Section Stats #}
   {% include "partials/stats-section.twig" %}

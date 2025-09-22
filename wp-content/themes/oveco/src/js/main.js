@@ -151,11 +151,7 @@ function initMouseFollower() {
   let currentY = 0;
   let insideHero = false;
 
-  // Récupère le pas de grille depuis les variables CSS de .hero
-  const style = getComputedStyle(heroSection);
-  const step = Math.max(8, parseFloat(style.getPropertyValue('--hero-grid-step') || '48')); // px
-  const offsetX = parseFloat(style.getPropertyValue('--hero-grid-offset-x') || '0');
-  const offsetY = parseFloat(style.getPropertyValue('--hero-grid-offset-y') || '0');
+  // Aucun snapping à la grille: mouvement fluide directement sous la souris
 
   const ease = 0.15; // smoothing factor
 
@@ -181,7 +177,7 @@ function initMouseFollower() {
   // Run animation loop
   animate();
 
-  // Écoute uniquement dans le hero et snap au maillage
+  // Écoute uniquement dans le hero, mouvement fluide
   heroSection.addEventListener('mousemove', (e) => {
     const rect = heroSection.getBoundingClientRect();
     const relX = e.clientX - rect.left; // position relative au hero
@@ -190,13 +186,8 @@ function initMouseFollower() {
     insideHero = relX >= 0 && relX <= rect.width && relY >= 0 && relY <= rect.height;
 
     if (!insideHero) return;
-
-    // Appliquer l’offset éventuel puis snapper sur la grille
-    const snappedX = Math.round((relX - offsetX) / step) * step + offsetX;
-    const snappedY = Math.round((relY - offsetY) / step) * step + offsetY;
-
-    targetX = snappedX;
-    targetY = snappedY;
+    targetX = relX;
+    targetY = relY;
   }, { passive: true });
 
   // Hide on resize for small screens

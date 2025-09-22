@@ -9,16 +9,21 @@
     &__container {
         max-width: $large;
         margin: 0 auto;
-        padding: 0 clamp(1rem, 4vw, 2rem);
+        padding: 0 clamp(16px, 4vw, 32px);
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        min-height: 80px;
+        min-height: clamp(70px, 10vw, 80px);
+        
+        @include tablet {
+            min-height: clamp(60px, 8vw, 70px);
+            padding: 0 clamp(16px, 4vw, 24px);
+        }
         
         @include mobile {
-            min-height: 70px;
-            padding: 0 1rem;
+            min-height: clamp(56px, 8vw, 64px);
+            padding: 0 16px;
         }
     }
 
@@ -81,27 +86,29 @@
     &__menu {
         display: flex;
         align-items: center;
-    gap: clamp(1.5rem, 3vw, 2.0625rem); 
+        gap: clamp(16px, 3vw, 32px); 
         list-style: none;
         margin: 0;
         padding: 0;
-    flex: 1 1 auto; /* Permet au menu d'occuper l'espace central */
-    min-width: 0; /* évite overflow des items flex */
+        flex: 1 1 auto; /* Permet au menu d'occuper l'espace central */
+        min-width: 0; /* évite overflow des items flex */
 
         @include tablet {
             position: fixed;
-            top: 80px;
+            top: clamp(60px, 8vw, 70px);
             left: 0;
             right: 0;
             background: $color-white;
             flex-direction: column;
-            padding: 2rem 1rem 3rem;
-            gap: 1.5rem;
+            padding: clamp(24px, 4vw, 32px) clamp(16px, 4vw, 24px) clamp(32px, 6vw, 48px);
+            gap: clamp(20px, 4vw, 24px);
             transform: translateY(-100vh);
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
             box-shadow: 0 8px 32px rgba(51, 71, 73, 0.15);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(51, 71, 73, 0.1);
 
             &.active {
                 transform: translateY(0);
@@ -110,8 +117,9 @@
             }
         }
 
-    @include mobile {
-            top: 70px;
+        @include mobile {
+            top: clamp(56px, 8vw, 64px);
+            padding: clamp(20px, 4vw, 24px) 16px clamp(24px, 5vw, 32px);
         }
     }
 
@@ -119,7 +127,7 @@
     &__links {
         display: flex;
         align-items: center;
-        gap: clamp(1.5rem, 3vw, 2.0625rem);
+        gap: clamp(16px, 3vw, 32px);
         margin-inline: auto; /* centre le groupe au milieu */
         min-width: 0;
 
@@ -128,7 +136,7 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            gap: 1.25rem;
+            gap: clamp(16px, 3vw, 20px);
             margin: 0; /* reset des marges auto en mobile */
         }
     }
@@ -137,24 +145,35 @@
         color: $color-text;
         font-family: $font-family-primary;
         font-weight: $font-weight-regular;
-        font-size: 1rem; 
-        line-height: 1.875; 
+        font-size: clamp(14px, 2.5vw, 16px); 
+        line-height: 1.5; 
         text-decoration: none;
         white-space: nowrap;
+        padding: clamp(8px, 1.5vw, 12px) clamp(4px, 1vw, 8px);
+        border-radius: 6px;
+        transition: all 0.2s ease;
 
         &:hover,
         &:focus {
             color: $color-accent;
+            background: rgba(2, 139, 154, 0.05);
         }
 
         &.active {
             color: $color-accent;
             font-weight: $font-weight-semibold;
+            background: rgba(2, 139, 154, 0.1);
         }
 
         @include tablet {
-            font-size: 1.125rem;
-            padding: 0.5rem 0;
+            font-size: clamp(16px, 3vw, 18px);
+            padding: clamp(12px, 2vw, 16px) clamp(16px, 3vw, 24px);
+            width: 100%;
+            text-align: center;
+        }
+        
+        @include mobile {
+            font-size: clamp(15px, 3.5vw, 16px);
         }
     }
 
@@ -164,20 +183,28 @@
     &__cta {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: clamp(8px, 2vw, 16px);
         
         @include tablet {
             width: 100%;
-            margin-top: 1rem;
+            margin-top: clamp(16px, 3vw, 24px);
             justify-content: center;
+            padding-top: clamp(16px, 3vw, 24px);
+            border-top: 1px solid rgba(51, 71, 73, 0.1);
         }
     }
 
     &__btn {
         @include cta-button;
+        font-size: clamp(14px, 2.5vw, 16px);
+        padding: clamp(10px, 2vw, 14px) clamp(20px, 4vw, 28px);
+        
         @include tablet {
             width: 100%;
+            max-width: 280px;
             text-align: center;
+            font-size: clamp(15px, 3vw, 16px);
+            padding: clamp(12px, 2.5vw, 16px) clamp(24px, 5vw, 32px);
         }
     }
 
@@ -189,34 +216,41 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 32px;
-        height: 32px;
+        width: clamp(28px, 6vw, 32px);
+        height: clamp(28px, 6vw, 32px);
         background: transparent;
         border: none;
         cursor: pointer;
         padding: 0;
         z-index: 1002;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
 
         @include tablet {
             display: flex;
         }
+        
+        &:hover {
+            background: rgba(2, 139, 154, 0.1);
+        }
 
         span {
             display: block;
-            width: 24px;
+            width: clamp(20px, 4vw, 24px);
             height: 2px;
             background: $color-secondary;
             transform-origin: center;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 
             &:not(:last-child) {
-                margin-bottom: 6px;
+                margin-bottom: clamp(4px, 1vw, 6px);
             }
         }
 
         &.active {
             span {
                 &:nth-child(1) {
-                    transform: rotate(45deg) translateY(8px);
+                    transform: rotate(45deg) translateY(clamp(6px, 1.5vw, 8px));
                 }
 
                 &:nth-child(2) {
@@ -225,7 +259,7 @@
                 }
 
                 &:nth-child(3) {
-                    transform: rotate(-45deg) translateY(-8px);
+                    transform: rotate(-45deg) translateY(clamp(-6px, -1.5vw, -8px));
                 }
             }
         }
@@ -262,10 +296,14 @@
    UTILITY CLASSES
    ======================================== */
 .navbar-spacer {
-    height: 80px;
+    height: clamp(70px, 10vw, 80px);
+    
+    @include tablet {
+        height: clamp(60px, 8vw, 70px);
+    }
     
     @include mobile {
-        height: 70px;
+        height: clamp(56px, 8vw, 64px);
     }
 }
 
@@ -281,6 +319,7 @@
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
 
     &.active {
         opacity: 1;

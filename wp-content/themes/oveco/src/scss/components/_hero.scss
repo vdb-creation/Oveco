@@ -1,9 +1,7 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
-/* ========================================
-   HERO SECTION
-   ======================================== */
+/* HERO */
 .hero {
     position: relative;
     min-height: 100vh;
@@ -17,261 +15,84 @@
     overflow: hidden;
     padding: 6rem 2rem;
 
-    // Variables CSS pour le maillage (utilisées par le JS pour le snapping)
-    // Ajuste --hero-grid-step pour coller exactement au pas de ta grille SVG
+    // Variables lues par le JS si besoin
     --hero-grid-step: 48px;
-    --hero-grid-offset-x: 0px; // décalage horizontal éventuel du motif
-    --hero-grid-offset-y: 0px; // décalage vertical éventuel du motif
+    --hero-grid-offset-x: 0px;
+    --hero-grid-offset-y: 0px;
 
-    // Responsive padding adjustments
-    @media (max-width: 1200px) {
-        padding: 5rem 1.5rem;
-    }
+    --hero-cell-cols: 2;
+    --hero-cell-rows: 1;
 
-    @include tablet {
-        padding: 4rem 1.5rem;
-        min-height: 80vh;
-    }
-
-    @include mobile {
-        min-height: 70vh;
-        padding: 3rem 1rem;
-    }
-
-    @media (max-width: 360px) {
-        padding: 2.5rem 0.75rem;
-        min-height: 60vh;
-    }
+    @media (max-width: 1200px) { padding: 5rem 1.5rem; }
+    @include tablet { padding: 4rem 1.5rem; min-height: 80vh; }
+    @include mobile { min-height: 70vh; padding: 3rem 1rem; }
 
     &__container {
-        position: relative;
+        position: static;
         z-index: 2;
         width: 100%;
         max-width: 1280px;
         display: flex;
         align-items: center;
         justify-content: center;
+        padding-inline: clamp(16px, 4vw, 80px);
     }
 
-    // Cercle suiveur de souris
+    /* Cercle suiveur de souris */
     &__mouse-follower {
         position: absolute;
-        width: 140px;
-        height: 140px;
-        background: radial-gradient(circle, rgba(4, 139, 154, 0.4) 0%, rgba(4, 139, 154, 0.2) 40%, rgba(4, 139, 154, 0.1) 70%, transparent 100%);
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle at 50% 50%, rgba(4,139,154,0.28), rgba(4,139,154,0.10) 60%, rgba(4,139,154,0.0) 70%);
         border-radius: 50%;
         pointer-events: none;
         z-index: 0;
         transform: translate(-50%, -50%);
-        transition: opacity 0.3s ease;
-        opacity: 1; // Visible par défaut pour test
+        transition: opacity 0.2s ease;
+        opacity: 0;
         will-change: transform, opacity;
         mix-blend-mode: normal;
-        left: 50%; // Position initiale au centre
+        left: 50%;
         top: 50%;
-        filter: blur(8px); // Ajout de blur principal
+        filter: blur(6px);
         
-        // Effet de glow supplémentaire
-        box-shadow: 
-            0 0 20px rgba(4, 139, 154, 0.3),
-            0 0 40px rgba(4, 139, 154, 0.2),
-            0 0 60px rgba(4, 139, 154, 0.1);
+        /* ombre douce pour mieux ressortir sur le fond */
+        box-shadow: 0 0 24px rgba(4, 139, 154, 0.22), 0 0 48px rgba(4, 139, 154, 0.12);
 
-        // Effet de pulsation subtile avec plus de blur
-        &::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 80%;
-            height: 80%;
-            background: rgba(4, 139, 154, 0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            animation: pulse 3s ease-in-out infinite;
-            filter: blur(4px);
-        }
-
-        // Cercle interne avec encore plus de blur
-        &::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 40%;
-            height: 40%;
-            background: rgba(4, 139, 154, 0.4);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            filter: blur(12px);
-            animation: pulseSecondary 4s ease-in-out infinite;
-        }
-
-        // Responsive adjustments
-        @media (max-width: 1200px) {
-            width: 120px;
-            height: 120px;
-            filter: blur(6px);
-        }
-
-        @include tablet {
-            width: 100px;
-            height: 100px;
-            filter: blur(5px);
-        }
-
-        @include mobile {
-            display: none; // Masquer sur mobile pour les performances
-        }
+        @media (max-width: 1200px) { width: 100px; height: 100px; filter: blur(5px); }
+        @include tablet { width: 90px; height: 90px; filter: blur(4px); }
+        @include mobile { display: none; }
     }
 
-    // Animations de pulsation pour les cercles internes
-    @keyframes pulse {
-        0%, 100% {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 0.4;
-        }
-        50% {
-            transform: translate(-50%, -50%) scale(1.3);
-            opacity: 0.1;
-        }
-    }
-
-    // Animation secondaire pour l'effet ::after
-    @keyframes pulseSecondary {
-        0%, 100% {
-            transform: translate(-50%, -50%) scale(0.8);
-            opacity: 0.5;
-        }
-        50% {
-            transform: translate(-50%, -50%) scale(1.5);
-            opacity: 0.05;
-        }
-    }
+    /* pas d'animations lourdes */
 
     // Positionnement des 4 images avec responsivité parfaite
     #img1 {
-        left: -320px;
-        top: -100px;
+        left: clamp(60px, 8vw, 140px);
+        top: clamp(100px, 18vh, 240px);
         z-index: 1;
-
-        // Large screens (1200px+)
-        @media (min-width: 1200px) {
-            left: -400px;
-            top: -120px;
-        }
-
-        // Medium-large screens (1024px to 1199px)
-        @include desktop {
-            left: -350px;
-            top: -110px;
-        }
-
-        // Medium screens (769px to 1023px)
-        @media (max-width: 1023px) and (min-width: 769px) {
-            left: -120px;
-            top: -60px;
-            width: 180px !important;
-            height: 220px !important;
-        }
-
-        // Small tablets and mobile (768px and below)
-        @include tablet {
-            display: none;
-        }
+        @include tablet { display: none; }
     }
     
     #img2 {
-        right: -320px;
-        top: -100px;
+        right: clamp(60px, 8vw, 140px);
+        top: clamp(100px, 18vh, 240px);
         z-index: 1;
-
-        // Large screens (1200px+)
-        @media (min-width: 1200px) {
-            right: -400px;
-            top: -120px;
-        }
-
-        // Medium-large screens (1024px to 1199px)
-        @include desktop {
-            right: -350px;
-            top: -110px;
-        }
-
-        // Medium screens (769px to 1023px)
-        @media (max-width: 1023px) and (min-width: 769px) {
-            right: -120px;
-            top: -60px;
-            width: 180px !important;
-            height: 220px !important;
-        }
-
-        // Small tablets and mobile (768px and below)
-        @include tablet {
-            display: none;
-        }
+        @include tablet { display: none; }
     }
     
     #img3 {
-        left: -290px;
-        bottom: -150px;
+        left: clamp(120px, 15vw, 300px);
+        bottom: clamp(100px, 20vh, 260px);
         z-index: 1;
-
-        // Large screens (1200px+)
-        @media (min-width: 1200px) {
-            left: -370px;
-            bottom: -170px;
-        }
-
-        // Medium-large screens (1024px to 1199px)
-        @include desktop {
-            left: -320px;
-            bottom: -160px;
-        }
-
-        // Medium screens (769px to 1023px)
-        @media (max-width: 1023px) and (min-width: 769px) {
-            left: -100px;
-            bottom: -80px;
-            width: 160px !important;
-            height: 120px !important;
-        }
-
-        // Small tablets and mobile (768px and below)
-        @include tablet {
-            display: none;
-        }
+        @include tablet { display: none; }
     }
     
     #img4 {
-        right: -290px;
-        bottom: -150px;
+        right: clamp(120px, 15vw, 300px);
+        bottom: clamp(100px, 20vh, 260px);
         z-index: 1;
-
-        // Large screens (1200px+)
-        @media (min-width: 1200px) {
-            right: -370px;
-            bottom: -170px;
-        }
-
-        // Medium-large screens (1024px to 1199px)
-        @include desktop {
-            right: -320px;
-            bottom: -160px;
-        }
-
-        // Medium screens (769px to 1023px)
-        @media (max-width: 1023px) and (min-width: 769px) {
-            right: -100px;
-            bottom: -80px;
-            width: 160px !important;
-            height: 120px !important;
-        }
-
-        // Small tablets and mobile (768px and below)
-        @include tablet {
-            display: none;
-        }
+        @include tablet { display: none; }
     }
 
     &__image {
@@ -280,123 +101,31 @@
         border-radius: 30px;
         z-index: 1;
         object-fit: cover;
-        // Pas d'effets au hover
         transition: none;
+        @include tablet { display: none; }
 
-        // Progressive hiding for better responsive experience
-        @media (max-width: 1023px) and (min-width: 769px) {
-            opacity: 1;
+        &--large-1, &--large-2 {
+            width: clamp(260px, 20vw, 320px);
+            height: clamp(320px, 25vw, 380px);
         }
 
-        @include tablet {
-            display: none;
-        }
-
-        // Image en haut à gauche
-        &--large-1 {
-            width: 280px;
-            height: 340px;
-
-            @media (min-width: 1200px) {
-                width: 320px;
-                height: 380px;
-            }
-
-            @media (max-width: 1023px) and (min-width: 769px) {
-                width: 180px;
-                height: 220px;
-            }
-        }
-
-        // Image en haut à droite
-        &--large-2 {
-            width: 280px;
-            height: 340px;
-
-            @media (min-width: 1200px) {
-                width: 320px;
-                height: 380px;
-            }
-
-            @media (max-width: 1023px) and (min-width: 769px) {
-                width: 180px;
-                height: 220px;
-            }
-        }
-
-        // Image en bas à gauche
-        &--medium-1 {
-            width: 250px;
-            height: 180px;
-
-            @media (min-width: 1200px) {
-                width: 280px;
-                height: 200px;
-            }
-
-            @media (max-width: 1023px) and (min-width: 769px) {
-                width: 160px;
-                height: 120px;
-            }
-        }
-
-        // Image en bas à droite
-        &--medium-2 {
-            width: 250px;
-            height: 180px;
-
-            @media (min-width: 1200px) {
-                width: 280px;
-                height: 200px;
-            }
-
-            @media (max-width: 1023px) and (min-width: 769px) {
-                width: 160px;
-                height: 120px;
-            }
+        &--medium-1, &--medium-2 {
+            width: clamp(220px, 18vw, 280px);
+            height: clamp(160px, 12vw, 200px);
         }
     }
 
     &__content {
-        width: 656px;
+        width: min(656px, 100%);
         position: relative;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        gap: 1.125rem; // 18px
+        gap: clamp(0.75rem, 2vw, 1.125rem);
         z-index: 3;
-
-        // Large tablets (769px to 1023px)
-        @media (max-width: 1023px) and (min-width: 769px) {
-            width: 100%;
-            max-width: 600px;
-            gap: 1rem;
-            padding: 0 1rem;
-        }
-
-        // Small tablets (481px to 768px)
-        @include tablet {
-            width: 100%;
-            max-width: 500px;
-            gap: 0.875rem;
-            padding: 0 1.5rem;
-        }
-
-        // Mobile (480px and below)
-        @include mobile {
-            width: 100%;
-            max-width: 400px;
-            gap: 0.75rem;
-            padding: 0 1rem;
-        }
-
-        // Small mobile (360px and below)
-        @media (max-width: 360px) {
-            max-width: 320px;
-            gap: 0.625rem;
-            padding: 0 0.75rem;
-        }
+        padding-inline: clamp(0.75rem, 3vw, 1.5rem);
+        max-width: clamp(320px, 90vw, 720px);
 
         &::before {
             content: '';
@@ -464,28 +193,8 @@
         display: inline-flex;
         text-decoration: none;
 
-        // Enhanced responsive design for CTA
-        @media (max-width: 1023px) and (min-width: 769px) {
-            padding: 16px 26px;
-            font-size: 18px;
-        }
-
-        @include tablet {
-            padding: 14px 22px;
-            font-size: 16px;
-        }
-
-        @include mobile {
-            padding: 12px 20px;
-            font-size: 15px;
-            width: auto;
-            min-width: 140px;
-        }
-
-        @media (max-width: 360px) {
-            padding: 10px 18px;
-            font-size: 14px;
-            min-width: 120px;
-        }
+        padding: clamp(10px, 2vw, 18px) clamp(18px, 4vw, 26px);
+        font-size: clamp(14px, 2.5vw, 18px);
+        min-width: clamp(120px, 25vw, 160px);
     }
 }

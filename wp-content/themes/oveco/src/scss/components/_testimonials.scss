@@ -77,8 +77,20 @@
     margin: 0;
   }
 
-  &__link { display: inline-flex; gap: 6px; text-decoration: none; }
-  &__link-arrow { width: 10px; height: 8.57px; }
+  &__link {
+    display: inline-flex;
+    align-items: center; /* aligner le texte et la flèche sur la même ligne */
+    gap: 6px;
+    text-decoration: none;
+    line-height: 1; /* éviter les variations de baseline */
+  }
+  &__link-arrow {
+    width: 10px;
+    height: 8.57px;
+    display: block; /* supprime l'alignement baseline des inline-svg */
+    flex-shrink: 0;
+    transform: translateY(0.5px); /* micro-correction optique */
+  }
 
   &__navigation { width: 400px; display: flex; justify-content: flex-end; align-items: center; gap: 28px; }
   &__nav-btn {
@@ -87,7 +99,8 @@
   }
 
   &__grid {
-    display: flex; align-items: center; gap: 12px; width: 100%; overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; cursor: grab; touch-action: pan-x pinch-zoom;
+    /* Reproduire la grille projets mais en carrousel horizontal */
+    display: flex; align-items: stretch; gap: 24px; width: 100%; overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; cursor: grab; touch-action: pan-x pinch-zoom;
     /* hidden scrollbar */
     scrollbar-width: none; -ms-overflow-style: none; &::-webkit-scrollbar { display:none; width:0; height:0; }
     /* trailing padding to not cut the last card */
@@ -97,6 +110,12 @@
     @media (max-width: 1024px){ padding-right:40px; }
     @include tablet { padding-right: 2rem; }
     @include mobile { padding-right: 1rem; }
+    /* Cartes témoignages = exactement 388x548 en desktop/tablette */
+    > .projects__card { width: 388px; height: 548px; flex: 0 0 auto; }
+    > .projects__card .projects__card-content { height: auto; }
+    @include mobile {
+      > .projects__card { width: 80%; height: auto; aspect-ratio: 388/548; }
+    }
   }
 }
 //TODO Pour plus tard

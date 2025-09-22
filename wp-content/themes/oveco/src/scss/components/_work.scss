@@ -6,7 +6,8 @@
 }
 
 .work-hero {
-  padding: clamp(32px, 8vw, 150px) clamp(16px, 6vw, 75px);
+  /* Espacement avec la navbar + padding responsive optimisé */
+  padding: clamp(80px, 12vw, 150px) clamp(16px, 6vw, 75px) clamp(32px, 8vw, 150px);
   /* Grille de fond: s'étend en largeur, garde la hauteur originale */
   background-image: url('assets/imgs/BgGrille.svg');
   background-repeat: repeat-x;
@@ -21,6 +22,8 @@
     width: 100%;
     max-width: 1219px;
     margin: 0 auto;
+    padding-inline: clamp(16px, 4vw, 32px);
+    padding-top: clamp(32px, 6vw, 64px);
   }
 
   &__content {
@@ -68,22 +71,11 @@
     object-fit: cover; 
     display: block; }
 
-  /* decorative bg block approx to spec */
-  &__deco--bg { 
-    width: 69.76px; 
-    height: 74.74px; 
-    position: absolute; 
-    left: 412.53px; 
-    top: 440.50px; 
-    transform: rotate(-171deg); 
-    transform-origin: top left; 
-    background: #FFFEF8; }
-
-  /* icônes: inversées (crayon en haut-gauche, maison en bas-droite rotée) */
+  /* icônes: maison repositionnée à la place du deco bg */
   &__icon { 
     position: absolute; 
     display: block; }
-  /* Swap positions: pencil goes top-left, house goes bottom-right rotated */
+  /* Swap positions: pencil goes top-left, house at deco bg position */
   &__icon--pencil { 
     width: 100.9px; 
     height: 100.9px; 
@@ -93,26 +85,36 @@
   &__icon--house { 
     width: 104px; 
     height: 104px; 
-    left: 425.62px; 
-    top: 455.62px; 
-    transform: rotate(-171deg); 
+    /* Position ajustée */
+    left: 308.53px; 
+    top: 345.5px; 
+    transform: none; 
     transform-origin: top left; }
 
   /* Responsive */
-  @media (max-width: 1200px) { padding: 42px 48px; }
+  @media (max-width: 1200px) { 
+    padding: clamp(72px, 10vw, 100px) clamp(32px, 6vw, 48px) clamp(32px, 6vw, 48px); 
+  }
   @media (max-width: 1024px) {
+    padding: clamp(64px, 8vw, 80px) clamp(24px, 4vw, 32px) clamp(24px, 4vw, 32px);
     &__inner { 
       flex-direction: column; 
-      gap: 40px; 
+      gap: clamp(32px, 6vw, 40px);
+      padding-inline: clamp(16px, 4vw, 24px);
     }
-    &__content { width: 100%; }
+    &__content { width: 100%; text-align: center; align-items: center; }
     &__media { width: 100%; max-width: 377px; height: auto; }
     &__image { position: relative; }
-    &__deco--bg, &__icon--pencil, &__icon--house { 
+    &__icon--pencil, &__icon--house { 
       display: none; 
     }
   }
-  @include mobile { padding: 32px 16px; }
+  @include mobile { 
+    padding: clamp(56px, 8vw, 64px) clamp(16px, 4vw, 20px) clamp(16px, 4vw, 20px); 
+    &__inner {
+      padding-inline: 16px;
+    }
+  }
 }
 
 // .work-grid-section and .work-grid removed as per request

@@ -1,6 +1,6 @@
-/* ===================================
-   Variables SCSS - Couleurs, Espacements et Typographie
-   =================================== */
+@use "sass:color";
+
+/* Variables SCSS - Couleurs, Espacements et Typographie */
 
 // Couleurs principales
 $color-accent: #048B9A;
@@ -11,9 +11,9 @@ $color-colored-white: #FFF9ED;
 
 // Couleurs dérivées et utilitaires
 $color-black: #000000;
-$color-gray-light: lighten($color-text, 30%);
+$color-gray-light: color.adjust($color-text, $lightness: 30%);
 $color-gray-medium: $color-text;
-$color-gray-dark: darken($color-text, 20%);
+$color-gray-dark: color.adjust($color-text, $lightness: -20%);
 
 // Couleurs d'état au cas où
 $color-success: #28a745;

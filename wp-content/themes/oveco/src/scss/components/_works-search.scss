@@ -5,7 +5,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 42px 24px;
+  padding: clamp(24px, 6vw, 42px) clamp(16px, 4vw, 24px);
   background: $color-white;
 
   &__container {
@@ -13,7 +13,7 @@
     max-width: 1219px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: clamp(16px, 4vw, 24px);
   }
 
   /* NAV: recherche + tags */
@@ -22,19 +22,29 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 16px;
+    gap: clamp(12px, 3vw, 16px);
     flex-wrap: wrap;
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
 
   &__form {
-    padding: 14px 24px;
+    padding: clamp(10px, 2vw, 14px) clamp(16px, 4vw, 24px);
     background: #FFFEF8;
     border-radius: 50px;
     outline: 1.5px solid #5C6D6F;
     outline-offset: -1.5px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: clamp(12px, 3vw, 16px);
+    min-width: min(100%, 300px);
+    
+    @media (max-width: 768px) {
+      width: 100%;
+    }
   }
 
   &__label {
@@ -49,13 +59,13 @@
   }
 
   &__input {
-    width: clamp(260px, 36vw, 371px);
+    width: clamp(200px, 30vw, 371px);
     border: none;
     background: transparent;
     color: #334749;
     font-family: $font-family-primary;
-    font-size: 16px;
-    line-height: 18px;
+    font-size: clamp(14px, 2.5vw, 16px);
+    line-height: clamp(16px, 3vw, 18px);
     outline: none;
 
     &::placeholder {
@@ -71,7 +81,12 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: 6px;
+    gap: clamp(4px, 1vw, 6px);
+    
+    @media (max-width: 768px) {
+      width: 100%;
+      justify-content: flex-start;
+    }
   }
 
   &__chip {
@@ -102,33 +117,26 @@
     line-height: 18px;
   }
 
-  /* GRID: cartes projets (2 par ligne) */
+  /* GRID: cartes projets (responsive automatique) */
   &__grid {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+    gap: clamp(16px, 4vw, 24px);
 
-    /* Rendre les cartes plus larges sur cette page: elles doivent remplir toute la colonne */
+    /* Rendre les cartes plus larges sur cette page */
     .projects__card {
       width: 100%;
       max-width: none;
+      height: auto;
+      aspect-ratio: 388/548;
     }
 
-    /* Évite les overflow internes hérités du carrousel */
     .projects__card-content {
-      height: auto; /* laisse la hauteur s'adapter au contenu si nécessaire */
-      min-height: 420px; /* garde une présence visuelle confortable */
+      height: auto;
+      min-height: 420px;
     }
   }
 
-  /* Chaque cellule contient une carte réutilisable */
-
-  /* Réduction à 1 colonne sur mobile */
-  @media (max-width: 768px) {
-    &__nav { flex-direction: column; align-items: stretch; }
-    &__form { width: 100%; }
-    &__tags { width: 100%; justify-content: flex-start; }
-    &__grid { grid-template-columns: 1fr; }
-  }
+  /* Plus de breakpoints fixes nécessaires - responsive automatique avec clamp() et auto-fit */
 }

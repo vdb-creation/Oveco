@@ -1,5 +1,13 @@
-/* ===================================
-   Utilities - Classes utilitaires
-   =================================== */
-
 @forward 'utilities/cta-buttons';
+
+/* Accessibilité */
+:focus:not(:focus-visible) { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+   *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+   }
+}
