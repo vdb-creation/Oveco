@@ -1,0 +1,48 @@
+{# Composant: Simple Compétence
+  Props attendues:
+  - number (string): ex. "Compétence 1"
+  - title (string): Titre de la compétence
+  - description (string): Texte descriptif
+  - cta (object): { label: string, url: string }
+  - image (object): { src: string, alt: string }
+  Notes:
+  - Image par défaut: assets_url/icons/maison.png
+  - Utilise un visuel incliné décoratif en arrière-plan (aria-hidden)
+  - Sémantique: section + figure + h3, description en p
+#}
+
+{% set _img = image is defined and image and image.src ? image : { src: assets_url ~ '/icons/maison.png', alt: 'Icône maison' } %}
+{% set _src_lc = _img.src|lower %}
+{% set _src_path = _src_lc|split('?')|first %}
+{% set is_png = (_src_path ends with '.png') %}
+{% set _cta = cta is defined and cta and cta.label and cta.url ? cta : null %}
+
+<section class="simple-competence" aria-labelledby="sc-title-{{ title|default('competence')|lower|replace({' ':'-'}) }}">
+  <figure class="simple-competence__visual" role="img" aria-label="{{ _img.alt|default('Visuel de la compétence') }}">
+    <span class="simple-competence__bg" aria-hidden="true"></span>
+  <img class="simple-competence__image {{ is_png ? 'is-png' : 'rotate-180' }}" src="{{ _img.src }}" alt="{{ _img.alt|default('Visuel de la compétence') }}" loading="lazy" decoding="async" />
+  </figure>
+
+  <div class="simple-competence__content">
+    <header class="simple-competence__header">
+      {% if number %}
+        <p class="simple-competence__kicker">{{ number }}</p>
+      {% endif %}
+      {% if title %}
+        <h3 id="sc-title-{{ title|lower|replace({' ':'-'}) }}" class="simple-competence__title">{{ title }}</h3>
+      {% endif %}
+    </header>
+
+    {% if description %}
+      <p class="simple-competence__description">{{ description }}</p>
+    {% endif %}
+
+    {% if _cta %}
+      <p class="simple-competence__cta">
+        <a class="simple-competence__link" href="{{ _cta.url }}">
+          <span>{{ _cta.label }}</span>
+        </a>
+      </p>
+    {% endif %}
+  </div>
+</section>

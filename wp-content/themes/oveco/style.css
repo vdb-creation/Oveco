@@ -2884,6 +2884,9 @@ body.no-scroll {
   inset: 0;
   /* Gradients avec espace transparent entre les deux et opacités réduites */
   background: linear-gradient(13deg, rgba(51, 71, 73, 0) 0%, rgba(51, 71, 73, 0) 58%, rgba(51, 71, 73, 0.65) 88%, rgba(51, 71, 73, 0.65) 100%), linear-gradient(189deg, rgba(255, 249, 237, 0) 0%, rgba(255, 249, 237, 0) 40%, rgba(255, 249, 237, 0.45) 70%, rgba(255, 249, 237, 0.45) 100%);
+  /* Léger flou pour améliorer la lisibilité sans altérer le style */
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   pointer-events: none;
 }
 .projects__card-content {
@@ -4647,6 +4650,150 @@ body.no-scroll {
   max-width: 1100px;
 }
 
+.simple-competence {
+  display: flex; /* block-level for easier centering */
+  align-items: center;
+  justify-content: center; /* center the visual + content cluster */
+  gap: 130px;
+  width: 100%;
+  margin-inline: auto; /* center the section within its container */
+  /* When used as core/image, the class may sit on the figure; ensure the img inherits the rules */
+  /* Responsive */
+}
+.simple-competence__visual {
+  width: 251px;
+  height: 272px;
+  position: relative;
+  margin: 0;
+}
+.simple-competence__bg {
+  position: absolute;
+  width: 135.13px;
+  height: 144.77px;
+  left: 80.12px;
+  top: 175.66px;
+  transform: rotate(-171deg);
+  transform-origin: top left;
+  background: #FFFEF8;
+}
+.simple-competence__image, .simple-competence__image img {
+  position: absolute;
+  width: 233.23px;
+  height: 233.23px;
+  left: 217.78px;
+  top: 267.27px;
+  transform: rotate(-171deg);
+  transform-origin: top left;
+  object-fit: contain;
+  display: block;
+}
+.simple-competence__image.is-png, .simple-competence__image.is-png img, .simple-competence__image img.is-png, .simple-competence__image img.is-png img {
+  transform: none; /* remove tilt for PNGs */
+  left: 0;
+  top: 0;
+}
+.simple-competence__image.rotate-180, .simple-competence__image.rotate-180 img, .simple-competence__image img.rotate-180, .simple-competence__image img.rotate-180 img {
+  transform: rotate(180deg); /* optional forced 180° rotation */
+  transform-origin: center center;
+  left: 0;
+  top: 0;
+}
+.simple-competence__content {
+  width: 458px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 21px;
+}
+.simple-competence__header {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.simple-competence__kicker {
+  color: #5C6D6F;
+  font-size: 19.2px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 20px;
+  letter-spacing: 1.92px;
+  margin: 0;
+}
+.simple-competence__title {
+  color: #334749;
+  font-size: 39.81px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 800;
+  line-height: 47.77px;
+  margin: 0;
+}
+.simple-competence__description {
+  color: #5C6D6F;
+  font-size: 16px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 28.8px;
+  margin: 0;
+}
+.simple-competence__cta {
+  margin: 0;
+}
+.simple-competence__link {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 6px;
+  text-decoration: none;
+  color: #048B9A;
+  font-size: 16px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  line-height: 19.2px;
+}
+.simple-competence__link:focus {
+  outline: 2px solid #048B9A;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.simple-competence__link::after {
+  content: "";
+  width: 10px;
+  height: 8.57px;
+  border: 1.5px solid currentColor;
+  border-left: 0;
+  border-bottom: 0;
+  transform: rotate(45deg);
+  display: inline-block;
+  margin-bottom: 2px;
+}
+@media (max-width: 1024px) {
+  .simple-competence {
+    gap: 64px;
+  }
+}
+@media (max-width: 768px) {
+  .simple-competence {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .simple-competence__content {
+    width: 100%;
+  }
+  .simple-competence__visual {
+    width: 200px;
+    height: 220px;
+  }
+  .simple-competence__image {
+    width: 200px;
+    height: 200px;
+    left: 160px;
+    top: 200px;
+  }
+}
+
 /* Composants Gutenberg */
 /* ================================
    PROJECT CARD COMPONENT - BEM
@@ -4777,6 +4924,18 @@ body.no-scroll {
 }
 .project-card--compact .project-card__content {
   padding: 16px;
+}
+
+/* Override pour la variante Gutenberg qui réutilise projects__card: conserver la taille actuelle du block (large) */
+.wp-block-oveco-project-card .projects__card {
+  width: 100%;
+  height: auto;
+  /* Conserver la hauteur perçue de l’ancienne carte large via ratio/limites */
+  aspect-ratio: 16/9; /* ajustable si besoin */
+  min-height: 420px; /* valorisée selon l’existant; modifiez si nécessaire */
+}
+.wp-block-oveco-project-card .projects__card-content {
+  height: auto;
 }
 
 /* Section Hero - Bloc Gutenberg */

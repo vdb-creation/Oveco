@@ -6,8 +6,16 @@
     {{ fn('the_content') }}
   {% endif %}
 </div>
-{# project section #}
- {% include "partials/projects-section.twig" %}
- {#section témoignage #}
-  {% include "partials/testimonials-section.twig" %}
+ {%  include "partials/projects-section.twig" %}
+ {# simple compétence section (centrée dans le container) #}
+ <div class="container">
+   {% include "partials/simple-competence.twig" with {
+     number: 'Compétence 1',
+     title: 'Titre de la compétence',
+     description: 'Description lorem ipsum dolor sit amet consectetur adipiscing elit tortor eu egestas morbi sem vulputate etiam facilisis pellentesque ut quis.',
+     cta: { label: 'Nous contacter', url: site.url ~ '#contact' },
+     image: { src: assets_url ~ '/icons/maison.png', alt: 'Icône maison' }
+   } %}
+ </div>
+
 {% endblock %}

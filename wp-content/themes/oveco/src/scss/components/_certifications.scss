@@ -9,7 +9,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 120px 199px;
+  padding: clamp(48px, 8vw, 120px) clamp(16px, 8vw, 199px);
 
   @media (max-width: 1200px) { padding: 100px 120px; }
   @media (max-width: 1024px) { padding: 80px 80px; }
@@ -56,9 +56,9 @@
   &__row {
     display: inline-flex;
     align-items: center;
-    gap: 21px;
-    flex-wrap: nowrap;
-    @include tablet { flex-wrap: wrap; justify-content: center; }
+    gap: clamp(12px, 2.5vw, 21px);
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   &__card {

@@ -6,11 +6,12 @@
     <meta itemprop="image" content="{{ bg_image }}" />
     <div class="projects__card-overlay" aria-hidden="true"></div>
 
-    <div class="projects__card-content">
-        <div class="projects__card-header">
-            <span class="projects__card-type">Témoignage</span>
-        </div>
+    {# Aligner la structure avec la carte projet: header hors du contenu pour un ancrage top-right constant #}
+    <div class="projects__card-header">
+        <span class="projects__card-type">Témoignage</span>
+    </div>
 
+    <div class="projects__card-content">
         <div class="projects__card-info">
             {% if testimonial.client_company or testimonial.client_position %}
                 <p class="projects__card-client">

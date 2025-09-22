@@ -217,19 +217,16 @@
     }
 
     &__grid {
-        /* Grille de 3 colonnes en desktop qui se stack sur mobile */
-    display: grid;
-    grid-template-columns: repeat(3, minmax(388px, 1fr));
+        /* Grille de 3 colonnes en desktop qui s'adapte */
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        /* Les cartes imposent leur ratio, pas de min-width qui déborde */
         gap: 24px;
         width: 100%;
         align-items: stretch;
 
         /* Cartes internes: prendre toute la largeur de la colonne, garder le ratio */
-        > .projects__card {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 388/548;
-        }
+        > .projects__card { width: 100%; height: auto; aspect-ratio: 388/548; }
         > .projects__card .projects__card-content { height: auto; }
     /* Garder le ratio des cartes dans Works (remplit la colonne en largeur, ratio 388/548) */
     .works-search__grid .projects__card {
@@ -275,10 +272,8 @@
             }
         }
 
-        @media (max-width: 1024px) {
-            grid-template-columns: repeat(2, minmax(300px, 1fr));
-            gap: 16px;
-        }
+        @media (max-width: 1280px) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+        @media (max-width: 1024px) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 
         @include mobile {
             grid-template-columns: 1fr;
@@ -287,9 +282,10 @@
     }
 
     &__card {
-        /* Carte conforme au design fourni */
-        width: 388px;
-        height: 548px;
+        /* Carte conforme au design fourni, mais dimensions fluides */
+        width: 100%;
+        height: auto;
+        aspect-ratio: 388/548;
         padding: 18px 18px 30px 18px;
         position: relative;
         overflow: hidden;
@@ -303,11 +299,7 @@
         align-items: flex-start;
         gap: 17px;
         box-shadow: 0 1px 0 rgba(0,0,0,0.04);
-
-    min-width: 388px;
-    @media (max-width: 1400px) { min-width: 360px; }
-    @media (max-width: 1200px) { min-width: 320px; height: auto; aspect-ratio: 388/548; }
-        @include mobile { width: min(100%, 360px); }
+        @include mobile { width: 100%; }
     }
 
     &__card-overlay {
@@ -327,6 +319,9 @@
                 rgba(255, 249, 237, 0.45) 70%,
                 rgba(255, 249, 237, 0.45) 100%
             );
+        /* Léger flou pour améliorer la lisibilité sans altérer le style */
+        -webkit-backdrop-filter: blur(2px);
+        backdrop-filter: blur(2px);
         pointer-events: none;
     }
 

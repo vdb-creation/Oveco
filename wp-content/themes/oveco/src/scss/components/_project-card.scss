@@ -156,3 +156,17 @@
     }
   }
 }
+
+/* Override pour la variante Gutenberg qui réutilise projects__card: conserver la taille actuelle du block (large) */
+.wp-block-oveco-project-card {
+  .projects__card {
+    width: 100%;
+    height: auto;
+    /* Conserver la hauteur perçue de l’ancienne carte large via ratio/limites */
+    aspect-ratio: 16/9; /* ajustable si besoin */
+    min-height: 420px; /* valorisée selon l’existant; modifiez si nécessaire */
+  }
+  .projects__card-content {
+    height: auto;
+  }
+}

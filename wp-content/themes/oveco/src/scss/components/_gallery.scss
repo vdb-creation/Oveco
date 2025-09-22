@@ -106,8 +106,8 @@
 
   @media (max-width: 768px) {
     padding: 48px 16px 0;
-    &__grid { gap: 16px; }
-    &__figure { width: 100%; height: auto; }
+    &__grid { gap: 16px; justify-content: center; }
+    &__figure { width: min(100%, 539px); margin-inline: auto; height: auto; }
     &__figure--a { aspect-ratio: 539 / 359; }
     &__figure--b { aspect-ratio: 539 / 383; }
     &__figure--c { aspect-ratio: 539 / 301; }

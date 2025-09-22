@@ -33,7 +33,6 @@
     color: $color-secondary;
   }
 
-  .container {
-    max-width: 1100px;
-  }
+  // Le container utilise désormais le système centralisé dans _layout.scss
+  // Ajoutez une variante si nécessaire : .container.container--narrow, etc.
 }

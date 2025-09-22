@@ -1,0 +1,9 @@
+{# Alias: inclut le composant réutilisable avec des valeurs par défaut #}
+{% include 'partials/components/simple-competence.twig' with {
+  number: number|default('Compétence 1'),
+  title: title|default('Titre de la compétence'),
+  description: description|default('Description lorem ipsum dolor sit amet consectetur adipiscing elit tortor eu egestas morbi sem vulputate etiam facilisis pellentesque ut quis.'),
+  cta: cta|default({ label: 'Nous contacter', url: site.url ~ '#contact' }),
+  image: image|default({ src: assets_url ~ '/icons/maison.png', alt: 'Icône maison' })
+} %}
+

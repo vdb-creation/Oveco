@@ -1,28 +1,10 @@
 <div {{ wrapper_attributes|raw }}>
-  {% if image_url %}
-    <div class="project-card__image" style="background-image: url('{{ image_url }}');" role="img" aria-label="{{ attrs.title }}">
-      {% if attrs.badge %}
-        <span class="project-card__badge">{{ attrs.badge }}</span>
-      {% endif %}
-    </div>
-  {% endif %}
-  
-  <div class="project-card__content">
-    {% if attrs.subtitle %}
-      <p class="project-card__subtitle">{{ attrs.subtitle }}</p>
-    {% endif %}
-    
-    {% if attrs.title %}
-      <h3 class="project-card__title">{{ attrs.title }}</h3>
-    {% endif %}
-    
-    {% if attrs.link.url and attrs.link.title %}
-      <a href="{{ attrs.link.url }}" class="project-card__link" aria-label="Voir le projet {{ attrs.title }}">
-        <span>{{ attrs.link.title }}</span>
-        <svg class="project-card__arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M1 6h10m0 0L7 2m4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-    {% endif %}
-  </div>
+  {% include 'partials/components/card.twig' with {
+    image: image_url,
+    type: attrs.badge ? attrs.badge : 'Projet',
+    client: attrs.subtitle,
+    title: attrs.title,
+    url: attrs.link and attrs.link.url ? attrs.link.url : null,
+    cta_label: attrs.link and attrs.link.title ? attrs.link.title : 'Voir le projet'
+  } %}
 </div>
