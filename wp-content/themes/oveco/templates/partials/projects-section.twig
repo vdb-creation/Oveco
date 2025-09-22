@@ -1,0 +1,71 @@
+{# Projects Section #}
+<section class="projects-section" id="projets" itemscope itemtype="https://schema.org/ItemList">
+    <div class="projects">
+        <div class="projects__container">
+        <header class="projects__header">
+                <div class="projects__header-content">
+                    <p class="projects__subtitle">Nos réalisations</p>
+            <h2 class="projects__title" id="projets-title" itemprop="name">Ce sont plus que des projets, ce sont des collaborations</h2>
+                    <p class="projects__description" itemprop="description">
+                        Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero
+                    </p>
+                    <a href="{{ site.url }}/works" class="projects__link" aria-label="Voir tous nos projets (page Réalisations)">
+                        <span>En savoir plus</span>
+                        <svg class="projects__link-arrow" width="10" height="9" viewBox="0 0 10 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M1 4.5H9M9 4.5L5.5 1M9 4.5L5.5 8" stroke="#048B9A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="projects__navigation" role="navigation" aria-label="Navigation des projets">
+                    <button class="projects__nav-btn projects__nav-btn--prev" aria-label="Projet précédent" type="button">
+                        <svg width="11" height="21" viewBox="0 0 11 21" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M10 1L1 10.5L10 20" stroke="#FFFEF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button class="projects__nav-btn projects__nav-btn--next" aria-label="Projet suivant" type="button">
+                        <svg width="11" height="21" viewBox="0 0 11 21" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M1 1L10 10.5L1 20" stroke="#FFFEF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+                        <div class="projects__grid" role="list" aria-labelledby="projets-title">
+                                {# Source de données alignée sur la page Works: on construit un tableau `cards` si non fourni #}
+                                {% if cards is not defined or cards|length == 0 %}
+                                    {% set wp_projects = function('get_posts', {
+                                        'post_type': 'project',
+                                        'posts_per_page': -1,
+                                        'post_status': 'publish'
+                                    }) %}
+                                    {% set cards = [] %}
+                                    {% for p in wp_projects %}
+                                        {% set tags = function('wp_get_post_terms', p.ID, 'project_tag') %}
+                                        {% set type = tags and tags|length > 0 ? tags[0].name : '' %}
+                                        {% set hero_img = function('get_post_meta', p.ID, '_project_hero_image', true) %}
+                                        {% set image = hero_img ?: function('get_the_post_thumbnail_url', p.ID, 'large') %}
+                                        {% set cards = cards|merge([{
+                                            image: image ?: (assets_url ~ '/imgs/maison-toit.png'),
+                                            type: type,
+                                            client: function('get_post_meta', p.ID, '_project_client', true),
+                                            title: p.post_title,
+                                            url: function('trailingslashit', function('home_url', '/work/' ~ p.post_name))
+                                        }]) %}
+                                    {% endfor %}
+                                {% endif %}
+
+                                {% for c in cards %}
+                                    {% include 'partials/components/card.twig' with {
+                                        image: c.image,
+                                        type: c.type,
+                                        client: c.client,
+                                        title: c.title,
+                                        url: c.url
+                                    } %}
+                                {% else %}
+                                    <p>Aucun projet a été ajouter</p>
+                                {% endfor %}
+                        </div>
+        </div>
+    </div>
+</section>

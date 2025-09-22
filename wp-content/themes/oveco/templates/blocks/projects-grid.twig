@@ -1,0 +1,58 @@
+{# Bloc dynamique: Projets – Grille #}
+{% set subtitle = attributes.subtitle ?? 'Nos réalisations' %}
+{% set title = attributes.title ?? 'Ce sont plus que des projets, ce sont des collaborations' %}
+{% set description = attributes.description ?? '' %}
+{% set linkText = attributes.linkText ?? 'En savoir plus' %}
+{% set linkUrl = attributes.linkUrl ?? '/works' %}
+{% set count = attributes.count ?? 6 %}
+
+<section {{ wrapper_attributes|raw }} class="projects-section" itemscope itemtype="https://schema.org/ItemList">
+  <div class="projects">
+    <div class="projects__container">
+      <header class="projects__header">
+        <div class="projects__header-content">
+          {% if subtitle %}<p class="projects__subtitle">{{ subtitle }}</p>{% endif %}
+          {% if title %}<h2 class="projects__title" id="projets-title" itemprop="name">{{ title }}</h2>{% endif %}
+          {% if description %}<p class="projects__description" itemprop="description">{{ description }}</p>{% endif %}
+          {% if linkText and linkUrl %}
+            <a href="{{ linkUrl }}" class="projects__link" aria-label="Voir tous nos projets (page Réalisations)">
+              <span>{{ linkText }}</span>
+              <svg class="projects__link-arrow" width="10" height="9" viewBox="0 0 10 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M1 4.5H9M9 4.5L5.5 1M9 4.5L5.5 8" stroke="#048B9A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {% endif %}
+        </div>
+        <div class="projects__navigation" role="navigation" aria-label="Navigation des projets">
+          <button class="projects__nav-btn projects__nav-btn--prev" aria-label="Projet précédent" type="button">
+            <svg width="11" height="21" viewBox="0 0 11 21" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10 1L1 10.5L10 20" stroke="#FFFEF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="projects__nav-btn projects__nav-btn--next" aria-label="Projet suivant" type="button">
+            <svg width="11" height="21" viewBox="0 0 11 21" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M1 1L10 10.5L1 20" stroke="#FFFEF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="projects__grid" role="list" aria-labelledby="projets-title">
+        {% set items = function('oveco_get_recent_projects', count) %}
+  {% for p in items %}
+          {% set primary_tag = p.tags is defined and p.tags ? p.tags|first.name : '' %}
+          {% set hero_img = function('get_post_meta', p.id, '_project_hero_image', true) %}
+          {% include 'partials/components/card.twig' with {
+            image: hero_img ?: (p.thumbnail ? p.thumbnail.src : (assets_url ~ '/imgs/maison-toit.png')),
+            type: primary_tag,
+            client: p.client ?? '',
+            title: p.title,
+            url: site.url ~ '/work/' ~ p.slug
+          } %}
+        {% else %}
+          <p>Aucun projet a été ajouter</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  </section>

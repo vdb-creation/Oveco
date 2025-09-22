@@ -1,0 +1,162 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<article class="testimonial-single">
+    <div class="container">
+        {# En-tête du témoignage #}
+        <header class="testimonial-header">
+            <div class="testimonial-header__content">
+                {% if testimonial.priority and testimonial.priority.slug == 'haute' %}
+                    <div class="testimonial-badge">
+                        <span class="badge badge--featured">Témoignage mis en avant</span>
+                    </div>
+                {% endif %}
+                
+                <h1 class="testimonial-header__title">
+                    {% if testimonial.client_name %}
+                        Témoignage de {{ testimonial.client_name }}
+                    {% else %}
+                        {{ post.title }}
+                    {% endif %}
+                </h1>
+                
+                {% if testimonial.client_company %}
+                    <p class="testimonial-header__company">{{ testimonial.client_company }}</p>
+                {% endif %}
+                
+                {% if testimonial.rating %}
+                    <div class="testimonial-header__rating">
+                        {{ testimonial.stars_html|raw }}
+                        <span class="rating-text">{{ testimonial.rating }}/5</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            {% if testimonial.thumbnail %}
+                <div class="testimonial-header__avatar">
+                    <img src="{{ testimonial.thumbnail.src('medium') }}" 
+                         alt="{{ testimonial.client_name }}"
+                         class="testimonial__photo">
+                </div>
+            {% endif %}
+        </header>
+        
+        {# Contenu principal #}
+        <section class="testimonial-content">
+            <div class="testimonial-quote">
+                <blockquote class="quote-content">
+                    {{ post.content|nl2br }}
+                </blockquote>
+            </div>
+            
+            {# Informations client #}
+            <aside class="testimonial-sidebar">
+                <div class="client-info">
+                    <h3>À propos du client</h3>
+                    
+                    {% if testimonial.client_name %}
+                        <p><strong>Nom :</strong> {{ testimonial.client_name }}</p>
+                    {% endif %}
+                    
+                    {% if testimonial.client_position %}
+                        <p><strong>Poste :</strong> {{ testimonial.client_position }}</p>
+                    {% endif %}
+                    
+                    {% if testimonial.client_company %}
+                        <p><strong>Entreprise :</strong> 
+                            {% if testimonial.client_website %}
+                                <a href="{{ testimonial.client_website }}" target="_blank" rel="noopener">
+                                    {{ testimonial.client_company }}
+                                </a>
+                            {% else %}
+                                {{ testimonial.client_company }}
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                    
+                    <p><strong>Date :</strong> {{ post.date|date('d F Y') }}</p>
+                </div>
+                
+                {# Projet lié #}
+                {% if testimonial.linked_project %}
+                    <div class="linked-project">
+                        <h3>Projet associé</h3>
+                        <a href="{{ testimonial.linked_project.link }}" class="project-card">
+                            {% if testimonial.linked_project.thumbnail %}
+                                <img src="{{ testimonial.linked_project.thumbnail }}" 
+                                     alt="{{ testimonial.linked_project.title }}"
+                                     class="project-thumbnail">
+                            {% endif %}
+                            <div class="project-info">
+                                <h4>{{ testimonial.linked_project.title }}</h4>
+                                <span class="project-link-text">Voir le projet →</span>
+                            </div>
+                        </a>
+                    </div>
+                {% endif %}
+                
+                {# Partage social #}
+                <div class="social-share">
+                    <h3>Partager ce témoignage</h3>
+                    <div class="share-buttons">
+                        <a href="https://twitter.com/intent/tweet?text={{ post.title|url_encode }}&url={{ post.link|url_encode }}" 
+                           target="_blank" class="share-btn share-btn--twitter">Twitter</a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ post.link|url_encode }}" 
+                           target="_blank" class="share-btn share-btn--linkedin">LinkedIn</a>
+                        <a href="mailto:?subject={{ post.title|url_encode }}&body={{ post.link|url_encode }}" 
+                           class="share-btn share-btn--email">Email</a>
+                    </div>
+                </div>
+            </aside>
+        </section>
+        
+        {# Navigation #}
+        <nav class="testimonial-navigation">
+            <a href="/testimonials" class="btn btn--secondary">
+                ← Retour aux témoignages
+            </a>
+            
+            {% if testimonial.linked_project %}
+                <a href="{{ testimonial.linked_project.link }}" class="btn btn--primary">
+                    Voir le projet associé →
+                </a>
+            {% endif %}
+        </nav>
+    </div>
+</article>
+
+{# Témoignages similaires #}
+{% if related_testimonials %}
+    <section class="related-testimonials">
+        <div class="container">
+            <h2 class="section-title">Autres témoignages</h2>
+            <div class="testimonials-grid testimonials-grid--related">
+                {% for testimonial in related_testimonials %}
+                    {% include 'partials/testimonial-card.twig' with {
+                        'testimonial': testimonial,
+                        'show_project': true,
+                        'show_rating': true
+                    } %}
+                {% endfor %}
+            </div>
+            
+            <div class="section-footer">
+                <a href="/testimonials" class="btn btn--outline">
+                    Voir tous les témoignages
+                </a>
+            </div>
+        </div>
+    </section>
+{% endif %}
+
+{# CTA Contact #}
+<section class="testimonial-cta">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Prêt à rejoindre nos clients satisfaits ?</h2>
+            <p>Découvrez comment nous pouvons vous aider à atteindre vos objectifs.</p>
+            <a href="/contact" class="btn btn--primary btn--large">Démarrer votre projet</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

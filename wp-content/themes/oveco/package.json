@@ -1,0 +1,21 @@
+{
+  "name": "oveco",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "sass": "sass src/scss/main.scss:style.css --style=expanded --source-map",
+    "sass:watch": "sass src/scss/main.scss:style.css --style=expanded --source-map --watch",
+    "sass:build": "sass src/scss/main.scss:style.css --style=compressed --no-source-map",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "sass": "^1.90.0"
+  }
+}

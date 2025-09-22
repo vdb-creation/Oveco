@@ -1,0 +1,45 @@
+{#
+  Composant: Works Hero (réutilisable)
+  Variables acceptées:
+  - id (string) : id unique du composant (pour aria-labelledby)
+  - subtitle (string)
+  - title (string)
+  - desc (string)
+  - cta (object: { label, url })
+  - media_left (object: { src, alt })
+  - media_right (object: { src, alt, overlay: bool })
+  Accessibilité/SEO: h1 pour le titre de page, alt descriptifs, structure sémantique
+#}
+
+{% set _id = id is defined and id ? id : 'works-hero-title' %}
+{% set _subtitle = subtitle is defined and subtitle ? subtitle : 'Nos réalisations' %}
+{% set _title = title is defined and title ? title : 'Des projets qui ont du sens' %}
+{% set _desc = desc is defined and desc ? desc : 'Description courte ipsum dolor sit amet consectetur adipiscing elit tortor eu egestas morbi sem vulputate etiam facilisis pellentesque ut quis.' %}
+{% set _cta = cta is defined and cta ? cta : { label: 'Nous contacter', url: site.url ~ '#contact' } %}
+{% set _media_left = media_left is defined and media_left ? media_left : { src: assets_url ~ '/imgs/maison-toit.png', alt: 'Maison avec panneaux solaires' } %}
+{% set _media_right = media_right is defined and media_right ? media_right : { src: assets_url ~ '/imgs/maison-build.png', alt: 'Chantier de construction', overlay: true } %}
+
+<section class="works-hero" aria-labelledby="{{ _id }}">
+  <div class="container works-hero__inner">
+    <div class="works-hero__side works-hero__side--left" aria-hidden="true">
+      <figure class="works-hero__figure">
+        <img class="works-hero__image" src="{{ _media_left.src }}" alt="" loading="lazy">
+      </figure>
+    </div>
+
+    <div class="works-hero__content">
+      <header class="works-hero__header">
+        <p class="works-hero__subtitle">{{ _subtitle }}</p>
+        <h1 class="works-hero__title" id="{{ _id }}">{{ _title }}</h1>
+      </header>
+      <p class="works-hero__desc">{{ _desc }}</p>
+      <a href="{{ _cta.url }}" class="works-hero__cta">{{ _cta.label }}</a>
+    </div>
+
+    <div class="works-hero__side works-hero__side--right" aria-hidden="true">
+      <figure class="works-hero__figure {{ _media_right.overlay ? 'works-hero__figure--overlay' : '' }}">
+        <img class="works-hero__image" src="{{ _media_right.src }}" alt="" loading="lazy">
+      </figure>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,231 @@
+{# Template de carte de projet réutilisable #}
+<article class="project-card">
+    {% if project.thumbnail %}
+        <div class="project-image">
+            <a href="{{ project.link }}">
+                <img src="{{ project.thumbnail.src }}" alt="{{ project.title }}">
+            </a>
+            {% if project.priority %}
+                <span class="priority-badge priority-{{ project.priority.slug }}">
+                    {{ project.priority.name }}
+                </span>
+            {% endif %}
+        </div>
+    {% endif %}
+    
+    <div class="project-card-content">
+        <h3 class="project-title">
+            <a href="{{ project.link }}">{{ project.title }}</a>
+        </h3>
+        
+        {% if project.excerpt %}
+            <p class="project-excerpt">{{ project.excerpt }}</p>
+        {% endif %}
+        
+        <div class="project-meta">
+            {% if project.client %}
+                <span class="project-client">
+                    <strong>Client:</strong> {{ project.client }}
+                </span>
+            {% endif %}
+            
+            {% if project.date %}
+                <span class="project-date">
+                    <strong>Date:</strong> {{ project.date | date('F Y') }}
+                </span>
+            {% endif %}
+            
+            {% if project.status %}
+                <span class="project-status status-{{ project.status }}">
+                    {% if project.status == 'en-cours' %}
+                        🔄 En cours
+                    {% elseif project.status == 'termine' %}
+                        ✅ Terminé
+                    {% elseif project.status == 'en-maintenance' %}
+                        🔧 Maintenance
+                    {% else %}
+                        {{ project.status }}
+                    {% endif %}
+                </span>
+            {% endif %}
+        </div>
+        
+        {% if project.tags %}
+            <div class="project-tags">
+                {% for tag in project.tags %}
+                    <span class="tag">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="project-actions">
+            <a href="{{ project.link }}" class="btn-primary">Voir le projet</a>
+            {% if project.url %}
+                <a href="{{ project.url }}" target="_blank" class="btn-secondary">Site web</a>
+            {% endif %}
+        </div>
+    </div>
+</article>
+
+<style>
+.project-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 2rem;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.project-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image img {
+    transform: scale(1.05);
+}
+
+.priority-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+}
+
+.priority-tres-haute {
+    background: #dc3545;
+}
+
+.priority-haute {
+    background: #fd7e14;
+}
+
+.priority-moyenne {
+    background: #ffc107;
+    color: #212529;
+}
+
+.priority-normale {
+    background: #28a745;
+}
+
+.project-card-content {
+    padding: 1.5rem;
+}
+
+.project-title {
+    margin-bottom: 1rem;
+}
+
+.project-title a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.project-title a:hover {
+    color: #667eea;
+}
+
+.project-excerpt {
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.project-meta {
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.project-meta > span {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #666;
+}
+
+.project-tags {
+    margin: 1rem 0;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background: #e9ecef;
+    color: #495057;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.project-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5a6fd8;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.status-en-cours {
+    color: #007bff;
+}
+
+.status-termine {
+    color: #28a745;
+}
+
+.status-en-maintenance {
+    color: #ffc107;
+}
+
+.status-archive {
+    color: #6c757d;
+}
+</style>

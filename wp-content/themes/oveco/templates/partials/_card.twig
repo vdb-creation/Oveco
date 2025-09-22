@@ -1,0 +1,47 @@
+{# Partial Card - Template réutilisable pour les éléments de grille #}
+<div class="card">
+  {% if post.thumbnail %}
+    <div class="card__media">
+      <a href="{{ post.link }}" class="card__media-link">
+        <img 
+          src="{{ post.thumbnail.src('medium') }}" 
+          alt="{{ post.thumbnail.alt }}" 
+          class="card__image" 
+          loading="lazy" 
+        />
+      </a>
+    </div>
+  {% endif %}
+  
+  <div class="card__content">
+    <h3 class="card__title">
+      <a href="{{ post.link }}" class="card__link">{{ post.title }}</a>
+    </h3>
+    
+    {% if post.excerpt %}
+      <p class="card__excerpt">{{ post.excerpt }}</p>
+    {% endif %}
+    
+    <div class="card__meta">
+      <time class="card__date" datetime="{{ post.date('c') }}">
+        {{ post.date('d/m/Y') }}
+      </time>
+      
+      {% if post.post_type == 'post' and post.categories %}
+        <div class="card__categories">
+          {% for category in post.categories %}
+            <span class="card__category">{{ category.name }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+      {% if post.post_type == 'project' and post.terms('project_category') %}
+        <div class="card__categories">
+          {% for category in post.terms('project_category') %}
+            <span class="card__category">{{ category.name }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+{# Call To Action - Template Twig inspiré de HTML To Gutenberg #}
+<section {{ wrapper_attributes|raw }} class="call-to-action call-to-action--{{ attributes.variant|default('primary') }}" id="{{ block_id }}">
+  <div class="call-to-action__container">
+    <div class="call-to-action__content">
+      {% if attributes.title %}
+        <h2 class="call-to-action__title">{{ attributes.title }}</h2>
+      {% endif %}
+      
+      {% if attributes.text %}
+        <p class="call-to-action__text">{{ attributes.text }}</p>
+      {% endif %}
+    </div>
+    
+    {% if attributes.buttonText and attributes.buttonUrl %}
+      <div class="call-to-action__action">
+        <a href="{{ attributes.buttonUrl }}" class="call-to-action__button button button--{{ attributes.variant|default('primary') }}">
+          {{ attributes.buttonText }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>

@@ -1,0 +1,126 @@
+<nav class="navbar" id="navbar" role="navigation" aria-label="Navigation principale">
+    <div class="navbar__container">
+        <!-- Brand/Logo -->
+        <a href="{{ site.url }}" class="navbar__brand">
+            {% if logo_url %}
+                <img src="{{ logo_url }}" alt="{{ site.name }}" class="brand__logo-img" 
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            {% endif %}
+        </a>
+    
+            {% set _about_page = function('get_page_by_path', 'about') %}
+            {% set about_url = _about_page ? function('get_permalink', _about_page.ID) : site.url ~ '/about' %}
+
+            {% set _auto_page = function('get_page_by_path', 'auto-construction') %}
+            {% set auto_url = _auto_page ? function('get_permalink', _auto_page.ID) : site.url ~ '/auto-construction' %}
+
+            {% set _competences_page = function('get_page_by_path', 'competences') %}
+            {% set competences_url = _competences_page ? function('get_permalink', _competences_page.ID) : site.url ~ '/competences' %}
+
+            {% set _works_page = function('get_page_by_path', 'works') %}
+            {% set works_url = _works_page ? function('get_permalink', _works_page.ID) : site.url ~ '/works' %}
+
+            {% set _contact_page = function('get_page_by_path', 'contact') %}
+            {% set contact_url = _contact_page ? function('get_permalink', _contact_page.ID) : site.url ~ '/contact' %}
+
+        <!-- Navigation Menu -->
+        <div class="navbar__menu" id="navbarMenu">
+            <div class="navbar__links">
+                <a href="{{ about_url }}" class="navbar__link">Qui sommes nous ?</a>
+                <a href="{{ auto_url }}" class="navbar__link">L'auto-construction</a>
+                <a href="{{ competences_url }}" class="navbar__link">Compétences</a>
+                <a href="{{ works_url }}" class="navbar__link">Réalisations</a>
+            </div>
+
+            <!-- CTA Button (dans le menu pour le mobile) -->
+            <div class="navbar__cta">
+                <a href="{{ contact_url }}" class="navbar__btn">Nous contacter</a>
+            </div>
+        </div>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar__toggle" id="navbarToggle" type="button" aria-label="Ouvrir le menu" aria-controls="navbarMenu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Overlay pour fermeture du menu sur mobile -->
+<div class="navbar-overlay" id="navbarOverlay" hidden></div>
+
+<script>
+// JavaScript pour le menu mobile et interactions
+document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.getElementById('navbar');
+    const toggle = document.getElementById('navbarToggle');
+    const menu = document.getElementById('navbarMenu');
+    const overlay = document.getElementById('navbarOverlay');
+    const body = document.body;
+
+    // Toggle mobile menu
+    toggle.addEventListener('click', function() {
+        const willOpen = !toggle.classList.contains('active');
+        toggle.classList.toggle('active');
+        menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+        overlay.hidden = !overlay.classList.contains('active');
+        body.classList.toggle('no-scroll', willOpen);
+        toggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    });
+
+    // Close mobile menu when clicking on a link
+    menu.addEventListener('click', function(e) {
+        if (e.target.classList.contains('navbar__link')) {
+            toggle.classList.remove('active');
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+            overlay.hidden = true;
+            body.classList.remove('no-scroll');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Close when clicking overlay
+    overlay.addEventListener('click', function() {
+        toggle.classList.remove('active');
+        menu.classList.remove('active');
+        overlay.classList.remove('active');
+        overlay.hidden = true;
+        body.classList.remove('no-scroll');
+        toggle.setAttribute('aria-expanded', 'false');
+    });
+
+    // Close on ESC
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && toggle.classList.contains('active')) {
+            toggle.click();
+        }
+    });
+
+    // Reset state on resize to desktop
+    const mqDesktop = window.matchMedia('(min-width: 1025px)');
+    const onResize = () => {
+        if (mqDesktop.matches) {
+            toggle.classList.remove('active');
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+            overlay.hidden = true;
+            body.classList.remove('no-scroll');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    };
+    window.addEventListener('resize', onResize);
+    mqDesktop.addEventListener?.('change', onResize);
+
+    // Navbar scroll effect (optional)
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+});
+</script>

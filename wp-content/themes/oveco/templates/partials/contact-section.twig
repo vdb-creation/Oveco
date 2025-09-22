@@ -1,0 +1,69 @@
+{# Contact Section #}
+<section class="contact-section" id="contact" aria-labelledby="contact-title">
+  <div class="contact" itemscope itemtype="https://schema.org/ContactPoint">
+    <div class="contact__container">
+      <aside class="contact__info" aria-labelledby="contact-title contact-subtitle">
+        <div class="contact__info-header">
+          <p class="contact__subtitle" id="contact-subtitle">Nous contacter</p>
+          <h2 class="contact__title" id="contact-title">Vous avez une idée, un projet, ou simplement des questions ?</h2>
+        </div>
+        <p class="contact__description">Écrivez-nous ou appelez-nous, on sera ravi d’en discuter.</p>
+
+        <ul class="contact__list" role="list">
+          <li class="contact__item">
+            <span class="contact__item-icon" aria-hidden="true"></span>
+            <a class="contact__link contact__link--accent" href="mailto:job@oveco.be">job@oveco.be</a>
+          </li>
+          <li class="contact__item">
+            <span class="contact__item-icon contact__item-icon--phone" aria-hidden="true"></span>
+            <a class="contact__link contact__link--accent" href="tel:+32473689902">+32 473 / 68.99.02</a>
+          </li>
+          <li class="contact__item">
+            <span class="contact__item-icon contact__item-icon--location" aria-hidden="true"></span>
+            <span class="contact__text">Région de Beauvechain</span>
+          </li>
+        </ul>
+      </aside>
+
+      <div class="contact__panel" aria-label="Formulaire de contact">
+        <form class="contact__form" method="post" action="#contact" novalidate>
+          <input type="hidden" name="form-name" value="oveco-contact" />
+          <div class="contact__groups">
+            <div class="contact__col">
+              <div class="contact__field">
+                <label class="contact__label" for="contact-name">Name</label>
+                <input id="contact-name" class="contact__input" name="name" type="text" inputmode="text" autocomplete="name" placeholder="John Carter" required aria-required="true" />
+              </div>
+
+              <div class="contact__field">
+                <label class="contact__label" for="contact-phone">Phone</label>
+                <input id="contact-phone" class="contact__input" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(123) 456 - 789" />
+              </div>
+            </div>
+
+            <div class="contact__col">
+              <div class="contact__field">
+                <label class="contact__label" for="contact-email">Email</label>
+                <input id="contact-email" class="contact__input" name="email" type="email" inputmode="email" autocomplete="email" placeholder="example@email.com" required aria-required="true" />
+              </div>
+
+              <div class="contact__field">
+                <label class="contact__label" for="contact-company">Company</label>
+                <input id="contact-company" class="contact__input" name="company" type="text" inputmode="text" autocomplete="organization" placeholder="Oveco" />
+              </div>
+            </div>
+          </div>
+
+          <div class="contact__field contact__field--message">
+            <label class="contact__label" for="contact-message">Message</label>
+            <textarea id="contact-message" class="contact__textarea" name="message" rows="6" placeholder="Please type your message here..." required aria-required="true"></textarea>
+          </div>
+
+          <div class="contact__actions">
+            <button type="submit" class="contact__submit" aria-label="Envoyer le message">Envoyer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

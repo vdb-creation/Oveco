@@ -1,0 +1,10 @@
+<div {{ wrapper_attributes|raw }}>
+  {% include 'partials/components/card.twig' with {
+    image: image_url,
+    type: attrs.badge ? attrs.badge : 'Projet',
+    client: attrs.subtitle,
+    title: attrs.title,
+    url: attrs.link and attrs.link.url ? attrs.link.url : null,
+    cta_label: attrs.link and attrs.link.title ? attrs.link.title : 'Voir le projet'
+  } %}
+</div>

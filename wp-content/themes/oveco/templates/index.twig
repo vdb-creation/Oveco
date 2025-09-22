@@ -1,51 +1,70 @@
 {% extends "base.twig" %}
-
 {% block content %}
-    <div class="content-area">
-        {% if posts %}
-            <div class="posts-grid">
-                {% for post in posts %}
-                    <article class="post-item">
-                        {% if post.thumbnail %}
-                            <div class="post-thumbnail">
-                                <a href="{{ post.link }}">
-                                    <img src="{{ post.thumbnail.src }}" alt="{{ post.thumbnail.alt }}">
-                                </a>
-                            </div>
-                        {% endif %}
-                        
-                        <div class="post-content">
-                            <h2 class="post-title">
-                                <a href="{{ post.link }}">{{ post.title }}</a>
-                            </h2>
-                            
-                            <div class="post-meta">
-                                <span class="post-date">{{ post.post_date|date('d F Y') }}</span>
-                                {% if post.author %}
-                                    <span class="post-author">par {{ post.author.name }}</span>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="post-excerpt">
-                                {{ post.excerpt }}
-                            </div>
-                            
-                            <a href="{{ post.link }}" class="read-more">Lire la suite</a>
+    {% if post is defined and post and post.content %}
+        <div class="home-page home-page--gutenberg">
+            {{ post.content }}
+        </div>
+    {% else %}
+    <div class="home-page">
+        <section class="hero">
+            {# Cercle suiveur de souris #}
+            <div class="hero__mouse-follower" id="mouseFollower"></div>
+            
+            <div class="container">
+                <div class="hero__container">
+                    <img src="{{ assets_url }}/imgs/maison-toit.png" alt="Maison avec toiture énergétique" loading="lazy" class="hero__image hero__image--large-1" id="img1">
+                    <img src="{{ assets_url }}/imgs/maison-toit-2.png" alt="Installation énergétique" loading="lazy" class="hero__image hero__image--large-2" id="img2">
+                    <img src="{{ assets_url }}/imgs/maison-build.png" alt="Construction énergétique" loading="lazy" class="hero__image hero__image--medium-1" id="img3">
+                    <img src="{{ assets_url }}/imgs/maison-build.png" alt="Réalisation énergétique" loading="lazy" class="hero__image hero__image--medium-2" id="img4">
+                    <div class="hero__content">
+                        <div class="hero__header">
+                            <div class="hero__subtitle">oveco</div>
+                            <h1 class="hero__title">Une réflexion énergétique globale vers l'autonomie</h1>
                         </div>
-                    </article>
-                {% endfor %}
+                        <p class="hero__description">Des ingénieurs-installateurs qui conçoivent <br>et réalisent votre projet sur mesure.</p>
+                        <a href="#contact" class="hero__cta">
+                            <span>Nous contacter</span>
+                        </a>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            {% if pagination %}
-                <nav class="pagination">
-                    {{ pagination }}
-                </nav>
-            {% endif %}
-        {% else %}
-            <div class="no-posts">
-                <h2>Aucun article trouvé</h2>
-                <p>Il n'y a actuellement aucun contenu publié.</p>
-            </div>
-        {% endif %}
+        <div class="speration"></div>
+
+        {# Section Oveco #}
+          {% include "partials/text_image-section.twig" with {
+            subtitle: "L’équipe",
+            title: "Des ingénieurs engagés,<br/>proches du terrain",
+            description: "Chez Oveco, la technique s’incarne sur le terrain. Nos fondateurs combinent expertise académique…",
+            link: { label: "En savoir plus", url: site.url ~ '#about' },
+            image: { src: assets_url ~ '/imgs/maison-build.png', alt: 'Réalisation Oveco' },
+            titre_section: true,
+            duplicate: false,
+        } %}
+
+        {# Section Expertise #}
+        {% include "partials/expertise-section.twig" %}
+
+        {# Section Partners #}
+        {% include "partials/partners-section.twig" %}
+
+        {# Section Auto-construction #}
+        {% include "partials/autoconstruction-section.twig" %}
+
+        {# Section Projects #}
+        {% include "partials/projects-section.twig" %}
+
+        {# Section Testimonials #}
+        {% include "partials/testimonials-section.twig" %}
+
+        {# Section Certifications #}
+        {% include "partials/certifications-section.twig" %}
+
+        {# Section Contact #}
+        {% include "partials/contact-section.twig" %}
+
+        
     </div>
+    {% endif %}
 {% endblock %}

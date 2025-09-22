@@ -1,0 +1,351 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* ========================================
+   OVECO SECTION
+   ======================================== */
+.oveco-section {
+    padding: 0;
+    background: $color-white;
+
+    // Plus de padding spécifique en mobile
+
+    // Reset des margins sur tous les éléments de titre dans cette section
+    h2, h3, p {
+        margin: 0 !important;
+    }
+
+    // Container principal pour les blocs dupliqués (complète le container global)
+    .container { display: flex; flex-direction: column; align-items: stretch; }
+}
+
+// Renforcer la spécificité contre les styles de blocs WP qui pourraient injecter un padding
+.wp-block-group.oveco-section,
+section.oveco-section,
+.wp-block-group .oveco-section {
+    padding: 0 !important;
+}
+
+// HEADER DE SECTION (centré)
+.oveco__section-header {
+    align-self: stretch;
+    padding-inline: clamp(16px, 6vw, 109px);
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+    margin-bottom: clamp(24px, 6vw, 64px);
+
+    @include tablet {
+        padding-left: 2rem;
+        padding-right: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    @include mobile {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-bottom: 2rem;
+    }
+}
+
+.oveco__section-content {
+    width: min(100%, 706.82px);
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+}
+
+.oveco__section-subtitle {
+    text-align: center;
+    color: $color-text;
+    font-size: 19.20px;
+    font-family: $font-family-primary;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    line-height: 20px;
+    letter-spacing: 1.92px;
+    margin: 0 !important;
+}
+
+.oveco__section-title {
+    align-self: stretch;
+    text-align: center;
+    color: $color-secondary;
+    font-size: 39.81px;
+    font-family: $font-family-primary;
+    font-weight: 800;
+    line-height: 47.77px;
+    margin: 0 !important;
+
+    @include mobile {
+        font-size: 28px;
+        line-height: 34px;
+    }
+}
+
+.oveco__section-description {
+    align-self: stretch;
+    text-align: center;
+    color: $color-text;
+    font-size: 16px;
+    font-family: $font-family-primary;
+    font-weight: $font-weight-regular;
+    line-height: 28.80px;
+    margin: 0 !important;
+}
+
+.oveco__container {
+    justify-content: space-between;
+    align-items: center;
+    gap: clamp(24px, 8vw, 130px);
+    display: flex;
+    margin-bottom: 0;
+    /* Responsivité améliorée avec padding adaptatif */
+    padding-inline: clamp(16px, 4vw, 32px);
+
+    // Espacement entre les containers en mode duplicate
+    & + & {
+        margin-top: clamp(64px, 10vw, 128px);
+        
+        @include tablet {
+            margin-top: clamp(48px, 8vw, 96px);
+        }
+        
+        @include mobile {
+            margin-top: clamp(32px, 6vw, 64px);
+        }
+    }
+
+    &.is-reverse {
+        flex-direction: row-reverse;
+    }
+
+    @include tablet { 
+        flex-direction: column; 
+        gap: clamp(32px, 6vw, 40px); 
+        text-align: center; 
+        padding-inline: clamp(16px, 4vw, 24px);
+        &.is-reverse { flex-direction: column-reverse; } 
+    }
+
+    @include mobile {
+        gap: clamp(24px, 5vw, 32px);
+        padding-inline: clamp(12px, 3vw, 16px);
+    }
+}
+
+.oveco__content {
+    width: 100%;
+    max-width: 600px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 21px;
+    display: flex;
+
+    @include tablet { align-items: center; }
+
+    @include mobile {
+        gap: 1.5rem;
+    }
+}
+
+.oveco__header {
+    align-self: stretch;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 6px;
+    display: flex;
+
+    @include tablet {
+        align-items: center;
+    }
+}
+
+.oveco__subtitle {
+    @include heading-3;
+    align-self: stretch;
+    color: $color-text;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.12rem; // 1.92px
+    margin: 0 !important;
+
+    @include tablet {
+        text-align: center;
+    }
+}
+
+.oveco__title {
+    @include heading-2;
+    align-self: stretch;
+    color: $color-secondary;
+    margin: 0 !important;
+
+    @include tablet {
+        text-align: center;
+    }
+}
+
+.oveco__description {
+    @include text-body;
+    align-self: stretch;
+    color: $color-text;
+    margin: 0 !important;
+
+    @include tablet {
+        text-align: center;
+    }
+}
+
+.oveco__link {
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+    text-decoration: none;
+
+    /* L’ancre interne doit aussi être en flex pour aligner le texte et la flèche */
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+    }
+
+    span {
+        color: $color-accent;
+        font-size: 1rem; // 16px
+        font-family: $font-family-primary;
+        font-weight: $font-weight-bold;
+        line-height: 1.2rem; // 19.20px
+    }
+}
+
+.oveco__arrow {
+    width: 16px;
+    height: 14px;
+}
+
+.oveco__visual {
+    width: min(100%, 452px);
+    height: 562px;
+    position: relative;
+
+    @include tablet { 
+        width: 100%; 
+        max-width: 452px; 
+        height: auto; 
+        aspect-ratio: 452 / 562; 
+        margin: 0 auto; /* Centrage pour éviter le débordement */
+    }
+
+    @include mobile {
+        max-width: 350px;
+        margin: 0 auto; /* Centrage mobile */
+    }
+}
+
+.oveco__main-image {
+    /* Conteneur de l'image principale (figure.wp-block-image) */
+    position: absolute;
+    left: 45px;
+    top: 63.26px;
+    width: 362px; /* largeur de référence desktop */
+    aspect-ratio: 362 / 435.49; /* conserve les proportions au redimensionnement */
+    margin: 0; /* reset figure default margin */
+    overflow: hidden;
+    border-radius: 40.83px;
+    background: linear-gradient(0deg, rgba(2, 139, 154, 0.05) 0%, rgba(2, 139, 154, 0.05) 100%);
+    background-blend-mode: color, normal;
+
+    /* L'image interne remplit entièrement le cadre, sans déformation */
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    @include tablet {
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(100%, 362px);
+    }
+
+    @include mobile {
+        width: 280px; /* contrainte mobile */
+    }
+}
+
+.oveco__decoration {
+    &--white {
+        width: 69.76px;
+        height: 74.74px;
+        left: 410.73px;
+        top: 527.70px;
+        position: absolute;
+        transform: rotate(-171deg);
+        transform-origin: top left;
+        background: $color-white;
+
+        @include tablet {
+            display: none;
+        }
+    }
+}
+
+.oveco__icon {
+    position: absolute;
+
+    &--house {
+        width: 100.90px;
+        height: 100.90px;
+        left: 330.82px;
+        top: 427.82px;
+        transform-origin: top left;
+
+        @include tablet {
+            /* Réajustement pour éviter le débordement */
+            left: 70%;
+            top: 75%;
+            transform: scale(0.8);
+        }
+
+        @include mobile {
+            /* Positionnement mobile sécurisé */
+            left: 65%;
+            top: 70%;
+            transform: scale(0.6);
+            width: 80px;
+            height: 80px;
+        }
+    }
+
+    &--pencil {
+        width: 104px;
+        height: 104px;
+        left: 8px;
+        top: 61px;
+
+        @include tablet {
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -180px;
+        }
+
+        @include mobile {
+            width: 80px;
+            height: 80px;
+            margin-left: -140px;
+            /* Ajustement pour éviter le débordement à gauche */
+            left: max(10px, 50%);
+        }
+    }
+}

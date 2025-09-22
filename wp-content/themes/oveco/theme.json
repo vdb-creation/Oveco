@@ -1,0 +1,78 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": false,
+    "layout": {
+      "contentSize": "1219px",
+      "wideSize": "1440px"
+    },
+    "color": {
+      "custom": false,
+      "customGradient": false,
+      "defaultGradients": false,
+      "defaultPalette": false,
+      "duotone": [],
+      "palette": [
+        { "slug": "primary", "name": "Primary", "color": "#334749" },
+        { "slug": "accent",  "name": "Accent",  "color": "#048B9A" },
+        { "slug": "ink",     "name": "Ink",     "color": "#5C6D6F" },
+        { "slug": "paper",   "name": "Paper",   "color": "#FFFEF8" },
+        { "slug": "white",   "name": "White",   "color": "#FFFFFF" }
+      ]
+    },
+    "spacing": {
+      "units": ["px"]
+    },
+    "typography": {
+      "dropCap": false,
+      "customFontSize": false
+    },
+    "blocks": {
+      "core/group": {
+        "border": { "color": false, "radius": false, "style": false, "width": false },
+        "color": { "background": false, "text": false, "link": false },
+        "spacing": { "padding": false, "margin": false }
+      },
+      "core/columns": {
+        "border": { "color": false, "radius": false, "style": false, "width": false },
+        "color": { "background": false, "text": false, "link": false },
+        "spacing": { "padding": false, "margin": false, "blockGap": false }
+      },
+      "core/column": {
+        "border": { "color": false, "radius": false, "style": false, "width": false },
+        "color": { "background": false, "text": false, "link": false },
+        "spacing": { "padding": false, "margin": false, "blockGap": false }
+      },
+      "core/image": {
+        "border": { "color": false, "radius": false, "style": false, "width": false },
+        "spacing": { "margin": false, "padding": false }
+      },
+      "core/paragraph": {
+        "typography": { "dropCap": false },
+        "color": { "link": false }
+      },
+      "core/heading": {
+        "color": { "link": false }
+      },
+      "core/buttons": {
+        "border": { "color": false, "radius": false, "style": false, "width": false },
+        "color": { "background": false, "text": false, "link": false },
+        "spacing": { "padding": false, "margin": false }
+      },
+      "core/button": {
+        "border": { "color": false, "radius": false, "style": false, "width": false },
+        "color": { "background": false, "text": false, "link": false },
+        "spacing": { "padding": false, "margin": false }
+      },
+      "core/list": {
+        "spacing": { "margin": false }
+      }
+    }
+  },
+  "styles": {
+    "spacing": {
+      "blockGap": "0"
+    }
+  }
+}

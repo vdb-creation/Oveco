@@ -1,0 +1,139 @@
+{#
+  Partial configurable : text + image section
+  Parameters (passed via include with { ... }):
+    -- HEADER DE SECTION (centré en haut) --
+    section_subtitle (string, optional) : sous-titre de la section (ex: "L'équipe")
+    section_title (string, optional) : titre principal de la section (ex: "Des ingénieurs engagés...")
+    section_description (string, optional) : description générale de la section
+    titre_section (bool) : si true (par défaut), affiche le header de section centré
+    
+    -- PREMIER COMPOSANT --
+    subtitle (string, optional) : sous-titre du composant (ex: "L'ingénieur")
+    title (string, optional) : titre du composant (ex: "Olivier Haerlingen")
+    description (string, optional) : description du composant
+    link (object { label, url }, optional)
+    image (object { src, alt, loading? }), optional
+    reverse (bool) : si true, affiche image à gauche, texte à droite
+    
+    -- SECOND COMPOSANT (si duplicate = true) --
+    duplicate (bool) : si true, affiche un second bloc
+    subtitle2 (string, optional) : sous-titre du 2e composant (ex: "Le concepteur") 
+    title2 (string, optional) : titre du 2e composant (ex: "Vincent Claessens")
+    description2 (string, optional) : description du 2e composant
+    link2 (object { label, url }, optional)
+    image2 (object { src, alt, loading? }), optional
+#}
+
+{# Variables de contrôle #}
+{% set show_section_header = titre_section is not defined or titre_section == true %}
+{% set _img = image is defined and image ? image : { src: assets_url ~ '/imgs/maison-build.png', alt: 'Réalisation Oveco' } %}
+{% set _img2 = image2 is defined and image2 ? image2 : _img %}
+
+{# Debug: {{ dump({'titre_section': titre_section, 'show_section_header': show_section_header}) }} #}
+
+<section class="oveco-section" itemscope itemtype="https://schema.org/Organization">
+  <div class="container">
+    
+    {# HEADER DE SECTION (centré) #}
+    {% if show_section_header and (section_subtitle or section_title or section_description) %}
+      <div class="oveco__section-header">
+        <div class="oveco__section-content">
+          {% if section_subtitle %}
+            <h3 class="oveco__section-subtitle">{{ section_subtitle }}</h3>
+          {% endif %}
+          {% if section_title %}
+            <h2 class="oveco__section-title">{{ section_title|raw }}</h2>
+          {% endif %}
+          {% if section_description %}
+            <p class="oveco__section-description">{{ section_description|raw }}</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+    
+    {# COMPOSANTS INDIVIDUELS (gauche/droite) #}
+    {# Premier bloc principal #}
+    <div class="oveco__container {{ reverse ? 'is-reverse' : '' }}">
+      {# Contenu textuel #}
+      <div class="oveco__content">
+        {% if subtitle or title or description %}
+          <header class="oveco__header">
+            {% if subtitle %}
+              <h3 class="oveco__subtitle" itemprop="name">{{ subtitle }}</h3>
+            {% endif %}
+            {% if title %}
+              <h2 class="oveco__title">{{ title|raw }}</h2>
+            {% endif %}
+            {% if description %}
+              <p class="oveco__description" itemprop="description">{{ description|raw }}</p>
+            {% endif %}
+          </header>
+        {% endif %}
+        
+        {% if link and link.label and link.url %}
+          <a href="{{ link.url }}" class="oveco__link" aria-label="En savoir plus sur {{ subtitle ?: 'nos services' }}">
+            <span>{{ link.label }}</span>
+            <img src="{{ assets_url }}/icons/Arrow.svg" alt="" class="oveco__arrow" aria-hidden="true">
+          </a>
+        {% endif %}
+      </div>
+
+      {# Zone visuelle #}
+      <div class="oveco__visual">
+        <img src="{{ _img.src }}" 
+             alt="{{ _img.alt }}" 
+             loading="{{ _img.loading ?: 'lazy' }}" 
+             width="362" 
+             height="472" 
+             class="oveco__main-image" 
+             itemprop="image">
+        <img src="{{ assets_url }}/icons/maison.png" alt="" class="oveco__icon oveco__icon--house" aria-hidden="true">
+        <img src="{{ assets_url }}/icons/crayon.png" alt="" class="oveco__icon oveco__icon--pencil" aria-hidden="true">
+      </div>
+    </div>
+
+    {# Bloc dupliqué avec contenu différent si demandé #}
+    {% if duplicate %}
+      {% set opposite_reverse = not reverse %}
+      <div class="oveco__container {{ opposite_reverse ? 'is-reverse' : '' }}">
+        {# Contenu textuel du 2e composant #}
+        <div class="oveco__content">
+          {% if subtitle2 or title2 or description2 %}
+            <header class="oveco__header">
+              {% if subtitle2 %}
+                <h3 class="oveco__subtitle" itemprop="name">{{ subtitle2 }}</h3>
+              {% endif %}
+              {% if title2 %}
+                <h2 class="oveco__title">{{ title2|raw }}</h2>
+              {% endif %}
+              {% if description2 %}
+                <p class="oveco__description" itemprop="description">{{ description2|raw }}</p>
+              {% endif %}
+            </header>
+          {% endif %}
+          
+          {% if link2 and link2.label and link2.url %}
+            <a href="{{ link2.url }}" class="oveco__link" aria-label="En savoir plus sur {{ subtitle2 ?: 'nos services' }}">
+              <span>{{ link2.label }}</span>
+              <img src="{{ assets_url }}/icons/Arrow.svg" alt="" class="oveco__arrow" aria-hidden="true">
+            </a>
+          {% endif %}
+        </div>
+
+        {# Zone visuelle du 2e composant #}
+        <div class="oveco__visual">
+          <img src="{{ _img2.src }}" 
+               alt="{{ _img2.alt }}" 
+               loading="{{ _img2.loading ?: 'lazy' }}" 
+               width="362" 
+               height="472" 
+               class="oveco__main-image" 
+               itemprop="image">
+          <img src="{{ assets_url }}/icons/maison.png" alt="" class="oveco__icon oveco__icon--house" aria-hidden="true">
+          <img src="{{ assets_url }}/icons/crayon.png" alt="" class="oveco__icon oveco__icon--pencil" aria-hidden="true">
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+

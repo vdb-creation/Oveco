@@ -1,0 +1,33 @@
+{# Section Hero - Template Twig #}
+<section {{ wrapper_attributes|raw }} class="section-hero section-hero--{{ attributes.variant|default('default') }}" id="{{ block_id }}">
+  <div class="section-hero__container">
+    {% if image_url %}
+      <div class="section-hero__media">
+        <img 
+          src="{{ image_url }}" 
+          alt="{{ image_alt }}"
+          class="section-hero__image"
+          loading="lazy"
+        />
+      </div>
+    {% endif %}
+    
+    <div class="section-hero__content">
+      {% if attributes.title %}
+        <h1 class="section-hero__title">{{ attributes.title }}</h1>
+      {% endif %}
+      
+      {% if attributes.subtitle %}
+        <p class="section-hero__subtitle">{{ attributes.subtitle }}</p>
+      {% endif %}
+      
+      {% if attributes.link.url and attributes.link.title %}
+        <div class="section-hero__actions">
+          <a href="{{ attributes.link.url }}" class="section-hero__cta button button--primary">
+            {{ attributes.link.title }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

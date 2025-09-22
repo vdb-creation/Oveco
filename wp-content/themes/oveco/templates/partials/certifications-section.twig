@@ -1,0 +1,32 @@
+{# Certifications Section #}
+<section class="certifications-section" id="certifications" aria-labelledby="certifications-title">
+  <div class="certifications">
+    <div class="certifications__container">
+      <header class="certifications__header">
+        <div class="certifications__header-content">
+          <h2 class="certifications__title" id="certifications-title">Des certifications à l’échelle européenne</h2>
+          <p class="certifications__description">
+            Notre savoir-faire est reconnu à l’échelle belge et européenne.<br>
+            Nos projets respectent les normes en vigueur (PEB, RGIE…) et s’inscrivent dans une logique de transition énergétique cohérente, mesurable et durable.
+          </p>
+        </div>
+      </header>
+
+      <div class="certifications__row" role="list">
+        {% for i in [1,2,3] %}
+          <article class="certifications__card" role="listitem" aria-label="Certification {{ i }}">
+            <div class="certifications__card-bg" aria-hidden="true"></div>
+
+            <div class="certifications__icon-wrap" aria-hidden="true">
+              {# Remplacez par une icône/image si disponible #}
+              {# <img src="{{ assets_url }}/imgs/certif-{{ i }}.svg" alt="Icône certification {{ i }}" loading="lazy" class="certifications__icon-img"> #}
+              <span class="certifications__icon" aria-hidden="true"></span>
+            </div>
+
+            <p class="certifications__number">{{ i }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>

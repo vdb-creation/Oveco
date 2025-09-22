@@ -50,3 +50,7 @@ Thumbs.db
 # Divers
 *.zip
 *.tar.gz
+/wp-content/themes/oveco/docs/
+/wp-content/themes/oveco/test/
+/Test/
+
