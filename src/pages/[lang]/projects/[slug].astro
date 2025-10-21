@@ -1,0 +1,46 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import ProjectPage from '../../../components/ProjectPage.astro';
+
+// Génère les chemins pour chaque langue et chaque projet JSON du dossier content/projects
+export async function getStaticPaths() {
+  const modules = import.meta.glob('../../../../content/projects/*.json');
+  const slugs = Object.keys(modules)
+    .map((p) => p.split('/').pop() || '')
+    .map((f) => f.replace(/\.json$/, ''))
+    .filter(Boolean);
+  const langs = ['fr', 'en'];
+  return slugs.flatMap((slug) => langs.map((lang) => ({ params: { lang, slug } })));
+}
+
+const paramLang = Astro.params.lang as string | undefined;
+const currentLang: 'fr' | 'en' = paramLang === 'en' ? 'en' : 'fr';
+const slug = Astro.params.slug as string;
+
+// Charge le projet depuis content/projects/<slug>.json
+let project: any = null;
+try {
+  const mod = await import(`../../../../content/projects/${slug}.json`);
+  project = mod?.default ?? mod;
+} catch (e) {
+  project = null;
+}
+
+const title = project?.title || 'Projet';
+const description = project?.description || '';
+const category = project?.category || '';
+const image = project?.image || '';
+---
+
+<Layout title={title} description={description}>
+  <ProjectPage
+    title={title}
+    description={description}
+    category={category}
+    image={image}
+    backHref={`/${currentLang}/`}
+    backLabel={currentLang === 'fr' ? 'Retour' : 'Back'}
+  />
+</Layout>
+
+

@@ -1,0 +1,370 @@
+---
+import { ChevronLeft, ChevronRight, ExternalLink, Folder } from 'lucide-astro';
+import Anim from './Anim.astro';
+import SmartImage from './SmartImage.astro';
+import defaultProjectImage from '../assets/imgs/default-placeholder.png';
+
+interface Project {
+  title: string;
+  description: string;
+  category: string;
+  image?: string;
+  projectRef?: any;
+}
+
+interface Props {
+  sectionIndex?: number;
+  title?: string;
+  projects?: Project[];
+  lang?: 'fr' | 'en';
+}
+
+const defaults: Props = {
+  title: "Nos Réalisations",
+  projects: [
+    {
+      title: "Projet Alpha",
+      category: "Web Design",
+      description: "Une refonte complète d'un site e-commerce avec une expérience utilisateur optimisée.",
+    },
+    {
+      title: "Projet Beta",
+      category: "Branding",
+      description: "Création d'identité visuelle pour une startup dans le secteur de la tech.",
+    },
+    {
+      title: "Projet Gamma",
+      category: "Development",
+      description: "Application web sur mesure pour la gestion de projet collaborative.",
+    },
+    {
+      title: "Projet Delta",
+      category: "Marketing",
+      description: "Campagne digitale complète avec stratégie SEO et content marketing.",
+    },
+  ],
+};
+const props = Astro.props as Props;
+const title = props.title ?? defaults.title!;
+const projects: Project[] = props.projects ?? (defaults.projects as Project[]);
+const lang = props.lang ?? 'fr';
+
+function slugify(input: string): string {
+  return (input || '')
+    .toString()
+    .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+---
+
+<section class="wf-projects" id="projects">
+  <div class="wf-projects__container">
+    <Anim effect="fade-up" delay={100}>
+      <div class="wf-projects__header">
+        <Folder size={36} />
+        <h2 class="wf-projects__title" data-bind="projects.title">{title}</h2>
+      </div>
+    </Anim>
+    <div class="wf-projects__carousel">
+      <button class="wf-projects__nav wf-projects__nav--prev" aria-label="Précédent">
+        <ChevronLeft size={24} />
+      </button>
+      <div class="wf-projects__track">
+        {projects.map((project, index) => (
+          <Anim effect="fade-up" delay={150 + index * 100}>
+            <div class="wf-project-card card" data-index={index}>
+              <div class="wf-project-card__image">
+                <SmartImage
+                  cmsSrc={project.image}
+                  fallback={defaultProjectImage}
+                  alt={project.title}
+                  width={400}
+                  aspectRatio={16/10}
+                  layout="constrained"
+                  placeholder="blurhash"
+                  breakpoints={[300, 400, 600]}
+                  class="wf-project-card__img"
+                />
+              </div>
+              <div class="wf-project-card__content">
+                <p class="wf-project-card__category" data-bind={`projects.items.${index}.category`}>{project.category}</p>
+                <h3 class="wf-project-card__title" data-bind={`projects.items.${index}.title`}>{project.title}</h3>
+                <p class="wf-project-card__description" data-bind={`projects.items.${index}.description`}>{project.description}</p>
+                <a href={(project.projectRef ? `/${lang}/projects/${(project.projectRef._sys?.relativePath || project.projectRef || '').toString().replace(/^\/*(content\/projects\/)?/, '').replace(/\.json$/, '')}/` : `/${lang}/projects/${slugify(project.title)}/`)} class="wf-project-card__link btn">
+                  Voir le projet
+                  <ExternalLink size={16} />
+                </a>
+              </div>
+            </div>
+          </Anim>
+        ))}
+      </div>
+      <button class="wf-projects__nav wf-projects__nav--next" aria-label="Suivant">
+        <ChevronRight size={24} />
+      </button>
+    </div>
+    <div class="wf-projects__dots">
+      {projects.map((_, index) => (
+        <button 
+          class={`wf-projects__dot ${index === 0 ? 'wf-projects__dot--active' : ''}`}
+          data-index={index}
+          aria-label={`Aller au projet ${index + 1}`}
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .wf-projects {
+    padding: 6rem 0;
+    background: var(--surface-2);
+    border-bottom: 2px solid var(--color-border);
+    overflow: hidden;
+  }
+
+  .wf-projects__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .wf-projects__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .wf-projects__header svg {
+    color: var(--color-text);
+  }
+
+  .wf-projects__title {
+    font-size: 2.5rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .wf-projects__title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: var(--color-border);
+  }
+
+  .wf-projects__carousel {
+    position: relative;
+    padding: 0 60px;
+  }
+
+  .wf-projects__track {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .wf-projects__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .wf-project-card {
+    min-width: 350px;
+    border: 2px solid var(--color-border);
+    background: var(--surface);
+    transition: transform var(--transition), box-shadow var(--transition);
+    flex-shrink: 0;
+  }
+
+  .wf-project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .wf-project-card__image {
+    height: 200px;
+    border-bottom: 2px solid var(--color-border);
+    overflow: hidden;
+  }
+
+  .wf-project-card__image img,
+  .wf-project-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition);
+  }
+
+  .wf-project-card:hover .wf-project-card__image img,
+  .wf-project-card:hover .wf-project-card__img {
+    transform: scale(1.05);
+  }
+
+  .wf-project-card__content {
+    padding: 1.5rem;
+  }
+
+  .wf-project-card__category {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #666;
+    margin-bottom: 0.5rem;
+  }
+
+  .wf-project-card__title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .wf-project-card__description {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .wf-project-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 2px solid var(--color-border);
+    transition: all var(--transition);
+  }
+
+  .wf-project-card__link svg {
+    transition: transform var(--transition);
+  }
+
+  .wf-project-card__link:hover {
+    transform: translateX(5px);
+    gap: 0.75rem;
+  }
+
+  .wf-project-card__link:hover svg {
+    transform: translate(3px, -3px);
+  }
+
+  .wf-projects__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--surface);
+    border: 2px solid var(--color-border);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all var(--transition);
+  }
+
+  .wf-projects__nav:hover {
+    background: var(--color-accent-black);
+    color: #fff;
+  }
+
+  .wf-projects__nav--prev {
+    left: 0;
+  }
+
+  .wf-projects__nav--next {
+    right: 0;
+  }
+
+  .wf-projects__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .wf-projects__dot {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--color-border);
+    background: var(--surface);
+    border-radius: 0;
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+
+  .wf-projects__dot--active,
+  .wf-projects__dot:hover {
+    background: var(--color-accent-black);
+  }
+
+  /* Animations gérées via <Anim /> */
+
+  @media (max-width: 768px) {
+    .wf-projects__carousel {
+      padding: 0 40px;
+    }
+
+    .wf-project-card {
+      min-width: 280px;
+    }
+
+    .wf-projects__title {
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const track = document.querySelector('.wf-projects__track') as HTMLElement;
+    const prevBtn = document.querySelector('.wf-projects__nav--prev') as HTMLElement;
+    const nextBtn = document.querySelector('.wf-projects__nav--next') as HTMLElement;
+    const dots = document.querySelectorAll('.wf-projects__dot');
+
+    if (!track) return;
+
+    let currentIndex = 0;
+    const cardWidth = 370; // 350px + 20px gap
+
+    function updateCarousel(index: number) {
+      track.scrollTo({
+        left: index * cardWidth,
+        behavior: 'smooth'
+      });
+      
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('wf-projects__dot--active', i === index);
+      });
+      
+      currentIndex = index;
+    }
+
+    prevBtn?.addEventListener('click', () => {
+      const newIndex = Math.max(0, currentIndex - 1);
+      updateCarousel(newIndex);
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      const maxIndex = dots.length - 1;
+      const newIndex = Math.min(maxIndex, currentIndex + 1);
+      updateCarousel(newIndex);
+    });
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        updateCarousel(index);
+      });
+    });
+  });
+</script>

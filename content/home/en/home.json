@@ -1,0 +1,133 @@
+{
+  "sections": [
+    {
+      "logo": "Template",
+      "links": [
+        { "label": "Home", "href": "#home" },
+        { "label": "Services", "href": "#services" },
+        { "label": "Projects", "href": "#projects" }
+      ],
+      "_template": "navbar"
+    },
+    {
+      "title": "Our Team",
+      "subtitle": "Passionate experts",
+      "members": [
+        {
+          "name": "Alice Dupont",
+          "role": "CEO",
+          "bio": "Leader.",
+          "image": "/uploads/team/wallpapper-op.jpg"
+        }
+      ],
+      "_template": "team"
+    },
+    {
+      "title": "Create something extraordinary",
+      "subtitle": "Astro Template - VDB Creation",
+      "description": "A modern and minimalist starting point for your web projects.",
+      "ctaLabel": "Discover",
+      "ctaHref": "#projects",
+      "heroImage": "/uploads/hero/wallpapper-op.jpg",
+      "_template": "hero"
+    },
+    {
+      "title": "Ready to start?",
+      "subtitle": "Contact us",
+      "ctaLabel": "Get in touch",
+      "ctaHref": "#contact",
+      "_template": "cta"
+    },
+    {
+      "title": "Our Services",
+      "items": [
+        {
+          "title": "UI/UX Design",
+          "description": "Designing intuitive and aesthetic interfaces.",
+          "icon": "Palette"
+        },
+        {
+          "title": "Web Development",
+          "description": "High-performance websites and web apps.",
+          "icon": "Code"
+        }
+      ],
+      "_template": "services"
+    },
+    {
+      "title": "Second Hero",
+      "subtitle": "Another hero for demonstration",
+      "description": "You can now have multiple hero sections.",
+      "ctaLabel": "Learn more",
+      "ctaHref": "#about",
+      "_template": "hero"
+    },
+    {
+      "title": "Our Work",
+      "items": [
+        {
+          "title": "Project Alpha",
+          "category": "Web",
+          "description": "E-commerce.",
+          "image": "/uploads/team/wallpapper-big.jpg"
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "title": "What our clients say",
+      "items": [
+        {
+          "name": "Marie Dupont",
+          "role": "CEO",
+          "content": "Excellent work.",
+          "rating": 5
+        }
+      ],
+      "_template": "testimonials"
+    },
+    {
+      "title": "By the numbers",
+      "items": [
+        { "value": "150+", "label": "Projects", "icon": "TrendingUp" }
+      ],
+      "_template": "stats"
+    },
+    {
+      "title": "Frequently Asked Questions",
+      "items": [
+        { "question": "Timelines?", "answer": "4 to 8 weeks." }
+      ],
+      "_template": "faq"
+    },
+    {
+      "title": "Ready to start?",
+      "subtitle": "Let’s talk",
+      "ctaLabel": "Contact us",
+      "ctaHref": "#contact",
+      "_template": "cta"
+    },
+    {
+      "title": "Contact",
+      "subtitle": "We are here",
+      "email": "contact@example.com",
+      "phone": "+33 1 23 45 67 89",
+      "address": "123 Rue Example, Paris",
+      "_template": "contact"
+    },
+    {
+      "companyName": "Your Company",
+      "description": "Digital creators.",
+      "links": [
+        { "label": "Home", "href": "#home" },
+        { "label": "Contact", "href": "#contact" }
+      ],
+      "socials": {
+        "github": "https://github.com",
+        "twitter": "https://twitter.com"
+      },
+      "_template": "footer"
+    }
+  ]
+}
+

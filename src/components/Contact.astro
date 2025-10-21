@@ -1,0 +1,251 @@
+---
+import { Mail, Phone, MapPin } from 'lucide-astro';
+
+interface Props {
+  sectionIndex?: number;
+  title?: string;
+  description?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+}
+
+const {
+  title = "Contactez-nous",
+  description = "Une question ? Un projet ? N'hésitez pas à nous contacter.",
+  email = "contact@exemple.com",
+  phone = "+33 1 23 45 67 89",
+  address = "123 Rue de la Paix, 75000 Paris",
+} = Astro.props;
+---
+
+<section class="wf-contact" id="contact">
+  <div class="wf-contact__container">
+    <div class="wf-contact__info">
+  <h2 class="wf-contact__title" data-bind="contact.title">{title}</h2>
+  <p class="wf-contact__description" data-bind="contact.subtitle">{description}</p>
+      <div class="wf-contact__details">
+        <div class="wf-contact__detail">
+          <Mail size={20} />
+          <div>
+            <strong>Email:</strong>
+            <a href={`mailto:${email}`} data-bind="contact.email">{email}</a>
+          </div>
+        </div>
+        <div class="wf-contact__detail">
+          <Phone size={20} />
+          <div>
+            <strong>Téléphone:</strong>
+            <a href={`tel:${phone}`} data-bind="contact.phone">{phone}</a>
+          </div>
+        </div>
+        <div class="wf-contact__detail">
+          <MapPin size={20} />
+          <div>
+            <strong>Adresse:</strong>
+            <p data-bind="contact.address">{address}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<!-- 1. Quand quelqu'un soumet ton formulaire, Netlify stocke la réponse dans son dashboard (onglet
+Forms de ton site).
+2. Tu peux configurer des notifications :
+• Aller dans Netlify Dashboard > Forms > Notifications
+• Ajouter une notification par email (tu indiques l'adresse de destination)
+• Ou par Slack / Webhook / Zapier si tu veux automatiser
+* Donc : sans config, rien n'est envoyé par email, ça reste visible uniquement dans le dashboard Netlify.
+* Avec la config, tu peux recevoir directement chaque soumission sur ton adresse email. -->
+
+    <!-- formulaire de contact -->
+    <form class="wf-contact__form" data-netlify="true" netlify-honeypot="bot-field">
+        <!-- champ anti-spam -->
+        <input type="hidden" name="form-name" value="contact" />
+        <p hidden>
+          <label>Ne pas remplir: <input name="bot-field" /></label>
+        </p>
+      <div class="wf-contact__field">
+        <label for="name">Nom</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div class="wf-contact__field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <div class="wf-contact__field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="wf-contact__submit">Envoyer</button>
+    </form>
+  </div>
+</section>
+
+<style>
+  .wf-contact {
+    padding: 6rem 0;
+    background: #f9f9f9;
+    border-bottom: 2px solid #333;
+  }
+
+  .wf-contact__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .wf-contact__title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 3px solid #333;
+    padding-bottom: 1rem;
+    animation: slideInLeft 0.6s ease-out;
+  }
+
+  .wf-contact__description {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 2rem;
+  }
+
+  .wf-contact__details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .wf-contact__detail {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-left: 3px solid #333;
+    transition: all 0.3s;
+  }
+
+  .wf-contact__detail:hover {
+    background: white;
+    padding-left: 1.5rem;
+    transform: translateX(5px);
+  }
+
+  .wf-contact__detail :global(svg) {
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+
+  .wf-contact__detail strong {
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .wf-contact__detail a {
+    color: #333;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s;
+  }
+
+  .wf-contact__detail a:hover {
+    border-bottom-color: #333;
+  }
+
+  .wf-contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    animation: slideInRight 0.6s ease-out;
+  }
+
+  .wf-contact__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .wf-contact__field label {
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+
+  .wf-contact__field input,
+  .wf-contact__field textarea {
+    padding: 0.75rem;
+    border: 2px solid #333;
+    font-family: inherit;
+    font-size: 1rem;
+    background: white;
+    transition: all 0.3s;
+  }
+
+  .wf-contact__field input:focus,
+  .wf-contact__field textarea:focus {
+    outline: none;
+    box-shadow: 4px 4px 0 #333;
+    transform: translateX(-2px) translateY(-2px);
+  }
+
+  .wf-contact__submit {
+    padding: 1rem 2rem;
+    background: #333;
+    color: white;
+    border: 2px solid #333;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    align-self: flex-start;
+  }
+
+  .wf-contact__submit:hover {
+    background: white;
+    color: #333;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0 #333;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .wf-contact__container {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .wf-contact__title {
+      font-size: 2rem;
+    }
+  }
+</style>

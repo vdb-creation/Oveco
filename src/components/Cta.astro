@@ -1,0 +1,162 @@
+---
+import { ArrowRight, Zap } from 'lucide-astro';
+import Anim from './Anim.astro';
+
+interface Props {
+  sectionIndex?: number;
+  title?: string;
+  subtitle?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+// Valeurs par défaut
+const defaults = {
+  title: "Prêt à démarrer votre projet ?",
+  subtitle: "Discutons ensemble de vos besoins et donnons vie à vos idées.",
+  ctaLabel: "Contactez-nous",
+  ctaHref: "#contact",
+};
+
+const merged = { ...defaults, ...(Astro.props as any) } as Required<Props>;
+const { title: ctaTitle, subtitle: ctaSubtitle, ctaLabel: ctaText, ctaHref: ctaUrl } = merged;
+---
+
+<section class="wf-cta">
+  <div class="wf-cta__container">
+    <Anim effect="fade-scale-up" delay={100}>
+      <div class="wf-cta__icon">
+        <Zap size={48} />
+      </div>
+    </Anim>
+    <Anim effect="fade-up" delay={180}>
+      <div class="wf-cta__content">
+        <h2 class="wf-cta__title" data-bind="cta.title">{ctaTitle}</h2>
+        <p class="wf-cta__subtitle" data-bind="cta.subtitle">{ctaSubtitle}</p>
+      </div>
+    </Anim>
+    <Anim effect="fade-up" delay={260}>
+      <a href={ctaUrl} class="wf-cta__button btn" data-bind="cta.ctaHref">
+        <span data-bind="cta.ctaLabel">{ctaText}</span>
+        <ArrowRight size={20} />
+      </a>
+    </Anim>
+  </div>
+</section>
+
+<style>
+  .wf-cta {
+    padding: 6rem 0;
+    background: linear-gradient(135deg, var(--surface-2) 0%, #e0e0e0 100%);
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .wf-cta::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border: 3px solid rgba(51, 51, 51, 0.1);
+    border-radius: 50%;
+    top: -150px;
+    right: -150px;
+    animation: rotate 20s linear infinite;
+  }
+
+  .wf-cta::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border: 2px solid rgba(51, 51, 51, 0.1);
+    border-radius: 50%;
+    bottom: -100px;
+    left: -100px;
+    animation: rotate 15s linear infinite reverse;
+  }
+
+  .wf-cta__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wf-cta__icon {
+    width: 80px;
+    height: 80px;
+    border: 3px solid var(--color-border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wf-cta__icon svg {
+    color: var(--color-text);
+  }
+
+  .wf-cta__title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .wf-cta__subtitle {
+    font-size: 1.2rem;
+    color: #555;
+    max-width: 600px;
+  }
+
+  .wf-cta__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 3rem;
+    background: var(--color-accent-black);
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border: 3px solid var(--color-border);
+    transition: all var(--transition);
+  }
+
+  .wf-cta__button svg {
+    transition: transform var(--transition);
+  }
+
+  .wf-cta__button:hover {
+    background: var(--surface);
+    color: var(--color-text);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .wf-cta__button:hover svg {
+    transform: translateX(5px);
+  }
+
+  /* Animations gérées via <Anim /> */
+
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 768px) {
+    .wf-cta__title {
+      font-size: 2rem;
+    }
+
+    .wf-cta__subtitle {
+      font-size: 1rem;
+    }
+  }
+</style>

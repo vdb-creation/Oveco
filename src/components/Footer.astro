@@ -1,0 +1,198 @@
+---
+import { Github, Twitter, Linkedin, Instagram } from 'lucide-astro';
+import Anim from './Anim.astro';
+
+interface Props {
+  sectionIndex?: number;
+  brandName?: string;
+  description?: string;
+  links?: { label: string; href: string }[];
+  socials?: {
+    github?: string;
+    twitter?: string;
+    linkedin?: string;
+  };
+}
+
+const {
+  sectionIndex = 0,
+  brandName = "Votre Marque",
+  description = "Créer l'extraordinaire ensemble",
+  links = [
+    { label: "Accueil", href: "#home" },
+    { label: "Services", href: "#services" },
+    { label: "Projets", href: "#projects" },
+    { label: "Contact", href: "#contact" },
+  ],
+  socials = {},
+} = Astro.props;
+
+const prefix = `sections.${sectionIndex}.footer`;
+
+const socialLinks = [
+  { name: "GitHub", url: socials?.github || "#", icon: Github, enabled: !!socials?.github },
+  { name: "Twitter", url: socials?.twitter || "#", icon: Twitter, enabled: !!socials?.twitter },
+  { name: "LinkedIn", url: socials?.linkedin || "#", icon: Linkedin, enabled: !!socials?.linkedin },
+].filter(s => s.enabled);
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="wf-footer">
+  <div class="wf-footer__container">
+    <Anim effect="fade-up" delay={100}>
+      <div class="wf-footer__brand">
+        <h3 data-bind={`${prefix}.companyName`}>{brandName}</h3>
+        <p data-bind={`${prefix}.description`}>{description}</p>
+      </div>
+    </Anim>
+    <div class="wf-footer__links">
+      <Anim effect="fade-up" delay={150}>
+        <div class="wf-footer__column">
+          <h4>Navigation</h4>
+          <ul>
+            {links.map((link, i) => (
+              <li>
+                <a href={link.href} data-bind={`${prefix}.links.${i}.href`}>
+                  <span data-bind={`${prefix}.links.${i}.label`}>{link.label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Anim>
+      <Anim effect="fade-up" delay={200}>
+        <div class="wf-footer__column">
+          <h4>Légal</h4>
+          <ul>
+            <li><a href="#">Mentions légales</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+            <li><a href="#">CGU</a></li>
+          </ul>
+        </div>
+      </Anim>
+      <Anim effect="fade-up" delay={250}>
+        <div class="wf-footer__column">
+          <h4>Suivez-nous</h4>
+          <div class="wf-footer__socials">
+            {socialLinks.map((social) => {
+              const IconComponent = social.icon;
+              return (
+                <a href={social.url} aria-label={social.name}>
+                  <IconComponent size={20} />
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </Anim>
+    </div>
+  </div>
+  <div class="wf-footer__bottom">
+    <p>© {currentYear} <span data-bind={`${prefix}.companyName`}>{brandName}</span>. Tous droits réservés.</p>
+  </div>
+</footer>
+
+<style>
+  .wf-footer {
+    background: var(--color-accent-black);
+    color: #fff;
+    border-top: 3px solid #000;
+  }
+
+  .wf-footer__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+  }
+
+  .wf-footer__brand h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .wf-footer__brand p {
+    color: #aaa;
+  }
+
+  .wf-footer__links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .wf-footer__column h4 {
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #fff;
+    padding-bottom: 0.5rem;
+  }
+
+  .wf-footer__column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .wf-footer__column li {
+    margin-bottom: 0.5rem;
+  }
+
+  .wf-footer__column a {
+    color: #aaa;
+    text-decoration: none;
+    transition: all var(--transition);
+    display: inline-block;
+  }
+
+  .wf-footer__column a:hover {
+    color: #fff;
+    transform: translateX(5px);
+  }
+
+  .wf-footer__socials {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .wf-footer__socials a {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+  }
+
+  .wf-footer__socials a:hover {
+    background: #fff;
+    transform: translateY(-3px) rotate(5deg);
+  }
+
+  .wf-footer__socials a:hover :global(svg) {
+    color: var(--color-accent-black);
+  }
+
+  .wf-footer__bottom {
+    text-align: center;
+    padding: 1.5rem;
+    border-top: 2px solid #555;
+    color: #aaa;
+  }
+
+  /* Animations gérées via <Anim /> */
+
+  @media (max-width: 768px) {
+    .wf-footer__container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .wf-footer__links {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,44 @@
+---
+/**
+ * 🎨 Composant Anim pour Astro
+ * Wrapper pratique autour du Web Component <x-anim>
+ * 
+ * @example
+ * ```astro
+ * <Anim effect="fade-up" duration={500} delay={100}>
+ *   <div class="card">Hello world</div>
+ * </Anim>
+ * ```
+ */
+
+interface Props {
+  /** Type d'animation : fade-up, fade-in, slide-left, etc. */
+  effect?: string;
+  /** Durée de l'animation en ms */
+  duration?: number;
+  /** Délai avant le démarrage en ms */
+  delay?: number;
+  /** Fonction d'interpolation (ex: cubic-bezier(0.16, 1, 0.3, 1)) */
+  ease?: string;
+}
+
+const { 
+  effect = 'fade-up', 
+  duration, 
+  delay, 
+  ease 
+} = Astro.props;
+---
+
+<x-anim 
+  effect={effect} 
+  duration={duration?.toString()} 
+  delay={delay?.toString()} 
+  ease={ease}
+>
+  <slot />
+</x-anim>
+
+<script>
+  import '../lib/anim';
+</script>

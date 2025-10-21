@@ -1,0 +1,118 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+import {
+  Navbar,
+  Hero,
+  Services,
+  Features,
+  Team,
+  ProjectShowcase,
+  Testimonials,
+  Stats,
+  FAQ,
+  CTA,
+  Contact,
+  WireframeFooter,
+} from '../../components';
+
+import { client } from '../../../tina/__generated__/client';
+import LiveBridge from '../../../tina/LiveBridge.tsx';
+
+const param = Astro.params.lang as string | undefined;
+const currentLang: 'fr' | 'en' = param === 'en' ? 'en' : 'fr';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'fr' } },
+    { params: { lang: 'en' } },
+  ];
+}
+
+let homeQ: any = null;
+const forceLive = import.meta.env.DEV || Astro.url.searchParams.get('live') === '1' || import.meta.env.PUBLIC_TINA_LIVE === '1';
+try {
+  async function loadWithTimeout(relativePath: string) {
+    const tinaPromise = client.queries.home({ relativePath });
+    if (forceLive) return await tinaPromise;
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('tina-timeout')), 1000));
+    return await Promise.race([tinaPromise, timeout]);
+  }
+  try {
+    homeQ = await loadWithTimeout(`${currentLang}/home.json`);
+  } catch {
+    homeQ = await loadWithTimeout('home.json');
+  }
+} catch (e) {
+  homeQ = null;
+}
+
+const H = homeQ?.data?.home || {};
+const sections = H.sections || [];
+
+console.log('[i18n index.astro] lang:', currentLang, 'homeQ:', !!homeQ);
+---
+
+<Layout
+  title="Template Astro Wireframe - Composants prêts à l'emploi"
+  description="Template Astro moderne avec une collection de composants wireframe pour démarrer vos projets rapidement."
+>
+  {homeQ && (
+    <LiveBridge client:load home={homeQ} />
+  )}
+
+  {sections.map((section: any, index: number) => {
+    const typename = section?.__typename || '';
+    const template = section?._template || typename.replace('HomeSections', '').toLowerCase();
+
+    if (template === 'navbar') {
+      return <Navbar sectionIndex={index} brandName={section.logo} links={section.links} brandHref={`/${currentLang}/`} currentLang={currentLang} />;
+    }
+    if (template === 'hero') {
+      return (
+        <Hero 
+          sectionIndex={index}
+          title={section.title} 
+          subtitle={section.subtitle} 
+          description={section.description} 
+          ctaLabel={section.ctaLabel} 
+          ctaHref={section.ctaHref}
+        />
+      );
+    }
+    if (template === 'services') {
+      return <Services sectionIndex={index} title={section.title} services={section.items} />;
+    }
+    if (template === 'features') {
+      return <Features sectionIndex={index} title={section.title} subtitle={section.subtitle} features={section.items} />;
+    }
+    if (template === 'team') {
+      return <Team sectionIndex={index} title={section.title} subtitle={section.subtitle} members={section.members} />;
+    }
+    if (template === 'projects') {
+      return <ProjectShowcase sectionIndex={index} title={section.title} projects={section.items} lang={currentLang} />;
+    }
+    if (template === 'testimonials') {
+      return <Testimonials sectionIndex={index} title={section.title} testimonials={section.items} lang={currentLang} />;
+    }
+    if (template === 'stats') {
+      return <Stats sectionIndex={index} title={section.title} stats={section.items} />;
+    }
+    if (template === 'faq') {
+      return <FAQ sectionIndex={index} title={section.title} faqs={section.items} />;
+    }
+    if (template === 'cta') {
+      return <CTA sectionIndex={index} title={section.title} subtitle={section.subtitle} ctaLabel={section.ctaLabel} ctaHref={section.ctaHref} />;
+    }
+    if (template === 'contact') {
+      return <Contact sectionIndex={index} title={section.title} description={section.subtitle} email={section.email} phone={section.phone} address={section.address} />;
+    }
+    if (template === 'footer') {
+      return <WireframeFooter sectionIndex={index} brandName={section.companyName} description={section.description} links={section.links} socials={section.socials} />;
+    }
+    return null;
+  })}
+
+</Layout>
+
+

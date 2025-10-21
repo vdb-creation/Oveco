@@ -1,0 +1,158 @@
+---
+import { TrendingUp, Award, Users, Clock } from 'lucide-astro';
+import Anim from './Anim.astro';
+
+interface Stat {
+  value: string;
+  label: string;
+  icon?: string;
+}
+
+interface Props {
+  sectionIndex?: number;
+  title?: string;
+  stats?: Stat[];
+}
+
+const icons = {
+  TrendingUp,
+  Award,
+  Users,
+  Clock,
+};
+
+const defaults: Props = {
+  title: "En chiffres",
+  stats: [
+    { value: "150+", label: "Projets réalisés", icon: "TrendingUp" },
+    { value: "98%", label: "Clients satisfaits", icon: "Award" },
+    { value: "50+", label: "Partenaires", icon: "Users" },
+    { value: "5 ans", label: "D'expérience", icon: "Clock" },
+  ],
+};
+const props = Astro.props as Props;
+const title = props.title ?? defaults.title!;
+const stats: Stat[] = props.stats ?? (defaults.stats as Stat[]);
+---
+
+<section class="wf-stats">
+  <div class="wf-stats__container">
+    <Anim effect="fade-up" delay={100}>
+      <h2 class="wf-stats__title" data-bind="stats.title">{title}</h2>
+    </Anim>
+    <div class="wf-stats__grid">
+      {stats.map((stat, index) => {
+        const Icon = stat.icon && icons[stat.icon as keyof typeof icons];
+        return (
+          <Anim effect="fade-scale-up" delay={150 + index * 80}>
+            <div class="wf-stat card">
+              {Icon && (
+                <div class="wf-stat__icon">
+                  <Icon size={32} />
+                </div>
+              )}
+              <div class="wf-stat__value" data-bind={`stats.items.${index}.value`}>{stat.value}</div>
+              <div class="wf-stat__label" data-bind={`stats.items.${index}.label`}>{stat.label}</div>
+            </div>
+          </Anim>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .wf-stats {
+    padding: 4rem 0;
+    background: var(--color-accent-black);
+    color: #fff;
+    border-bottom: 2px solid #000;
+  }
+
+  .wf-stats__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .wf-stats__title {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    border-bottom: 3px solid #fff;
+    padding-bottom: 1rem;
+  }
+
+  .wf-stats__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+  }
+
+  .wf-stat {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border: 2px solid #fff;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .wf-stat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    transition: left var(--transition);
+    z-index: 0;
+  }
+
+  .wf-stat:hover::before {
+    left: 0;
+  }
+
+  .wf-stat:hover {
+    color: var(--color-accent-black);
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .wf-stat__icon {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+    display: inline-flex;
+  }
+
+  .wf-stat__value {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wf-stat__label {
+    font-size: 1rem;
+    opacity: 0.9;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Animations gérées via <Anim /> */
+
+  @media (max-width: 768px) {
+    .wf-stats__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .wf-stat__value {
+      font-size: 2rem;
+    }
+  }
+</style>

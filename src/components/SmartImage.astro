@@ -1,0 +1,314 @@
+---
+import { Image as UnpicImage, Source as UnpicSource } from "@unpic/astro";
+import type { ImageMetadata } from "astro";
+import path from "node:path";
+import { stat as fsStat } from "node:fs/promises";
+
+const PUBLIC_DIR = path.join(process.cwd(), "public");
+async function versioned(p?: string) {
+  if (!p || !p.startsWith("/")) return p;
+  try {
+    const abs = path.join(PUBLIC_DIR, p.replace(/^\//, ""));
+    const s = await fsStat(abs);
+    return `${p}?v=${Math.floor(s.mtimeMs)}`;
+  } catch { return p; }
+}
+
+// Manifests (LQIP d’abord, puis BlurHash)
+import lqipManifest from "../lqip-manifest.json";
+import blurManifest from "../blurhash-manifest.json";
+
+type Layout = "constrained" | "fullWidth" | "fixed";
+type PlaceholderKind = "blurhash" | "dominantColor" | "lqip";
+type FitKind = "contain" | "cover" | "fill" | "none" | "scale-down";
+
+interface Props {
+  cmsSrc?: string;                       // Tina: /uploads/... ou /upload/...
+  fallback?: ImageMetadata | string;     // import Astro ou string
+  alt: string;
+
+  width?: number;
+  height?: number;
+  aspectRatio?: number;
+
+  context?: "hero" | "about" | "galerie" | "default"; // Ajout du contexte pour la taille
+  isAvatar?: boolean; // Pour border-radius 100% sur les avatars
+
+  layout?: Layout;
+  breakpoints?: number[];
+  sizes?: string;
+
+  priority?: boolean;
+  placeholder?: PlaceholderKind;         // utile si src distante
+  background?: string;                   // override manuel
+
+  quality?: number;
+  fit?: FitKind;
+  position?: string;
+
+  class?: string;                        // appliqué à <img>
+  style?: string;                        // appliqué au wrapper
+  decoding?: "sync" | "async" | "auto";
+  loading?: "lazy" | "eager";
+
+  formats?: Array<"avif" | "webp">;      // ordre de préférence
+  // STRICT: quel format utiliser pour le <img> fallback (jamais l’original)
+  fallbackFormat?: "avif" | "webp";
+}
+
+const {
+  cmsSrc, fallback, alt,
+  width, height, aspectRatio,
+  context = "default",
+  isAvatar = false,
+  layout = "constrained", breakpoints, sizes,
+  priority = false,
+  placeholder, background,
+  quality, fit, position,
+  class: imgClass, style, decoding, loading,
+  formats = ["avif", "webp"],
+  fallbackFormat = "webp", // => fallback <img> en WebP par défaut
+} = Astro.props as Props;
+
+// Helpers
+const normalizeCmsSrc = (src?: string) =>
+  src?.startsWith("/public/") ? src.replace("/public/", "/") : src;
+
+const isRemoteUrl = (src?: string | ImageMetadata) =>
+  typeof src === "string" && /^https?:\/\//i.test(src);
+
+const isStringLocalUpload = (src?: string | ImageMetadata) =>
+  typeof src === "string" &&
+  (src.startsWith("/uploads/") || src.startsWith("/upload/"));
+
+const toStringSrc = (src?: string | ImageMetadata): string | undefined =>
+  typeof src === "string"
+    ? src
+    : src && typeof (src as ImageMetadata).src === "string"
+    ? (src as ImageMetadata).src
+    : undefined;
+
+// Entrée finale
+const cms = normalizeCmsSrc(cmsSrc);
+const finalSrc: string | ImageMetadata | undefined = cms ?? fallback;
+const srcString = toStringSrc(finalSrc);
+const normalizedSrcString = normalizeCmsSrc(srcString);
+
+// Dimensions anti-CLS
+let targetWidth = width;
+let targetHeight = height;
+
+// Taille par défaut selon le contexte
+if (!targetWidth && !targetHeight) {
+  switch (context) {
+    case "hero":
+      targetWidth = 1920;
+      targetHeight = aspectRatio ? Math.round(1920 / aspectRatio) : 800;
+      break;
+    case "about":
+      targetWidth = 800;
+      targetHeight = aspectRatio ? Math.round(800 / aspectRatio) : 600;
+      break;
+    case "galerie":
+      targetWidth = 1200;
+      targetHeight = aspectRatio ? Math.round(1200 / aspectRatio) : 900;
+      break;
+    default:
+      targetWidth = 1200;
+      if (aspectRatio) targetHeight = Math.round(targetWidth / aspectRatio);
+      break;
+  }
+}
+
+if (aspectRatio && targetWidth && !targetHeight) {
+  targetHeight = Math.max(1, Math.round(targetWidth / aspectRatio));
+} else if (aspectRatio && targetHeight && !targetWidth) {
+  targetWidth = Math.max(1, Math.round(targetHeight * aspectRatio));
+}
+
+// Breakpoints & sizes
+const DEFAULT_BP = [320, 640, 768, 1024, 1280, 1920, 2560] as const;
+const baseBp = (breakpoints?.length ? breakpoints : DEFAULT_BP).slice();
+const maxW = targetWidth ? Math.round(targetWidth * 1.1) : undefined;
+const filteredBp = maxW ? baseBp.filter((w) => w <= maxW) : baseBp;
+
+const autoSizes =
+  layout === "fullWidth" ? "100vw" :
+  layout === "fixed"     ? `${targetWidth ?? 1}px` :
+                           `min(100vw, ${targetWidth ?? 1}px)`;
+
+// Placeholders
+const remotePH = isRemoteUrl(normalizedSrcString as any) ? placeholder : undefined;
+
+const localKey = typeof normalizedSrcString === "string" ? normalizedSrcString : undefined;
+const localLQIP =
+  localKey && isStringLocalUpload(localKey)
+    ? (lqipManifest as Record<string, string>)[localKey]
+    : undefined;
+const localBlur =
+  localKey && isStringLocalUpload(localKey)
+    ? (blurManifest as Record<string, string>)[localKey]
+    : undefined;
+
+const localBackground = localLQIP ?? localBlur ?? background;
+
+// Classes wrapper
+const wrapClass =
+  remotePH ? "has-remote-ph" :
+  localLQIP ? "has-local-ph" :
+  localBlur ? "has-local-ph" :
+             "has-skeleton";
+
+// Opérations Astro (quality/fit)
+const astroOps: Record<string, unknown> = {};
+if (typeof quality === "number") astroOps.quality = quality;
+if (fit) astroOps.fit = fit;
+
+// Résolution des dérivés *.opt.avif / *.opt.webp (si présents)
+async function exists(p: string) {
+  try { await fsStat(p); return true; } catch { return false; }
+}
+function replaceExtToOpt(src: string, ext: "avif" | "webp") {
+  const i = src.lastIndexOf(".");
+  const base = i > -1 ? src.slice(0, i) : src;
+  return `${base}.opt.${ext}`;
+}
+
+let srcAvif: string | undefined = normalizedSrcString;
+let srcWebp: string | undefined = normalizedSrcString;
+
+if (normalizedSrcString && isStringLocalUpload(normalizedSrcString)) {
+  const rel = normalizedSrcString.replace(/^\//, "");
+  const i = rel.lastIndexOf(".");
+  const relNoExt = i > -1 ? rel.slice(0, i) : rel;
+  const avifAbs = path.join(PUBLIC_DIR, `${relNoExt}.opt.avif`);
+  const webpAbs = path.join(PUBLIC_DIR, `${relNoExt}.opt.webp`);
+  if (await exists(avifAbs)) srcAvif = `/${relNoExt}.opt.avif`;
+  if (await exists(webpAbs)) srcWebp = `/${relNoExt}.opt.webp`;
+}
+
+// Version the local URLs to bust caches when file mtime changes
+srcAvif = await versioned(srcAvif);
+srcWebp = await versioned(srcWebp);
+
+// <source> operations: si on pointe déjà sur .avif/.webp, pas besoin de re-encoder (juste resize)
+const opsForAvif =
+  srcAvif?.endsWith(".avif")
+    ? (Object.keys(astroOps).length ? { astro: astroOps } : undefined)
+    : { astro: { ...astroOps, format: "avif" } };
+
+const opsForWebp =
+  srcWebp?.endsWith(".webp")
+    ? (Object.keys(astroOps).length ? { astro: astroOps } : undefined)
+    : { astro: { ...astroOps, format: "webp" } };
+
+// STRICT: choisir la source du <img> (jamais l’original)
+// - priorité AVIF si fallbackFormat === "avif" et dispo, sinon WebP, sinon conversion à la volée
+let imgSrc: string | undefined;
+let imgOps: any;
+
+if (fallbackFormat === "avif") {
+  if (srcAvif && srcAvif.endsWith(".avif")) { imgSrc = srcAvif; imgOps = Object.keys(astroOps).length ? { astro: astroOps } : undefined; }
+  else { imgSrc = srcAvif ?? normalizedSrcString; imgOps = { astro: { ...astroOps, format: "avif" } }; }
+} else {
+  if (srcWebp && srcWebp.endsWith(".webp")) { imgSrc = srcWebp; imgOps = Object.keys(astroOps).length ? { astro: astroOps } : undefined; }
+  else { imgSrc = srcWebp ?? normalizedSrcString; imgOps = { astro: { ...astroOps, format: "webp" } }; }
+}
+
+imgSrc = await versioned(imgSrc);
+
+const effectiveLoading = priority ? "eager" : loading;
+const altText = alt ?? "";
+const canRender = !!normalizedSrcString;
+
+const wrapperStyle = [
+  style,
+  fit && `--si-fit:${fit}`,
+  position && `--si-pos:${position}`,
+  isAvatar ? "border-radius:100%" : undefined
+].filter(Boolean).join(";");
+---
+
+{canRender ? (
+  <span class={`si-wrap ${wrapClass}`} style={wrapperStyle}>
+    <picture>
+      {formats?.includes("avif") && (
+        <UnpicSource
+          type="image/avif"
+          src={srcAvif as any}
+          layout={layout}
+          width={targetWidth}
+          height={targetHeight}
+          breakpoints={filteredBp}
+          sizes={sizes ?? autoSizes}
+          operations={opsForAvif}
+        />
+      )}
+      {formats?.includes("webp") && (
+        <UnpicSource
+          type="image/webp"
+          src={srcWebp as any}
+          layout={layout}
+          width={targetWidth}
+          height={targetHeight}
+          breakpoints={filteredBp}
+          sizes={sizes ?? autoSizes}
+          operations={opsForWebp}
+        />
+      )}
+
+      {/* Fallback <img> — en AVIF/WEBP (STRICT) */}
+      <UnpicImage
+        src={imgSrc as any}
+        alt={altText}
+        width={targetWidth}
+        height={targetHeight}
+        layout={layout}
+        breakpoints={filteredBp}
+        sizes={sizes ?? autoSizes}
+        priority={priority}
+        placeholder={remotePH}
+        background={localBackground}
+        operations={imgOps}
+        class={imgClass ? `si-img ${imgClass}` : "si-img"}
+        decoding={decoding}
+        loading={effectiveLoading}
+        onload="this.closest('.si-wrap')?.classList.add('is-loaded')"
+      />
+    </picture>
+  </span>
+) : <></>}
+
+<style>
+  .si-wrap {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 0;
+    border-radius: inherit;
+    overflow: hidden;
+  }
+  .si-wrap .si-img { display: block; }
+  .si-wrap .si-img,
+  .si-wrap picture img,
+  .si-wrap picture,
+  .si-wrap video,
+  .si-wrap canvas,
+  .si-wrap svg {
+    width: 100%;
+    height: 100%;
+    object-fit: var(--si-fit, initial);
+    object-position: var(--si-pos, initial);
+    border-radius: inherit;
+  }
+  .si-wrap.has-skeleton::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, #eee 25%, #f6f6f6 37%, #eee 63%);
+    background-size: 400% 100%;
+    animation: si-shimmer 1.2s infinite linear;
+  }
+  @keyframes si-shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+  .si-wrap.is-loaded::before { opacity: 0; visibility: hidden; }
+</style>

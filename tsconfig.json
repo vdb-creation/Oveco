@@ -1,0 +1,16 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] },
+    "resolveJsonModule": true,
+    "moduleResolution": "Bundler",
+    "ignoreDeprecations": "6.0"
+  },
+  "exclude": [
+    "dist",
+    "src/pages/admin.astro",
+    "src/lib/anim/**/*.astro"
+  ]
+}

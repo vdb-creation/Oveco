@@ -1,0 +1,161 @@
+{
+  "sections": [
+    {
+      "logo": "Template",
+      "links": [
+        {
+          "label": "Accueil",
+          "href": "#home"
+        },
+        {
+          "label": "Services",
+          "href": "#services"
+        },
+        {
+          "label": "Projets",
+          "href": "#projects"
+        }
+      ],
+      "_template": "navbar"
+    },
+    {
+      "title": "Notre Équipe",
+      "subtitle": "Des experts passionnés",
+      "members": [
+        {
+          "name": "Alice Dupont",
+          "role": "CEO",
+          "bio": "Leader.",
+          "image": "/uploads/team/wallpapper-op.jpg"
+        }
+      ],
+      "_template": "team"
+    },
+    {
+      "title": "Créez quelque chose d'extraordinaire",
+      "subtitle": "Template Astro - VDB Creation",
+      "description": "Un point de départ moderne et minimaliste pour vos projets web.",
+      "ctaLabel": "Découvrir",
+      "ctaHref": "#projects",
+      "heroImage": "/uploads/hero/wallpapper-op.jpg",
+      "_template": "hero"
+    },
+    {
+      "title": "Prêt à démarrer ?",
+      "subtitle": "Contactez-nous",
+      "ctaLabel": "Nous contacter",
+      "ctaHref": "#contact",
+      "_template": "cta"
+    },
+    {
+      "title": "Nos Services",
+      "items": [
+        {
+          "title": "Design UI/UX",
+          "description": "Création d'interfaces intuitives et esthétiques.",
+          "icon": "Palette"
+        },
+        {
+          "title": "Développement Web",
+          "description": "Sites et applications web performants.",
+          "icon": "Code"
+        }
+      ],
+      "_template": "services"
+    },
+    {
+      "title": "Second Hero",
+      "subtitle": "Un autre hero pour démonstration",
+      "description": "Maintenant vous pouvez avoir plusieurs hero sections.",
+      "ctaLabel": "En savoir plus",
+      "ctaHref": "#about",
+      "_template": "hero"
+    },
+    {
+      "title": "Nos Réalisations",
+      "items": [
+        {
+          "title": "Projet Alpha",
+          "category": "WEB",
+          "description": "E-commerce.",
+          "image": "/uploads/team/wallpapper-big.jpg"
+        },
+        {
+          "title": "Test",
+          "category": "mouais",
+          "description": "pas mal pasmal..",
+          "image": "/uploads/hero/wallpapper-op.opt.avif"
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "title": "Ce que disent nos clients",
+      "items": [
+        {
+          "name": "Marie Dupont",
+          "role": "CEO",
+          "content": "Excellent travail.",
+          "rating": 5,
+          "projectRef": ""
+        }
+      ],
+      "_template": "testimonials"
+    },
+    {
+      "title": "En chiffres",
+      "items": [
+        {
+          "value": "150+",
+          "label": "Projets",
+          "icon": "TrendingUp"
+        }
+      ],
+      "_template": "stats"
+    },
+    {
+      "title": "Questions Fréquentes",
+      "items": [
+        {
+          "question": "Délais ?",
+          "answer": "4 à 8 semaines."
+        }
+      ],
+      "_template": "faq"
+    },
+    {
+      "title": "Prêt à démarrer ?",
+      "subtitle": "Discutons ensemble",
+      "ctaLabel": "Contactez-nous",
+      "ctaHref": "#contact",
+      "_template": "cta"
+    },
+    {
+      "title": "Contact",
+      "subtitle": "Nous sommes là",
+      "email": "contact@example.com",
+      "phone": "+33 1 23 45 67 89",
+      "address": "123 Rue Example, Paris",
+      "_template": "contact"
+    },
+    {
+      "companyName": "Votre Entreprise",
+      "description": "Créateurs digitaux.",
+      "links": [
+        {
+          "label": "Accueil",
+          "href": "#home"
+        },
+        {
+          "label": "Contact",
+          "href": "#contact"
+        }
+      ],
+      "socials": {
+        "github": "https://github.com",
+        "twitter": "https://twitter.com"
+      },
+      "_template": "footer"
+    }
+  ]
+}

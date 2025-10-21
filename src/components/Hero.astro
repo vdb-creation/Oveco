@@ -1,0 +1,337 @@
+---
+import { ArrowRight, Sparkles } from 'lucide-astro';
+import Anim from './Anim.astro';
+import SmartImage from './SmartImage.astro';
+import defaultHeroBg from '../assets/imgs/default-placeholder.png';
+
+interface Props {
+  sectionIndex?: number;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  backgroundImage?: string;
+  heroImage?: string;
+}
+
+// Props par défaut
+const defaults: Props = {
+  sectionIndex: 0,
+  title: "Créez quelque chose d'extraordinaire",
+  subtitle: "Template Astro Wireframe",
+  description: "Un point de départ moderne et minimaliste pour vos projets web. Commencez rapidement avec des composants prêts à l'emploi.",
+  ctaLabel: "Découvrir",
+  ctaHref: "#projects",
+};
+
+const merged = { ...defaults, ...(Astro.props as any) } as Required<Props>;
+const { sectionIndex, title, subtitle, description, ctaLabel, ctaHref, backgroundImage, heroImage } = merged;
+const prefix = `sections.${sectionIndex}.hero`;
+---
+
+<section class="wf-hero" id="home" aria-labelledby="hero-title">
+  {backgroundImage && (
+    <div class="wf-hero__background">
+      <SmartImage
+        cmsSrc={backgroundImage}
+        fallback={defaultHeroBg}
+        alt="Hero background"
+        priority={true}
+        layout="fullWidth"
+        placeholder="blurhash"
+        breakpoints={[640, 1024, 1920, 2560]}
+        class="wf-hero__bg-image"
+      />
+    </div>
+  )}
+  <div class="wf-hero__container">
+    <div class="wf-hero__content">
+      <Anim effect="fade-up" delay={100}>
+        <div class="wf-hero__subtitle-wrapper" role="complementary" aria-label="Badge de présentation">
+          <Sparkles size={16} aria-hidden="true" />
+          <p class="wf-hero__subtitle" data-bind={`${prefix}.subtitle`}>
+            {subtitle}
+          </p>
+        </div>
+      </Anim>
+      <Anim effect="fade-up" delay={160}>
+        <h1 
+          id="hero-title" 
+          class="wf-hero__title"
+          data-bind={`${prefix}.title`}
+        >
+          {title}
+        </h1>
+      </Anim>
+      <Anim effect="fade-up" delay={220}>
+        <p class="wf-hero__description" data-bind={`${prefix}.description`}>
+          {description}
+        </p>
+      </Anim>
+      <Anim effect="fade-up" delay={280}>
+        <a 
+          href={ctaHref} 
+          class="wf-hero__cta"
+          data-bind={`${prefix}.ctaHref`}
+          aria-label={`${ctaLabel} - En savoir plus sur nos projets`}
+        >
+          <span data-bind={`${prefix}.ctaLabel`}>
+            {ctaLabel}
+          </span>
+          <ArrowRight size={20} aria-hidden="true" />
+        </a>
+      </Anim>
+    </div>
+    <Anim effect="fade-scale-up" delay={200}>
+      <div class="wf-hero__visual" role="img" aria-label="Illustration décorative moderne">
+        <div class="wf-hero__box">
+          {heroImage && (
+            <SmartImage
+              cmsSrc={heroImage}
+              fallback={defaultHeroBg}
+              alt="Hero visual"
+              width={600}
+              aspectRatio={4/3}
+              layout="constrained"
+              placeholder="blurhash"
+              breakpoints={[400, 600, 800]}
+              class="wf-hero__box-image"
+            />
+          )}
+        </div>
+      </div>
+    </Anim>
+  </div>
+</section>
+
+<style>
+  .wf-hero {
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 0;
+    background: var(--gradient-hero);
+    background-image: var(--gradient-mesh);
+    border-bottom: 1px solid var(--color-border-light);
+    overflow: hidden;
+  }
+
+  .wf-hero__background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.3;
+  }
+
+  .wf-hero__bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .wf-hero__container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .wf-hero::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -200px;
+    right: -200px;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(5deg); }
+  }
+
+  .wf-hero__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wf-hero__subtitle-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--surface-glass);
+    backdrop-filter: var(--backdrop-blur-sm);
+    -webkit-backdrop-filter: var(--backdrop-blur-sm);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-full);
+    margin-bottom: 1.5rem;
+  }
+
+  .wf-hero__subtitle-wrapper svg {
+    color: var(--color-primary);
+  }
+
+  .wf-hero__subtitle {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--color-primary);
+  }
+
+  .wf-hero__title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    position: relative;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .wf-hero__description {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #555;
+    margin-bottom: 2.5rem;
+    max-width: 540px;
+  }
+
+  .wf-hero__cta {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 2.5rem;
+    background: var(--gradient-accent);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    isolation: isolate;
+    transition: all var(--transition-smooth);
+  }
+
+  .wf-hero__cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--surface);
+    transform: translateY(100%);
+    transition: transform var(--transition-smooth);
+    z-index: -1;
+  }
+
+  .wf-hero__cta:hover::before {
+    transform: translateY(0);
+  }
+
+  .wf-hero__cta svg {
+    transition: transform var(--transition);
+  }
+
+  .wf-hero__cta:hover {
+    color: var(--color-accent-dark);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-colored);
+    border-color: var(--color-primary);
+  }
+
+  .wf-hero__cta:hover svg {
+    transform: translateX(5px);
+  }
+
+  .wf-hero__cta:active {
+    transform: translateY(-1px);
+  }
+
+  .wf-hero__visual {
+    position: relative;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wf-hero__box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--surface-glass);
+    backdrop-filter: var(--backdrop-blur-lg);
+    -webkit-backdrop-filter: var(--backdrop-blur-lg);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+  }
+
+  .wf-hero__box-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .wf-hero__box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-mesh);
+    opacity: 0.6;
+    z-index: 0;
+  }
+
+  .wf-hero__box::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 4s ease-in-out infinite;
+    z-index: 0;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.3; }
+  }
+
+  /* Animations gérées via <Anim /> */
+
+  @media (max-width: 768px) {
+    .wf-hero__container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .wf-hero__title {
+      font-size: 2rem;
+    }
+
+    .wf-hero__visual {
+      height: 300px;
+    }
+  }
+</style>

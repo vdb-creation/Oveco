@@ -1,0 +1,366 @@
+---
+import { Menu, X } from 'lucide-astro';
+
+interface Props {
+  sectionIndex?: number;
+  brandName?: string;
+  links?: { label: string; href: string }[];
+  brandHref?: string;
+  currentLang?: 'fr' | 'en';
+}
+
+const defaults = {
+  sectionIndex: 0,
+  brandName: "Votre Marque",
+  links: [
+    { label: "Accueil", href: "#home" },
+    { label: "Services", href: "#services" },
+    { label: "Projets", href: "#projects" },
+    { label: "Témoignages", href: "#testimonials" },
+    { label: "Contact", href: "#contact" },
+  ] as { label: string; href: string }[],
+};
+
+const merged = { ...defaults, ...(Astro.props as any) } as { sectionIndex: number; brandName: string; links: { label: string; href: string }[]; brandHref?: string; currentLang?: 'fr' | 'en' };
+const { sectionIndex, brandName, links, brandHref = '/', currentLang = 'fr' } = merged;
+const prefix = `sections.${sectionIndex}.navbar`;
+---
+
+<nav class="wf-navbar" role="navigation" aria-label="Navigation principale" id="navbar">
+  <div class="wf-navbar__container">
+    <div class="wf-navbar__brand">
+      <a href={brandHref} data-bind={`${prefix}.logo`} aria-label="Retour à l'accueil">{brandName}</a>
+    </div>
+    <ul class="wf-navbar__links" role="menubar">
+      {links.map((link, i) => (
+        <li role="none">
+          <a 
+            href={link.href} 
+            data-bind={`${prefix}.links.${i}.href`}
+            role="menuitem"
+            aria-label={`Naviguer vers ${link.label}`}
+          >
+            <span data-bind={`${prefix}.links.${i}.label`}>{link.label}</span>
+          </a>
+        </li>
+      ))}
+      <li role="none">
+        <a href={currentLang === 'fr' ? '/en/' : '/fr/'} role="menuitem" aria-label="Changer de langue">
+          {currentLang === 'fr' ? 'EN' : 'FR'}
+        </a>
+      </li>
+    </ul>
+    <button 
+      class="wf-navbar__toggle" 
+      aria-label="Ouvrir le menu" 
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      id="menu-toggle"
+    >
+      <Menu class="icon-menu" size={24} aria-hidden="true" />
+      <X class="icon-close" size={24} style="display: none;" aria-hidden="true" />
+    </button>
+  </div>
+  <div class="wf-navbar__mobile" id="mobile-menu" role="menu" aria-hidden="true">
+    <ul>
+      {links.map((link, i) => (
+        <li role="none">
+          <a 
+            href={link.href} 
+            data-bind={`navbar.links.${i}.href`}
+            role="menuitem"
+          >
+            <span data-bind={`navbar.links.${i}.label`}>{link.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .wf-navbar {
+    background: var(--surface-glass);
+    backdrop-filter: var(--backdrop-blur-md);
+    -webkit-backdrop-filter: var(--backdrop-blur-md);
+    border-bottom: 1px solid var(--color-border-light);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
+  }
+
+  .wf-navbar.scrolled {
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+    padding: 0.75rem 0;
+  }
+
+  .wf-navbar__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .wf-navbar__brand a {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--color-text);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 0.5rem 0;
+    display: inline-block;
+    transition: all var(--transition);
+    position: relative;
+  }
+
+  .wf-navbar__brand a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    transition: width var(--transition-smooth);
+  }
+
+  .wf-navbar__brand a:hover::after {
+    width: 100%;
+  }
+
+  .wf-navbar__links {
+    display: flex;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .wf-navbar__links a {
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .wf-navbar__links a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-secondary);
+    opacity: 0;
+    transition: opacity var(--transition);
+    z-index: -1;
+  }
+
+  .wf-navbar__links a:hover::before {
+    opacity: 1;
+  }
+
+  .wf-navbar__links a:hover {
+    color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+
+  .wf-navbar__links a:active {
+    transform: translateY(0);
+  }
+
+  /* Indicateur de lien actif */
+  .wf-navbar__links a.active {
+    background: var(--gradient-primary);
+    color: #fff;
+  }
+
+  .wf-navbar__links a.active::before {
+    display: none;
+  }
+
+  .wf-navbar__toggle {
+    display: none;
+    background: var(--surface);
+    border: 2px solid var(--color-border);
+    padding: 0.625rem;
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all var(--transition);
+    color: var(--color-text);
+  }
+
+  .wf-navbar__toggle:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .wf-navbar__toggle:hover :global(svg) {
+    color: #fff;
+  }
+
+  .wf-navbar__toggle:active {
+    transform: translateY(0);
+  }
+
+  .wf-navbar__mobile {
+    display: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-slow) ease-out,
+                opacity var(--transition);
+    opacity: 0;
+    background: var(--surface-glass);
+    backdrop-filter: var(--backdrop-blur-md);
+    -webkit-backdrop-filter: var(--backdrop-blur-md);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .wf-navbar__mobile.active {
+    max-height: 500px;
+    opacity: 1;
+  }
+
+  .wf-navbar__mobile ul {
+    list-style: none;
+    padding: 1.5rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .wf-navbar__mobile li {
+    border: none;
+  }
+
+  .wf-navbar__mobile a {
+    display: block;
+    padding: 1rem 1.25rem;
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 600;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition);
+    background: var(--surface);
+    border: 1px solid var(--color-border-light);
+  }
+
+  .wf-navbar__mobile a:hover {
+    background: var(--color-secondary);
+    color: var(--color-primary);
+    transform: translateX(8px);
+    border-color: var(--color-primary);
+  }
+
+  .wf-navbar__mobile a:active {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 768px) {
+    .wf-navbar__links {
+      display: none;
+    }
+    
+    .wf-navbar__toggle {
+      display: block;
+    }
+
+    .wf-navbar__mobile {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  // Menu toggle
+  const toggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconMenu = toggle?.querySelector('.icon-menu') as HTMLElement;
+  const iconClose = toggle?.querySelector('.icon-close') as HTMLElement;
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = mobileMenu?.classList.toggle('active');
+    
+    if (isOpen) {
+      iconMenu.style.display = 'none';
+      iconClose.style.display = 'block';
+      toggle?.setAttribute('aria-expanded', 'true');
+      toggle?.setAttribute('aria-label', 'Fermer le menu');
+      mobileMenu?.setAttribute('aria-hidden', 'false');
+    } else {
+      iconMenu.style.display = 'block';
+      iconClose.style.display = 'none';
+      toggle?.setAttribute('aria-expanded', 'false');
+      toggle?.setAttribute('aria-label', 'Ouvrir le menu');
+      mobileMenu?.setAttribute('aria-hidden', 'true');
+    }
+  });
+
+  // Fermer le menu mobile au clic sur un lien
+  const mobileLinks = mobileMenu?.querySelectorAll('a');
+  mobileLinks?.forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu?.classList.remove('active');
+      iconMenu.style.display = 'block';
+      iconClose.style.display = 'none';
+      toggle?.setAttribute('aria-expanded', 'false');
+      toggle?.setAttribute('aria-label', 'Ouvrir le menu');
+      mobileMenu?.setAttribute('aria-hidden', 'true');
+    });
+  });
+
+  // Scroll detection pour effet glassmorphism
+  const navbar = document.getElementById('navbar');
+  let lastScroll = 0;
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    
+    if (currentScroll > 50) {
+      navbar?.classList.add('scrolled');
+    } else {
+      navbar?.classList.remove('scrolled');
+    }
+    
+    lastScroll = currentScroll;
+  });
+
+  // Active link detection
+  const observerOptions = {
+    threshold: 0.5,
+    rootMargin: '-100px 0px -60% 0px'
+  };
+
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.wf-navbar__links a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${id}`) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, observerOptions);
+
+  sections.forEach(section => observer.observe(section));
+</script>

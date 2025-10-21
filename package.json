@@ -1,0 +1,49 @@
+{
+  "name": "astro-restaurant-template",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "predev": "node scripts/check-anim.mjs",
+    "gen:lqip": "node scripts/gen-lqip.mjs",
+    "gen:blur": "node scripts/gen-blurhash.mjs",
+    "optimize:uploads": "node scripts/optimize-uploads.mjs",
+    "watch:media": "chokidar \"public/{upload,uploads}/**/*.{jpg,jpeg,png,webp,avif}\" --ignore \"**/*.opt.webp\" --ignore \"**/*.opt.avif\" --await-write-finish=500 -c \"pnpm gen:lqip && pnpm gen:blur && pnpm optimize:uploads\"",
+    "dev": "pnpm watch:media & tinacms dev -c \"astro dev\"",
+    "dev:watch": "concurrently \"pnpm run dev\" \"node scripts/watch-webp.mjs\"",
+    "build": "pnpm gen:lqip && pnpm gen:blur && pnpm optimize:uploads && astro build",
+    "build:astro": "astro build",
+    "build:admin": "tinacms build",
+    "build:full": "node scripts/build-with-tina.mjs",
+    "preview": "astro preview",
+    "astro": "astro",
+    "content:create": "bash scripts/create-content.sh",
+    "images:convert": "node scripts/convert-to-webp.mjs",
+    "images:watch": "node scripts/watch-webp.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/image": "^0.18.0",
+    "@astrojs/react": "^4.3.1",
+    "@tinacms/react-core": "^0.43.0",
+    "@tinacms/react-sidebar": "^0.43.3",
+    "@tinacms/toolkit": "^1.7.13",
+    "@unpic/astro": "^1.0.1",
+    "astro": "^5.13.5",
+    "lucide-astro": "^0.545.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tinacms": "^2.8.3",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "@tinacms/cli": "^1.10.3",
+    "@types/node": "^24.5.0",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@unpic/placeholder": "^0.1.2",
+    "blurhash": "^2.0.5",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.2.1",
+    "sharp": "^0.34.4"
+  }
+}
