@@ -1,178 +1,149 @@
 {
   "sections": [
     {
-      "logo": "Template",
-      "links": [
+      "subtitle": "Nous contacter",
+      "title": "Vous avez une idée, un projet, ou simplement des questions ?",
+      "description": "Écrivez-nous ou appelez-nous, on sera ravi d'en discuter.",
+      "contactInfo": {
+        "email": "job@oveco.be",
+        "phone": "+32 473 / 68.99.02",
+        "location": "Région de Beauvechain"
+      },
+      "formAction": "#contact",
+      "_template": "contact"
+    },
+    {
+      "subtitle": "l'auto-construction",
+      "title": "Apprendre en faisant, construire en étant accompagné",
+      "description": "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat.",
+      "services": [
         {
-          "label": "Accueil",
-          "href": "#home"
+          "image": "/uploads/hero/wallpapper-op.jpg",
+          "alt": "Accompagnement personnalisé",
+          "title": "Accompagnement personnalisé",
+          "description": "Nous vous guidons à chaque étape de votre projet d'auto-construction."
         },
         {
-          "label": "Services",
-          "href": "#services"
-        },
-        {
-          "label": "Projets",
-          "href": "#projects"
+          "image": "/uploads/hero/wallpapper-op.jpg",
+          "alt": "Formation pratique",
+          "title": "Formation pratique",
+          "description": "Apprenez les techniques de construction directement sur le terrain."
         }
       ],
-      "_template": "navbar"
+      "ctaLabel": "En savoir plus",
+      "ctaHref": "#contact",
+      "_template": "autoconstruction"
     },
     {
-      "title": "Notre Équipe",
-      "subtitle": "Des experts passionnés",
-      "members": [
-        {
-          "name": "Alice Dupont",
-          "role": "CEO",
-          "bio": "Leader.",
-          "image": "/uploads/team/wallpapper-op.jpg"
-        },
-        {
-          "name": "aaa",
-          "role": "aaa",
-          "bio": "aaa",
-          "image": "/uploads/team/pic.jpg"
-        },
-        {
-          "name": "zzz",
-          "role": "zzz",
-          "bio": "zzzz",
-          "image": "/uploads/team/wallpapper-big.jpg"
-        },
-        {
-          "name": "ssss",
-          "role": "ssss",
-          "bio": "ssss",
-          "image": "/uploads/team/wp5823332-8k-desktop-hd-wallpapers.jpg"
-        },
-        {
-          "name": "hhh",
-          "role": "hhh",
-          "bio": "hhhh",
-          "image": "/uploads/team/wallpapper-op.jpg"
-        }
-      ],
-      "_template": "team"
-    },
-    {
-      "title": "Créez quelque chose d'extraordinaire",
-      "subtitle": "Template Astro - VDB Creation",
-      "description": "Un point de départ moderne et minimaliste pour vos projets web.",
-      "ctaLabel": "Découvrir",
-      "ctaHref": "#projects",
-      "heroImage": "/uploads/hero/wallpapper-op.jpg",
-      "_template": "hero"
-    },
-    {
-      "title": "Prêt à démarrer ?",
-      "subtitle": "Contactez-nous",
+      "subtitle": "Nos réalisations",
+      "title": "Des projets qui ont du sens",
+      "description": "Découvrez nos réalisations en auto-construction et rénovation durable.",
       "ctaLabel": "Nous contacter",
       "ctaHref": "#contact",
-      "_template": "cta"
+      "mediaLeft": {
+        "src": "/uploads/hero/wallpapper-op.jpg",
+        "alt": "Projet de construction"
+      },
+      "mediaRight": {
+        "src": "/uploads/hero/wallpapper-op.jpg",
+        "alt": "Projet terminé",
+        "overlay": true
+      },
+      "_template": "worksHero"
     },
     {
-      "title": "Nos Services",
-      "items": [
+      "subtitle": "Nos expertises",
+      "title": "Mettre la technique au service de projets humains et durables",
+      "description": "Chez Oveco, la technique n'est jamais un but en soi, mais toujours un moyen au service de vos projets.",
+      "cards": [
         {
-          "title": "Design UI/UX",
-          "description": "Création d'interfaces intuitives et esthétiques.",
-          "icon": "Palette"
+          "icon": "/uploads/icons/expertise1.jpg",
+          "alt": "Construction durable",
+          "title": "Construction durable",
+          "description": "Techniques et matériaux respectueux de l'environnement."
         },
         {
-          "title": "Développement Web",
-          "description": "Sites et applications web performants.",
-          "icon": "Code"
+          "icon": "/uploads/icons/expertise2.jpg",
+          "alt": "Auto-construction",
+          "title": "Auto-construction",
+          "description": "Accompagnement personnalisé pour vos projets d'auto-construction."
         }
       ],
-      "_template": "services"
+      "ctaLabel": "Découvrir toutes nos expertises",
+      "ctaHref": "#expertises-details",
+      "_template": "expertise"
     },
     {
-      "title": "Second Hero",
-      "subtitle": "Un autre hero pour démonstration",
-      "description": "Maintenant vous pouvez avoir plusieurs hero sections.",
-      "ctaLabel": "En savoir plus",
-      "ctaHref": "#about",
-      "_template": "hero"
-    },
-    {
-      "title": "Nos Réalisations",
-      "items": [
+      "title": "Statistiques du projet",
+      "stats": [
         {
-          "title": "Projet Alpha",
-          "category": "Web",
-          "description": "E-commerce.",
-          "image": "/uploads/team/wallpapper-big.jpg"
-        }
-      ],
-      "_template": "projects"
-    },
-    {
-      "title": "Ce que disent nos clients",
-      "items": [
+          "value": "+ de 45",
+          "label": "panneaux solaires",
+          "description": "Installés sur nos projets"
+        },
         {
-          "name": "Marie Dupont",
-          "role": "CEO",
-          "content": "Excellent travail.",
-          "rating": 5,
-          "projectRef": "content/projects/Test_project.json"
-        }
-      ],
-      "_template": "testimonials"
-    },
-    {
-      "title": "En chiffres",
-      "items": [
-        {
-          "value": "150+",
-          "label": "Projets",
-          "icon": "TrendingUp"
+          "value": "100%",
+          "label": "énergies renouvelables",
+          "description": "Dans nos nouvelles constructions"
         }
       ],
       "_template": "stats"
     },
     {
-      "title": "Questions Fréquentes",
-      "items": [
+      "subtitle": "Nos réalisations",
+      "title": "Ce sont plus que des projets, ce sont des collaborations",
+      "description": "Découvrez quelques-unes de nos réalisations récentes.",
+      "linkText": "En savoir plus",
+      "linkUrl": "/works",
+      "cards": [
         {
-          "question": "Délais ?",
-          "answer": "4 à 8 semaines."
-        }
-      ],
-      "_template": "faq"
-    },
-    {
-      "title": "Prêt à démarrer ?",
-      "subtitle": "Discutons ensemble",
-      "ctaLabel": "Contactez-nous",
-      "ctaHref": "#contact",
-      "_template": "cta"
-    },
-    {
-      "title": "Contact",
-      "subtitle": "Nous sommes là",
-      "email": "contact@example.com",
-      "phone": "+33 1 23 45 67 89",
-      "address": "123 Rue Example, Paris",
-      "_template": "contact"
-    },
-    {
-      "companyName": "Votre Entreprise",
-      "description": "Créateurs digitaux.",
-      "links": [
-        {
-          "label": "Accueil",
-          "href": "#home"
+          "image": "/uploads/projects/projet1.jpg",
+          "type": "Rénovation",
+          "client": "Famille Martin",
+          "title": "Maison passive à Beauvechain",
+          "url": "/work/maison-passive",
+          "description": "Rénovation complète d'une maison familiale avec isolation passive et panneaux solaires."
         },
         {
-          "label": "Contact",
-          "href": "#contact"
+          "image": "/uploads/projects/projet2.jpg",
+          "type": "Auto-construction",
+          "client": "Couple Dubois",
+          "title": "Extension écologique",
+          "url": "/work/extension-ecologique",
+          "description": "Accompagnement à l'auto-construction d'une extension en matériaux naturels."
         }
       ],
-      "socials": {
-        "github": "https://github.com",
-        "twitter": "https://twitter.com"
-      },
+      "_template": "projects"
+    },
+    {
+      "subtitle": "Qu'est-ce qui s'en dit ?",
+      "title": "Ce sont plus que des projets, ce sont des collaborations",
+      "description": "Découvrez les témoignages de nos clients satisfaits.",
+      "linkText": "En savoir plus",
+      "linkUrl": "#temoignages-complets",
+      "testimonials": [
+        {
+          "thumbnail": {
+            "src": "/uploads/testimonials/client1.jpg",
+            "alt": "Photo de Marie Dupont"
+          },
+          "client_name": "Marie Dupont",
+          "client_position": "Propriétaire",
+          "client_company": "Maison passive Beauvechain",
+          "content": "Oveco nous a accompagnés dans notre projet de rénovation passive. Leur expertise et leur disponibilité ont fait toute la différence.",
+          "card_content": "Excellent accompagnement pour notre projet de rénovation passive.",
+          "linked_project": {
+            "title": "Maison passive à Beauvechain",
+            "link": "/work/maison-passive"
+          }
+        }
+      ],
+      "_template": "testimonials"
+    },
+    {
+      "copyrightYear": 2024,
+      "companyName": "Oveco",
+      "legalText": "All Rights Reserved | Terms and Conditions | Privacy Policy",
       "_template": "footer"
     }
   ]

@@ -1,0 +1,185 @@
+---
+/**
+ * TestimonialItem Component - Oveco
+ * Item de témoignage détaillé avec citation, auteur et note
+ * 
+ * @component
+ * @tinacms Utilisé dans templates de témoignages
+ */
+
+export interface Props {
+  testimonial: {
+    content: string;
+    client_name?: string;
+    client_position?: string;
+    client_company?: string;
+    thumbnail?: {
+      src: string;
+      alt: string;
+    };
+    rating?: number;
+    stars_html?: string;
+    linked_project?: {
+      title: string;
+      link: string;
+    };
+    priority?: {
+      slug: string;
+    };
+  };
+  show_rating?: boolean;
+  show_project?: boolean;
+}
+
+const { testimonial, show_rating = false, show_project = false } = Astro.props;
+
+// Convertir les sauts de ligne en <br> pour la citation
+const formattedContent = testimonial.content.replace(/\n/g, '<br>');
+---
+
+<article class:list={[
+  'testimonial-item',
+  testimonial.priority && `testimonial-item--${testimonial.priority.slug}`
+]}>
+  <div class="testimonial-item__content">
+    <blockquote class="testimonial__quote" set:html={formattedContent} />
+    
+    <div class="testimonial-item__meta">
+      <div class="testimonial__client">
+        {testimonial.thumbnail && (
+          <img 
+            src={testimonial.thumbnail.src} 
+            alt={testimonial.thumbnail.alt || testimonial.client_name || 'Client'}
+            class="testimonial__avatar"
+            loading="lazy"
+          />
+        )}
+        
+        <div class="testimonial__details">
+          {testimonial.client_name && (
+            <cite class="testimonial__author">{testimonial.client_name}</cite>
+          )}
+          
+          {(testimonial.client_position || testimonial.client_company) && (
+            <span class="testimonial__company">
+              {testimonial.client_position && <>{testimonial.client_position}</>}
+              {testimonial.client_position && testimonial.client_company && <>, </>}
+              {testimonial.client_company && <>{testimonial.client_company}</>}
+            </span>
+          )}
+        </div>
+      </div>
+      
+      {show_rating && testimonial.rating && testimonial.stars_html && (
+        <div class="testimonial__rating" set:html={testimonial.stars_html} />
+      )}
+      
+      {show_project && testimonial.linked_project && (
+        <div class="testimonial__project">
+          <a href={testimonial.linked_project.link}>
+            Voir le projet: {testimonial.linked_project.title}
+          </a>
+        </div>
+      )}
+    </div>
+  </div>
+</article>
+
+<style>
+  .testimonial-item {
+    background: var(--oveco-white);
+    border-radius: var(--oveco-radius);
+    padding: var(--oveco-space-5);
+    box-shadow: var(--oveco-shadow-light);
+  }
+
+  .testimonial-item__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oveco-space-4);
+  }
+
+  .testimonial__quote {
+    color: var(--oveco-secondary);
+    font-size: var(--oveco-font-p-large);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-regular);
+    line-height: var(--oveco-line-relaxed);
+    margin: 0;
+    font-style: italic;
+  }
+
+  .testimonial-item__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oveco-space-3);
+  }
+
+  .testimonial__client {
+    display: flex;
+    align-items: center;
+    gap: var(--oveco-space-3);
+  }
+
+  .testimonial__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .testimonial__details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oveco-space-1);
+  }
+
+  .testimonial__author {
+    color: var(--oveco-secondary);
+    font-size: var(--oveco-font-p);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-bold);
+    font-style: normal;
+  }
+
+  .testimonial__company {
+    color: var(--oveco-text);
+    font-size: var(--oveco-font-p-small);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-regular);
+  }
+
+  .testimonial__rating {
+    display: flex;
+    gap: var(--oveco-space-1);
+  }
+
+  .testimonial__project a {
+    color: var(--oveco-accent);
+    font-size: var(--oveco-font-p);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-semibold);
+    text-decoration: none;
+    transition: var(--oveco-transition-fast);
+  }
+
+  .testimonial__project a:hover {
+    text-decoration: underline;
+  }
+
+  .testimonial__project a:focus {
+    outline: 2px solid var(--oveco-accent);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  /* Variantes de priorité */
+  .testimonial-item--high {
+    border-left: 4px solid var(--oveco-accent);
+  }
+
+  .testimonial-item--featured {
+    background: var(--oveco-colored-white);
+    box-shadow: var(--oveco-shadow-medium);
+  }
+</style>

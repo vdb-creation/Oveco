@@ -75,209 +75,153 @@ export default defineConfig({
               },
             } as any,
             templates: [
-              // NAVBAR
-              {
-                name: "navbar",
-                label: "Navigation",
-                fields: [
-                  { type: "string", name: "logo", label: "Logo / Nom", required: true },
-                  {
-                    type: "object",
-                    name: "links",
-                    label: "Liens de navigation",
-                    list: true,
-                    ui: {
-                      itemProps: (item: any) => ({ label: item?.label || "Lien" }),
-                    },
-                    fields: [
-                      { type: "string", name: "label", label: "Libellé", required: true },
-                      { type: "string", name: "href", label: "Lien", required: true },
-                    ],
-                  },
-                ],
-                ui: {
-                  defaultItem: {
-                    logo: "Template",
-                    links: [
-                      { label: "Accueil", href: "#home" },
-                      { label: "Services", href: "#services" },
-                    ],
-                  },
-                },
-              },
+              // ==================== COMPOSANTS OVECO ====================
 
-              // HERO
+              // CONTACT
               {
-                name: "hero",
-                label: "Hero",
+                name: "contact",
+                label: "Contact",
                 fields: [
-                  { type: "string", name: "title", label: "Titre principal" },
                   { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
                   { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
-                  { type: "string", name: "ctaLabel", label: "Texte du bouton" },
-                  { type: "string", name: "ctaHref", label: "Lien du bouton" },
-                  imageField("backgroundImage", "Image de fond (optionnelle)", "hero"),
-                  imageField("heroImage", "Image principale (optionnelle)", "hero"),
+                  {
+                    type: "object",
+                    name: "contactInfo",
+                    label: "Informations de contact",
+                    fields: [
+                      { type: "string", name: "email", label: "Email" },
+                      { type: "string", name: "phone", label: "Téléphone" },
+                      { type: "string", name: "location", label: "Localisation" },
+                    ],
+                  },
+                  { type: "string", name: "formAction", label: "Action du formulaire (URL)" },
                 ],
                 ui: {
                   defaultItem: {
-                    title: "Nouveau Hero",
-                    subtitle: "Sous-titre",
-                    description: "Description...",
-                    ctaLabel: "Découvrir",
-                    ctaHref: "#",
+                    subtitle: "Nous contacter",
+                    title: "Vous avez une idée, un projet, ou simplement des questions ?",
+                    description: "Écrivez-nous ou appelez-nous, on sera ravi d'en discuter.",
+                    contactInfo: {
+                      email: "job@oveco.be",
+                      phone: "+32 473 / 68.99.02",
+                      location: "Région de Beauvechain",
+                    },
+                    formAction: "#contact",
                   },
                 },
               },
 
-              // SERVICES
+              // AUTOCONSTRUCTION
               {
-                name: "services",
-                label: "Services",
+                name: "autoconstruction",
+                label: "Auto-construction",
                 fields: [
-                  { type: "string", name: "title", label: "Titre de la section" },
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
                   {
                     type: "object",
-                    name: "items",
+                    name: "services",
                     label: "Services",
                     list: true,
                     ui: { itemProps: (item: any) => ({ label: item?.title || "Service" }) },
                     fields: [
+                      imageField("image", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
                       { type: "string", name: "title", label: "Titre" },
                       { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
-                      { type: "string", name: "icon", label: "Icône", options: ["Palette","Code","Smartphone","Rocket","Zap","Shield","Heart","Check"] },
                     ],
                   },
+                  { type: "string", name: "ctaLabel", label: "Texte du bouton" },
+                  { type: "string", name: "ctaHref", label: "Lien du bouton" },
                 ],
                 ui: {
                   defaultItem: {
-                    title: "Nos Services",
-                    items: [
-                      { title: "Service 1", description: "Description...", icon: "Code" },
-                    ],
+                    subtitle: "l'auto-construction",
+                    title: "Apprendre en faisant, construire en étant accompagné",
+                    description: "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat.",
+                    services: [],
+                    ctaLabel: "En savoir plus",
+                    ctaHref: "#contact",
                   },
                 },
               },
 
-              // FEATURES
+              // WORKS HERO
               {
-                name: "features",
-                label: "Fonctionnalités",
+                name: "worksHero",
+                label: "Hero Réalisations",
                 fields: [
-                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "id", label: "ID (aria-labelledby)" },
                   { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  { type: "string", name: "ctaLabel", label: "Texte du bouton" },
+                  { type: "string", name: "ctaHref", label: "Lien du bouton" },
                   {
                     type: "object",
-                    name: "items",
-                    label: "Fonctionnalités",
-                    list: true,
-                    ui: { itemProps: (item: any) => ({ label: item?.title || "Feature" }) },
+                    name: "mediaLeft",
+                    label: "Image gauche",
                     fields: [
-                      { type: "string", name: "title", label: "Titre" },
-                      { type: "string", name: "description", label: "Description" },
-                      { type: "string", name: "icon", label: "Icône", options: ["Check","Zap","Shield","Heart"] },
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "mediaRight",
+                    label: "Image droite",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                      { type: "boolean", name: "overlay", label: "Appliquer un overlay" },
                     ],
                   },
                 ],
                 ui: {
                   defaultItem: {
-                    title: "Fonctionnalités",
-                    subtitle: "Ce que nous offrons",
-                    items: [{ title: "Feature 1", description: "Description...", icon: "Check" }],
+                    subtitle: "Nos réalisations",
+                    title: "Des projets qui ont du sens",
+                    description: "Description courte...",
+                    ctaLabel: "Nous contacter",
+                    ctaHref: "#contact",
                   },
                 },
               },
 
-              // TEAM
+              // EXPERTISE
               {
-                name: "team",
-                label: "Équipe",
+                name: "expertise",
+                label: "Expertises",
                 fields: [
-                  { type: "string", name: "title", label: "Titre" },
                   { type: "string", name: "subtitle", label: "Sous-titre" },
-                  {
-                    type: "object",
-                    name: "members",
-                    label: "Membres",
-                    list: true,
-                    ui: { itemProps: (item: any) => ({ label: item?.name || "Membre" }) },
-                    fields: [
-                      { type: "string", name: "name", label: "Nom", required: true },
-                      { type: "string", name: "role", label: "Poste" },
-                      { type: "string", name: "bio", label: "Bio", ui: { component: "textarea" } },
-                      imageField("image", "Photo", "team"),
-                    ],
-                  },
-                ],
-                ui: {
-                  defaultItem: {
-                    title: "Notre Équipe",
-                    subtitle: "Des experts à votre service",
-                    members: [{ name: "Nouveau membre", role: "Poste" }],
-                  },
-                },
-              },
-
-              // PROJECTS
-              {
-                name: "projects",
-                label: "Projets",
-                fields: [
                   { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
                   {
                     type: "object",
-                    name: "items",
-                    label: "Projets",
+                    name: "cards",
+                    label: "Cartes d'expertise",
                     list: true,
-                    ui: { itemProps: (item: any) => ({ label: item?.title || "Projet" }) },
+                    ui: { itemProps: (item: any) => ({ label: item?.title || "Expertise" }) },
                     fields: [
+                      imageField("icon", "Icône", "icons"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
                       { type: "string", name: "title", label: "Titre" },
-                      { type: "string", name: "category", label: "Catégorie" },
-                      { type: "string", name: "description", label: "Description" },
-                      { type: "reference", name: "projectRef", label: "Projet lié (global)", collections: ["projects"] },
-                      imageField("image", "Image", "projects"),
+                      { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
                     ],
                   },
+                  { type: "string", name: "ctaLabel", label: "Texte du bouton" },
+                  { type: "string", name: "ctaHref", label: "Lien du bouton" },
                 ],
                 ui: {
                   defaultItem: {
-                    title: "Nos Réalisations",
-                    items: [{ title: "Projet 1", category: "Web", description: "Description..." }],
-                  },
-                },
-              },
-
-              // TESTIMONIALS
-              {
-                name: "testimonials",
-                label: "Témoignages",
-                fields: [
-                  { type: "string", name: "title", label: "Titre" },
-                  {
-                    type: "object",
-                    name: "items",
-                    label: "Témoignages",
-                    list: true,
-                    ui: { itemProps: (item: any) => ({ label: item?.name || "Témoignage" }) },
-                    fields: [
-                      { type: "string", name: "name", label: "Nom", required: true },
-                      { type: "string", name: "role", label: "Poste" },
-                      { type: "string", name: "content", label: "Contenu", ui: { component: "textarea" } },
-                      { type: "number", name: "rating", label: "Note (sur 5)" },
-                      {
-                        type: "reference",
-                        name: "projectRef",
-                        label: "Projet lié",
-                        collections: ["projects"],
-                      },
-                      imageField("avatar", "Avatar", "testimonials"),
-                    ],
-                  },
-                ],
-                ui: {
-                  defaultItem: {
-                    title: "Ce que disent nos clients",
-                    items: [{ name: "Client 1", role: "CEO", content: "Excellent travail", rating: 5 }],
+                    subtitle: "Nos expertises",
+                    title: "Mettre la technique au service de projets humains et durables",
+                    description: "Chez Oveco, la technique n'est jamais un but en soi...",
+                    cards: [],
+                    ctaLabel: "Découvrir toutes nos expertises",
+                    ctaHref: "#expertises-details",
                   },
                 },
               },
@@ -287,92 +231,318 @@ export default defineConfig({
                 name: "stats",
                 label: "Statistiques",
                 fields: [
-                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "title", label: "Titre (caché visuellement)" },
                   {
                     type: "object",
-                    name: "items",
-                    label: "Stats",
+                    name: "stats",
+                    label: "Statistiques",
                     list: true,
-                    ui: { itemProps: (item: any) => ({ label: item?.label || item?.value || "Stat" }) },
+                    ui: { itemProps: (item: any) => ({ label: item?.value || "Stat" }) },
                     fields: [
                       { type: "string", name: "value", label: "Valeur", required: true },
-                      { type: "string", name: "label", label: "Libellé" },
-                      { type: "string", name: "icon", label: "Icône", options: ["TrendingUp","Award","Users","Clock"] },
+                      { type: "string", name: "label", label: "Libellé", required: true },
+                      { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
                     ],
                   },
                 ],
                 ui: {
                   defaultItem: {
-                    title: "En chiffres",
-                    items: [{ value: "100+", label: "Clients satisfaits", icon: "Award" }],
+                    title: "Statistiques du projet",
+                    stats: [
+                      { value: "+ de 45", label: "panneaux solaires", description: "" },
+                    ],
                   },
                 },
               },
 
-              // FAQ
+              // COMPETENCES
               {
-                name: "faq",
-                label: "FAQ",
+                name: "competences",
+                label: "Compétences",
                 fields: [
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "competences",
+                    label: "Compétences",
+                    list: true,
+                    ui: { itemProps: (item: any) => ({ label: item?.title || "Compétence" }) },
+                    fields: [
+                      imageField("image", "Image/Icône", "icons"),
+                      { type: "string", name: "title", label: "Titre" },
+                      { type: "string", name: "url", label: "Lien (optionnel)" },
+                      { type: "string", name: "description", label: "Description (alternative au lien)", ui: { component: "textarea" } },
+                    ],
+                  },
+                ],
+                ui: {
+                  defaultItem: {
+                    subtitle: "Nom du client",
+                    title: "Titre narratif",
+                    competences: [],
+                  },
+                },
+              },
+
+              // CERTIFICATIONS
+              {
+                name: "certifications",
+                label: "Certifications",
+                fields: [
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "cards",
+                    label: "Cartes de certification",
+                    list: true,
+                    ui: { itemProps: (item: any) => ({ label: `Certification ${item?._order || ''}` }) },
+                    fields: [
+                      imageField("image", "Image/Logo", "certifications"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                    ],
+                  },
+                ],
+                ui: {
+                  defaultItem: {
+                    title: "Des certifications à l'échelle européenne",
+                    description: "Notre savoir-faire est reconnu...",
+                    cards: [{}, {}, {}],
+                  },
+                },
+              },
+
+              // GALLERIE
+              {
+                name: "gallerie",
+                label: "Galerie d'images",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
                   {
                     type: "object",
-                    name: "items",
-                    label: "Questions",
+                    name: "gallery",
+                    label: "Images",
                     list: true,
-                    ui: { itemProps: (item: any) => ({ label: item?.question || "Question" }) },
+                    ui: { itemProps: (item: any) => ({ label: item?.alt || "Image" }) },
                     fields: [
-                      { type: "string", name: "question", label: "Question", required: true },
-                      { type: "string", name: "answer", label: "Réponse", ui: { component: "textarea" } },
+                      imageField("src", "Image", "gallery"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                      { type: "string", name: "mod", label: "Variante de layout", options: ["a", "b", "c", "d"] },
                     ],
                   },
                 ],
                 ui: {
                   defaultItem: {
-                    title: "Questions fréquentes",
-                    items: [{ question: "Question ?", answer: "Réponse..." }],
+                    subtitle: "Galerie",
+                    title: "Quelques photos du projet",
+                    gallery: [],
                   },
                 },
               },
 
-              // CTA
+              // TEXT IMAGE
               {
-                name: "cta",
-                label: "Call to Action",
+                name: "textImage",
+                label: "Texte + Image",
                 fields: [
-                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "sectionSubtitle", label: "Sous-titre de section" },
+                  { type: "string", name: "sectionTitle", label: "Titre de section" },
+                  { type: "string", name: "sectionDescription", label: "Description de section", ui: { component: "textarea" } },
+                  { type: "boolean", name: "showSectionHeader", label: "Afficher le header de section" },
                   { type: "string", name: "subtitle", label: "Sous-titre" },
-                  { type: "string", name: "ctaLabel", label: "Texte du bouton" },
-                  { type: "string", name: "ctaHref", label: "Lien du bouton" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "link",
+                    label: "Lien",
+                    fields: [
+                      { type: "string", name: "label", label: "Texte du lien" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "image",
+                    label: "Image",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                      { type: "string", name: "loading", label: "Chargement", options: ["lazy", "eager"] },
+                    ],
+                  },
+                  { type: "boolean", name: "reverse", label: "Inverser l'ordre (image à gauche)" },
+                  { type: "boolean", name: "duplicate", label: "Ajouter un second bloc" },
+                  { type: "string", name: "subtitle2", label: "Sous-titre du 2e bloc" },
+                  { type: "string", name: "title2", label: "Titre du 2e bloc" },
+                  { type: "string", name: "description2", label: "Description du 2e bloc", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "link2",
+                    label: "Lien du 2e bloc",
+                    fields: [
+                      { type: "string", name: "label", label: "Texte du lien" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "image2",
+                    label: "Image du 2e bloc",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                    ],
+                  },
                 ],
                 ui: {
                   defaultItem: {
-                    title: "Prêt à démarrer ?",
-                    subtitle: "Contactez-nous",
-                    ctaLabel: "Nous contacter",
-                    ctaHref: "#contact",
+                    showSectionHeader: true,
+                    reverse: false,
+                    duplicate: false,
                   },
                 },
               },
 
-              // CONTACT
+              // PROJECTS
               {
-                name: "contact",
-                label: "Contact",
+                name: "projects",
+                label: "Projets",
                 fields: [
-                  { type: "string", name: "title", label: "Titre" },
                   { type: "string", name: "subtitle", label: "Sous-titre" },
-                  { type: "string", name: "email", label: "Email" },
-                  { type: "string", name: "phone", label: "Téléphone" },
-                  { type: "string", name: "address", label: "Adresse" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  { type: "string", name: "linkText", label: "Texte du lien" },
+                  { type: "string", name: "linkUrl", label: "URL du lien" },
+                  {
+                    type: "object",
+                    name: "cards",
+                    label: "Cartes de projets",
+                    list: true,
+                    ui: { itemProps: (item: any) => ({ label: item?.title || "Projet" }) },
+                    fields: [
+                      imageField("image", "Image", "projects"),
+                      { type: "string", name: "type", label: "Type de projet" },
+                      { type: "string", name: "client", label: "Client" },
+                      { type: "string", name: "title", label: "Titre" },
+                      { type: "string", name: "url", label: "URL", required: true },
+                      { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                    ],
+                  },
                 ],
                 ui: {
                   defaultItem: {
-                    title: "Contact",
-                    subtitle: "Nous écrire",
-                    email: "contact@example.com",
-                    phone: "+33 1 23 45 67 89",
-                    address: "123 Rue Example, Paris",
+                    subtitle: "Nos réalisations",
+                    title: "Ce sont plus que des projets, ce sont des collaborations",
+                    linkText: "En savoir plus",
+                    linkUrl: "/works",
+                    cards: [],
+                  },
+                },
+              },
+
+              // TESTIMONIALS
+              {
+                name: "testimonials",
+                label: "Témoignages",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  { type: "string", name: "linkText", label: "Texte du lien" },
+                  { type: "string", name: "linkUrl", label: "URL du lien" },
+                  {
+                    type: "object",
+                    name: "testimonials",
+                    label: "Témoignages",
+                    list: true,
+                    ui: { itemProps: (item: any) => ({ label: item?.client_name || "Témoignage" }) },
+                    fields: [
+                      {
+                        type: "object",
+                        name: "thumbnail",
+                        label: "Image/Photo",
+                        fields: [
+                          imageField("src", "Image", "testimonials"),
+                          { type: "string", name: "alt", label: "Texte alternatif" },
+                        ],
+                      },
+                      { type: "string", name: "client_name", label: "Nom du client" },
+                      { type: "string", name: "client_position", label: "Poste du client" },
+                      { type: "string", name: "client_company", label: "Entreprise du client" },
+                      { type: "string", name: "content", label: "Contenu du témoignage", ui: { component: "textarea" } },
+                      { type: "string", name: "card_content", label: "Contenu carte (court)", ui: { component: "textarea" } },
+                      { type: "string", name: "link", label: "Lien vers le témoignage complet" },
+                      {
+                        type: "object",
+                        name: "linked_project",
+                        label: "Projet lié",
+                        fields: [
+                          { type: "string", name: "title", label: "Titre du projet" },
+                          { type: "string", name: "link", label: "Lien du projet" },
+                        ],
+                      },
+                      {
+                        type: "object",
+                        name: "priority",
+                        label: "Priorité",
+                        fields: [
+                          { type: "string", name: "slug", label: "Slug", options: ["high", "featured", "normal"] },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+                ui: {
+                  defaultItem: {
+                    subtitle: "Qu'est-ce qui s'en dit ?",
+                    title: "Ce sont plus que des projets, ce sont des collaborations",
+                    linkText: "En savoir plus",
+                    linkUrl: "#temoignages-complets",
+                    testimonials: [],
+                  },
+                },
+              },
+
+              // SIMPLE COMPETENCE
+              {
+                name: "simpleCompetence",
+                label: "Compétence Simple",
+                fields: [
+                  { type: "string", name: "number", label: "Numéro/Kicker", required: true },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "cta",
+                    label: "Call to Action",
+                    fields: [
+                      { type: "string", name: "label", label: "Texte du bouton", required: true },
+                      { type: "string", name: "url", label: "URL", required: true },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "image",
+                    label: "Image",
+                    fields: [
+                      imageField("src", "Image", "competences"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                      { type: "boolean", name: "isPng", label: "Est PNG (sans rotation)" },
+                      { type: "boolean", name: "rotate180", label: "Rotation 180°" },
+                    ],
+                  },
+                ],
+                ui: {
+                  defaultItem: {
+                    number: "Compétence 1",
+                    title: "Titre de la compétence",
+                    description: "Description lorem ipsum...",
+                    cta: { label: "Nous contacter", url: "#contact" },
+                    image: { alt: "Icône compétence" },
                   },
                 },
               },
@@ -380,41 +550,17 @@ export default defineConfig({
               // FOOTER
               {
                 name: "footer",
-                label: "Pied de page",
+                label: "Footer",
                 fields: [
-                  { type: "string", name: "companyName", label: "Nom de l'entreprise", required: true },
-                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
-                  {
-                    type: "object",
-                    name: "links",
-                    label: "Liens",
-                    list: true,
-                    ui: { itemProps: (item: any) => ({ label: item?.label || "Lien" }) },
-                    fields: [
-                      { type: "string", name: "label", label: "Libellé", required: true },
-                      { type: "string", name: "href", label: "Lien", required: true },
-                    ],
-                  },
-                  {
-                    type: "object",
-                    name: "socials",
-                    label: "Réseaux sociaux",
-                    fields: [
-                      { type: "string", name: "github", label: "GitHub" },
-                      { type: "string", name: "twitter", label: "Twitter" },
-                      { type: "string", name: "linkedin", label: "LinkedIn" },
-                    ],
-                  },
+                  { type: "number", name: "copyrightYear", label: "Année de copyright" },
+                  { type: "string", name: "companyName", label: "Nom de l'entreprise" },
+                  { type: "string", name: "legalText", label: "Texte légal", ui: { component: "textarea" } },
                 ],
                 ui: {
                   defaultItem: {
-                    companyName: "Votre Entreprise",
-                    description: "Créateurs d'expériences digitales",
-                    links: [
-                      { label: "Accueil", href: "#home" },
-                      { label: "Contact", href: "#contact" },
-                    ],
-                    socials: {},
+                    copyrightYear: new Date().getFullYear(),
+                    companyName: "Oveco",
+                    legalText: "All Rights Reserved | Terms and Conditions | Privacy Policy",
                   },
                 },
               },

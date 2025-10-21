@@ -1,0 +1,499 @@
+---
+/**
+ * Projects Section - Oveco
+ * Section des projets avec grille responsive et navigation
+ * 
+ * @component
+ * @tinacms Template : projects
+ */
+
+import Card from './Card.astro';
+
+export interface Props {
+  subtitle?: string;
+  title: string;
+  description?: string;
+  linkText?: string;
+  linkUrl?: string;
+  cards?: Array<{
+    image: string;
+    type?: string;
+    client?: string;
+    title: string;
+    url: string;
+    description?: string;
+  }>;
+}
+
+const { 
+  subtitle = "Nos réalisations",
+  title,
+  description,
+  linkText = "En savoir plus",
+  linkUrl = "/works",
+  cards = []
+} = Astro.props;
+
+// Sécuriser cards pour éviter les erreurs null/undefined
+const safeCards = Array.isArray(cards) ? cards : [];
+
+// ID unique pour l'accessibilité
+const sectionId = 'projets';
+const titleId = `${sectionId}-title`;
+---
+
+<section 
+  class="projects-section" 
+  id={sectionId}
+  itemscope 
+  itemtype="https://schema.org/ItemList"
+>
+  <div class="projects">
+    <div class="projects__container">
+      <header class="projects__header">
+        <div class="projects__header-content">
+          <p class="projects__subtitle">{subtitle}</p>
+          <h2 class="projects__title" id={titleId} itemprop="name">{title}</h2>
+          {description && (
+            <p class="projects__description" itemprop="description">{description}</p>
+          )}
+          <a 
+            href={linkUrl} 
+            class="projects__link" 
+            aria-label="Voir tous nos projets (page Réalisations)"
+          >
+            <span>{linkText}</span>
+            <svg 
+              class="projects__link-arrow" 
+              width="10" 
+              height="9" 
+              viewBox="0 0 10 9" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              aria-hidden="true"
+            >
+              <path 
+                d="M1 4.5H9M9 4.5L5.5 1M9 4.5L5.5 8" 
+                stroke="#048B9A" 
+                stroke-width="1.5" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+        </div>
+        
+        <div class="projects__navigation" role="navigation" aria-label="Navigation des projets">
+          <button 
+            class="projects__nav-btn projects__nav-btn--prev" 
+            aria-label="Projet précédent" 
+            type="button"
+            data-scroll-dir="prev"
+          >
+            <svg 
+              width="11" 
+              height="21" 
+              viewBox="0 0 11 21" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              aria-hidden="true"
+            >
+              <path 
+                d="M10 1L1 10.5L10 20" 
+                stroke="#FFFEF8" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <button 
+            class="projects__nav-btn projects__nav-btn--next" 
+            aria-label="Projet suivant" 
+            type="button"
+            data-scroll-dir="next"
+          >
+            <svg 
+              width="11" 
+              height="21" 
+              viewBox="0 0 11 21" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              aria-hidden="true"
+            >
+              <path 
+                d="M1 1L10 10.5L1 20" 
+                stroke="#FFFEF8" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div 
+        class="projects__grid" 
+        role="list" 
+        aria-labelledby={titleId}
+        data-projects-grid
+      >
+        {safeCards.length > 0 ? (
+          safeCards.map((card) => (
+            <Card {...card} />
+          ))
+        ) : (
+          <p>Aucun projet n'a été ajouté</p>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Navigation du carrousel de projets sur mobile
+  function initProjectsNavigation() {
+    const grid = document.querySelector('[data-projects-grid]') as HTMLElement;
+    if (!grid) return;
+
+    const prevBtn = document.querySelector('.projects__nav-btn--prev') as HTMLButtonElement;
+    const nextBtn = document.querySelector('.projects__nav-btn--next') as HTMLButtonElement;
+
+    if (!prevBtn || !nextBtn) return;
+
+    // Vérifier si on est en mode mobile (carrousel)
+    const isMobile = () => window.innerWidth <= 480;
+
+    if (isMobile()) {
+      const scrollAmount = window.innerWidth * 0.8 + 14; // 80% width + gap
+
+      prevBtn.addEventListener('click', () => {
+        grid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      });
+
+      nextBtn.addEventListener('click', () => {
+        grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      });
+
+      // Drag to scroll
+      let isDown = false;
+      let startX: number;
+      let scrollLeft: number;
+
+      grid.addEventListener('mousedown', (e) => {
+        isDown = true;
+        grid.classList.add('is-grabbing');
+        startX = e.pageX - grid.offsetLeft;
+        scrollLeft = grid.scrollLeft;
+      });
+
+      grid.addEventListener('mouseleave', () => {
+        isDown = false;
+        grid.classList.remove('is-grabbing');
+      });
+
+      grid.addEventListener('mouseup', () => {
+        isDown = false;
+        grid.classList.remove('is-grabbing');
+      });
+
+      grid.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - grid.offsetLeft;
+        const walk = (x - startX) * 2;
+        grid.scrollLeft = scrollLeft - walk;
+      });
+
+      // Touch events
+      grid.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].pageX - grid.offsetLeft;
+        scrollLeft = grid.scrollLeft;
+      });
+
+      grid.addEventListener('touchmove', (e) => {
+        const x = e.touches[0].pageX - grid.offsetLeft;
+        const walk = (x - startX) * 2;
+        grid.scrollLeft = scrollLeft - walk;
+      });
+    }
+  }
+
+  // Initialiser au chargement de la page
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProjectsNavigation);
+  } else {
+    initProjectsNavigation();
+  }
+</script>
+
+<style>
+  .projects-section {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    background: var(--oveco-white);
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    display: flex;
+  }
+
+  .projects__container {
+    width: 100%;
+    max-width: 1589px;
+    padding: 57px 109px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 89px;
+    display: flex;
+    box-sizing: border-box;
+  }
+
+  .projects__header {
+    width: 100%;
+    max-width: 1219px;
+    justify-content: space-between;
+    align-items: flex-end;
+    display: flex;
+  }
+
+  .projects__header-content {
+    width: 589px;
+    max-width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 11px;
+    display: flex;
+  }
+
+  .projects__subtitle {
+    color: var(--oveco-text);
+    font-size: var(--oveco-font-h3);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-bold);
+    text-transform: uppercase;
+    line-height: 20px;
+    letter-spacing: 1.92px;
+    margin: 0;
+  }
+
+  .projects__title {
+    align-self: stretch;
+    color: var(--oveco-secondary);
+    font-size: var(--oveco-font-h2);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-extrabold);
+    line-height: 47.77px;
+    margin: 0;
+  }
+
+  .projects__description {
+    align-self: stretch;
+    color: var(--oveco-secondary);
+    font-size: var(--oveco-font-p);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-regular);
+    line-height: 28.80px;
+    margin: 0;
+  }
+
+  .projects__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: none;
+    line-height: 1;
+  }
+
+  .projects__link:focus {
+    outline: 2px solid var(--oveco-accent);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  .projects__link span {
+    color: var(--oveco-accent);
+    font-size: var(--oveco-font-p);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-bold);
+    line-height: 19.20px;
+    text-align: center;
+  }
+
+  .projects__link-arrow {
+    width: 10px;
+    height: 8.57px;
+    flex-shrink: 0;
+    display: block;
+    transform: translateY(0.5px);
+  }
+
+  .projects__navigation {
+    width: 400px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 28px;
+    display: flex;
+    position: relative;
+    z-index: 2;
+  }
+
+  .projects__nav-btn {
+    width: 64px;
+    height: 64px;
+    background: var(--oveco-secondary);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: none;
+    position: relative;
+  }
+
+  .projects__nav-btn:hover {
+    background: var(--oveco-accent);
+  }
+
+  .projects__nav-btn:focus {
+    outline: 2px solid var(--oveco-accent);
+    outline-offset: 4px;
+  }
+
+  .projects__nav-btn svg {
+    width: 11px;
+    height: 21px;
+  }
+
+  .projects__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(388px, 388px));
+    gap: 24px;
+    width: 100%;
+    align-items: start;
+    justify-content: start;
+  }
+
+  .projects__grid.is-grabbing {
+    cursor: grabbing;
+  }
+
+  /* Responsive */
+  @media (max-width: 1400px) {
+    .projects__container {
+      padding: 50px 80px;
+      gap: 70px;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .projects__container {
+      padding: 45px 60px;
+      gap: 60px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .projects__container {
+      padding: 40px 40px;
+      gap: 50px;
+    }
+    .projects__grid {
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .projects__container {
+      padding: 35px 2rem;
+      gap: 40px;
+    }
+    .projects__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 30px;
+    }
+    .projects__header-content {
+      width: 100%;
+    }
+    .projects__subtitle {
+      font-size: 17px;
+      letter-spacing: 1.5px;
+    }
+    .projects__title {
+      font-size: 32px;
+      line-height: 38px;
+    }
+    .projects__description {
+      font-size: 15px;
+      line-height: 26px;
+    }
+    .projects__navigation {
+      width: auto;
+      justify-content: flex-start;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .projects__container {
+      padding: 30px 1rem;
+      gap: 35px;
+    }
+    .projects__subtitle {
+      font-size: 15px;
+      line-height: 18px;
+      letter-spacing: 1.2px;
+    }
+    .projects__title {
+      font-size: 26px;
+      line-height: 30px;
+    }
+    .projects__description {
+      font-size: 14px;
+      line-height: 24px;
+    }
+    .projects__navigation {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      gap: 16px;
+      margin-top: 8px;
+      z-index: 2;
+    }
+    .projects__grid {
+      display: flex;
+      align-items: stretch;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      gap: 14px;
+      padding-right: 1rem;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .projects__grid::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+  }
+
+  /* Accessibilité - Réduire les animations */
+  @media (prefers-reduced-motion: reduce) {
+    .projects__grid {
+      scroll-behavior: auto;
+    }
+    .projects__nav-btn,
+    .projects__link {
+      transition: none !important;
+    }
+  }
+</style>

@@ -1,19 +1,21 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
+// Composants Oveco migrés
 import {
-  Navbar,
-  Hero,
-  Services,
-  Features,
-  Team,
-  ProjectShowcase,
-  Testimonials,
-  Stats,
-  FAQ,
-  CTA,
+  Autoconstruction,
+  WorksHero,
   Contact,
-  WireframeFooter,
+  Expertise,
+  Stats,
+  Competences,
+  Certifications,
+  Gallerie,
+  TextImage,
+  Projects,
+  Testimonials,
+  SimpleCompetence,
+  Footer,
 } from '../../components';
 
 import { client } from '../../../tina/__generated__/client';
@@ -65,51 +67,171 @@ console.log('[i18n index.astro] lang:', currentLang, 'homeQ:', !!homeQ);
     const typename = section?.__typename || '';
     const template = section?._template || typename.replace('HomeSections', '').toLowerCase();
 
-    if (template === 'navbar') {
-      return <Navbar sectionIndex={index} brandName={section.logo} links={section.links} brandHref={`/${currentLang}/`} currentLang={currentLang} />;
-    }
-    if (template === 'hero') {
+    // ========== Composants Oveco migrés ==========
+    
+    if (template === 'autoconstruction') {
       return (
-        <Hero 
-          sectionIndex={index}
-          title={section.title} 
-          subtitle={section.subtitle} 
-          description={section.description} 
-          ctaLabel={section.ctaLabel} 
+        <Autoconstruction
+          subtitle={section.subtitle}
+          title={section.title}
+          description={section.description}
+          services={section.services}
+          ctaLabel={section.ctaLabel}
           ctaHref={section.ctaHref}
         />
       );
     }
-    if (template === 'services') {
-      return <Services sectionIndex={index} title={section.title} services={section.items} />;
+    
+    if (template === 'workshero') {
+      return (
+        <WorksHero
+          subtitle={section.subtitle}
+          title={section.title}
+          description={section.description}
+          ctaLabel={section.ctaLabel}
+          ctaHref={section.ctaHref}
+          mediaLeft={section.mediaLeft}
+          mediaRight={section.mediaRight}
+        />
+      );
     }
-    if (template === 'features') {
-      return <Features sectionIndex={index} title={section.title} subtitle={section.subtitle} features={section.items} />;
-    }
-    if (template === 'team') {
-      return <Team sectionIndex={index} title={section.title} subtitle={section.subtitle} members={section.members} />;
-    }
-    if (template === 'projects') {
-      return <ProjectShowcase sectionIndex={index} title={section.title} projects={section.items} lang={currentLang} />;
-    }
-    if (template === 'testimonials') {
-      return <Testimonials sectionIndex={index} title={section.title} testimonials={section.items} lang={currentLang} />;
-    }
-    if (template === 'stats') {
-      return <Stats sectionIndex={index} title={section.title} stats={section.items} />;
-    }
-    if (template === 'faq') {
-      return <FAQ sectionIndex={index} title={section.title} faqs={section.items} />;
-    }
-    if (template === 'cta') {
-      return <CTA sectionIndex={index} title={section.title} subtitle={section.subtitle} ctaLabel={section.ctaLabel} ctaHref={section.ctaHref} />;
-    }
+    
     if (template === 'contact') {
-      return <Contact sectionIndex={index} title={section.title} description={section.subtitle} email={section.email} phone={section.phone} address={section.address} />;
+      return (
+        <Contact
+          subtitle={section.subtitle}
+          title={section.title}
+          description={section.description}
+          contactInfo={section.contactInfo}
+          formAction={section.formAction}
+        />
+      );
     }
+    
+    if (template === 'expertise') {
+      return (
+        <Expertise
+          subtitle={section.subtitle}
+          title={section.title}
+          description={section.description}
+          cards={section.cards}
+          ctaLabel={section.ctaLabel}
+          ctaHref={section.ctaHref}
+        />
+      );
+    }
+    
+    if (template === 'stats') {
+      return (
+        <Stats
+          title={section.title}
+          stats={section.stats}
+        />
+      );
+    }
+    
+    if (template === 'competences') {
+      return (
+        <Competences
+          subtitle={section.subtitle}
+          title={section.title}
+          description={section.description}
+          competences={section.competences}
+        />
+      );
+    }
+    
+    if (template === 'certifications') {
+      return (
+        <Certifications
+          title={section.title}
+          description={section.description}
+          cards={section.cards}
+        />
+      );
+    }
+    
+    if (template === 'gallerie') {
+      return (
+        <Gallerie
+          subtitle={section.subtitle}
+          title={section.title}
+          gallery={section.gallery}
+        />
+      );
+    }
+    
+    if (template === 'textimage') {
+      return (
+        <TextImage
+          sectionSubtitle={section.sectionSubtitle}
+          sectionTitle={section.sectionTitle}
+          sectionDescription={section.sectionDescription}
+          showSectionHeader={section.showSectionHeader}
+          subtitle={section.subtitle}
+          title={section.title}
+          description={section.description}
+          link={section.link}
+          image={section.image}
+          reverse={section.reverse}
+          duplicate={section.duplicate}
+          subtitle2={section.subtitle2}
+          title2={section.title2}
+          description2={section.description2}
+          link2={section.link2}
+          image2={section.image2}
+        />
+      );
+    }
+    
+    if (template === 'projects') {
+      return (
+        <Projects
+          subtitle={section.subtitle}
+          title={section.title}
+          description={section.description}
+          linkText={section.linkText}
+          linkUrl={section.linkUrl}
+          cards={section.cards}
+        />
+      );
+    }
+    
+    if (template === 'testimonials') {
+      return (
+        <Testimonials
+          subtitle={section.subtitle}
+          title={section.title}
+          description={section.description}
+          linkText={section.linkText}
+          linkUrl={section.linkUrl}
+          testimonials={section.testimonials}
+        />
+      );
+    }
+    
+    if (template === 'simplecompetence') {
+      return (
+        <SimpleCompetence
+          number={section.number}
+          title={section.title}
+          description={section.description}
+          cta={section.cta}
+          image={section.image}
+        />
+      );
+    }
+    
     if (template === 'footer') {
-      return <WireframeFooter sectionIndex={index} brandName={section.companyName} description={section.description} links={section.links} socials={section.socials} />;
+      return (
+        <Footer
+          copyrightYear={section.copyrightYear}
+          companyName={section.companyName}
+          legalText={section.legalText}
+        />
+      );
     }
+    
     return null;
   })}
 

@@ -1,0 +1,297 @@
+---
+/**
+ * Composant: Competences
+ * Grille de compétences avec icônes et liens
+ * Compatible TinaCMS via props
+ */
+
+export interface Competence {
+  image: string;
+  title: string;
+  url?: string;
+  description?: string;
+}
+
+export interface Props {
+  subtitle?: string;
+  title?: string;
+  description?: string;
+  competences?: Competence[];
+}
+
+const {
+  subtitle = "Nom du client",
+  title = "Titre narratif",
+  description,
+  competences = [
+    {
+      image: "/uploads/icons/clim.png",
+      title: "Compétence 1",
+      url: "/expertise#clim"
+    },
+    {
+      image: "/uploads/icons/eolienne.png",
+      title: "Compétence 2",
+      url: "/expertise#eolienne"
+    },
+    {
+      image: "/uploads/icons/elec.png",
+      title: "Compétence 3",
+      url: "/expertise#electricite"
+    },
+    {
+      image: "/uploads/icons/personne.png",
+      title: "Compétence 4",
+      url: "/expertise#accompagnement"
+    }
+  ]
+} = Astro.props;
+---
+
+<section class="competences" aria-labelledby="competences-title">
+  <div class="container competences__container">
+    <header class="competences__header">
+      <p class="competences__subtitle">{subtitle}</p>
+      <h2 class="competences__title" id="competences-title">{title}</h2>
+      {description && <p class="competences__description">{description}</p>}
+    </header>
+
+    <ul class="competences__grid" role="list">
+      {competences.map((c) => (
+        <li class="competences__item" role="listitem">
+          <figure class="competences__figure">
+            <img 
+              class="competences__image" 
+              src={c.image} 
+              alt={c.title} 
+              width="168" 
+              height="168" 
+              loading="lazy"
+            />
+            <figcaption class="visually-hidden">{c.title}</figcaption>
+          </figure>
+          <div class="competences__body">
+            <h3 class="competences__name">{c.title}</h3>
+            {c.description ? (
+              <p class="competences__description-item">{c.description}</p>
+            ) : (
+              <a 
+                class="competences__link" 
+                href={c.url || '#'} 
+                aria-label={`En savoir plus sur ${c.title}`}
+              >
+                <span>En savoir plus</span>
+              </a>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+.competences {
+  width: 100%;
+  background: var(--oveco-white);
+  display: flex;
+  justify-content: center;
+  padding: 42px 24px;
+}
+
+.competences__container {
+  width: 100%;
+  max-width: 1214px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 72px;
+}
+
+.competences__header {
+  width: 100%;
+  max-width: 706.82px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.competences__subtitle {
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-h3);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-bold);
+  text-transform: uppercase;
+  line-height: var(--oveco-line-tight);
+  letter-spacing: var(--oveco-spacing-wide);
+  margin: 0;
+}
+
+.competences__title {
+  align-self: stretch;
+  color: var(--oveco-secondary);
+  font-size: var(--oveco-font-h2);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-extrabold);
+  line-height: var(--oveco-line-normal);
+  margin: 0;
+}
+
+.competences__description {
+  align-self: stretch;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-p);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-regular);
+  line-height: var(--oveco-line-extra-loose);
+  margin: 0;
+}
+
+.competences__grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 61px;
+  row-gap: 42px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  justify-items: center;
+}
+
+@media (max-width: 1200px) {
+  .competences__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    row-gap: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .competences {
+    padding: 32px 16px;
+  }
+  
+  .competences__grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    row-gap: 24px;
+  }
+  
+  .competences__item {
+    width: 100%;
+  }
+  
+  .competences__name {
+    width: 100%;
+  }
+}
+
+.competences__item {
+  width: 364px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.competences__figure {
+  margin: 0;
+  width: 168px;
+  height: 168px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.competences__figure img,
+.competences__image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+  display: block;
+}
+
+.competences__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.competences__name {
+  width: 324px;
+  text-align: center;
+  color: var(--oveco-secondary);
+  font-size: var(--oveco-font-h4);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-extrabold);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.competences__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--oveco-accent);
+  font-size: var(--oveco-font-p);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-bold);
+  line-height: 1.2;
+  text-decoration: none;
+  transition: opacity var(--oveco-transition-fast);
+}
+
+.competences__link:hover {
+  opacity: 0.8;
+}
+
+.competences__link::after {
+  content: '';
+  width: 10px;
+  height: 8.57px;
+  border: 1.5px solid currentColor;
+  border-left: 0;
+  border-bottom: 0;
+  transform: rotate(45deg);
+  display: inline-block;
+  margin-top: 2px;
+}
+
+.competences__link:focus-visible {
+  outline: 2px solid var(--oveco-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.competences__description-item {
+  width: 364px;
+  text-align: center;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-p);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-regular);
+  line-height: var(--oveco-line-extra-loose);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .competences__description-item {
+    width: 100%;
+  }
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+</style>

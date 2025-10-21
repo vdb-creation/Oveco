@@ -1,158 +1,189 @@
 ---
-import { TrendingUp, Award, Users, Clock } from 'lucide-astro';
-import Anim from './Anim.astro';
+/**
+ * Composant: Stats
+ * Affichage de statistiques en grille
+ * Compatible TinaCMS via props
+ */
 
-interface Stat {
+export interface StatItem {
   value: string;
   label: string;
-  icon?: string;
+  description?: string;
 }
 
-interface Props {
-  sectionIndex?: number;
+export interface Props {
+  stats?: StatItem[];
   title?: string;
-  stats?: Stat[];
 }
 
-const icons = {
-  TrendingUp,
-  Award,
-  Users,
-  Clock,
-};
-
-const defaults: Props = {
-  title: "En chiffres",
-  stats: [
-    { value: "150+", label: "Projets réalisés", icon: "TrendingUp" },
-    { value: "98%", label: "Clients satisfaits", icon: "Award" },
-    { value: "50+", label: "Partenaires", icon: "Users" },
-    { value: "5 ans", label: "D'expérience", icon: "Clock" },
-  ],
-};
-const props = Astro.props as Props;
-const title = props.title ?? defaults.title!;
-const stats: Stat[] = props.stats ?? (defaults.stats as Stat[]);
+const {
+  title = "Statistiques du projet",
+  stats = [
+    {
+      value: "+ de 45",
+      label: "panneaux solaires",
+      description: "Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero"
+    },
+    {
+      value: "+ de 30",
+      label: "éoliennes",
+      description: "Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero"
+    },
+    {
+      value: "+ de 60",
+      label: "batteries de stockage",
+      description: "Lorem ipsum dolor sit amet consectetur adipiscing elit semper dalar elementum tempus hac tellus libero"
+    }
+  ]
+} = Astro.props;
 ---
 
-<section class="wf-stats">
-  <div class="wf-stats__container">
-    <Anim effect="fade-up" delay={100}>
-      <h2 class="wf-stats__title" data-bind="stats.title">{title}</h2>
-    </Anim>
-    <div class="wf-stats__grid">
-      {stats.map((stat, index) => {
-        const Icon = stat.icon && icons[stat.icon as keyof typeof icons];
-        return (
-          <Anim effect="fade-scale-up" delay={150 + index * 80}>
-            <div class="wf-stat card">
-              {Icon && (
-                <div class="wf-stat__icon">
-                  <Icon size={32} />
-                </div>
-              )}
-              <div class="wf-stat__value" data-bind={`stats.items.${index}.value`}>{stat.value}</div>
-              <div class="wf-stat__label" data-bind={`stats.items.${index}.label`}>{stat.label}</div>
-            </div>
-          </Anim>
-        );
-      })}
-    </div>
+<section class="stats" aria-labelledby="stats-title">
+  <div class="container stats__container">
+    <h2 id="stats-title" class="stats__title visually-hidden">{title}</h2>
+
+    <ul class="stats__grid" role="list">
+      {stats.map((stat) => (
+        <li class="stats__item" role="listitem">
+          <div class="stats__content">
+            <h1 class="stats__value">{stat.value}</h1>
+            <h3 class="stats__label">{stat.label}</h3>
+            {stat.description && <p class="stats__desc">{stat.description}</p>}
+          </div>
+        </li>
+      ))}
+    </ul>
   </div>
 </section>
 
 <style>
-  .wf-stats {
-    padding: 4rem 0;
-    background: var(--color-accent-black);
-    color: #fff;
-    border-bottom: 2px solid #000;
-  }
+.stats {
+  width: 100%;
+  background: var(--oveco-white);
+  display: flex;
+  justify-content: center;
+  padding: 42px 24px;
+}
 
-  .wf-stats__container {
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 0 1.5rem;
-  }
+.stats__container {
+  width: 100%;
+  max-width: 1219px;
+}
 
-  .wf-stats__title {
-    font-size: 2rem;
-    margin-bottom: 3rem;
-    text-align: center;
-    border-bottom: 3px solid #fff;
-    padding-bottom: 1rem;
-  }
+.stats__title {
+  margin: 0;
+}
 
-  .wf-stats__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 3rem;
-  }
+.stats__grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 61px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  justify-items: center;
+}
 
-  .wf-stat {
-    text-align: center;
-    padding: 2rem 1.5rem;
-    border: 2px solid #fff;
-    transition: all var(--transition);
-    position: relative;
-    overflow: hidden;
-    background: transparent;
+@media (max-width: 1200px) {
+  .stats__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
   }
+}
 
-  .wf-stat::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
+@media (max-width: 768px) {
+  .stats {
+    padding: 32px 16px;
+  }
+  
+  .stats__grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+.stats__item {
+  width: 364px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .stats__item {
     width: 100%;
-    height: 100%;
-    background: #fff;
-    transition: left var(--transition);
-    z-index: 0;
   }
+}
 
-  .wf-stat:hover::before {
-    left: 0;
+.stats__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.stats__value {
+  width: 324px;
+  text-align: center;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-h1);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-extrabold);
+  line-height: 1.2;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .stats__value {
+    width: 100%;
   }
+}
 
-  .wf-stat:hover {
-    color: var(--color-accent-black);
-    transform: translateY(-10px);
-    box-shadow: var(--shadow-lg);
+.stats__label {
+  width: 324px;
+  text-align: center;
+  color: var(--oveco-secondary);
+  font-size: var(--oveco-font-h4);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-bold);
+  line-height: 1.1;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .stats__label {
+    width: 100%;
   }
+}
 
-  .wf-stat__icon {
-    position: relative;
-    z-index: 1;
-    margin-bottom: 1rem;
-    display: inline-flex;
+.stats__desc {
+  width: 364px;
+  text-align: center;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-p);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-regular);
+  line-height: var(--oveco-line-extra-loose);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .stats__desc {
+    width: 100%;
   }
+}
 
-  .wf-stat__value {
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .wf-stat__label {
-    font-size: 1rem;
-    opacity: 0.9;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Animations gérées via <Anim /> */
-
-  @media (max-width: 768px) {
-    .wf-stats__grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-    }
-
-    .wf-stat__value {
-      font-size: 2rem;
-    }
-  }
+/* A11y helper */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
 </style>

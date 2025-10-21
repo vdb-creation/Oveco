@@ -1,153 +1,291 @@
 ---
-interface Props {
+/**
+ * ProjectPage - Oveco
+ * Page de détail d'un projet
+ * 
+ * @component
+ */
+
+export interface Props {
   title: string;
   description?: string;
   category?: string;
   image?: string;
   backHref?: string;
   backLabel?: string;
-  client?: string;
-  date?: string;
-  tags?: string[];
-  website?: string;
-  gallery?: string[];
-  metrics?: { label: string; value: string }[];
-  ctaHref?: string;
-  ctaLabel?: string;
 }
 
 const {
   title,
-  description = '',
-  category = '',
-  image = '',
-  backHref = '/',
-  backLabel = 'Retour',
-  client = '',
-  date = '',
-  tags = [],
-  website = '',
-  gallery = [],
-  metrics = [],
-  ctaHref = website || '',
-  ctaLabel = 'Visiter le projet',
-} = Astro.props as Props;
+  description = "",
+  category = "",
+  image = "",
+  backHref = "/",
+  backLabel = "Retour"
+} = Astro.props;
 ---
 
-<main class="wf-project">
-  <section class="wf-project__hero" style={image ? `--hero:url(${image})` : undefined}>
-    <div class="wf-project__hero-overlay"></div>
-    <div class="wf-project__hero-content">
-      {category && <span class="chip chip--ghost">{category}</span>}
-      <h1>{title}</h1>
-      {(client || date) && (
-        <p class="wf-project__meta">
-          {client && <span>{client}</span>}
-          {client && date && <span class="sep">•</span>}
-          {date && <span>{date}</span>}
-        </p>
-      )}
-      {(ctaHref || backHref) && (
-        <div class="wf-project__cta">
-          {ctaHref && <a class="btn btn--primary" href={ctaHref} target="_blank" rel="noopener">{ctaLabel}</a>}
-          {backHref && <a class="btn" href={backHref}>{backLabel}</a>}
-        </div>
-      )}
-    </div>
-  </section>
+<section class="project-page">
+  <div class="project-page__container">
+    <!-- Bouton retour -->
+    <nav class="project-page__nav" aria-label="Navigation de retour">
+      <a href={backHref} class="project-page__back">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        {backLabel}
+      </a>
+    </nav>
 
-  <section class="wf-project__body">
-    <div class="wf-project__grid">
-      <article class="wf-project__content card">
-        {description && <p>{description}</p>}
-        {Array.isArray(gallery) && gallery.length > 0 && (
-          <div class="wf-project__gallery">
-            {gallery.map((src) => (
-              <img src={src} alt={title} loading="lazy" />
-            ))}
-          </div>
-        )}
-      </article>
-      <aside class="wf-project__aside">
-        <div class="details card">
-          <h3>Détails</h3>
-          <ul class="details__list">
-            {category && (
-              <li><span>Catégorie</span><strong>{category}</strong></li>
-            )}
-            {client && (
-              <li><span>Client</span><strong>{client}</strong></li>
-            )}
-            {date && (
-              <li><span>Date</span><strong>{date}</strong></li>
-            )}
-            {website && (
-              <li><span>Site</span><a href={website} target="_blank" rel="noopener">{website}</a></li>
-            )}
-          </ul>
-          {Array.isArray(tags) && tags.length > 0 && (
-            <div class="tags">
-              {tags.map((t) => (<span class="chip">{t}</span>))}
-            </div>
-          )}
-        </div>
-        {Array.isArray(metrics) && metrics.length > 0 && (
-          <div class="metrics card">
-            <div class="metrics__grid">
-              {metrics.map((m) => (
-                <div class="metric"><div class="metric__value">{m.value}</div><div class="metric__label">{m.label}</div></div>
-              ))}
-            </div>
-          </div>
-        )}
-      </aside>
+    <!-- Header du projet -->
+    <header class="project-page__header">
+      {category && (
+        <p class="project-page__category">{category}</p>
+      )}
+      <h1 class="project-page__title">{title}</h1>
+      {description && (
+        <p class="project-page__description">{description}</p>
+      )}
+    </header>
+
+    <!-- Image du projet -->
+    {image && (
+      <div class="project-page__image-container">
+        <img 
+          src={image} 
+          alt={title}
+          class="project-page__image"
+          loading="eager"
+        />
+      </div>
+    )}
+
+    <!-- Contenu du projet -->
+    <div class="project-page__content">
+      <div class="project-page__text">
+        <h2>À propos de ce projet</h2>
+        <p>Ce projet illustre parfaitement notre approche de l'auto-construction et de la construction durable. Nous avons accompagné nos clients dans la réalisation de leur vision, en combinant expertise technique et respect de l'environnement.</p>
+        
+        <h3>Caractéristiques techniques</h3>
+        <ul>
+          <li>Matériaux écologiques et durables</li>
+          <li>Isolation passive optimisée</li>
+          <li>Système de ventilation naturelle</li>
+          <li>Panneaux solaires intégrés</li>
+        </ul>
+
+        <h3>Résultats obtenus</h3>
+        <p>Grâce à cette approche, nous avons pu réduire significativement la consommation énergétique tout en créant un habitat confortable et respectueux de l'environnement.</p>
+      </div>
     </div>
-  </section>
-</main>
+
+    <!-- CTA -->
+    <div class="project-page__cta">
+      <h2>Vous avez un projet similaire ?</h2>
+      <p>Contactez-nous pour discuter de votre projet d'auto-construction ou de rénovation durable.</p>
+      <a href="#contact" class="project-page__cta-button">
+        Nous contacter
+      </a>
+    </div>
+  </div>
+</section>
 
 <style>
-  .wf-project { width: 100%; }
-  .wf-project__hero { position: relative; min-height: 360px; display: grid; place-items: center; background: var(--surface); overflow: hidden; }
-  .wf-project__hero::before { content:""; position:absolute; inset:0; background-image: var(--hero); background-size: cover; background-position: center; filter: blur(8px) saturate(1.05); transform: scale(1.05); opacity:.35; }
-  .wf-project__hero-overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15)); }
-  .wf-project__hero-content { position: relative; z-index: 1; max-width: var(--container-max); width: 100%; padding: 3rem 1.5rem; color: #fff; text-align: center; }
-  .wf-project__hero-content h1 { font-size: 2.25rem; margin: .75rem 0; letter-spacing: .3px; }
-  .wf-project__meta { opacity: .9; margin: .25rem 0 1rem; }
-  .wf-project__meta .sep { margin: 0 .5rem; opacity: .8; }
-  .wf-project__cta { display: flex; gap: .75rem; justify-content: center; margin-top: .75rem; }
-
-  .wf-project__body { max-width: var(--container-max); margin: 0 auto; padding: 2rem 1.5rem; }
-  .wf-project__grid { display: grid; grid-template-columns: 1.7fr .9fr; gap: 1.5rem; align-items: start; }
-  .wf-project__content { line-height: 1.8; }
-  .wf-project__gallery { margin-top: 1.25rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .75rem; }
-  .wf-project__gallery img { width: 100%; height: auto; border: 1px solid var(--color-border); border-radius: var(--radius-md); }
-
-  .wf-project__aside { display: grid; gap: 1rem; }
-  .card { background: var(--surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1rem; }
-  .details h3 { margin: .25rem 0 1rem; font-size: 1.1rem; }
-  .details__list { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: .5rem; }
-  .details__list li { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px dashed var(--color-border-light); padding-bottom: .5rem; }
-  .details__list li span { color: #666; }
-  .details__list li a { color: var(--color-primary); text-decoration: none; }
-  .tags { display: flex; flex-wrap: wrap; gap: .45rem; }
-  .chip { display: inline-flex; align-items: center; padding: .25rem .6rem; border: 1px solid var(--color-border); border-radius: 999px; background: rgba(255,255,255,.15); backdrop-filter: var(--backdrop-blur-sm); color: inherit; }
-  .chip--ghost { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.35); }
-
-  .metrics__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .75rem; }
-  .metric { text-align: center; padding: .75rem; border: 1px dashed var(--color-border-light); border-radius: var(--radius-md); }
-  .metric__value { font-size: 1.25rem; font-weight: 700; }
-  .metric__label { color: #666; font-size: .9rem; }
-
-  .btn { display: inline-block; padding: .75rem 1.25rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); text-decoration: none; background: var(--surface); color: var(--color-text); }
-  .btn--primary { background: var(--gradient-primary); color: #fff; border-color: transparent; }
-
-  @media (max-width: 1024px) {
-    .wf-project__grid { grid-template-columns: 1fr; }
+  .project-page {
+    min-height: 100vh;
+    background: var(--oveco-white);
+    padding: clamp(24px, 5vw, 48px) clamp(16px, 4vw, 32px);
   }
-  @media (max-width: 640px) {
-    .wf-project__hero-content h1 { font-size: 1.75rem; }
-    .wf-project__cta { flex-direction: column; align-items: center; }
+
+  .project-page__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(32px, 6vw, 64px);
+  }
+
+  /* Navigation */
+  .project-page__nav {
+    margin-bottom: 16px;
+  }
+
+  .project-page__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--oveco-accent);
+    text-decoration: none;
+    font-family: var(--oveco-font-family);
+    font-size: var(--oveco-font-p);
+    font-weight: var(--oveco-weight-medium);
+    transition: var(--oveco-transition-fast);
+  }
+
+  .project-page__back:hover {
+    color: var(--oveco-secondary);
+    transform: translateX(-4px);
+  }
+
+  /* Header */
+  .project-page__header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .project-page__category {
+    font-family: var(--oveco-font-family);
+    font-size: var(--oveco-font-p-small);
+    font-weight: var(--oveco-weight-medium);
+    color: var(--oveco-accent);
+    text-transform: uppercase;
+    letter-spacing: var(--oveco-spacing-wide);
+    margin: 0 0 16px 0;
+  }
+
+  .project-page__title {
+    font-family: var(--oveco-font-family);
+    font-size: clamp(var(--oveco-font-h3), 4vw, var(--oveco-font-h1));
+    font-weight: var(--oveco-weight-extrabold);
+    line-height: var(--oveco-line-tight);
+    color: var(--oveco-secondary);
+    margin: 0 0 24px 0;
+  }
+
+  .project-page__description {
+    font-family: var(--oveco-font-family);
+    font-size: var(--oveco-font-p-large);
+    font-weight: var(--oveco-weight-regular);
+    line-height: var(--oveco-line-relaxed);
+    color: var(--oveco-text);
+    margin: 0;
+  }
+
+  /* Image */
+  .project-page__image-container {
+    width: 100%;
+    border-radius: var(--oveco-radius-large);
+    overflow: hidden;
+    box-shadow: var(--oveco-shadow-medium);
+  }
+
+  .project-page__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* Contenu */
+  .project-page__content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .project-page__text h2 {
+    font-family: var(--oveco-font-family);
+    font-size: var(--oveco-font-h3);
+    font-weight: var(--oveco-weight-bold);
+    line-height: var(--oveco-line-normal);
+    color: var(--oveco-secondary);
+    margin: 0 0 16px 0;
+  }
+
+  .project-page__text h3 {
+    font-family: var(--oveco-font-family);
+    font-size: var(--oveco-font-h4);
+    font-weight: var(--oveco-weight-semibold);
+    line-height: var(--oveco-line-normal);
+    color: var(--oveco-secondary);
+    margin: 32px 0 12px 0;
+  }
+
+  .project-page__text p {
+    font-family: var(--oveco-font-family);
+    font-size: var(--oveco-font-p);
+    font-weight: var(--oveco-weight-regular);
+    line-height: var(--oveco-line-relaxed);
+    color: var(--oveco-text);
+    margin: 0 0 16px 0;
+  }
+
+  .project-page__text ul {
+    font-family: var(--oveco-font-family);
+    font-size: var(--oveco-font-p);
+    font-weight: var(--oveco-weight-regular);
+    line-height: var(--oveco-line-relaxed);
+    color: var(--oveco-text);
+    margin: 0 0 16px 0;
+    padding-left: 24px;
+  }
+
+  .project-page__text li {
+    margin-bottom: 8px;
+  }
+
+  /* CTA */
+  .project-page__cta {
+    background: var(--oveco-colored-white);
+    padding: clamp(32px, 6vw, 48px);
+    border-radius: var(--oveco-radius-large);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .project-page__cta h2 {
+    font-family: var(--oveco-font-family);
+    font-size: var(--oveco-font-h3);
+    font-weight: var(--oveco-weight-bold);
+    line-height: var(--oveco-line-normal);
+    color: var(--oveco-secondary);
+    margin: 0 0 16px 0;
+  }
+
+  .project-page__cta p {
+    font-family: var(--oveco-font-family);
+    font-size: var(--oveco-font-p);
+    font-weight: var(--oveco-weight-regular);
+    line-height: var(--oveco-line-relaxed);
+    color: var(--oveco-text);
+    margin: 0 0 24px 0;
+  }
+
+  .project-page__cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 32px;
+    background: var(--oveco-accent);
+    color: var(--oveco-white);
+    text-decoration: none;
+    font-family: var(--oveco-font-family);
+    font-size: var(--oveco-font-p);
+    font-weight: var(--oveco-weight-semibold);
+    border-radius: var(--oveco-radius-button);
+    transition: var(--oveco-transition-normal);
+    box-shadow: var(--oveco-shadow-light);
+  }
+
+  .project-page__cta-button:hover {
+    background: var(--oveco-secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--oveco-shadow-medium);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .project-page {
+      padding: 16px;
+    }
+
+    .project-page__container {
+      gap: 24px;
+    }
+
+    .project-page__cta {
+      padding: 24px;
+    }
   }
 </style>
-
-

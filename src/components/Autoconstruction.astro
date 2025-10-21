@@ -1,0 +1,312 @@
+---
+/**
+ * Composant: Autoconstruction
+ * Section présentant les services d'accompagnement à l'auto-construction
+ * Compatible TinaCMS via props
+ */
+
+export interface AutoconstructionService {
+  image: string;
+  alt: string;
+  title: string;
+  description: string;
+}
+
+export interface Props {
+  subtitle?: string;
+  title?: string;
+  description?: string;
+  services?: AutoconstructionService[];
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  subtitle = "l'auto-construction",
+  title = "Apprendre en faisant, construire en étant accompagné",
+  description = "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat. En vous formant, en vous conseillant et en vous fournissant les bons outils, nous vous permettons de participer activement aux installations en toute sécurité.",
+  services = [
+    {
+      image: "/uploads/hero/maison-build.png",
+      alt: "Accompagnement personnalisé pour l'auto-construction",
+      title: "Accompagnement sur mesure",
+      description: "Chaque projet est unique : nous adaptons nos conseils, nos formations et nos outils à vos compétences et vos objectifs."
+    },
+    {
+      image: "/uploads/hero/maison-toit.png",
+      alt: "Formation et transmission de savoir-faire",
+      title: "Formation et transmission",
+      description: "Des sessions de formation sont prévues avant les étapes clés du chantier. Vous devenez autonome tout en étant épaulé."
+    },
+    {
+      image: "/uploads/hero/maison-toit-2.png",
+      alt: "Matériel professionnel pour l'auto-construction",
+      title: "Matériel professionnel accessible",
+      description: "Nous vous proposons les équipements professionnels à prix préférentiels, avec livraison et support technique."
+    }
+  ],
+  ctaLabel = "En savoir plus",
+  ctaHref = "#contact"
+} = Astro.props;
+---
+
+<section class="autoconstruction-section" id="autoconstruction" itemscope itemtype="https://schema.org/Service">
+  <div class="autoconstruction">
+    <div class="autoconstruction__container">
+      <header class="autoconstruction__header">
+        <p class="autoconstruction__subtitle">{subtitle}</p>
+        <h2 class="autoconstruction__title" itemprop="name" set:html={title} />
+        <p class="autoconstruction__description" itemprop="description" set:html={description} />
+      </header>
+
+      <div class="autoconstruction__content">
+        <div class="autoconstruction__services" role="list" aria-labelledby="autoconstruction-title">
+          {services.map((service) => (
+            <article class="autoconstruction__service" role="listitem" itemscope itemtype="https://schema.org/Service">
+              <img 
+                src={service.image}
+                alt={service.alt}
+                loading="lazy"
+                class="autoconstruction__service-image"
+                itemprop="image"
+              />
+              <div class="autoconstruction__service-content">
+                <h3 class="autoconstruction__service-title" itemprop="name">{service.title}</h3>
+                <p class="autoconstruction__service-description" itemprop="description">
+                  {service.description}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <a href={ctaHref} class="autoconstruction__cta" aria-label={`${ctaLabel} sur l'auto-construction`}>
+          <span>{ctaLabel}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* Variables Oveco depuis theme.css */
+.autoconstruction-section {
+  padding: clamp(50px, 8vw, 90px) clamp(16px, 6vw, 109px);
+  overflow: hidden;
+  background: var(--oveco-white);
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.autoconstruction__container {
+  width: 100%;
+  max-width: 1214px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: clamp(30px, 5vw, 72px);
+  display: flex;
+}
+
+.autoconstruction__header {
+  width: 842px;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+
+@media (max-width: 1024px) {
+  .autoconstruction__header { width: 100%; max-width: 700px; padding: 0 20px; }
+}
+
+@media (max-width: 768px) {
+  .autoconstruction__header { max-width: 600px; padding: 0 15px; }
+}
+
+@media (max-width: 480px) {
+  .autoconstruction__header { padding: 0 5px; }
+}
+
+.autoconstruction__subtitle {
+  text-align: center;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-h3);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-bold);
+  text-transform: uppercase;
+  line-height: var(--oveco-line-tight);
+  letter-spacing: var(--oveco-spacing-wide);
+  margin: 0;
+}
+
+.autoconstruction__title {
+  align-self: stretch;
+  text-align: center;
+  color: var(--oveco-secondary);
+  font-size: var(--oveco-font-h2);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-extrabold);
+  line-height: var(--oveco-line-normal);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .autoconstruction__title { font-size: clamp(28px, 6vw, 32px); line-height: 1.2; }
+}
+
+.autoconstruction__description {
+  align-self: stretch;
+  text-align: center;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-p);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-regular);
+  line-height: var(--oveco-line-extra-loose);
+  margin: 0;
+}
+
+.autoconstruction__content {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 42px;
+  display: flex;
+  overflow: hidden;
+}
+
+.autoconstruction__services {
+  width: 100%;
+  max-width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(15px, 4vw, 61px);
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+.autoconstruction__service {
+  flex: 1 1 320px;
+  width: 100%;
+  max-width: 364px;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .autoconstruction__service { max-width: 400px; }
+}
+
+.autoconstruction__service-image {
+  width: 100%;
+  max-width: 287px;
+  margin-inline: auto;
+  aspect-ratio: 287 / 161;
+  border-radius: 24px;
+  overflow: hidden;
+  object-fit: cover;
+  display: block;
+}
+
+.autoconstruction__service-content {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  display: flex;
+}
+
+.autoconstruction__service-title {
+  width: 324px;
+  max-width: 100%;
+  text-align: center;
+  color: var(--oveco-secondary);
+  font-size: var(--oveco-font-h4);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-extrabold);
+  line-height: 1.1;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .autoconstruction__service-title { width: 100%; font-size: clamp(20px, 5vw, 24px); }
+}
+
+.autoconstruction__service-description {
+  width: 364px;
+  max-width: 100%;
+  text-align: center;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-p);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-regular);
+  line-height: var(--oveco-line-extra-loose);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .autoconstruction__service-description { width: 100%; font-size: clamp(14px, 3vw, 16px); }
+}
+
+.autoconstruction__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 18px 30px;
+  background: var(--oveco-secondary);
+  border-radius: var(--oveco-radius-button);
+  color: var(--oveco-white);
+  font-size: var(--oveco-font-h3);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-bold);
+  line-height: 1.2;
+  text-align: center;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--oveco-transition-normal);
+}
+
+.autoconstruction__cta:hover {
+  background: #2a3a3c;
+  transform: translateY(-2px);
+  box-shadow: var(--oveco-shadow-medium);
+}
+
+.autoconstruction__cta:focus {
+  outline: 2px solid var(--oveco-accent);
+  outline-offset: 4px;
+}
+
+@media (max-width: 768px) {
+  .autoconstruction__cta { padding: 15px 24px; font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .autoconstruction__cta {
+    transition: none !important;
+  }
+  .autoconstruction__cta:hover {
+    transform: none !important;
+  }
+}
+</style>

@@ -1,237 +1,439 @@
 ---
-import { Quote, Star } from 'lucide-astro';
-import Anim from './Anim.astro';
-import SmartImage from './SmartImage.astro';
-import defaultAvatar from '../assets/imgs/default-placeholder.png';
+/**
+ * Testimonials Section - Oveco
+ * Section des témoignages clients avec carrousel horizontal et navigation
+ * 
+ * @component
+ * @tinacms Template : testimonials
+ */
 
-type Testimonial = {
-  name: string;
-  role: string;
-  content: string;
-  avatar?: string;
-  rating?: number;
-  projectRef?: any; // peut être string (ex: project-alpha.json) ou objet (référence Tina)
-};
+import TestimonialCard from './TestimonialCard.astro';
 
-type Props = {
-  sectionIndex?: number;
-  title?: string;
-  testimonials?: Testimonial[];
-  lang?: 'fr' | 'en';
-};
-
-const defaults: Props = {
-  title: 'Ce que disent nos clients',
-  testimonials: [
-    {
-      name: 'Marie Dupont',
-      role: 'CEO, TechCorp',
-      content:
-        "Un travail exceptionnel. L'équipe a dépassé toutes nos attentes et livré un produit de qualité supérieure.",
-      rating: 5,
-    },
-    {
-      name: 'Jean Martin',
-      role: 'Designer, Creative Studio',
-      content:
-        'Professionnalisme et créativité au rendez-vous. Je recommande vivement leurs services.',
-      rating: 5,
-    },
-    {
-      name: 'Sophie Laurent',
-      role: 'Directrice Marketing',
-      content:
-        'Une collaboration fluide et des résultats impressionnants. Nous sommes ravis du résultat final.',
-      rating: 5,
-    },
-  ],
-};
-
-const { title = defaults.title, testimonials = defaults.testimonials, lang = 'fr' } = Astro.props as Props;
-const items: Testimonial[] = testimonials ?? [];
-
-function toProjectSlug(ref: any): string | null {
-  if (!ref) return null;
-  if (typeof ref === 'string') {
-    return ref.replace(/^\/*(content\/projects\/)?/, '').replace(/\.json$/, '');
-  }
-  if (typeof ref === 'object') {
-    const candidate = (ref as any)?._sys?.relativePath || (ref as any)?.relativePath || (ref as any)?.id || (ref as any)?.path || '';
-    if (typeof candidate === 'string') {
-      return candidate.replace(/^\/*(content\/projects\/)?/, '').replace(/\.json$/, '');
-    }
-  }
-  return null;
+export interface Props {
+  subtitle?: string;
+  title: string;
+  description?: string;
+  linkText?: string;
+  linkUrl?: string;
+  testimonials: Array<{
+    thumbnail?: {
+      src: string;
+      alt?: string;
+    };
+    client_name?: string;
+    client_position?: string;
+    client_company?: string;
+    card_content?: string;
+    content?: string;
+    linked_project?: {
+      link: string;
+      title: string;
+    };
+    link?: string;
+    priority?: {
+      slug: string;
+    };
+  }>;
 }
+
+const { 
+  subtitle = "Qu'est-ce qui s'en dit ?",
+  title,
+  description,
+  linkText = "En savoir plus",
+  linkUrl = "#temoignages-complets",
+  testimonials = []
+} = Astro.props;
+
+// Sécuriser testimonials pour éviter les erreurs null/undefined
+const safeTestimonials = Array.isArray(testimonials) ? testimonials : [];
+
+// ID unique pour l'accessibilité
+const sectionId = 'temoignages';
+const titleId = `${sectionId}-title`;
 ---
 
-<section class="wf-testimonials" id="testimonials">
-  <div class="wf-testimonials__container">
-    <Anim effect="fade-up" delay={100}>
-      <h2 class="wf-testimonials__title" data-bind="testimonials.title">{title}</h2>
-    </Anim>
-    <div class="wf-testimonials__grid">
-      {items.map((t, index) => (
-        <Anim effect="fade-up" delay={150 + index * 100}>
-          <div class="wf-testimonial-card card">
-            <div class="wf-testimonial-card__quote-icon">
-              <Quote size={32} />
-            </div>
-            {t.rating && (
-              <div class="wf-testimonial-card__rating">
-                {Array.from({ length: t.rating }).map((_) => (
-                  <Star size={16} fill="currentColor" />
-                ))}
-              </div>
-            )}
-            <p class="wf-testimonial-card__content" data-bind={`testimonials.items.${index}.content`}>{t.content}</p>
-            <div class="wf-testimonial-card__author">
-              <div class="wf-testimonial-card__avatar">
-                <SmartImage
-                  cmsSrc={t.avatar}
-                  fallback={defaultAvatar}
-                  alt={t.name}
-                  width={50}
-                  aspectRatio={1}
-                  layout="fixed"
-                  placeholder="dominantColor"
-                  breakpoints={[50, 100]}
-                  class="wf-testimonial-card__avatar-img"
-                />
-              </div>
-              <div>
-                <p class="wf-testimonial-card__name" data-bind={`testimonials.items.${index}.name`}>{t.name}</p>
-                <p class="wf-testimonial-card__role" data-bind={`testimonials.items.${index}.role`}>{t.role}</p>
-              </div>
-            </div>
-            {t.projectRef && (
-              <div class="wf-testimonial-card__actions">
-                <a class="btn" href={(toProjectSlug(t.projectRef) ? `/${lang}/projects/${toProjectSlug(t.projectRef)}/` : '#')}>
-                  {lang === 'fr' ? 'Voir le projet' : 'View project'}
-                </a>
-              </div>
-            )}
-          </div>
-        </Anim>
-      ))}
+<section 
+  class="testimonials-section" 
+  id={sectionId}
+  itemscope 
+  itemtype="https://schema.org/ItemList"
+>
+  <div class="testimonials">
+    <div class="testimonials__container">
+      <header class="testimonials__header">
+        <div class="testimonials__header-content">
+          <p class="testimonials__subtitle">{subtitle}</p>
+          <h2 class="testimonials__title" id={titleId}>{title}</h2>
+          {description && (
+            <p class="testimonials__description">{description}</p>
+          )}
+          <a href={linkUrl} class="testimonials__link" aria-label="Voir tous les témoignages">
+            <span>{linkText}</span>
+            <svg 
+              class="testimonials__link-arrow" 
+              width="10" 
+              height="9" 
+              viewBox="0 0 10 9" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              aria-hidden="true"
+            >
+              <path 
+                d="M1 4.5H9M9 4.5L5.5 1M9 4.5L5.5 8" 
+                stroke="#048B9A" 
+                stroke-width="1.5" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+        </div>
+        
+        <div class="testimonials__navigation" role="navigation" aria-label="Navigation des témoignages">
+          <button 
+            class="testimonials__nav-btn testimonials__nav-btn--prev" 
+            aria-label="Témoignage précédent" 
+            type="button"
+            data-scroll-dir="prev"
+          >
+            <svg 
+              width="11" 
+              height="21" 
+              viewBox="0 0 11 21" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              aria-hidden="true"
+            >
+              <path 
+                d="M10 1L1 10.5L10 20" 
+                stroke="#FFFEF8" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <button 
+            class="testimonials__nav-btn testimonials__nav-btn--next" 
+            aria-label="Témoignage suivant" 
+            type="button"
+            data-scroll-dir="next"
+          >
+            <svg 
+              width="11" 
+              height="21" 
+              viewBox="0 0 11 21" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              aria-hidden="true"
+            >
+              <path 
+                d="M1 1L10 10.5L1 20" 
+                stroke="#FFFEF8" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div 
+        class="testimonials__grid" 
+        role="list" 
+        aria-labelledby={titleId}
+        data-testimonials-grid
+      >
+        {safeTestimonials.length > 0 ? (
+          safeTestimonials.map((testimonial) => (
+            <TestimonialCard testimonial={testimonial} />
+          ))
+        ) : (
+          <p>Aucun témoignage n'a été ajouté</p>
+        )}
+      </div>
     </div>
   </div>
 </section>
 
+<script>
+  // Navigation du carrousel de témoignages
+  function initTestimonialsNavigation() {
+    const grid = document.querySelector('[data-testimonials-grid]') as HTMLElement;
+    if (!grid) return;
+
+    const prevBtn = document.querySelector('.testimonials__nav-btn--prev') as HTMLButtonElement;
+    const nextBtn = document.querySelector('.testimonials__nav-btn--next') as HTMLButtonElement;
+
+    if (!prevBtn || !nextBtn) return;
+
+    const scrollAmount = 412; // 388px (card width) + 24px (gap)
+
+    prevBtn.addEventListener('click', () => {
+      grid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+
+    // Drag to scroll
+    let isDown = false;
+    let startX: number;
+    let scrollLeft: number;
+
+    grid.addEventListener('mousedown', (e) => {
+      isDown = true;
+      grid.classList.add('is-grabbing');
+      startX = e.pageX - grid.offsetLeft;
+      scrollLeft = grid.scrollLeft;
+    });
+
+    grid.addEventListener('mouseleave', () => {
+      isDown = false;
+      grid.classList.remove('is-grabbing');
+    });
+
+    grid.addEventListener('mouseup', () => {
+      isDown = false;
+      grid.classList.remove('is-grabbing');
+    });
+
+    grid.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - grid.offsetLeft;
+      const walk = (x - startX) * 2;
+      grid.scrollLeft = scrollLeft - walk;
+    });
+  }
+
+  // Initialiser au chargement de la page
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTestimonialsNavigation);
+  } else {
+    initTestimonialsNavigation();
+  }
+</script>
+
 <style>
-  .wf-testimonials {
-    padding: 6rem 0;
-    background: var(--surface);
-    border-bottom: 2px solid var(--color-border);
-  }
-
-  .wf-testimonials__container {
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 0 1.5rem;
-  }
-
-  .wf-testimonials__title {
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    text-align: center;
-    border-bottom: 3px solid var(--color-border);
-    padding-bottom: 1rem;
-    display: inline-block;
+  .testimonials-section {
     width: 100%;
-  }
-
-  .wf-testimonials__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-  }
-
-  .wf-testimonial-card {
-    border: 2px solid var(--color-border);
-    padding: 2rem;
-    background: var(--surface);
-    position: relative;
-    transition: transform var(--transition), box-shadow var(--transition);
-  }
-
-  .wf-testimonial-card:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .wf-testimonial-card__quote-icon {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    color: #eee;
-  }
-
-  .wf-testimonial-card__rating {
+    max-width: 1440px;
+    margin: 0 auto;
+    background: var(--oveco-white);
+    overflow: hidden;
     display: flex;
-    gap: 0.25rem;
-    margin-bottom: 1rem;
-    color: var(--color-text);
+    flex-direction: column;
   }
 
-  .wf-testimonial-card__content {
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-    color: #555;
-  }
-
-  .wf-testimonial-card__author {
+  .testimonials__container {
+    width: 100%;
+    max-width: 1589px;
+    padding: 57px 109px;
     display: flex;
+    flex-direction: column;
+    gap: 89px;
+    box-sizing: border-box;
+  }
+
+  .testimonials__header {
+    width: 100%;
+    max-width: 1219px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .testimonials__header-content {
+    width: 493px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .testimonials__subtitle {
+    color: var(--oveco-text);
+    font-size: var(--oveco-font-h3);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-bold);
+    text-transform: uppercase;
+    line-height: 20px;
+    letter-spacing: 1.92px;
+    margin: 0;
+  }
+
+  .testimonials__title {
+    color: var(--oveco-secondary);
+    font-size: var(--oveco-font-h2);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-extrabold);
+    line-height: 47.77px;
+    margin: 0;
+  }
+
+  .testimonials__description {
+    color: var(--oveco-text);
+    font-size: var(--oveco-font-p);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-regular);
+    line-height: 28.8px;
+    margin: 0;
+  }
+
+  .testimonials__link {
+    display: inline-flex;
     align-items: center;
-    gap: 1rem;
-    padding-top: 1rem;
-    border-top: 2px solid #eee;
+    gap: 6px;
+    text-decoration: none;
+    line-height: 1;
+    color: var(--oveco-accent);
+    font-size: var(--oveco-font-p);
+    font-family: var(--oveco-font-family);
+    font-weight: var(--oveco-weight-bold);
   }
 
-  .wf-testimonial-card__avatar {
-    width: 50px;
-    height: 50px;
-    border: 2px solid var(--color-border);
+  .testimonials__link:focus {
+    outline: 2px solid var(--oveco-accent);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  .testimonials__link-arrow {
+    width: 10px;
+    height: 8.57px;
+    display: block;
+    flex-shrink: 0;
+    transform: translateY(0.5px);
+  }
+
+  .testimonials__navigation {
+    width: 400px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .testimonials__nav-btn {
+    width: 64px;
+    height: 64px;
+    background: var(--oveco-secondary);
+    border: none;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-size: 1.2rem;
-    background: #f5f5f5;
-    flex-shrink: 0;
-    transition: transform var(--transition);
-    border-radius: 50%;
-    overflow: hidden;
+    cursor: pointer;
+    transition: var(--oveco-transition-fast);
   }
 
-  .wf-testimonial-card:hover .wf-testimonial-card__avatar {
-    transform: scale(1.1) rotate(5deg);
+  .testimonials__nav-btn:hover {
+    background: var(--oveco-accent);
   }
 
-  .wf-testimonial-card__avatar img,
-  .wf-testimonial-card__avatar-img {
+  .testimonials__nav-btn:focus {
+    outline: 2px solid var(--oveco-accent);
+    outline-offset: 4px;
+  }
+
+  .testimonials__nav-btn svg {
+    width: 11px;
+    height: 21px;
+  }
+
+  .testimonials__grid {
+    display: flex;
+    align-items: stretch;
+    gap: 24px;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+    touch-action: pan-x pinch-zoom;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-right: 109px;
   }
 
-  .wf-testimonial-card__name {
-    font-weight: bold;
-    margin-bottom: 0.25rem;
+  .testimonials__grid::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
-  .wf-testimonial-card__role {
-    font-size: 0.9rem;
-    color: #666;
+  .testimonials__grid.is-grabbing {
+    cursor: grabbing;
   }
 
-  /* Animations gérées via <Anim /> */
+  /* Responsive */
+  @media (max-width: 1400px) {
+    .testimonials__container {
+      padding: 50px 80px;
+      gap: 70px;
+    }
+    .testimonials__grid {
+      gap: 10px;
+      padding-right: 80px;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .testimonials__container {
+      padding: 45px 60px;
+      gap: 60px;
+    }
+    .testimonials__grid {
+      padding-right: 60px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .testimonials__container {
+      padding: 40px 40px;
+      gap: 50px;
+    }
+    .testimonials__grid {
+      padding-right: 40px;
+    }
+  }
 
   @media (max-width: 768px) {
-    .wf-testimonials__title {
-      font-size: 2rem;
+    .testimonials__container {
+      padding: 35px 2rem;
+      gap: 40px;
+    }
+    .testimonials__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 30px;
+    }
+    .testimonials__grid {
+      padding-right: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .testimonials__container {
+      padding: 30px 1rem;
+      gap: 35px;
+    }
+    .testimonials__grid {
+      padding-right: 1rem;
+    }
+  }
+
+  /* Accessibilité - Réduire les animations */
+  @media (prefers-reduced-motion: reduce) {
+    .testimonials__grid {
+      scroll-behavior: auto;
+    }
+    .testimonials__nav-btn {
+      transition: none !important;
     }
   }
 </style>

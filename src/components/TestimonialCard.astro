@@ -1,0 +1,157 @@
+---
+/**
+ * TestimonialCard Component - Oveco
+ * Carte de témoignage harmonisée avec le style des cartes projet
+ * Affichage visuel avec image de fond, overlay et lien vers projet
+ * 
+ * @component
+ * @tinacms Utilisé dans la section Testimonials
+ */
+
+export interface Props {
+  testimonial: {
+    thumbnail?: {
+      src: string;
+      alt?: string;
+    };
+    client_name?: string;
+    client_position?: string;
+    client_company?: string;
+    card_content?: string;
+    content?: string;
+    linked_project?: {
+      link: string;
+      title: string;
+    };
+    link?: string;
+    priority?: {
+      slug: string;
+    };
+  };
+}
+
+const { testimonial } = Astro.props;
+
+// Image de fond : thumbnail du témoignage ou image par défaut
+const bgImage = testimonial.thumbnail?.src || '/uploads/default-placeholder.png';
+
+// Texte de la carte : prioriser card_content, sinon content
+const cardText = testimonial.card_content || testimonial.content || '';
+// Tronquer à 160 caractères (simulation de striptags + truncate de Twig)
+const truncatedText = cardText.replace(/<[^>]*>/g, '').substring(0, 160);
+
+// URL du lien : projet lié en priorité, sinon témoignage
+const linkedUrl = testimonial.linked_project?.link || testimonial.link || '#';
+
+// Classes de priorité
+const priorityClass = testimonial.priority ? `is-${testimonial.priority.slug}` : '';
+---
+
+<article 
+  class:list={['projects__card', 'projects__card--testimonial', priorityClass]}
+  role="listitem"
+  itemscope 
+  itemtype="https://schema.org/Review"
+  style={`background-image: url('${bgImage}');`}
+>
+  <meta itemprop="image" content={bgImage} />
+  <div class="projects__card-overlay" aria-hidden="true"></div>
+
+  <!-- Header: Type en haut à droite -->
+  <div class="projects__card-header">
+    <span class="projects__card-type">Témoignage</span>
+  </div>
+
+  <!-- Contenu principal -->
+  <div class="projects__card-content">
+    <div class="projects__card-info">
+      {(testimonial.client_company || testimonial.client_position) && (
+        <p class="projects__card-client">
+          {testimonial.client_position && <>{testimonial.client_position}</>}
+          {testimonial.client_position && testimonial.client_company && <> chez </>}
+          {testimonial.client_company && <>{testimonial.client_company}</>}
+        </p>
+      )}
+      
+      {testimonial.client_name && (
+        <h3 
+          class="projects__card-title" 
+          itemprop="author" 
+          itemscope 
+          itemtype="https://schema.org/Person"
+        >
+          <span itemprop="name">{testimonial.client_name}</span>
+        </h3>
+      )}
+      
+      {truncatedText && (
+        <p class="projects__card-description" itemprop="reviewBody">
+          {truncatedText}{cardText.length > 160 ? '...' : ''}
+        </p>
+      )}
+    </div>
+  </div>
+
+  <!-- Footer: Lien vers le projet -->
+  <footer class="projects__card-footer">
+    <a 
+      href={linkedUrl} 
+      class="projects__card-link" 
+      itemprop="url" 
+      aria-label={`Voir le projet lié à ${testimonial.client_name || 'ce témoignage'}`}
+    >
+      <span>Voir le projet</span>
+      <svg 
+        class="projects__card-arrow" 
+        width="10" 
+        height="9" 
+        viewBox="0 0 10 9" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg" 
+        aria-hidden="true"
+      >
+        <path 
+          d="M1 4.5H9M9 4.5L5.5 1M9 4.5L5.5 8" 
+          stroke="#048B9A" 
+          stroke-width="1.5" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+        />
+      </svg>
+    </a>
+  </footer>
+</article>
+
+<style>
+  /* Les styles de la carte sont déjà définis dans _projects.scss */
+  /* et partagés avec les cartes projet via .projects__card */
+  
+  /* Styles spécifiques aux cartes témoignage si nécessaire */
+  .projects__card--testimonial {
+    /* Peut ajouter des styles spécifiques ici */
+  }
+
+  /* Variantes de priorité */
+  .projects__card--testimonial.is-high {
+    box-shadow: 0 4px 15px rgba(4, 139, 154, 0.2);
+  }
+
+  .projects__card--testimonial.is-featured {
+    border: 2px solid var(--oveco-accent);
+  }
+
+  /* Ajustement pour les cartes témoignage dans la grille de témoignages */
+  :global(.testimonials__grid) .projects__card {
+    width: 388px;
+    height: 548px;
+    flex: 0 0 auto;
+  }
+
+  @media (max-width: 480px) {
+    :global(.testimonials__grid) .projects__card {
+      width: 80%;
+      height: auto;
+      aspect-ratio: 388/548;
+    }
+  }
+</style>

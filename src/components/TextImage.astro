@@ -1,0 +1,532 @@
+---
+/**
+ * Composant: TextImage
+ * Composant réutilisable texte + image avec header de section optionnel
+ * Compatible TinaCMS via props
+ */
+
+export interface Link {
+  label: string;
+  url: string;
+}
+
+export interface Image {
+  src: string;
+  alt: string;
+  loading?: 'lazy' | 'eager';
+}
+
+export interface TextImageBlock {
+  subtitle?: string;
+  title?: string;
+  description?: string;
+  link?: Link;
+  image?: Image;
+}
+
+export interface Props {
+  // Header de section (centré)
+  sectionSubtitle?: string;
+  sectionTitle?: string;
+  sectionDescription?: string;
+  showSectionHeader?: boolean;
+  
+  // Premier bloc
+  subtitle?: string;
+  title?: string;
+  description?: string;
+  link?: Link;
+  image?: Image;
+  reverse?: boolean;
+  
+  // Second bloc (optionnel)
+  duplicate?: boolean;
+  subtitle2?: string;
+  title2?: string;
+  description2?: string;
+  link2?: Link;
+  image2?: Image;
+}
+
+const {
+  sectionSubtitle,
+  sectionTitle,
+  sectionDescription,
+  showSectionHeader = true,
+  
+  subtitle,
+  title,
+  description,
+  link,
+  image = {
+    src: "/uploads/hero/maison-build.png",
+    alt: "Réalisation Oveco"
+  },
+  reverse = false,
+  
+  duplicate = false,
+  subtitle2,
+  title2,
+  description2,
+  link2,
+  image2
+} = Astro.props;
+
+const image2Final = image2 || image;
+---
+
+<section class="oveco-section" itemscope itemtype="https://schema.org/Organization">
+  <div class="container">
+    
+    {/* HEADER DE SECTION (centré) */}
+    {showSectionHeader && (sectionSubtitle || sectionTitle || sectionDescription) && (
+      <div class="oveco__section-header">
+        <div class="oveco__section-content">
+          {sectionSubtitle && <h3 class="oveco__section-subtitle">{sectionSubtitle}</h3>}
+          {sectionTitle && <h2 class="oveco__section-title" set:html={sectionTitle} />}
+          {sectionDescription && <p class="oveco__section-description" set:html={sectionDescription} />}
+        </div>
+      </div>
+    )}
+    
+    {/* PREMIER BLOC */}
+    <div class={`oveco__container ${reverse ? 'is-reverse' : ''}`}>
+      {/* Contenu textuel */}
+      <div class="oveco__content">
+        {(subtitle || title || description) && (
+          <header class="oveco__header">
+            {subtitle && <h3 class="oveco__subtitle" itemprop="name">{subtitle}</h3>}
+            {title && <h2 class="oveco__title" set:html={title} />}
+            {description && <p class="oveco__description" itemprop="description" set:html={description} />}
+          </header>
+        )}
+        
+        {link && link.label && link.url && (
+          <a href={link.url} class="oveco__link" aria-label={`En savoir plus sur ${subtitle || 'nos services'}`}>
+            <span>{link.label}</span>
+            <img src="/uploads/icons/Arrow.svg" alt="" class="oveco__arrow" aria-hidden="true" />
+          </a>
+        )}
+      </div>
+
+      {/* Zone visuelle */}
+      <div class="oveco__visual">
+        <img 
+          src={image.src} 
+          alt={image.alt} 
+          loading={image.loading || 'lazy'} 
+          width="362" 
+          height="472" 
+          class="oveco__main-image" 
+          itemprop="image"
+        />
+        <img src="/uploads/icons/maison.png" alt="" class="oveco__icon oveco__icon--house" aria-hidden="true" />
+        <img src="/uploads/icons/crayon.png" alt="" class="oveco__icon oveco__icon--pencil" aria-hidden="true" />
+      </div>
+    </div>
+
+    {/* SECOND BLOC (si duplicate) */}
+    {duplicate && (
+      <div class={`oveco__container ${!reverse ? 'is-reverse' : ''}`}>
+        {/* Contenu textuel du 2e bloc */}
+        <div class="oveco__content">
+          {(subtitle2 || title2 || description2) && (
+            <header class="oveco__header">
+              {subtitle2 && <h3 class="oveco__subtitle" itemprop="name">{subtitle2}</h3>}
+              {title2 && <h2 class="oveco__title" set:html={title2} />}
+              {description2 && <p class="oveco__description" itemprop="description" set:html={description2} />}
+            </header>
+          )}
+          
+          {link2 && link2.label && link2.url && (
+            <a href={link2.url} class="oveco__link" aria-label={`En savoir plus sur ${subtitle2 || 'nos services'}`}>
+              <span>{link2.label}</span>
+              <img src="/uploads/icons/Arrow.svg" alt="" class="oveco__arrow" aria-hidden="true" />
+            </a>
+          )}
+        </div>
+
+        {/* Zone visuelle du 2e bloc */}
+        <div class="oveco__visual">
+          <img 
+            src={image2Final.src} 
+            alt={image2Final.alt} 
+            loading={image2Final.loading || 'lazy'} 
+            width="362" 
+            height="472" 
+            class="oveco__main-image" 
+            itemprop="image"
+          />
+          <img src="/uploads/icons/maison.png" alt="" class="oveco__icon oveco__icon--house" aria-hidden="true" />
+          <img src="/uploads/icons/crayon.png" alt="" class="oveco__icon oveco__icon--pencil" aria-hidden="true" />
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+/* OVECO SECTION */
+.oveco-section {
+  padding: 0;
+  background: var(--oveco-white);
+}
+
+.oveco-section h2,
+.oveco-section h3,
+.oveco-section p {
+  margin: 0 !important;
+}
+
+.oveco-section .container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* HEADER DE SECTION (centré) */
+.oveco__section-header {
+  align-self: stretch;
+  padding-inline: clamp(16px, 6vw, 109px);
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+  margin-bottom: clamp(24px, 6vw, 64px);
+}
+
+@media (max-width: 768px) {
+  .oveco__section-header {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    margin-bottom: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__section-header {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.oveco__section-content {
+  width: min(100%, 706.82px);
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+
+.oveco__section-subtitle {
+  text-align: center;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-h3);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-bold);
+  text-transform: uppercase;
+  line-height: var(--oveco-line-tight);
+  letter-spacing: var(--oveco-spacing-wide);
+  margin: 0 !important;
+}
+
+.oveco__section-title {
+  align-self: stretch;
+  text-align: center;
+  color: var(--oveco-secondary);
+  font-size: var(--oveco-font-h2);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-extrabold);
+  line-height: var(--oveco-line-normal);
+  margin: 0 !important;
+}
+
+@media (max-width: 480px) {
+  .oveco__section-title {
+    font-size: clamp(24px, 6vw, 28px);
+    line-height: 1.2;
+  }
+}
+
+.oveco__section-description {
+  align-self: stretch;
+  text-align: center;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-p);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-regular);
+  line-height: var(--oveco-line-extra-loose);
+  margin: 0 !important;
+}
+
+.oveco__container {
+  justify-content: space-between;
+  align-items: center;
+  gap: clamp(24px, 8vw, 130px);
+  display: flex;
+  margin-bottom: 0;
+  padding-inline: clamp(16px, 4vw, 32px);
+}
+
+.oveco__container + .oveco__container {
+  margin-top: clamp(64px, 10vw, 128px);
+}
+
+@media (max-width: 768px) {
+  .oveco__container + .oveco__container {
+    margin-top: clamp(48px, 8vw, 96px);
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__container + .oveco__container {
+    margin-top: clamp(32px, 6vw, 64px);
+  }
+}
+
+.oveco__container.is-reverse {
+  flex-direction: row-reverse;
+}
+
+@media (max-width: 768px) {
+  .oveco__container {
+    flex-direction: column;
+    gap: clamp(32px, 6vw, 40px);
+    text-align: center;
+    padding-inline: clamp(16px, 4vw, 24px);
+  }
+  
+  .oveco__container.is-reverse {
+    flex-direction: column-reverse;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__container {
+    gap: clamp(24px, 5vw, 32px);
+    padding-inline: clamp(12px, 3vw, 16px);
+  }
+}
+
+.oveco__content {
+  width: 100%;
+  max-width: 600px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 21px;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .oveco__content {
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__content {
+    gap: 1.5rem;
+  }
+}
+
+.oveco__header {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 6px;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .oveco__header {
+    align-items: center;
+  }
+}
+
+.oveco__subtitle {
+  align-self: stretch;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-h3);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-bold);
+  text-transform: uppercase;
+  line-height: var(--oveco-line-tight);
+  letter-spacing: 0.12rem;
+  margin: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .oveco__subtitle {
+    text-align: center;
+  }
+}
+
+.oveco__title {
+  align-self: stretch;
+  color: var(--oveco-secondary);
+  font-size: var(--oveco-font-h2);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-extrabold);
+  line-height: var(--oveco-line-normal);
+  margin: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .oveco__title {
+    text-align: center;
+  }
+}
+
+.oveco__description {
+  align-self: stretch;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-p);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-regular);
+  line-height: var(--oveco-line-extra-loose);
+  margin: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .oveco__description {
+    text-align: center;
+  }
+}
+
+.oveco__link {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+  text-decoration: none;
+  transition: opacity var(--oveco-transition-fast);
+}
+
+.oveco__link:hover {
+  opacity: 0.8;
+}
+
+.oveco__link span {
+  color: var(--oveco-accent);
+  font-size: 1rem;
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-bold);
+  line-height: 1.2rem;
+}
+
+.oveco__arrow {
+  width: 16px;
+  height: 14px;
+}
+
+.oveco__visual {
+  width: min(100%, 452px);
+  height: 562px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .oveco__visual {
+    width: 100%;
+    max-width: 452px;
+    height: auto;
+    aspect-ratio: 452 / 562;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__visual {
+    max-width: 350px;
+    margin: 0 auto;
+  }
+}
+
+.oveco__main-image {
+  position: absolute;
+  left: 45px;
+  top: 63.26px;
+  width: 362px;
+  aspect-ratio: 362 / 435.49;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 40.83px;
+  background: linear-gradient(0deg, rgba(2, 139, 154, 0.05) 0%, rgba(2, 139, 154, 0.05) 100%);
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .oveco__main-image {
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(100%, 362px);
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__main-image {
+    width: 280px;
+  }
+}
+
+.oveco__icon {
+  position: absolute;
+}
+
+.oveco__icon--house {
+  width: 100.90px;
+  height: 100.90px;
+  left: 330.82px;
+  top: 427.82px;
+  transform-origin: top left;
+}
+
+@media (max-width: 768px) {
+  .oveco__icon--house {
+    left: 70%;
+    top: 75%;
+    transform: scale(0.8);
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__icon--house {
+    left: 65%;
+    top: 70%;
+    transform: scale(0.6);
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.oveco__icon--pencil {
+  width: 104px;
+  height: 104px;
+  left: 8px;
+  top: 61px;
+}
+
+@media (max-width: 768px) {
+  .oveco__icon--pencil {
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: -180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__icon--pencil {
+    width: 80px;
+    height: 80px;
+    margin-left: -140px;
+    left: max(10px, 50%);
+  }
+}
+</style>

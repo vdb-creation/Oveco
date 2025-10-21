@@ -1,133 +1,150 @@
 {
   "sections": [
     {
-      "logo": "Template",
-      "links": [
-        { "label": "Home", "href": "#home" },
-        { "label": "Services", "href": "#services" },
-        { "label": "Projects", "href": "#projects" }
-      ],
-      "_template": "navbar"
-    },
-    {
-      "title": "Our Team",
-      "subtitle": "Passionate experts",
-      "members": [
-        {
-          "name": "Alice Dupont",
-          "role": "CEO",
-          "bio": "Leader.",
-          "image": "/uploads/team/wallpapper-op.jpg"
-        }
-      ],
-      "_template": "team"
-    },
-    {
-      "title": "Create something extraordinary",
-      "subtitle": "Astro Template - VDB Creation",
-      "description": "A modern and minimalist starting point for your web projects.",
-      "ctaLabel": "Discover",
-      "ctaHref": "#projects",
-      "heroImage": "/uploads/hero/wallpapper-op.jpg",
-      "_template": "hero"
-    },
-    {
-      "title": "Ready to start?",
       "subtitle": "Contact us",
-      "ctaLabel": "Get in touch",
-      "ctaHref": "#contact",
-      "_template": "cta"
+      "title": "Do you have an idea, a project, or simply questions?",
+      "description": "Write to us or call us, we'll be happy to discuss it.",
+      "contactInfo": {
+        "email": "job@oveco.be",
+        "phone": "+32 473 / 68.99.02",
+        "location": "Beauvechain region"
+      },
+      "formAction": "#contact",
+      "_template": "contact"
     },
     {
-      "title": "Our Services",
-      "items": [
+      "subtitle": "self-construction",
+      "title": "Learn by doing, build while being accompanied",
+      "description": "We believe that self-construction is a powerful way to take ownership of your habitat.",
+      "services": [
         {
-          "title": "UI/UX Design",
-          "description": "Designing intuitive and aesthetic interfaces.",
-          "icon": "Palette"
+          "image": "/uploads/hero/wallpapper-op.jpg",
+          "alt": "Personalized support",
+          "title": "Personalized support",
+          "description": "We guide you through every step of your self-construction project."
         },
         {
-          "title": "Web Development",
-          "description": "High-performance websites and web apps.",
-          "icon": "Code"
+          "image": "/uploads/hero/wallpapper-op.jpg",
+          "alt": "Practical training",
+          "title": "Practical training",
+          "description": "Learn construction techniques directly on site."
         }
       ],
-      "_template": "services"
-    },
-    {
-      "title": "Second Hero",
-      "subtitle": "Another hero for demonstration",
-      "description": "You can now have multiple hero sections.",
       "ctaLabel": "Learn more",
-      "ctaHref": "#about",
-      "_template": "hero"
+      "ctaHref": "#contact",
+      "_template": "autoconstruction"
     },
     {
-      "title": "Our Work",
-      "items": [
+      "subtitle": "Our achievements",
+      "title": "Projects that make sense",
+      "description": "Discover our achievements in self-construction and sustainable renovation.",
+      "ctaLabel": "Contact us",
+      "ctaHref": "#contact",
+      "mediaLeft": {
+        "src": "/uploads/hero/wallpapper-op.jpg",
+        "alt": "Construction project"
+      },
+      "mediaRight": {
+        "src": "/uploads/hero/wallpapper-op.jpg",
+        "alt": "Completed project",
+        "overlay": true
+      },
+      "_template": "worksHero"
+    },
+    {
+      "subtitle": "Our expertise",
+      "title": "Putting technique at the service of human and sustainable projects",
+      "description": "At Oveco, technique is never an end in itself, but always a means at the service of your projects.",
+      "cards": [
         {
-          "title": "Project Alpha",
-          "category": "Web",
-          "description": "E-commerce.",
-          "image": "/uploads/team/wallpapper-big.jpg"
+          "icon": "/uploads/icons/expertise1.jpg",
+          "alt": "Sustainable construction",
+          "title": "Sustainable construction",
+          "description": "Techniques and materials respectful of the environment."
+        },
+        {
+          "icon": "/uploads/icons/expertise2.jpg",
+          "alt": "Self-construction",
+          "title": "Self-construction",
+          "description": "Personalized support for your self-construction projects."
+        }
+      ],
+      "ctaLabel": "Discover all our expertise",
+      "ctaHref": "#expertises-details",
+      "_template": "expertise"
+    },
+    {
+      "title": "Project statistics",
+      "stats": [
+        {
+          "value": "+45",
+          "label": "solar panels",
+          "description": "Installed on our projects"
+        },
+        {
+          "value": "100%",
+          "label": "renewable energy",
+          "description": "In our new constructions"
+        }
+      ],
+      "_template": "stats"
+    },
+    {
+      "subtitle": "Our achievements",
+      "title": "These are more than projects, these are collaborations",
+      "description": "Discover some of our recent achievements.",
+      "linkText": "Learn more",
+      "linkUrl": "/works",
+      "cards": [
+        {
+          "image": "/uploads/projects/projet1.jpg",
+          "type": "Renovation",
+          "client": "Martin Family",
+          "title": "Passive house in Beauvechain",
+          "url": "/work/maison-passive",
+          "description": "Complete renovation of a family home with passive insulation and solar panels."
+        },
+        {
+          "image": "/uploads/projects/projet2.jpg",
+          "type": "Self-construction",
+          "client": "Dubois Couple",
+          "title": "Ecological extension",
+          "url": "/work/extension-ecologique",
+          "description": "Support for self-construction of an extension in natural materials."
         }
       ],
       "_template": "projects"
     },
     {
-      "title": "What our clients say",
-      "items": [
+      "subtitle": "What do they say?",
+      "title": "These are more than projects, these are collaborations",
+      "description": "Discover the testimonials of our satisfied customers.",
+      "linkText": "Learn more",
+      "linkUrl": "#temoignages-complets",
+      "testimonials": [
         {
-          "name": "Marie Dupont",
-          "role": "CEO",
-          "content": "Excellent work.",
-          "rating": 5
+          "thumbnail": {
+            "src": "/uploads/testimonials/client1.jpg",
+            "alt": "Photo of Marie Dupont"
+          },
+          "client_name": "Marie Dupont",
+          "client_position": "Owner",
+          "client_company": "Passive house Beauvechain",
+          "content": "Oveco accompanied us in our passive renovation project. Their expertise and availability made all the difference.",
+          "card_content": "Excellent support for our passive renovation project.",
+          "linked_project": {
+            "title": "Passive house in Beauvechain",
+            "link": "/work/maison-passive"
+          }
         }
       ],
       "_template": "testimonials"
     },
     {
-      "title": "By the numbers",
-      "items": [
-        { "value": "150+", "label": "Projects", "icon": "TrendingUp" }
-      ],
-      "_template": "stats"
-    },
-    {
-      "title": "Frequently Asked Questions",
-      "items": [
-        { "question": "Timelines?", "answer": "4 to 8 weeks." }
-      ],
-      "_template": "faq"
-    },
-    {
-      "title": "Ready to start?",
-      "subtitle": "Let’s talk",
-      "ctaLabel": "Contact us",
-      "ctaHref": "#contact",
-      "_template": "cta"
-    },
-    {
-      "title": "Contact",
-      "subtitle": "We are here",
-      "email": "contact@example.com",
-      "phone": "+33 1 23 45 67 89",
-      "address": "123 Rue Example, Paris",
-      "_template": "contact"
-    },
-    {
-      "companyName": "Your Company",
-      "description": "Digital creators.",
-      "links": [
-        { "label": "Home", "href": "#home" },
-        { "label": "Contact", "href": "#contact" }
-      ],
-      "socials": {
-        "github": "https://github.com",
-        "twitter": "https://twitter.com"
-      },
+      "copyrightYear": 2024,
+      "companyName": "Oveco",
+      "legalText": "All Rights Reserved | Terms and Conditions | Privacy Policy",
       "_template": "footer"
     }
   ]
 }
-

@@ -1,251 +1,480 @@
 ---
-import { Mail, Phone, MapPin } from 'lucide-astro';
+/**
+ * Composant: Contact
+ * Section de contact avec informations et formulaire
+ * Compatible TinaCMS via props
+ */
 
-interface Props {
-  sectionIndex?: number;
-  title?: string;
-  description?: string;
+export interface ContactInfo {
   email?: string;
   phone?: string;
-  address?: string;
+  location?: string;
+}
+
+export interface Props {
+  subtitle?: string;
+  title?: string;
+  description?: string;
+  contactInfo?: ContactInfo;
+  formAction?: string;
 }
 
 const {
-  title = "Contactez-nous",
-  description = "Une question ? Un projet ? N'hésitez pas à nous contacter.",
-  email = "contact@exemple.com",
-  phone = "+33 1 23 45 67 89",
-  address = "123 Rue de la Paix, 75000 Paris",
+  subtitle = "Nous contacter",
+  title = "Vous avez une idée, un projet, ou simplement des questions ?",
+  description = "Écrivez-nous ou appelez-nous, on sera ravi d'en discuter.",
+  contactInfo = {
+    email: "job@oveco.be",
+    phone: "+32 473 / 68.99.02",
+    location: "Région de Beauvechain"
+  },
+  formAction = "#contact"
 } = Astro.props;
 ---
 
-<section class="wf-contact" id="contact">
-  <div class="wf-contact__container">
-    <div class="wf-contact__info">
-  <h2 class="wf-contact__title" data-bind="contact.title">{title}</h2>
-  <p class="wf-contact__description" data-bind="contact.subtitle">{description}</p>
-      <div class="wf-contact__details">
-        <div class="wf-contact__detail">
-          <Mail size={20} />
-          <div>
-            <strong>Email:</strong>
-            <a href={`mailto:${email}`} data-bind="contact.email">{email}</a>
-          </div>
+<section class="contact-section" id="contact" aria-labelledby="contact-title">
+  <div class="contact" itemscope itemtype="https://schema.org/ContactPoint">
+    <div class="contact__container">
+      <aside class="contact__info" aria-labelledby="contact-title contact-subtitle">
+        <div class="contact__info-header">
+          <p class="contact__subtitle" id="contact-subtitle">{subtitle}</p>
+          <h2 class="contact__title" id="contact-title">{title}</h2>
         </div>
-        <div class="wf-contact__detail">
-          <Phone size={20} />
-          <div>
-            <strong>Téléphone:</strong>
-            <a href={`tel:${phone}`} data-bind="contact.phone">{phone}</a>
+        <p class="contact__description">{description}</p>
+
+        <ul class="contact__list" role="list">
+          {contactInfo.email && (
+            <li class="contact__item">
+              <span class="contact__item-icon" aria-hidden="true">
+                <svg width="19" height="15" viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18.2476 3.14648V11.4798C18.2476 12.0324 18.0281 12.5623 17.6374 12.953C17.2467 13.3437 16.7168 13.5632 16.1642 13.5632H3.66424C3.11171 13.5632 2.5818 13.3437 2.1911 12.953C1.8004 12.5623 1.58091 12.0324 1.58091 11.4798V3.14648" stroke="#048B9A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M18.2476 3.14681C18.2476 2.59428 18.0281 2.06437 17.6374 1.67367C17.2467 1.28297 16.7168 1.06348 16.1642 1.06348H3.66424C3.11171 1.06348 2.5818 1.28297 2.1911 1.67367C1.8004 2.06437 1.58091 2.59428 1.58091 3.14681L8.81008 7.6607C9.14118 7.86764 9.52378 7.97737 9.91424 7.97737C10.3047 7.97737 10.6873 7.86764 11.0184 7.6607L18.2476 3.14681Z" stroke="#048B9A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <a class="contact__link contact__link--accent" href={`mailto:${contactInfo.email}`}>
+                {contactInfo.email}
+              </a>
+            </li>
+          )}
+          
+          {contactInfo.phone && (
+            <li class="contact__item">
+              <span class="contact__item-icon contact__item-icon--phone" aria-hidden="true">
+                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.1658 17.5824L12.1749 17.5888C12.962 18.0899 13.8964 18.3075 14.8239 18.2056C15.7514 18.1038 16.6163 17.6886 17.2759 17.0286L17.8488 16.4556C17.9758 16.3287 18.0765 16.1781 18.1452 16.0122C18.2139 15.8464 18.2493 15.6687 18.2493 15.4892C18.2493 15.3097 18.2139 15.1319 18.1452 14.9661C18.0765 14.8003 17.9758 14.6496 17.8488 14.5227L15.4322 12.108C15.3054 11.981 15.1547 11.8803 14.9889 11.8116C14.823 11.7429 14.6453 11.7075 14.4658 11.7075C14.2863 11.7075 14.1085 11.7429 13.9427 11.8116C13.7769 11.8803 13.6262 11.981 13.4993 12.108C13.2431 12.3641 12.8957 12.508 12.5334 12.508C12.1711 12.508 11.8236 12.3641 11.5674 12.108L7.70342 8.24312C7.44727 7.9869 7.30338 7.63943 7.30338 7.27713C7.30338 6.91484 7.44727 6.56737 7.70342 6.31115C7.83039 6.18426 7.93111 6.0336 7.99983 5.86777C8.06855 5.70195 8.10392 5.5242 8.10392 5.3447C8.10392 5.1652 8.06855 4.98746 7.99983 4.82163C7.93111 4.65581 7.83039 4.50515 7.70342 4.37826L5.28777 1.96352C5.03154 1.70737 4.68408 1.56348 4.32178 1.56348C3.95948 1.56348 3.61201 1.70737 3.35579 1.96352L2.78193 2.53646C2.12208 3.1961 1.70702 4.06112 1.60533 4.98858C1.50364 5.91604 1.72141 6.85044 2.22265 7.63739L2.22812 7.6465C4.8753 11.5631 8.24874 14.9359 12.1658 17.5824V17.5824Z" stroke="#048B9A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <a class="contact__link contact__link--accent" href={`tel:${contactInfo.phone.replace(/\s/g, '')}`}>
+                {contactInfo.phone}
+              </a>
+            </li>
+          )}
+          
+          {contactInfo.location && (
+            <li class="contact__item">
+              <span class="contact__item-icon contact__item-icon--location" aria-hidden="true">
+                <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.7751 8.65382C14.7751 14.0327 9.26589 17.3464 8.121 17.9776C8.05758 18.0126 7.98632 18.0309 7.91389 18.0309C7.84146 18.0309 7.77021 18.0126 7.70678 17.9776C6.56103 17.3464 1.05356 14.0327 1.05356 8.65382C1.05356 4.36584 3.62634 1.36426 7.91432 1.36426C12.2023 1.36426 14.7751 4.36584 14.7751 8.65382Z" stroke="#5C6D6F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4.48396 8.2253C4.48396 9.1351 4.84538 10.0076 5.4887 10.6509C6.13202 11.2943 7.00455 11.6557 7.91434 11.6557C8.82414 11.6557 9.69667 11.2943 10.34 10.6509C10.9833 10.0076 11.3447 9.1351 11.3447 8.2253C11.3447 7.31551 10.9833 6.44298 10.34 5.79966C9.69667 5.15634 8.82414 4.79492 7.91434 4.79492C7.00455 4.79492 6.13202 5.15634 5.4887 5.79966C4.84538 6.44298 4.48396 7.31551 4.48396 8.2253V8.2253Z" stroke="#5C6D6F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="contact__text">{contactInfo.location}</span>
+            </li>
+          )}
+        </ul>
+      </aside>
+
+      <div class="contact__panel" aria-label="Formulaire de contact">
+        <form class="contact__form" method="post" action={formAction} novalidate>
+          <input type="hidden" name="form-name" value="oveco-contact" />
+          <div class="contact__groups">
+            <div class="contact__col">
+              <div class="contact__field">
+                <label class="contact__label" for="contact-name">Nom</label>
+                <input 
+                  id="contact-name" 
+                  class="contact__input" 
+                  name="name" 
+                  type="text" 
+                  inputmode="text" 
+                  autocomplete="name" 
+                  placeholder="John Carter" 
+                  required 
+                  aria-required="true" 
+                />
+              </div>
+
+              <div class="contact__field">
+                <label class="contact__label" for="contact-phone">Téléphone</label>
+                <input 
+                  id="contact-phone" 
+                  class="contact__input" 
+                  name="phone" 
+                  type="tel" 
+                  inputmode="tel" 
+                  autocomplete="tel" 
+                  placeholder="(123) 456 - 789" 
+                />
+              </div>
+            </div>
+
+            <div class="contact__col">
+              <div class="contact__field">
+                <label class="contact__label" for="contact-email">Email</label>
+                <input 
+                  id="contact-email" 
+                  class="contact__input" 
+                  name="email" 
+                  type="email" 
+                  inputmode="email" 
+                  autocomplete="email" 
+                  placeholder="example@email.com" 
+                  required 
+                  aria-required="true" 
+                />
+              </div>
+
+              <div class="contact__field">
+                <label class="contact__label" for="contact-company">Entreprise</label>
+                <input 
+                  id="contact-company" 
+                  class="contact__input" 
+                  name="company" 
+                  type="text" 
+                  inputmode="text" 
+                  autocomplete="organization" 
+                  placeholder="Oveco" 
+                />
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="wf-contact__detail">
-          <MapPin size={20} />
-          <div>
-            <strong>Adresse:</strong>
-            <p data-bind="contact.address">{address}</p>
+
+          <div class="contact__field contact__field--message">
+            <label class="contact__label" for="contact-message">Message</label>
+            <textarea 
+              id="contact-message" 
+              class="contact__textarea" 
+              name="message" 
+              rows="6" 
+              placeholder="Votre message ici..." 
+              required 
+              aria-required="true"
+            ></textarea>
           </div>
-        </div>
+
+          <div class="contact__actions">
+            <button type="submit" class="contact__submit" aria-label="Envoyer le message">Envoyer</button>
+          </div>
+        </form>
       </div>
     </div>
-
-
-<!-- 1. Quand quelqu'un soumet ton formulaire, Netlify stocke la réponse dans son dashboard (onglet
-Forms de ton site).
-2. Tu peux configurer des notifications :
-• Aller dans Netlify Dashboard > Forms > Notifications
-• Ajouter une notification par email (tu indiques l'adresse de destination)
-• Ou par Slack / Webhook / Zapier si tu veux automatiser
-* Donc : sans config, rien n'est envoyé par email, ça reste visible uniquement dans le dashboard Netlify.
-* Avec la config, tu peux recevoir directement chaque soumission sur ton adresse email. -->
-
-    <!-- formulaire de contact -->
-    <form class="wf-contact__form" data-netlify="true" netlify-honeypot="bot-field">
-        <!-- champ anti-spam -->
-        <input type="hidden" name="form-name" value="contact" />
-        <p hidden>
-          <label>Ne pas remplir: <input name="bot-field" /></label>
-        </p>
-      <div class="wf-contact__field">
-        <label for="name">Nom</label>
-        <input type="text" id="name" name="name" required />
-      </div>
-      <div class="wf-contact__field">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required />
-      </div>
-      <div class="wf-contact__field">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="5" required></textarea>
-      </div>
-      <button type="submit" class="wf-contact__submit">Envoyer</button>
-    </form>
   </div>
 </section>
 
 <style>
-  .wf-contact {
-    padding: 6rem 0;
-    background: #f9f9f9;
-    border-bottom: 2px solid #333;
-  }
+.contact-section {
+  width: 100%;
+  background: var(--oveco-white);
+  display: flex;
+  justify-content: center;
+  padding: 80px 24px;
+}
 
-  .wf-contact__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    animation: fadeIn 0.6s ease-out;
+@media (min-width: 1200px) {
+  .contact-section {
+    padding: 120px 24px;
   }
+}
 
-  .wf-contact__title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    border-bottom: 3px solid #333;
-    padding-bottom: 1rem;
-    animation: slideInLeft 0.6s ease-out;
+.contact__container {
+  width: 100%;
+  max-width: 1219px;
+  display: grid;
+  grid-template-columns: 1fr 616px;
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .contact__container {
+    grid-template-columns: 1fr;
   }
+}
 
-  .wf-contact__description {
-    font-size: 1.1rem;
-    color: #555;
-    margin-bottom: 2rem;
+.contact__info {
+  width: 100%;
+  max-width: 502.17px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.contact__info-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact__subtitle {
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-h3);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-bold);
+  text-transform: uppercase;
+  line-height: var(--oveco-line-tight);
+  letter-spacing: var(--oveco-spacing-wide);
+  margin: 0;
+}
+
+.contact__title {
+  color: var(--oveco-secondary);
+  font-size: var(--oveco-font-h2);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-extrabold);
+  line-height: var(--oveco-line-normal);
+  margin: 0;
+}
+
+.contact__description {
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-p);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-regular);
+  line-height: var(--oveco-line-extra-loose);
+  margin: 0;
+}
+
+.contact__list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contact__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact__text {
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-h3);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-regular);
+  line-height: var(--oveco-line-extra-loose);
+}
+
+.contact__link {
+  text-decoration: none;
+  font-size: var(--oveco-font-h3);
+  line-height: var(--oveco-line-extra-loose);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-regular);
+  transition: opacity var(--oveco-transition-fast);
+}
+
+.contact__link:hover {
+  opacity: 0.8;
+}
+
+.contact__link--accent {
+  color: var(--oveco-accent);
+}
+
+.contact__item-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.contact__item-icon svg {
+  display: block;
+  width: 19px;
+  height: 19px;
+}
+
+.contact__item-icon--location {
+  width: 16px;
+  height: 19px;
+}
+
+.contact__item-icon--location svg {
+  width: 16px;
+  height: 19px;
+}
+
+.contact__panel {
+  width: 616px;
+  min-height: 682px;
+  background: rgba(51, 71, 73, 0.10);
+  border-radius: 25px;
+  position: relative;
+  padding: 65px 40px 40px 40px;
+  box-sizing: border-box;
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.contact__groups {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.contact__col {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.contact__field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact__label {
+  color: var(--oveco-secondary);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-bold);
+  font-size: 18px;
+  line-height: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+.contact__input {
+  width: 256px;
+  height: 72px;
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  background: rgba(255, 254, 248, 0.75);
+  padding: 21.5px 24px;
+  box-sizing: border-box;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-p);
+  font-family: var(--oveco-font-family);
+  line-height: var(--oveco-line-extra-loose);
+  font-weight: var(--oveco-weight-regular);
+  transition: background var(--oveco-transition-fast);
+}
+
+.contact__input:focus {
+  background: rgba(255, 254, 248, 1);
+  outline: 2px solid var(--oveco-accent);
+  outline-offset: 2px;
+}
+
+.contact__field--message {
+  width: 100%;
+}
+
+.contact__textarea {
+  width: 100%;
+  max-width: 536px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  background: var(--oveco-white);
+  padding: 24px;
+  box-sizing: border-box;
+  color: var(--oveco-text);
+  font-size: var(--oveco-font-p);
+  font-family: var(--oveco-font-family);
+  line-height: var(--oveco-line-extra-loose);
+  font-weight: var(--oveco-weight-regular);
+  min-height: 172px;
+  resize: vertical;
+  transition: background var(--oveco-transition-fast);
+}
+
+.contact__textarea:focus {
+  outline: 2px solid var(--oveco-accent);
+  outline-offset: 2px;
+}
+
+.contact__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.contact__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 18px 30px;
+  background: var(--oveco-secondary);
+  border-radius: var(--oveco-radius-button);
+  color: var(--oveco-white);
+  font-size: var(--oveco-font-h3);
+  font-family: var(--oveco-font-family);
+  font-weight: var(--oveco-weight-bold);
+  line-height: 1.2;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  transition: all var(--oveco-transition-normal);
+}
+
+.contact__submit:hover {
+  background: #2a3a3c;
+  transform: translateY(-2px);
+  box-shadow: var(--oveco-shadow-medium);
+}
+
+.contact__submit:focus {
+  outline: 2px solid var(--oveco-accent);
+  outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .contact__panel {
+    width: 100%;
+    padding: 40px 20px;
   }
-
-  .wf-contact__details {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  
+  .contact__groups {
+    gap: 16px;
   }
-
-  .wf-contact__detail {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-    border-left: 3px solid #333;
-    transition: all 0.3s;
+  
+  .contact__col {
+    gap: 24px;
   }
-
-  .wf-contact__detail:hover {
-    background: white;
-    padding-left: 1.5rem;
-    transform: translateX(5px);
+  
+  .contact__input {
+    width: min(100%, 420px);
+    height: 64px;
   }
-
-  .wf-contact__detail :global(svg) {
-    flex-shrink: 0;
-    margin-top: 0.2rem;
+  
+  .contact__textarea {
+    max-width: 100%;
   }
-
-  .wf-contact__detail strong {
-    font-size: 0.9rem;
-    display: block;
-    margin-bottom: 0.25rem;
+  
+  .contact__actions {
+    justify-content: center;
   }
+}
 
-  .wf-contact__detail a {
-    color: #333;
-    text-decoration: none;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.3s;
+@media (prefers-reduced-motion: reduce) {
+  .contact__submit {
+    transition: none !important;
   }
-
-  .wf-contact__detail a:hover {
-    border-bottom-color: #333;
+  .contact__submit:hover {
+    transform: none !important;
   }
-
-  .wf-contact__form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    animation: slideInRight 0.6s ease-out;
-  }
-
-  .wf-contact__field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .wf-contact__field label {
-    font-weight: bold;
-    font-size: 0.9rem;
-  }
-
-  .wf-contact__field input,
-  .wf-contact__field textarea {
-    padding: 0.75rem;
-    border: 2px solid #333;
-    font-family: inherit;
-    font-size: 1rem;
-    background: white;
-    transition: all 0.3s;
-  }
-
-  .wf-contact__field input:focus,
-  .wf-contact__field textarea:focus {
-    outline: none;
-    box-shadow: 4px 4px 0 #333;
-    transform: translateX(-2px) translateY(-2px);
-  }
-
-  .wf-contact__submit {
-    padding: 1rem 2rem;
-    background: #333;
-    color: white;
-    border: 2px solid #333;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s;
-    align-self: flex-start;
-  }
-
-  .wf-contact__submit:hover {
-    background: white;
-    color: #333;
-    transform: translateY(-2px);
-    box-shadow: 4px 4px 0 #333;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes slideInLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @media (max-width: 768px) {
-    .wf-contact__container {
-      grid-template-columns: 1fr;
-      gap: 3rem;
-    }
-
-    .wf-contact__title {
-      font-size: 2rem;
-    }
-  }
+}
 </style>
