@@ -1,0 +1,21 @@
+{
+  "title": "Home",
+  "description": "Home page",
+  "sections": [
+    {
+      "_template": "contact"
+    },
+    {
+      "_template": "worksHero"
+    },
+    {
+      "_template": "autoconstruction"
+    },
+    {
+      "_template": "projects"
+    },
+    {
+      "_template": "footer"
+    }
+  ]
+}

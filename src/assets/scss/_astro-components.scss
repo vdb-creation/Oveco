@@ -1,0 +1,9 @@
+/* ═══════════════════════════════════════════════════════════
+   🎨 Configuration SCSS pour composants Astro
+   ═══════════════════════════════════════════════════════════ */
+
+// Ce fichier peut être importé dans les composants Astro individuels
+// pour avoir accès aux variables et mixins SCSS
+
+@import 'variables';
+@import 'mixins';

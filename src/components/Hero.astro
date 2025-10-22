@@ -1,0 +1,163 @@
+---
+/**
+ * Hero Component - Oveco
+ * Section héro avec images et cercle suiveur de souris
+ * 
+ * @component
+ */
+
+import SmartImage from './SmartImage.astro';
+
+export interface HeroProps {
+  subtitle?: string;
+  title: string;
+  description?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  images?: Array<{
+    src: string;
+    alt: string;
+    class?: string;
+  }>;
+}
+
+const {
+  subtitle = "oveco",
+  title,
+  description = "Des ingénieurs-installateurs qui conçoivent et réalisent votre projet sur mesure.",
+  ctaText = "Nous contacter",
+  ctaUrl = "#contact",
+  images = [
+    {
+      src: "/uploads/hero/maison-build.png",
+      alt: "Maison avec toiture énergétique",
+      class: "hero__image hero__image--large-1"
+    },
+    {
+      src: "/uploads/hero/maison-build.png", 
+      alt: "Installation énergétique",
+      class: "hero__image hero__image--large-2"
+    },
+    {
+      src: "/uploads/hero/maison-build.png",
+      alt: "Construction énergétique", 
+      class: "hero__image hero__image--medium-1"
+    },
+    {
+      src: "/uploads/hero/maison-build.png",
+      alt: "Réalisation énergétique",
+      class: "hero__image hero__image--medium-2"
+    }
+  ]
+} = Astro.props;
+---
+
+<div class="home-page">
+  <section class="hero">
+    <!-- Cercle suiveur de souris -->
+    <div class="hero__mouse-follower" id="mouseFollower"></div>
+    
+    <div class="container">
+      <div class="hero__container">
+        {images && images.length > 0 && images.map((image: { src: string; alt: string; class?: string }, index: number) => (
+          <SmartImage 
+            cmsSrc={image.src} 
+            alt={image.alt} 
+            loading="lazy" 
+            class={image.class || `hero__image hero__image--${index < 2 ? 'large' : 'medium'}-${(index % 2) + 1}`}
+            id={`img${index + 1}`}
+          />
+        ))}
+        
+        <div class="hero__content">
+          <div class="hero__header">
+            <div class="hero__subtitle">{subtitle}</div>
+            <h1 class="hero__title">{title}</h1>
+          </div>
+          <p class="hero__description">{description}</p>
+          <a href={ctaUrl} class="hero__cta">
+            <span>{ctaText}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+/**
+ * Initialize mouse follower circle for hero section
+ */
+function initMouseFollower() {
+  const follower = document.getElementById('mouseFollower') as HTMLElement;
+  const heroSection = document.querySelector('.hero') as HTMLElement;
+
+  if (!follower || !heroSection) return;
+
+  // Ensure CSS transform centers the circle
+  follower.style.transform = 'translate(-50%, -50%)';
+
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let insideHero = false;
+
+  // Aucun snapping à la grille: mouvement fluide directement sous la souris
+  const ease = 0.15; // smoothing factor
+
+  function animate() {
+    // ease towards the target
+    currentX += (targetX - currentX) * ease;
+    currentY += (targetY - currentY) * ease;
+
+    // apply as left/top relative to hero (keeps center via translate(-50%, -50%))
+    follower.style.left = currentX + 'px';
+    follower.style.top = currentY + 'px';
+
+    // show/hide based on whether mouse is inside hero and viewport is desktop
+    if (window.innerWidth > 768 && insideHero) {
+      if (follower.style.opacity !== '1') follower.style.opacity = '1';
+    } else {
+      if (follower.style.opacity !== '0') follower.style.opacity = '0';
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  // Run animation loop
+  animate();
+
+  // Écoute uniquement dans le hero, mouvement fluide
+  heroSection.addEventListener('mousemove', (e: MouseEvent) => {
+    const rect = heroSection.getBoundingClientRect();
+    const relX = e.clientX - rect.left; // position relative au hero
+    const relY = e.clientY - rect.top;
+
+    insideHero = relX >= 0 && relX <= rect.width && relY >= 0 && relY <= rect.height;
+
+    if (!insideHero) return;
+    targetX = relX;
+    targetY = relY;
+  }, { passive: true });
+
+  // Hide on resize for small screens
+  window.addEventListener('resize', () => {
+    if (window.innerWidth <= 768) {
+      follower.style.opacity = '0';
+    }
+  });
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMouseFollower);
+} else {
+  initMouseFollower();
+}
+</script>
+
+<style lang="scss">
+  @use '../assets/scss/astro-components' as *;
+  @use '../assets/scss/components/_hero' as *;
+</style>

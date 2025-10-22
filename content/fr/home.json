@@ -1,0 +1,153 @@
+{
+  "title": "AccueilPPp",
+  "description": "Page d'accueil",
+  "sections": [
+    {
+      "siteName": "Oveco",
+      "siteUrl": "/",
+      "links": [
+        {
+          "label": "Réalisations",
+          "url": "/works"
+        }
+      ],
+      "ctaButton": {
+        "label": "Nous contacter",
+        "url": "/contact"
+      },
+      "_template": "navbar"
+    },
+    {
+      "subtitle": "lorem",
+      "title": "gsdfqhqisug",
+      "description": "sgqoisugçs!yguçsd",
+      "ctaLabel": "Clique stp",
+      "ctaHref": "/about",
+      "mediaLeft": {
+        "src": "/uploads/imgs/Charpantier.opt.webp"
+      },
+      "mediaRight": {
+        "src": "/uploads/imgs/maison-toit-2.opt.webp"
+      },
+      "_template": "worksHero"
+    },
+    {
+      "subtitle": "oveco",
+      "title": "Construisons l'avenir",
+      "description": "Des ingénieurs-installateurs à vos côtés.",
+      "ctaText": "Nous contacter",
+      "ctaUrl": "/contact",
+      "images": [
+        {
+          "src": "/uploads/hero/maison-build.png",
+          "alt": "Image 1",
+          "class": "hero__image hero__image--large-1"
+        },
+        {
+          "src": "/uploads/hero/maison-build.png",
+          "alt": "Image 2",
+          "class": "hero__image hero__image--large-2"
+        },
+        {
+          "src": "/uploads/hero/maison-build.png",
+          "alt": "Image 3",
+          "class": "hero__image hero__image--medium-1"
+        },
+        {
+          "src": "/uploads/hero/maison-build.png",
+          "alt": "Image 4",
+          "class": "hero__image hero__image--medium-2"
+        }
+      ],
+      "_template": "hero"
+    },
+    {
+      "services": [
+        {
+          "image": "/uploads/imgs/Charpantier.opt.webp",
+          "title": "Lorem?",
+          "description": "Quis qui occaecat qui incididunt velit qui culpa ad exercitation laborum ipsum aliquip. Dolor elit amet nulla mollit ex consequat fugiat elit consectetur cillum dolor. "
+        },
+        {
+          "image": "/uploads/imgs/plan.opt.webp",
+          "title": "Lorim ?",
+          "description": "Quis qui occaecat qui incididunt velit qui culpa ad exercitation laborum ipsum aliquip. Dolor elit amet nulla mollit ex consequat fugiat elit consectetur cillum dolor. "
+        }
+      ],
+      "_template": "autoconstruction"
+    },
+    {
+      "_template": "expertise"
+    },
+    {
+      "subtitle": "Galerie",
+      "title": "En images",
+      "gallery": [
+        {
+          "src": "/uploads/imgs/maison-build.png",
+          "alt": "Photo"
+        },
+        {},
+        {},
+        {}
+      ],
+      "_template": "gallerie"
+    },
+    {
+      "sectionSubtitle": "Section",
+      "sectionTitle": "Titre de section",
+      "sectionDescription": "Description de section",
+      "showSectionHeader": false,
+      "subtitle": "Bloc 1",
+      "title": "Titre bloc 1",
+      "description": "Texte bloc 1",
+      "image": {
+        "src": "/uploads/imgs/maison-toit.png",
+        "alt": "Image"
+      },
+      "reverse": false,
+      "_template": "textimage"
+    },
+    {
+      "copyrightYear": 2024,
+      "companyName": "Oveco",
+      "legalText": "All Rights Reserved",
+      "_template": "footer"
+    },
+    {
+      "title": "Nos certifications",
+      "description": "Labels et reconnaissances.",
+      "cards": [
+        {
+          "logo": "/uploads/partenaire/Google.svg",
+          "title": "Google",
+          "text": "Quis dolore pariatur nulla dolore pariatur ad ex qui quis. Excepteur consequat ex tempor proident aliqua aliqua enim cillum dolore exercitation dolor proident pariatur amet."
+        },
+        {
+          "logo": "/uploads/partenaire/Webflow.svg",
+          "title": "Webflow",
+          "text": "Quis dolore pariatur nulla dolore pariatur ad ex qui quis. Excepteur consequat ex tempor proident aliqua aliqua enim cillum dolore exercitation dolor proident pariatur amet."
+        }
+      ],
+      "_template": "certifications"
+    },
+    {
+      "subtitle": "Nos réalisations",
+      "title": "Projets récents",
+      "description": "Une sélection de projets accompagnés.",
+      "linkText": "Voir tous les projets",
+      "linkUrl": "/works",
+      "cards": [
+        {
+          "image": "/uploads/imgs/maison-toit.png",
+          "type": "Rénovation",
+          "client": "Famille Martin",
+          "title": "Maison passive",
+          "url": "/work/maison-passive-beauvechain",
+          "description": "Isolation passive et PV."
+        }
+      ],
+      "_template": "projects"
+    }
+  ]
+}

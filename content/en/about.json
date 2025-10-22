@@ -1,0 +1,91 @@
+{
+  "title": "About Oveco",
+  "subtitle": "Our story",
+  "description": "Oveco was born from the conviction that housing can be both sustainable, accessible and human. We support individuals in their self-build and ecological renovation projects.",
+  "hero": {
+    "title": "Building sustainable housing together",
+    "subtitle": "Our mission",
+    "description": "At Oveco, we believe that everyone can become an actor in their own housing. Our mission is to democratize self-build and sustainable construction techniques.",
+    "image": "/uploads/team/wallpapper-big.jpg",
+    "imageAlt": "Oveco team in action"
+  },
+  "story": {
+    "title": "Our story",
+    "content": "Founded in 2020 by sustainable construction enthusiasts, Oveco was born from a simple observation: too many ecological housing projects remain inaccessible to individuals. We decided to change this by offering personalized support and practical training.\n\nSince our beginnings, we have supported more than 50 families in their self-build and ecological renovation projects. Each project is unique, and it is this diversity that enriches us and pushes us to always innovate.",
+    "image": "/uploads/imgs/maison-build.png",
+    "imageAlt": "Self-build construction site supported by Oveco"
+  },
+  "values": {
+    "title": "Our values",
+    "subtitle": "What guides us",
+    "items": [
+      {
+        "icon": "/uploads/icon/house.svg",
+        "title": "Sustainability",
+        "description": "We always favor the most sustainable solutions, both environmentally and economically."
+      },
+      {
+        "icon": "/uploads/icon/pencil.svg",
+        "title": "Support",
+        "description": "Each project is unique. We adapt to your needs and your learning pace."
+      },
+      {
+        "icon": "/uploads/compétance/personne.png",
+        "title": "Transmission",
+        "description": "Our goal is to make you autonomous. We pass on our knowledge so you can continue alone."
+      }
+    ]
+  },
+  "team": {
+    "title": "Our team",
+    "subtitle": "Experts at your service",
+    "description": "Our team brings together complementary skills: architects, engineers, craftsmen and trainers. All share the same passion for sustainable construction and human support.",
+    "members": [
+      {
+        "name": "Jean Dupont",
+        "role": "Founder & Architect",
+        "description": "Architect specialized in passive construction, Jean supports projects from design to completion.",
+        "image": "/uploads/team/pic.jpg",
+        "imageAlt": "Jean Dupont, founder of Oveco"
+      },
+      {
+        "name": "Marie Martin",
+        "role": "Renewable Energy Engineer",
+        "description": "Specialist in photovoltaic and wind systems, Marie optimizes the energy efficiency of your projects.",
+        "image": "/uploads/team/pic.jpg",
+        "imageAlt": "Marie Martin, renewable energy engineer"
+      }
+    ]
+  },
+  "stats": {
+    "title": "Our achievements in figures",
+    "items": [
+      {
+        "value": "50+",
+        "label": "Projects supported",
+        "description": "Since our creation"
+      },
+      {
+        "value": "100%",
+        "label": "Renewable energy",
+        "description": "In our new constructions"
+      },
+      {
+        "value": "45+",
+        "label": "Solar panels",
+        "description": "Installed on our projects"
+      },
+      {
+        "value": "95%",
+        "label": "Satisfied customers",
+        "description": "Who recommend our services"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Ready to start your project?",
+    "description": "Contact us to discuss your self-build or ecological renovation project.",
+    "buttonText": "Contact us",
+    "buttonUrl": "#contact"
+  }
+}

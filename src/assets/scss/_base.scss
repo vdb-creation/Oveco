@@ -1,0 +1,157 @@
+/* ===================================
+   Base Styles - Reset et Typographie Nunito Sans
+   =================================== */
+
+@import 'variables';
+@import 'mixins';
+
+// ===================================
+// FONT LOADING
+// ===================================
+
+@font-face {
+  font-family: 'Nunito Sans Variable';
+  src: url('../assets/fonts/NunitoSans-VariableFont.ttf') format('truetype');
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+// ===================================
+// RESET ET BASE
+// ===================================
+
+html {
+  box-sizing: border-box;
+  font-size: 16px; // Base pour rem calculations
+  scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  @include font-base;
+  @include text-body;
+  margin: 0;
+  background: $color-white;
+  color: $color-text;
+}
+
+// ===================================
+// TYPOGRAPHIE GLOBALE
+// ===================================
+
+h1 {
+  @include heading-1;
+}
+
+h2 {
+  @include heading-2;
+}
+
+h3 {
+  @include heading-3;
+}
+
+h4 {
+  @include heading-4;
+}
+
+p {
+  @include text-body;
+  
+  &.text-large {
+    @include text-large;
+  }
+  
+  &.text-small {
+    @include text-small;
+  }
+  
+  &.text-muted {
+    @include text-muted;
+  }
+}
+
+// ===================================
+// LIENS ET INTERACTIONS
+// ===================================
+
+a {
+  @include text-link;
+}
+
+strong, 
+b {
+  @include text-emphasis;
+}
+
+em,
+i {
+  font-style: italic;
+}
+
+// ===================================
+// ELEMENTS DE BASE
+// ===================================
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  @include font-base;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  @include font-base;
+  font-size: $font-size-p;
+}
+
+// ===================================
+// UTILITAIRES TYPOGRAPHIQUES
+// ===================================
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-gradient {
+  @include text-gradient;
+}
+
+.text-accent {
+}
+
+.text-secondary {
+  color: $color-secondary;
+}
+
+// Forcer les styles de heading
+.h1 { @include heading-1; }
+.h2 { @include heading-2; }
+.h3 { @include heading-3; }
+.h4 { @include heading-4; }
+
+// Tailles de paragraphe
+.p-large { @include text-large; }
+.p-body { @include text-body; }
+.p-small { @include text-small; }
+

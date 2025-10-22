@@ -6,7 +6,9 @@
     "paths": { "@/*": ["src/*"] },
     "resolveJsonModule": true,
     "moduleResolution": "Bundler",
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "6.0",
+    "jsx": "preserve",
+    "jsxImportSource": "astro"
   },
   "exclude": [
     "dist",

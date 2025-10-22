@@ -122,36 +122,7 @@ const priorityClass = testimonial.priority ? `is-${testimonial.priority.slug}` :
   </footer>
 </article>
 
-<style>
-  /* Les styles de la carte sont déjà définis dans _projects.scss */
-  /* et partagés avec les cartes projet via .projects__card */
-  
-  /* Styles spécifiques aux cartes témoignage si nécessaire */
-  .projects__card--testimonial {
-    /* Peut ajouter des styles spécifiques ici */
-  }
-
-  /* Variantes de priorité */
-  .projects__card--testimonial.is-high {
-    box-shadow: 0 4px 15px rgba(4, 139, 154, 0.2);
-  }
-
-  .projects__card--testimonial.is-featured {
-    border: 2px solid var(--oveco-accent);
-  }
-
-  /* Ajustement pour les cartes témoignage dans la grille de témoignages */
-  :global(.testimonials__grid) .projects__card {
-    width: 388px;
-    height: 548px;
-    flex: 0 0 auto;
-  }
-
-  @media (max-width: 480px) {
-    :global(.testimonials__grid) .projects__card {
-      width: 80%;
-      height: auto;
-      aspect-ratio: 388/548;
-    }
-  }
+<style lang="scss">
+  @use '../assets/scss/astro-components' as *;
+  @use '../assets/scss/components/_testimonials' as *;
 </style>

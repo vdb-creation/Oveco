@@ -1,2 +1,23 @@
 ---
-return Astro.redirect('/fr/');
+import DynamicPage from '../components/DynamicPage.astro';
+
+// Charger les données home.json pour la langue française
+let homeData: any = null;
+try {
+  const homeModule = await import('../../content/fr/home.json');
+  homeData = homeModule.default;
+} catch (e) {
+  console.error('Erreur lors du chargement de home.json:', e);
+}
+
+const home = homeData || {};
+---
+
+<DynamicPage 
+  title={home.title || "Oveco - Auto-construction et Rénovation Écologique"}
+  description={home.description || "Oveco accompagne vos projets d'auto-construction et de rénovation écologique. Expertise en maisons passives et énergies renouvelables."}
+  jsonFile="home"
+  lang="fr"
+>
+  <!-- Le contenu est géré par DynamicPage avec les sections du JSON -->
+</DynamicPage>

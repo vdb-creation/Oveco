@@ -14,9 +14,23 @@ export default defineConfig({
       layout: "constrained",
     }),
   },
+  // Configuration SCSS
+  scopedStyleStrategy: 'where',
   // Autorise les hôtes externes (ngrok) pour le serveur de dev Vite
   vite: {
-    resolve: { alias: { "@": new URL("./src", import.meta.url).pathname } },
+    resolve: { 
+      alias: { 
+        "@": new URL("./src", import.meta.url).pathname,
+        "@scss": new URL("./src/assets/scss", import.meta.url).pathname
+      } 
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          // Configuration SCSS simplifiée
+        }
+      }
+    },
     server: {
       allowedHosts: true,
       host: true,

@@ -1,0 +1,55 @@
+---
+import DynamicPage from '../components/DynamicPage.astro';
+import ProjectPage from '../components/ProjectPage.astro';
+
+// Charger les données work.json
+let workData: any = null;
+try {
+  const workModule = await import('../../content/work.json');
+  workData = workModule.default;
+} catch (e) {
+  console.error('Erreur lors du chargement de work.json:', e);
+}
+
+const work = workData?.project || {};
+
+export interface Props {
+  project?: {
+    title?: string;
+    excerpt?: string;
+    content?: string;
+    images?: string[];
+  };
+  projectType?: string;
+  projectDescription?: string;
+}
+
+const { project, projectType = work.category || 'Projet', projectDescription } = Astro.props;
+---
+
+<!-- @ts-expect-error - Astro slots are not recognized as children by TypeScript -->
+<DynamicPage 
+  title={`${work.title || project?.title || 'Projet'} - Oveco`}
+  description={work.description || projectDescription || project?.excerpt || ''}
+  jsonFile="work"
+  lang="fr"
+>
+  <main class="work-page" id="work">
+    <ProjectPage 
+      title={work.title || project?.title || 'Projet'}
+      description={work.description || projectDescription || project?.excerpt || ''}
+      category={work.category || projectType}
+      image={work.heroImage || project?.images?.[0] || ''}
+      backHref="/works"
+      backLabel="Retour aux réalisations"
+    />
+  </main>
+</DynamicPage>
+
+<style lang="scss">
+  @use '../assets/scss/astro-components' as *;
+
+  .work-page {
+    // Styles spécifiques à la page work
+  }
+</style>

@@ -1,0 +1,23 @@
+---
+import DynamicPage from '../../components/DynamicPage.astro';
+
+// Charger les données home.json pour la langue anglaise
+let homeData: any = null;
+try {
+  const homeModule = await import('../../../content/en/home.json');
+  homeData = homeModule.default;
+} catch (e) {
+  console.error('Erreur lors du chargement de home.json:', e);
+}
+
+const home = homeData || {};
+---
+
+<DynamicPage 
+  title={home.title || "Oveco - Self-build and Ecological Renovation"}
+  description={home.description || "Oveco supports your self-build and ecological renovation projects. Expertise in passive houses and renewable energies."}
+  jsonFile="home"
+  lang="en"
+>
+  <!-- Le contenu est géré par DynamicPage avec les sections du JSON -->
+</DynamicPage>

@@ -1,0 +1,503 @@
+{
+  "collections": [
+    {
+      "name": "home",
+      "label": "Home Page",
+      "path": "content/home",
+      "format": "json",
+      "fields": [
+        {
+          "type": "object",
+          "name": "sections",
+          "label": "Sections",
+          "list": true,
+          "fields": [
+            {
+              "type": "string",
+              "name": "_template",
+              "label": "Template",
+              "options": [
+                "hero",
+                "autoconstruction", 
+                "worksHero",
+                "expertise",
+                "stats",
+                "projects",
+                "testimonials",
+                "contact",
+                "footer"
+              ]
+            },
+            {
+              "type": "string",
+              "name": "subtitle",
+              "label": "Subtitle"
+            },
+            {
+              "type": "string",
+              "name": "title",
+              "label": "Title"
+            },
+            {
+              "type": "string",
+              "name": "description",
+              "label": "Description",
+              "ui": {
+                "component": "textarea"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "about",
+      "label": "About Page",
+      "path": "content",
+      "format": "json",
+      "fields": [
+        {
+          "type": "string",
+          "name": "title",
+          "label": "Page Title"
+        },
+        {
+          "type": "string",
+          "name": "subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "type": "string",
+          "name": "description",
+          "label": "Description",
+          "ui": {
+            "component": "textarea"
+          }
+        },
+        {
+          "type": "object",
+          "name": "hero",
+          "label": "Hero Section",
+          "fields": [
+            {
+              "type": "string",
+              "name": "title",
+              "label": "Hero Title"
+            },
+            {
+              "type": "string",
+              "name": "subtitle",
+              "label": "Hero Subtitle"
+            },
+            {
+              "type": "string",
+              "name": "description",
+              "label": "Hero Description",
+              "ui": {
+                "component": "textarea"
+              }
+            },
+            {
+              "type": "image",
+              "name": "image",
+              "label": "Hero Image"
+            },
+            {
+              "type": "string",
+              "name": "imageAlt",
+              "label": "Hero Image Alt Text"
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "name": "story",
+          "label": "Our Story",
+          "fields": [
+            {
+              "type": "string",
+              "name": "title",
+              "label": "Story Title"
+            },
+            {
+              "type": "string",
+              "name": "content",
+              "label": "Story Content",
+              "ui": {
+                "component": "textarea"
+              }
+            },
+            {
+              "type": "image",
+              "name": "image",
+              "label": "Story Image"
+            },
+            {
+              "type": "string",
+              "name": "imageAlt",
+              "label": "Story Image Alt Text"
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "name": "values",
+          "label": "Our Values",
+          "fields": [
+            {
+              "type": "string",
+              "name": "title",
+              "label": "Values Title"
+            },
+            {
+              "type": "string",
+              "name": "subtitle",
+              "label": "Values Subtitle"
+            },
+            {
+              "type": "object",
+              "name": "items",
+              "label": "Values Items",
+              "list": true,
+              "fields": [
+                {
+                  "type": "image",
+                  "name": "icon",
+                  "label": "Value Icon"
+                },
+                {
+                  "type": "string",
+                  "name": "title",
+                  "label": "Value Title"
+                },
+                {
+                  "type": "string",
+                  "name": "description",
+                  "label": "Value Description"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "name": "team",
+          "label": "Our Team",
+          "fields": [
+            {
+              "type": "string",
+              "name": "title",
+              "label": "Team Title"
+            },
+            {
+              "type": "string",
+              "name": "subtitle",
+              "label": "Team Subtitle"
+            },
+            {
+              "type": "string",
+              "name": "description",
+              "label": "Team Description",
+              "ui": {
+                "component": "textarea"
+              }
+            },
+            {
+              "type": "object",
+              "name": "members",
+              "label": "Team Members",
+              "list": true,
+              "fields": [
+                {
+                  "type": "string",
+                  "name": "name",
+                  "label": "Member Name"
+                },
+                {
+                  "type": "string",
+                  "name": "role",
+                  "label": "Member Role"
+                },
+                {
+                  "type": "string",
+                  "name": "description",
+                  "label": "Member Description"
+                },
+                {
+                  "type": "image",
+                  "name": "image",
+                  "label": "Member Photo"
+                },
+                {
+                  "type": "string",
+                  "name": "imageAlt",
+                  "label": "Member Photo Alt Text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "name": "stats",
+          "label": "Statistics",
+          "fields": [
+            {
+              "type": "string",
+              "name": "title",
+              "label": "Stats Title"
+            },
+            {
+              "type": "object",
+              "name": "items",
+              "label": "Stats Items",
+              "list": true,
+              "fields": [
+                {
+                  "type": "string",
+                  "name": "value",
+                  "label": "Stat Value"
+                },
+                {
+                  "type": "string",
+                  "name": "label",
+                  "label": "Stat Label"
+                },
+                {
+                  "type": "string",
+                  "name": "description",
+                  "label": "Stat Description"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "works",
+      "label": "Works Page",
+      "path": "content",
+      "format": "json",
+      "fields": [
+        {
+          "type": "string",
+          "name": "title",
+          "label": "Page Title"
+        },
+        {
+          "type": "string",
+          "name": "subtitle",
+          "label": "Page Subtitle"
+        },
+        {
+          "type": "string",
+          "name": "description",
+          "label": "Page Description",
+          "ui": {
+            "component": "textarea"
+          }
+        },
+        {
+          "type": "object",
+          "name": "hero",
+          "label": "Hero Section",
+          "fields": [
+            {
+              "type": "string",
+              "name": "title",
+              "label": "Hero Title"
+            },
+            {
+              "type": "string",
+              "name": "subtitle",
+              "label": "Hero Subtitle"
+            },
+            {
+              "type": "string",
+              "name": "description",
+              "label": "Hero Description",
+              "ui": {
+                "component": "textarea"
+              }
+            },
+            {
+              "type": "string",
+              "name": "ctaLabel",
+              "label": "CTA Button Label"
+            },
+            {
+              "type": "string",
+              "name": "ctaUrl",
+              "label": "CTA Button URL"
+            },
+            {
+              "type": "object",
+              "name": "mediaLeft",
+              "label": "Left Media",
+              "fields": [
+                {
+                  "type": "image",
+                  "name": "src",
+                  "label": "Left Image"
+                },
+                {
+                  "type": "string",
+                  "name": "alt",
+                  "label": "Left Image Alt Text"
+                }
+              ]
+            },
+            {
+              "type": "object",
+              "name": "mediaRight",
+              "label": "Right Media",
+              "fields": [
+                {
+                  "type": "image",
+                  "name": "src",
+                  "label": "Right Image"
+                },
+                {
+                  "type": "string",
+                  "name": "alt",
+                  "label": "Right Image Alt Text"
+                },
+                {
+                  "type": "boolean",
+                  "name": "overlay",
+                  "label": "Has Overlay"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "name": "projects",
+          "label": "Projects",
+          "list": true,
+          "fields": [
+            {
+              "type": "string",
+              "name": "id",
+              "label": "Project ID"
+            },
+            {
+              "type": "string",
+              "name": "title",
+              "label": "Project Title"
+            },
+            {
+              "type": "string",
+              "name": "category",
+              "label": "Project Category"
+            },
+            {
+              "type": "string",
+              "name": "client",
+              "label": "Client Name"
+            },
+            {
+              "type": "string",
+              "name": "description",
+              "label": "Project Description",
+              "ui": {
+                "component": "textarea"
+              }
+            },
+            {
+              "type": "image",
+              "name": "image",
+              "label": "Project Image"
+            },
+            {
+              "type": "string",
+              "name": "imageAlt",
+              "label": "Project Image Alt Text"
+            },
+            {
+              "type": "string",
+              "name": "year",
+              "label": "Project Year"
+            },
+            {
+              "type": "string",
+              "name": "surface",
+              "label": "Project Surface"
+            },
+            {
+              "type": "string",
+              "name": "budget",
+              "label": "Project Budget"
+            },
+            {
+              "type": "string",
+              "name": "duration",
+              "label": "Project Duration"
+            },
+            {
+              "type": "string",
+              "name": "technologies",
+              "label": "Technologies Used",
+              "list": true
+            },
+            {
+              "type": "object",
+              "name": "results",
+              "label": "Project Results",
+              "fields": [
+                {
+                  "type": "string",
+                  "name": "energyConsumption",
+                  "label": "Energy Consumption"
+                },
+                {
+                  "type": "string",
+                  "name": "co2Reduction",
+                  "label": "CO2 Reduction"
+                },
+                {
+                  "type": "string",
+                  "name": "energyBill",
+                  "label": "Energy Bill"
+                }
+              ]
+            },
+            {
+              "type": "object",
+              "name": "testimonial",
+              "label": "Client Testimonial",
+              "fields": [
+                {
+                  "type": "string",
+                  "name": "text",
+                  "label": "Testimonial Text",
+                  "ui": {
+                    "component": "textarea"
+                  }
+                },
+                {
+                  "type": "string",
+                  "name": "author",
+                  "label": "Testimonial Author"
+                },
+                {
+                  "type": "string",
+                  "name": "role",
+                  "label": "Author Role"
+                }
+              ]
+            },
+            {
+              "type": "string",
+              "name": "gallery",
+              "label": "Project Gallery",
+              "list": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

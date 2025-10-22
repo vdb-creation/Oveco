@@ -1,0 +1,185 @@
+{
+  "sections": [
+    {
+      "subtitle": "Contact us",
+      "title": "Do you have an idea, a project, or simply questions?",
+      "description": "Write to us or call us, we'll be happy to discuss it.",
+      "contactInfo": {
+        "email": "job@oveco.be",
+        "phone": "+32 473 / 68.99.02",
+        "location": "Beauvechain region"
+      },
+      "formAction": "#contact",
+      "_template": "contact"
+    },
+    {
+      "subtitle": "self-build",
+      "title": "Learn by doing, build while being supported",
+      "description": "We believe that self-build is a powerful way to take ownership of your habitat.",
+      "services": [
+        {
+          "image": "/uploads/imgs/maison-build.png",
+          "alt": "Personalized support",
+          "title": "Personalized support",
+          "description": "We guide you through every step of your self-build project."
+        },
+        {
+          "image": "/uploads/imgs/plan.png",
+          "alt": "Practical training",
+          "title": "Practical training",
+          "description": "Learn construction techniques directly in the field."
+        }
+      ],
+      "ctaLabel": "Learn more",
+      "ctaHref": "#contact",
+      "_template": "autoconstruction"
+    },
+    {
+      "subtitle": "Our achievements",
+      "title": "Projects that make sense",
+      "description": "Discover our achievements in self-build and sustainable renovation.",
+      "ctaLabel": "Contact us",
+      "ctaHref": "#contact",
+      "mediaLeft": {
+        "src": "/uploads/imgs/maison-toit.png",
+        "alt": "House with solar panels"
+      },
+      "mediaRight": {
+        "src": "/uploads/imgs/maison-build.png",
+        "alt": "Construction site",
+        "overlay": true
+      },
+      "_template": "worksHero"
+    },
+    {
+      "subtitle": "Our expertise",
+      "title": "Putting technique at the service of human and sustainable projects",
+      "description": "At Oveco, technique is never an end in itself, but always a means at the service of your projects.",
+      "cards": [
+        {
+          "icon": "/uploads/compétance/maison.png",
+          "alt": "Sustainable construction",
+          "title": "Sustainable construction",
+          "description": "Environmentally friendly techniques and materials."
+        },
+        {
+          "icon": "/uploads/compétance/personne.png",
+          "alt": "Self-build",
+          "title": "Self-build",
+          "description": "Personalized support for your self-build projects."
+        },
+        {
+          "icon": "/uploads/compétance/eolienne.png",
+          "alt": "Renewable energy",
+          "title": "Renewable energy",
+          "description": "Installation of photovoltaic and wind systems."
+        },
+        {
+          "icon": "/uploads/compétance/clim.png",
+          "alt": "Energy efficiency",
+          "title": "Energy efficiency",
+          "description": "Optimization of your habitat's energy performance."
+        }
+      ],
+      "ctaLabel": "Discover all our expertise",
+      "ctaHref": "#expertises-details",
+      "_template": "expertise"
+    },
+    {
+      "title": "Project statistics",
+      "stats": [
+        {
+          "value": "+ 45",
+          "label": "solar panels",
+          "description": "Installed on our projects"
+        },
+        {
+          "value": "100%",
+          "label": "renewable energy",
+          "description": "In our new constructions"
+        }
+      ],
+      "_template": "stats"
+    },
+    {
+      "subtitle": "Our achievements",
+      "title": "These are more than projects, they are collaborations",
+      "description": "Discover some of our recent achievements.",
+      "linkText": "Learn more",
+      "linkUrl": "/works",
+      "cards": [
+        {
+          "image": "/uploads/imgs/maison-toit.png",
+          "type": "Renovation",
+          "client": "Martin Family",
+          "title": "Passive house in Beauvechain",
+          "url": "/work/maison-passive-beauvechain",
+          "description": "Complete renovation of a family home with passive insulation and solar panels."
+        },
+        {
+          "image": "/uploads/imgs/maison-build.png",
+          "type": "Self-build",
+          "client": "Dubois Couple",
+          "title": "Ecological extension",
+          "url": "/work/extension-ecologique",
+          "description": "Support for self-building an extension in natural materials."
+        },
+        {
+          "image": "/uploads/imgs/maison-toit-2.png",
+          "type": "Energy renovation",
+          "client": "Leroy Family",
+          "title": "Renovation with solar heating",
+          "url": "/work/renovation-chauffage-solaire",
+          "description": "Energy renovation with combined solar heating system."
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "subtitle": "What do they say?",
+      "title": "These are more than projects, they are collaborations",
+      "description": "Discover the testimonials of our satisfied customers.",
+      "linkText": "Learn more",
+      "linkUrl": "#temoignages-complets",
+      "testimonials": [
+        {
+          "thumbnail": {
+            "src": "/uploads/team/pic.jpg",
+            "alt": "Photo of Marie Martin"
+          },
+          "client_name": "Marie Martin",
+          "client_position": "Owner",
+          "client_company": "Passive house Beauvechain",
+          "content": "Oveco supported us in our passive renovation project. Their expertise and availability made all the difference.",
+          "card_content": "Excellent support for our passive renovation project.",
+          "linked_project": {
+            "title": "Passive house in Beauvechain",
+            "link": "/work/maison-passive-beauvechain"
+          }
+        },
+        {
+          "thumbnail": {
+            "src": "/uploads/team/pic.jpg",
+            "alt": "Photo of Pierre Dubois"
+          },
+          "client_name": "Pierre Dubois",
+          "client_position": "Self-builder",
+          "client_company": "Ecological extension",
+          "content": "Thanks to Oveco's support, we were able to build our extension ourselves while learning sustainable techniques.",
+          "card_content": "Exceptional practical training for our self-build project.",
+          "linked_project": {
+            "title": "Ecological extension",
+            "link": "/work/extension-ecologique"
+          }
+        }
+      ],
+      "_template": "testimonials"
+    },
+    {
+      "copyrightYear": 2024,
+      "companyName": "Oveco",
+      "legalText": "All Rights Reserved | Terms and Conditions | Privacy Policy",
+      "_template": "footer"
+    }
+  ]
+}

@@ -279,7 +279,9 @@ const wrapperStyle = [
   </span>
 ) : <></>}
 
-<style>
+<style lang="scss">
+  @use '../assets/scss/astro-components' as *;
+
   .si-wrap {
     position: relative;
     display: block;
@@ -289,7 +291,11 @@ const wrapperStyle = [
     border-radius: inherit;
     overflow: hidden;
   }
-  .si-wrap .si-img { display: block; }
+  
+  .si-wrap .si-img { 
+    display: block; 
+  }
+  
   .si-wrap .si-img,
   .si-wrap picture img,
   .si-wrap picture,
@@ -302,13 +308,23 @@ const wrapperStyle = [
     object-position: var(--si-pos, initial);
     border-radius: inherit;
   }
+  
   .si-wrap.has-skeleton::before {
     content: "";
-    position: absolute; inset: 0;
+    position: absolute; 
+    inset: 0;
     background: linear-gradient(90deg, #eee 25%, #f6f6f6 37%, #eee 63%);
     background-size: 400% 100%;
     animation: si-shimmer 1.2s infinite linear;
   }
-  @keyframes si-shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
-  .si-wrap.is-loaded::before { opacity: 0; visibility: hidden; }
+  
+  @keyframes si-shimmer { 
+    0% { background-position: 100% 0; } 
+    100% { background-position: 0 0; } 
+  }
+  
+  .si-wrap.is-loaded::before { 
+    opacity: 0; 
+    visibility: hidden; 
+  }
 </style>

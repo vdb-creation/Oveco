@@ -1,0 +1,188 @@
+{
+  "project": {
+    "id": "maison-passive-beauvechain",
+    "title": "Maison passive à Beauvechain",
+    "subtitle": "Rénovation complète",
+    "category": "Rénovation",
+    "client": "Famille Martin",
+    "year": "2023",
+    "location": "Beauvechain, Belgique",
+    "description": "Rénovation complète d'une maison familiale des années 70 en maison passive. Ce projet exemplaire démontre qu'il est possible de transformer un habitat énergivore en maison passive performante.",
+    "heroImage": "/uploads/imgs/maison-toit.png",
+    "heroImageAlt": "Maison passive rénovée à Beauvechain",
+    "challenge": {
+      "title": "Le défi",
+      "content": "La maison des années 70 présentait une consommation énergétique de 200 kWh/m²/an, soit 13 fois plus qu'une maison passive. Les propriétaires souhaitaient réduire drastiquement leur facture énergétique tout en améliorant leur confort de vie."
+    },
+    "solution": {
+      "title": "Notre solution",
+      "content": "Nous avons opté pour une rénovation complète en maison passive : isolation par l'extérieur, triple vitrage, VMC double flux et installation photovoltaïque. L'accompagnement a permis aux propriétaires de participer activement aux travaux.",
+      "technologies": [
+        {
+          "name": "Isolation par l'extérieur",
+          "description": "Isolation de 20cm en laine de roche pour atteindre une résistance thermique de 5 m².K/W",
+          "icon": "/uploads/compétance/maison.png"
+        },
+        {
+          "name": "Triple vitrage",
+          "description": "Fenêtres triple vitrage avec coefficient Uw de 0,8 W/m².K pour minimiser les déperditions",
+          "icon": "/uploads/compétance/maison.png"
+        },
+        {
+          "name": "VMC double flux",
+          "description": "Ventilation mécanique contrôlée avec récupération de chaleur de 85%",
+          "icon": "/uploads/compétance/clim.png"
+        },
+        {
+          "name": "Panneaux photovoltaïques",
+          "description": "Installation de 8kW de panneaux solaires pour l'autoconsommation",
+          "icon": "/uploads/compétance/eolienne.png"
+        },
+        {
+          "name": "Pompe à chaleur",
+          "description": "Chauffage par pompe à chaleur air-eau avec coefficient de performance de 4,2",
+          "icon": "/uploads/compétance/clim.png"
+        }
+      ]
+    },
+    "results": {
+      "title": "Les résultats",
+      "content": "La transformation est spectaculaire : la consommation énergétique est passée de 200 à 15 kWh/m²/an, soit une réduction de 92%. La facture énergétique annuelle est maintenant de 200€ au lieu de 2500€.",
+      "metrics": [
+        {
+          "value": "15",
+          "unit": "kWh/m²/an",
+          "label": "Consommation énergétique",
+          "description": "Standard maison passive atteint"
+        },
+        {
+          "value": "85",
+          "unit": "%",
+          "label": "Réduction CO₂",
+          "description": "Par rapport à l'état initial"
+        },
+        {
+          "value": "200",
+          "unit": "€/an",
+          "label": "Facture énergétique",
+          "description": "Au lieu de 2500€ avant rénovation"
+        },
+        {
+          "value": "8",
+          "unit": "kW",
+          "label": "Puissance photovoltaïque",
+          "description": "Installation solaire"
+        }
+      ]
+    },
+    "process": {
+      "title": "Le processus",
+      "phases": [
+        {
+          "phase": "1",
+          "title": "Diagnostic énergétique",
+          "description": "Analyse complète de la performance énergétique et identification des points d'amélioration",
+          "duration": "2 semaines"
+        },
+        {
+          "phase": "2",
+          "title": "Conception du projet",
+          "description": "Élaboration des plans détaillés et choix des technologies adaptées au bâtiment",
+          "duration": "1 mois"
+        },
+        {
+          "phase": "3",
+          "title": "Isolation par l'extérieur",
+          "description": "Pose de l'isolation de 20cm et enduit de finition",
+          "duration": "3 semaines"
+        },
+        {
+          "phase": "4",
+          "title": "Remplacement des fenêtres",
+          "description": "Installation du triple vitrage sur toutes les ouvertures",
+          "duration": "1 semaine"
+        },
+        {
+          "phase": "5",
+          "title": "Installation VMC",
+          "description": "Mise en place du système de ventilation double flux",
+          "duration": "1 semaine"
+        },
+        {
+          "phase": "6",
+          "title": "Installation photovoltaïque",
+          "description": "Pose des panneaux solaires et mise en service",
+          "duration": "3 jours"
+        }
+      ]
+    },
+    "testimonial": {
+      "title": "Témoignage client",
+      "content": "Oveco nous a accompagnés dans cette transformation incroyable. Aujourd'hui, notre facture énergétique est divisée par 12 et nous vivons dans un confort optimal toute l'année. L'investissement se rentabilise rapidement et nous sommes fiers de notre contribution à la transition écologique.",
+      "author": "Marie Martin",
+      "role": "Propriétaire",
+      "image": "/uploads/team/pic.jpg",
+      "imageAlt": "Marie Martin, propriétaire de la maison passive"
+    },
+    "gallery": [
+      {
+        "src": "/uploads/imgs/maison-toit.png",
+        "alt": "Vue extérieure de la maison passive rénovée",
+        "caption": "Vue extérieure après rénovation"
+      },
+      {
+        "src": "/uploads/imgs/maison-build.png",
+        "alt": "Travaux d'isolation par l'extérieur",
+        "caption": "Travaux d'isolation par l'extérieur"
+      },
+      {
+        "src": "/uploads/imgs/maison-toit-2.png",
+        "alt": "Installation des panneaux photovoltaïques",
+        "caption": "Installation des panneaux photovoltaïques"
+      },
+      {
+        "src": "/uploads/imgs/plan.png",
+        "alt": "Plans de rénovation",
+        "caption": "Plans de rénovation énergétique"
+      }
+    ],
+    "specifications": {
+      "title": "Spécifications techniques",
+      "items": [
+        {
+          "category": "Enveloppe",
+          "specs": [
+            "Isolation par l'extérieur : 20cm laine de roche",
+            "Résistance thermique : 5 m².K/W",
+            "Triple vitrage : Uw = 0,8 W/m².K",
+            "Étanchéité à l'air : n50 < 0,6 h⁻¹"
+          ]
+        },
+        {
+          "category": "Systèmes",
+          "specs": [
+            "VMC double flux : récupération 85%",
+            "Pompe à chaleur : COP 4,2",
+            "Panneaux photovoltaïques : 8kW",
+            "Chauffe-eau solaire : 300L"
+          ]
+        },
+        {
+          "category": "Performance",
+          "specs": [
+            "Consommation : 15 kWh/m²/an",
+            "Besoin de chauffage : < 15 kWh/m²/an",
+            "Été : surchauffe < 5% du temps",
+            "Confort : température stable 20°C"
+          ]
+        }
+      ]
+    },
+    "cta": {
+      "title": "Vous avez un projet similaire ?",
+      "description": "Contactez-nous pour discuter de votre projet de rénovation énergétique.",
+      "buttonText": "Nous contacter",
+      "buttonUrl": "#contact"
+    }
+  }
+}

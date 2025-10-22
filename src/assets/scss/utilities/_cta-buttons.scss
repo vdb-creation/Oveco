@@ -1,0 +1,11 @@
+/* ===================================
+   CTA Button Utilities
+   =================================== */
+
+@import '../variables';
+@import '../mixins';
+
+/* CTA */
+.cta-btn {
+  @include cta-button;
+}

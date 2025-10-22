@@ -1,0 +1,461 @@
+@import '../variables';
+@import '../mixins';
+
+/* ========================================
+   PROJECTS SECTION
+   ======================================== */
+.projects-section {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    background: #FFFEF8;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    display: flex;
+}
+
+.projects {
+    &__container {
+        width: 100%;
+        max-width: 1589px;
+        padding: 57px 109px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 89px;
+        display: flex;
+        box-sizing: border-box;
+
+        @media (max-width: 1400px) {
+            padding: 50px 80px;
+            gap: 70px;
+        }
+
+        @media (max-width: 1200px) {
+            padding: 45px 60px;
+            gap: 60px;
+        }
+
+        @media (max-width: 1024px) {
+            padding: 40px 40px;
+            gap: 50px;
+        }
+
+        @include tablet {
+            padding: 35px 2rem;
+            gap: 40px;
+        }
+
+        @include mobile {
+            padding: 30px 1rem;
+            gap: 35px;
+        }
+    }
+
+    &__header {
+        width: 100%;
+        max-width: 1219px;
+        justify-content: space-between;
+        align-items: flex-end;
+        display: flex;
+
+        @include tablet {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 30px;
+        }
+    }
+
+    &__header-content {
+        width: 589px;
+        max-width: 100%;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 11px;
+        display: flex;
+
+        @include tablet {
+            width: 100%;
+        }
+    }
+
+    &__subtitle {
+        color: #5C6D6F;
+        font-size: 19.20px;
+        font-family: $font-family-primary;
+        font-weight: 700;
+        text-transform: uppercase;
+        line-height: 20px;
+        letter-spacing: 1.92px;
+        margin: 0;
+
+        @include tablet {
+            font-size: 17px;
+            letter-spacing: 1.5px;
+        }
+
+        @include mobile {
+            font-size: 15px;
+            line-height: 18px;
+            letter-spacing: 1.2px;
+        }
+    }
+
+    &__title {
+        align-self: stretch;
+        color: #334749;
+        font-size: 39.81px;
+        font-family: $font-family-primary;
+        font-weight: 800;
+        line-height: 47.77px;
+        margin: 0;
+
+        @include tablet {
+            font-size: 32px;
+            line-height: 38px;
+        }
+
+        @include mobile {
+            font-size: 26px;
+            line-height: 30px;
+        }
+    }
+
+    &__description {
+        align-self: stretch;
+        color: #334749;
+        font-size: 16px;
+        font-family: $font-family-primary;
+        font-weight: 400;
+        line-height: 28.80px;
+        margin: 0;
+
+        @include tablet {
+            font-size: 15px;
+            line-height: 26px;
+        }
+
+        @include mobile {
+            font-size: 14px;
+            line-height: 24px;
+        }
+    }
+
+    &__link {
+        /* Texte + flèche sur une seule ligne */
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: none;
+        line-height: 1; /* évite le décalage de baseline */
+
+        &:focus {
+            outline: 2px solid #048B9A;
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        span {
+            color: #048B9A;
+            font-size: 16px;
+            font-family: $font-family-primary;
+            font-weight: 700;
+            line-height: 19.20px;
+            text-align: center;
+        }
+    }
+
+    &__link-arrow {
+        width: 10px;
+        height: 8.57px;
+        flex-shrink: 0;
+        display: block; /* supprime l'alignement baseline des inline-svg */
+        transform: translateY(0.5px); /* micro-correction optique */
+    }
+
+    &__navigation {
+        width: 400px;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 28px;
+        display: flex;
+        position: relative;
+        z-index: 2;
+
+        @include tablet {
+            width: auto;
+            justify-content: flex-start;
+        }
+
+        @include mobile {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            gap: 16px;
+            margin-top: 8px;
+            z-index: 2;
+        }
+    }
+
+    &__nav-btn {
+        width: 64px;
+        height: 64px;
+        background: #334749;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: none;
+        position: relative;
+
+        /* Pas d'effets hover/active */
+
+        &:focus {
+            outline: 2px solid #048B9A;
+            outline-offset: 4px;
+        }
+
+    /* Les SVG intégrés pointent déjà dans la bonne direction */
+
+        svg {
+            width: 11px;
+            height: 21px;
+        }
+    }
+
+    &__grid {
+        /* Grille avec colonnes fixes de 388px, wrap sur la ligne suivante si nécessaire */
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(388px, 388px));
+        gap: 24px;
+        width: 100%;
+        align-items: start;
+        justify-content: start;
+
+        /* Cartes internes: taille fixe desktop/tablette */
+        > .projects__card { width: 388px; height: 548px; }
+        > .projects__card .projects__card-content { height: auto; }
+
+        /* Works search: mêmes dimensions fixes */
+        .works-search__grid .projects__card { width: 388px; height: 548px; min-width: 388px; }
+        .works-search__grid .projects__card-content {
+            height: auto;
+            min-height: 0; /* supprime l'effet qui remonte le contenu */
+            justify-content: flex-end; /* colle le contenu en bas */
+        }
+
+        /* Colonnes Gutenberg mises en forme comme cartes */
+        > .wp-block-column {
+            background: #FFF;
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+
+            > figure.wp-block-image {
+                margin: 0;
+                width: 100%;
+                aspect-ratio: 388/280;
+
+                img { width: 100%; height: 100%; object-fit: cover; display: block; }
+            }
+
+            .projects__card-info { padding: 18px; display: flex; flex-direction: column; gap: 6px; }
+        }
+
+        @media (max-width: 1024px) { gap: 16px; }
+
+        @include mobile {
+            display: flex;
+            align-items: stretch;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            gap: 14px;
+            padding-right: 1rem;
+            scrollbar-width: none; -ms-overflow-style: none; &::-webkit-scrollbar { display: none; width: 0; height: 0; }
+            > .projects__card { width: 80%; height: auto; aspect-ratio: 388/548; flex: 0 0 auto; }
+        }
+    }
+
+    &__card {
+        /* Carte 388 x 548 en desktop/tablette. Fallback mobile géré plus haut */
+        width: 388px;
+        height: 548px;
+        padding: 18px 18px 30px 18px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
+        gap: 17px;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+        @include mobile { width: 100%; height: auto; aspect-ratio: 388/548; }
+    }
+
+    &__card-overlay {
+        position: absolute;
+        inset: 0;
+        /* Overlay renforcé pour lisibilité: sombre en bas, plus doux au-dessus */
+        background:
+            linear-gradient(180deg,
+                rgba(17, 24, 39, 0.00) 0%,
+                rgba(17, 24, 39, 0.25) 35%,
+                rgba(17, 24, 39, 0.55) 65%,
+                rgba(17, 24, 39, 0.65) 100%
+            ),
+            /* Légère teinte chaude conservée */
+            linear-gradient(200deg,
+                rgba(255, 249, 237, 0.00) 0%,
+                rgba(255, 249, 237, 0.12) 50%,
+                rgba(255, 249, 237, 0.20) 100%
+            );
+        /* Flou un peu plus présent pour renforcer le contraste du texte */
+        -webkit-backdrop-filter: blur(3px);
+        backdrop-filter: blur(3px);
+        pointer-events: none;
+    }
+
+    &__card-content {
+        align-self: stretch;
+        height: 451px; /* conformément au style inline fourni */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+        position: static; /* pour que le header absolu s'ancre à la carte entière */
+        z-index: 1;
+        @media (max-width: 1200px) { height: auto; gap: 14px; }
+    }
+
+    /* Le type doit être en haut à droite */
+    &__card-header {
+        position: absolute;
+        top: 18px; /* coin haut droit de la carte */
+        right: 18px;
+        z-index: 2;
+        text-align: right;
+    }
+
+    &__card-type {
+        color: #FFFEF8;
+        font-size: 14px;
+        font-family: 'DM Sans', $font-family-primary;
+        font-weight: 700;
+        text-transform: uppercase;
+        line-height: 22px;
+        letter-spacing: 1.40px;
+        text-align: right;
+        display: inline-block;
+                text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+      }
+
+    &__card-info {
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    &__card-client {
+        color: rgba(255, 254, 248, 0.85);
+        font-size: 14px;
+        font-family: $font-family-primary;
+        font-weight: 700;
+        text-transform: uppercase;
+        line-height: 22px;
+        letter-spacing: 1.40px;
+        margin: 0;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+    }
+
+    &__card-title {
+        align-self: stretch;
+        color: #FFFEF8;
+        font-size: 27.65px;
+        font-family: $font-family-primary;
+        font-weight: 800;
+        line-height: 30.42px;
+        margin: 0;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    &__card-description {
+        align-self: stretch;
+        color: rgba(255, 254, 248, 0.92);
+        font-size: 14px;
+        font-family: $font-family-primary;
+        font-weight: 400;
+        line-height: 21px;
+        margin: 0;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+    }
+
+    &__card-footer {
+        padding-top: 12px;
+        display: inline-flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        gap: 6px;
+        position: relative;
+        z-index: 2;
+    }
+
+    &__card-link {
+        display: inline-flex;
+        align-items: center; /* aligner verticalement texte + flèche */
+        gap: 6px;
+        text-decoration: none;
+        transition: none;
+        &:focus { outline: 2px solid #048B9A; outline-offset: 4px; border-radius: 4px; }
+        span {
+            color: #048B9A;
+            font-size: 16px;
+            font-family: $font-family-primary;
+            font-weight: 700;
+            line-height: 19.20px;
+            text-align: center;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.25);
+        }
+    }
+
+    &__card-arrow {
+        width: 10px;
+        height: 8.57px;
+        flex-shrink: 0;
+        display: block; /* évite l'alignement sur baseline */
+        transform: translateY(0.5px); /* micro-correction optique */
+    }
+}
+
+// Amélioration accessibilité
+@media (prefers-reduced-motion: reduce) {
+    .projects__card,
+    .projects__nav-btn,
+    .projects__link,
+    .projects__card-link {
+        transition: none !important;
+    }
+}
+
+/* État de saisie pendant le drag */
+.projects__grid.is-grabbing {
+    cursor: grabbing;
+}
+
+/* Texte non sélectionnable pour éviter les highlights pendant le drag */
+.projects__card-type {
+    user-select: none;
+}

@@ -1,0 +1,171 @@
+---
+import DynamicPage from '../../components/DynamicPage.astro';
+
+// Charger les données about.json pour la langue anglaise
+let aboutData: any = null;
+try {
+  const aboutModule = await import('../../../content/en/about.json');
+  aboutData = aboutModule.default;
+} catch (e) {
+  console.error('Erreur lors du chargement de about.json:', e);
+}
+
+const about = aboutData || {};
+---
+
+<DynamicPage 
+  title={about.title || "About - Oveco"}
+  description={about.description || "Discover Oveco's story, our team and our values."}
+  jsonFile="about"
+  lang="en"
+>
+  <div class="about-page">
+    <!-- Hero Section -->
+    <section class="about-hero">
+      <div class="container">
+        <div class="about-hero__content">
+          <h1 class="about-hero__title">{about.hero?.title || "Building sustainable housing together"}</h1>
+          <p class="about-hero__subtitle">{about.hero?.subtitle || "Our mission"}</p>
+          <p class="about-hero__description">{about.hero?.description || "At Oveco, we believe that everyone can become an actor in their own housing."}</p>
+        </div>
+        {about.hero?.image && (
+          <div class="about-hero__image">
+            <img src={about.hero.image} alt={about.hero.imageAlt || "Oveco team"} />
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- Story Section -->
+    {about.story && (
+      <section class="about-story">
+        <div class="container">
+          <div class="about-story__content">
+            <h2 class="about-story__title">{about.story.title}</h2>
+            <div class="about-story__text" set:html={about.story.content?.split('\n').map(paragraph => 
+              paragraph.trim() ? `<p>${paragraph}</p>` : ''
+            ).join('')}></div>
+          </div>
+          {about.story.image && (
+            <div class="about-story__image">
+              <img src={about.story.image} alt={about.story.imageAlt || "Our story"} />
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    <!-- Values Section -->
+    {about.values && (
+      <section class="about-values">
+        <div class="container">
+          <div class="about-values__header">
+            <h2 class="about-values__title">{about.values.title}</h2>
+            <p class="about-values__subtitle">{about.values.subtitle}</p>
+          </div>
+          <div class="about-values__grid">
+            {about.values.items?.map((value: any) => (
+              <div class="about-values__item">
+                {value.icon && <img src={value.icon} alt={value.alt || value.title} class="about-values__icon" />}
+                <h3 class="about-values__item-title">{value.title}</h3>
+                <p class="about-values__item-description">{value.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Team Section -->
+    {about.team && (
+      <section class="about-team">
+        <div class="container">
+          <div class="about-team__header">
+            <h2 class="about-team__title">{about.team.title}</h2>
+            <p class="about-team__subtitle">{about.team.subtitle}</p>
+            <p class="about-team__description">{about.team.description}</p>
+          </div>
+          <div class="about-team__grid">
+            {about.team.members?.map((member: any) => (
+              <div class="about-team__member">
+                {member.image && <img src={member.image} alt={member.imageAlt || member.name} class="about-team__photo" />}
+                <h3 class="about-team__name">{member.name}</h3>
+                <p class="about-team__role">{member.role}</p>
+                <p class="about-team__description">{member.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Stats Section -->
+    {about.stats && (
+      <section class="about-stats">
+        <div class="container">
+          <h2 class="about-stats__title">{about.stats.title}</h2>
+          <div class="about-stats__grid">
+            {about.stats.items?.map((stat: any) => (
+              <div class="about-stats__item">
+                <div class="about-stats__value">{stat.value}</div>
+                <div class="about-stats__label">{stat.label}</div>
+                <div class="about-stats__description">{stat.description}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CTA Section -->
+    {about.cta && (
+      <section class="about-cta">
+        <div class="container">
+          <h2 class="about-cta__title">{about.cta.title}</h2>
+          <p class="about-cta__description">{about.cta.description}</p>
+          <a href={about.cta.buttonUrl} class="about-cta__button">{about.cta.buttonText}</a>
+        </div>
+      </section>
+    )}
+  </div>
+</DynamicPage>
+
+<style lang="scss">
+  @use '../../assets/scss/astro-components' as *;
+
+  .about-page {
+    // Styles spécifiques à la page about
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .about-hero {
+    padding: 80px 0;
+    text-align: center;
+  }
+
+  .about-values__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+  }
+
+  .about-team__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+  }
+
+  .about-stats__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+  }
+</style>

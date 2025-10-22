@@ -28,6 +28,8 @@ export { default as Oveco } from './Oveco.astro';
 
 // Composants de pages
 export { default as ProjectPage } from './ProjectPage.astro';
+export { default as Navbar } from './Nabar.astro';
+export { default as Hero } from './Hero.astro';
 
 /**
  * Types pour TinaCMS
@@ -282,5 +284,42 @@ export interface CardProps {
   title: string;
   url: string;
   description?: string;
+}
+
+// Nouveaux composants - Interfaces TypeScript
+export interface ProjectPageProps {
+  title: string;
+  description?: string;
+  category?: string;
+  image?: string;
+  backHref?: string;
+  backLabel?: string;
+}
+
+export interface NavbarProps {
+  logoUrl?: string;
+  siteName?: string;
+  siteUrl?: string;
+  links?: Array<{
+    label: string;
+    url: string;
+  }>;
+  ctaButton?: {
+    label: string;
+    url: string;
+  };
+}
+
+export interface HeroProps {
+  subtitle?: string;
+  title: string;
+  description?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  images?: Array<{
+    src: string;
+    alt: string;
+    class?: string;
+  }>;
 }
 

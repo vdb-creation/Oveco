@@ -30,68 +30,7 @@ const {
   </div>
 </footer>
 
-<style>
-  .footer {
-    width: 100%;
-    height: 162px;
-    position: relative;
-    background: var(--oveco-white);
-    overflow: hidden;
-  }
-
-  .footer__container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    max-width: 1440px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 110px;
-    margin-top: 66px;
-  }
-
-  .footer__copyright {
-    color: var(--oveco-text);
-    font-size: 18px;
-    font-family: var(--oveco-font-family);
-    font-weight: var(--oveco-weight-regular);
-    line-height: 18px;
-  }
-
-  .footer__legal {
-    color: var(--oveco-text);
-    font-size: 16px;
-    font-family: var(--oveco-font-family);
-    font-weight: var(--oveco-weight-regular);
-    line-height: 28.8px;
-    text-align: right;
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    .footer__container {
-      flex-direction: column;
-      justify-content: center;
-      gap: 1rem;
-      padding: 0 2rem;
-      text-align: center;
-    }
-
-    .footer__copyright {
-      order: 2;
-    }
-
-    .footer__legal {
-      text-align: center;
-      order: 1;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .footer__container {
-      padding: 0 1rem;
-    }
-  }
+<style lang="scss">
+  @use '../assets/scss/astro-components' as *;
+  @use '../assets/scss/components/_footer' as *;
 </style>

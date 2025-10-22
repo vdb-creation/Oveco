@@ -1,0 +1,79 @@
+---
+import DynamicPage from '../components/DynamicPage.astro';
+import WorksHero from '../components/WorksHero.astro';
+import Projects from '../components/Projects.astro';
+import Contact from '../components/Contact.astro';
+
+// Charger les données works.json
+let worksData: any = null;
+try {
+  const worksModule = await import('../../content/works.json');
+  worksData = worksModule.default;
+} catch (e) {
+  console.error('Erreur lors du chargement de works.json:', e);
+}
+
+const works = worksData || {};
+---
+
+<!-- @ts-expect-error - Astro slots are not recognized as children by TypeScript -->
+<DynamicPage 
+  title={works.title || "Nos Réalisations - Oveco"}
+  description={works.description || "Découvrez une sélection de nos projets d'auto-construction et de rénovation écologique."}
+  jsonFile="works"
+  lang="fr"
+>
+  <main class="works-page" id="works">
+    <!-- Hero Section -->
+    <WorksHero 
+      id="works-hero-title"
+      subtitle={works.hero?.subtitle || "Nos réalisations"}
+      title={works.hero?.title || "Des projets qui ont du sens"}
+      description={works.hero?.description || "Explorez une sélection de réalisations menées avec nos clients."}
+      cta-label={works.hero?.ctaLabel || "Nous contacter"}
+      cta-url={works.hero?.ctaUrl || "#contact"}
+      media-left-src={works.hero?.mediaLeft?.src || "/uploads/imgs/maison-toit.png"}
+      media-left-alt={works.hero?.mediaLeft?.alt || "Maison avec panneaux solaires"}
+      media-right-src={works.hero?.mediaRight?.src || "/uploads/imgs/maison-build.png"}
+      media-right-alt={works.hero?.mediaRight?.alt || "Chantier de construction"}
+      media-right-overlay={works.hero?.mediaRight?.overlay ? "true" : "false"}
+    />
+
+    <!-- Projects Section -->
+    <Projects 
+      title={works.title || "Nos Réalisations"}
+      description={works.description || "Découvrez une sélection de nos projets d'auto-construction et de rénovation écologique."}
+      linkText="Voir tous les projets"
+      linkUrl="/works"
+      cards={works.projects?.map((project: any) => ({
+        image: project.image,
+        type: project.category,
+        client: project.client,
+        title: project.title,
+        url: `/work/${project.id}`,
+        description: project.description
+      })) || []}
+    />
+
+    <!-- Contact Section -->
+    <Contact />
+  </main>
+</DynamicPage>
+
+<style lang="scss">
+  @use '../assets/scss/astro-components' as *;
+
+  .works-page {
+    // Styles spécifiques à la page works
+  }
+
+  .works-page__intro {
+    padding: var(--space-4) 0;
+    text-align: center;
+    
+    &.is-gutenberg {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  }
+</style>

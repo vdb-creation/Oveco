@@ -1,0 +1,187 @@
+{
+  "title": "Accueil - Oveco",
+  "description": "Oveco accompagne vos projets d'auto-construction et de rénovation écologique. Expertise en maisons passives et énergies renouvelables.",
+  "sections": [
+    {
+      "subtitle": "Nous contacter",
+      "title": "Vous avez une idée, un projet, ou simplement des questions ?",
+      "description": "Écrivez-nous ou appelez-nous, on sera ravi d'en discuter.",
+      "contactInfo": {
+        "email": "job@oveco.be",
+        "phone": "+32 473 / 68.99.02",
+        "location": "Région de Beauvechain"
+      },
+      "formAction": "#contact",
+      "_template": "contact"
+    },
+    {
+      "subtitle": "l'auto-construction",
+      "title": "Apprendre en faisant, construire en étant accompagné",
+      "description": "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat.",
+      "services": [
+        {
+          "image": "/uploads/imgs/maison-build.png",
+          "alt": "Accompagnement personnalisé",
+          "title": "Accompagnement personnalisé",
+          "description": "Nous vous guidons à chaque étape de votre projet d'auto-construction."
+        },
+        {
+          "image": "/uploads/imgs/plan.png",
+          "alt": "Formation pratique",
+          "title": "Formation pratique",
+          "description": "Apprenez les techniques de construction directement sur le terrain."
+        }
+      ],
+      "ctaLabel": "En savoir plus",
+      "ctaHref": "#contact",
+      "_template": "autoconstruction"
+    },
+    {
+      "subtitle": "Nos réalisations",
+      "title": "Des projets qui ont du sens",
+      "description": "Découvrez nos réalisations en auto-construction et rénovation durable.",
+      "ctaLabel": "Nous contacter",
+      "ctaHref": "#contact",
+      "mediaLeft": {
+        "src": "/uploads/imgs/maison-toit.png",
+        "alt": "Maison avec panneaux solaires"
+      },
+      "mediaRight": {
+        "src": "/uploads/imgs/maison-build.png",
+        "alt": "Chantier de construction",
+        "overlay": true
+      },
+      "_template": "worksHero"
+    },
+    {
+      "subtitle": "Nos expertises",
+      "title": "Mettre la technique au service de projets humains et durables",
+      "description": "Chez Oveco, la technique n'est jamais un but en soi, mais toujours un moyen au service de vos projets.",
+      "cards": [
+        {
+          "icon": "/uploads/compétance/maison.png",
+          "alt": "Construction durable",
+          "title": "Construction durable",
+          "description": "Techniques et matériaux respectueux de l'environnement."
+        },
+        {
+          "icon": "/uploads/compétance/personne.png",
+          "alt": "Auto-construction",
+          "title": "Auto-construction",
+          "description": "Accompagnement personnalisé pour vos projets d'auto-construction."
+        },
+        {
+          "icon": "/uploads/compétance/eolienne.png",
+          "alt": "Énergies renouvelables",
+          "title": "Énergies renouvelables",
+          "description": "Installation de systèmes photovoltaïques et éoliens."
+        },
+        {
+          "icon": "/uploads/compétance/clim.png",
+          "alt": "Efficacité énergétique",
+          "title": "Efficacité énergétique",
+          "description": "Optimisation de la performance énergétique de votre habitat."
+        }
+      ],
+      "ctaLabel": "Découvrir toutes nos expertises",
+      "ctaHref": "#expertises-details",
+      "_template": "expertise"
+    },
+    {
+      "title": "Statistiques du projet",
+      "stats": [
+        {
+          "value": "+ de 45",
+          "label": "panneaux solaires",
+          "description": "Installés sur nos projets"
+        },
+        {
+          "value": "100%",
+          "label": "énergies renouvelables",
+          "description": "Dans nos nouvelles constructions"
+        }
+      ],
+      "_template": "stats"
+    },
+    {
+      "subtitle": "Nos réalisations",
+      "title": "Ce sont plus que des projets, ce sont des collaborations",
+      "description": "Découvrez quelques-unes de nos réalisations récentes.",
+      "linkText": "En savoir plus",
+      "linkUrl": "/works",
+      "cards": [
+        {
+          "image": "/uploads/imgs/maison-toit.png",
+          "type": "Rénovation",
+          "client": "Famille Martin",
+          "title": "Maison passive à Beauvechain",
+          "url": "/work/maison-passive-beauvechain",
+          "description": "Rénovation complète d'une maison familiale avec isolation passive et panneaux solaires."
+        },
+        {
+          "image": "/uploads/imgs/maison-build.png",
+          "type": "Auto-construction",
+          "client": "Couple Dubois",
+          "title": "Extension écologique",
+          "url": "/work/extension-ecologique",
+          "description": "Accompagnement à l'auto-construction d'une extension en matériaux naturels."
+        },
+        {
+          "image": "/uploads/imgs/maison-toit-2.png",
+          "type": "Rénovation énergétique",
+          "client": "Famille Leroy",
+          "title": "Rénovation avec chauffage solaire",
+          "url": "/work/renovation-chauffage-solaire",
+          "description": "Rénovation énergétique avec système de chauffage solaire combiné."
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "subtitle": "Qu'est-ce qui s'en dit ?",
+      "title": "Ce sont plus que des projets, ce sont des collaborations",
+      "description": "Découvrez les témoignages de nos clients satisfaits.",
+      "linkText": "En savoir plus",
+      "linkUrl": "#temoignages-complets",
+      "testimonials": [
+        {
+          "thumbnail": {
+            "src": "/uploads/team/pic.jpg",
+            "alt": "Photo de Marie Martin"
+          },
+          "client_name": "Marie Martin",
+          "client_position": "Propriétaire",
+          "client_company": "Maison passive Beauvechain",
+          "content": "Oveco nous a accompagnés dans notre projet de rénovation passive. Leur expertise et leur disponibilité ont fait toute la différence.",
+          "card_content": "Excellent accompagnement pour notre projet de rénovation passive.",
+          "linked_project": {
+            "title": "Maison passive à Beauvechain",
+            "link": "/work/maison-passive-beauvechain"
+          }
+        },
+        {
+          "thumbnail": {
+            "src": "/uploads/team/pic.jpg",
+            "alt": "Photo de Pierre Dubois"
+          },
+          "client_name": "Pierre Dubois",
+          "client_position": "Auto-constructeur",
+          "client_company": "Extension écologique",
+          "content": "Grâce à l'accompagnement d'Oveco, nous avons pu réaliser notre extension nous-mêmes tout en apprenant des techniques durables.",
+          "card_content": "Formation pratique exceptionnelle pour notre projet d'auto-construction.",
+          "linked_project": {
+            "title": "Extension écologique",
+            "link": "/work/extension-ecologique"
+          }
+        }
+      ],
+      "_template": "testimonials"
+    },
+    {
+      "copyrightYear": 2024,
+      "companyName": "Oveco",
+      "legalText": "All Rights Reserved | Terms and Conditions | Privacy Policy",
+      "_template": "footer"
+    }
+  ]
+}

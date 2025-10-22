@@ -1,0 +1,214 @@
+@import '../variables';
+@import '../mixins';
+
+/* ========================================
+   PARTNERS SECTION
+   ======================================== */
+.partners-section {
+    padding: 70px 111px;
+    overflow: hidden;
+    background: $color-white;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 42px;
+    display: flex;
+
+    @media (max-width: 1200px) {
+        padding: 60px 80px;
+    }
+
+    @media (max-width: 1024px) {
+        padding: 50px 40px;
+    }
+
+    @include tablet {
+        padding: 40px 2rem;
+        gap: 35px;
+    }
+
+    @include mobile {
+        padding: 30px 1rem;
+        gap: 30px;
+    }
+}
+
+.partners {
+    &__container {
+        width: 100%;
+        max-width: 1214px;
+        margin: 0 auto;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 42px;
+        display: flex;
+
+        @include tablet {
+            gap: 35px;
+        }
+
+        @include mobile {
+            gap: 30px;
+        }
+    }
+
+    &__header {
+        width: 706.82px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+        display: flex;
+
+        @include tablet {
+            width: 100%;
+            max-width: 706.82px;
+        }
+    }
+
+    &__subtitle {
+        text-align: center;
+        color: #5C6D6F;
+        font-size: 19.20px;
+        font-family: $font-family-primary;
+        font-weight: 700;
+        text-transform: uppercase;
+        line-height: 20px;
+        letter-spacing: 1.92px;
+        margin: 0;
+
+        @include tablet {
+            font-size: 17px;
+            letter-spacing: 1.5px;
+        }
+
+        @include mobile {
+            font-size: 15px;
+            line-height: 18px;
+            letter-spacing: 1.2px;
+        }
+    }
+
+    &__title {
+        align-self: stretch;
+        text-align: center;
+        color: #334749;
+        font-size: 39.81px;
+        font-family: $font-family-primary;
+        font-weight: 800;
+        line-height: 47.77px;
+        margin: 0;
+
+        @include tablet {
+            font-size: 32px;
+            line-height: 38px;
+        }
+
+        @include mobile {
+            font-size: 26px;
+            line-height: 30px;
+        }
+    }
+
+    &__description {
+        align-self: stretch;
+        text-align: center;
+        color: #5C6D6F;
+        font-size: 16px;
+        font-family: $font-family-primary;
+        font-weight: 400;
+        line-height: 28.80px;
+        margin: 0;
+
+        @include tablet {
+            font-size: 15px;
+            line-height: 26px;
+        }
+
+        @include mobile {
+            font-size: 14px;
+            line-height: 24px;
+        }
+    }
+
+    &__logos {
+        opacity: 0.30;
+        justify-content: center;
+        align-items: center;
+        gap: 92px;
+        display: flex;
+        flex-wrap: wrap;
+
+        @media (max-width: 1400px) {
+            gap: 60px;
+        }
+
+        @media (max-width: 1200px) {
+            gap: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            gap: 30px;
+        }
+
+        @include tablet {
+            gap: 25px;
+            justify-content: center;
+        }
+
+        @include mobile {
+            gap: 20px;
+            justify-content: center;
+        }
+    }
+
+    &__logo {
+        /* Figure du logo */
+        margin: 0; /* reset figure */
+        width: 140px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        filter: grayscale(100%);
+
+        /* L'image remplit la boîte sans déformation */
+        img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+            display: block;
+        }
+
+        &:hover {
+            opacity: 0.8;
+            filter: grayscale(0%);
+            transform: translateY(-2px);
+        }
+
+        &:focus {
+            outline: 2px solid #048B9A;
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        // Responsive sizing fixe (boîte)
+        @include tablet {
+            width: 120px;
+            height: 50px;
+        }
+
+        @include mobile {
+            width: 100px;
+            height: 40px;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .partners__logo {
+        transition: none !important;
+    }
+}

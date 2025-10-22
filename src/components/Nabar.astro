@@ -1,0 +1,170 @@
+---
+/**
+ * Navbar Component - Oveco
+ * Barre de navigation responsive avec menu mobile
+ * 
+ * @component
+ */
+
+export interface NavbarProps {
+  logoUrl?: string;
+  siteName?: string;
+  siteUrl?: string;
+  links?: Array<{
+    label: string;
+    url: string;
+  }>;
+  ctaButton?: {
+    label: string;
+    url: string;
+  };
+}
+
+const {
+  logoUrl,
+  siteName = "Oveco",
+  siteUrl = "/",
+  links = [
+    { label: "Qui sommes nous ?", url: "/about" },
+    { label: "L'auto-construction", url: "/auto-construction" },
+    { label: "Compétences", url: "/competences" },
+    { label: "Réalisations", url: "/works" }
+  ],
+  ctaButton = {
+    label: "Nous contacter",
+    url: "/contact"
+  }
+} = Astro.props;
+---
+
+<nav class="navbar" id="navbar" role="navigation" aria-label="Navigation principale">
+  <div class="navbar__container">
+    <!-- Brand/Logo -->
+    <a href={siteUrl} class="navbar__brand">
+      {logoUrl ? (
+        <img 
+          src={logoUrl} 
+          alt={siteName} 
+          class="brand__logo-img" 
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+      ) : null}
+      <div class="brand__text" style="display: none;">
+        {siteName}
+      </div>
+    </a>
+
+    <!-- Navigation Menu -->
+    <div class="navbar__menu" id="navbarMenu">
+      <div class="navbar__links">
+        {links.map((link: { label: string; url: string }) => (
+          <a href={link.url} class="navbar__link">{link.label}</a>
+        ))}
+      </div>
+
+      <!-- CTA Button (dans le menu pour le mobile) -->
+      <div class="navbar__cta">
+        <a href={ctaButton.url} class="navbar__btn">{ctaButton.label}</a>
+      </div>
+    </div>
+
+    <!-- Mobile Toggle -->
+    <button 
+      class="navbar__toggle" 
+      id="navbarToggle" 
+      type="button" 
+      aria-label="Ouvrir le menu" 
+      aria-controls="navbarMenu" 
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Overlay pour fermeture du menu sur mobile -->
+<div class="navbar-overlay" id="navbarOverlay" hidden></div>
+
+<script>
+// JavaScript pour le menu mobile et interactions
+document.addEventListener('DOMContentLoaded', function() {
+  const navbar = document.getElementById('navbar') as HTMLElement;
+  const toggle = document.getElementById('navbarToggle') as HTMLButtonElement;
+  const menu = document.getElementById('navbarMenu') as HTMLElement;
+  const overlay = document.getElementById('navbarOverlay') as HTMLElement;
+  const body = document.body;
+
+  if (!navbar || !toggle || !menu || !overlay) return;
+
+  // Toggle mobile menu
+  toggle.addEventListener('click', function() {
+    const willOpen = !toggle.classList.contains('active');
+    toggle.classList.toggle('active');
+    menu.classList.toggle('active');
+    overlay.classList.toggle('active');
+    overlay.hidden = !overlay.classList.contains('active');
+    body.classList.toggle('no-scroll', willOpen);
+    toggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  });
+
+  // Close mobile menu when clicking on a link
+  menu.addEventListener('click', function(e: Event) {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('navbar__link')) {
+      toggle.classList.remove('active');
+      menu.classList.remove('active');
+      overlay.classList.remove('active');
+      overlay.hidden = true;
+      body.classList.remove('no-scroll');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close when clicking overlay
+  overlay.addEventListener('click', function() {
+    toggle.classList.remove('active');
+    menu.classList.remove('active');
+    overlay.classList.remove('active');
+    overlay.hidden = true;
+    body.classList.remove('no-scroll');
+    toggle.setAttribute('aria-expanded', 'false');
+  });
+
+  // Close on ESC
+  window.addEventListener('keydown', function(e: KeyboardEvent) {
+    if (e.key === 'Escape' && toggle.classList.contains('active')) {
+      toggle.click();
+    }
+  });
+
+  // Reset state on resize to desktop
+  const mqDesktop = window.matchMedia('(min-width: 1025px)');
+  const onResize = () => {
+    if (mqDesktop.matches) {
+      toggle.classList.remove('active');
+      menu.classList.remove('active');
+      overlay.classList.remove('active');
+      overlay.hidden = true;
+      body.classList.remove('no-scroll');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  };
+  window.addEventListener('resize', onResize);
+  mqDesktop.addEventListener?.('change', onResize);
+
+  // Navbar scroll effect (optional)
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+});
+</script>
+<style lang="scss">
+  @use '../assets/scss/astro-components' as *;
+  @use '../assets/scss/components/_navbar' as *;
+  </style>
