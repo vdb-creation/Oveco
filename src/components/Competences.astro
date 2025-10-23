@@ -6,7 +6,9 @@
  */
 
 export interface Competence {
-  image: string;
+  icon?: string;  // TinaCMS field: icon path
+  alt?: string;   // TinaCMS field: alt text
+  image?: string; // Legacy field
   title: string;
   url?: string;
   description?: string;
@@ -25,27 +27,48 @@ const {
   description,
   competences = [
     {
-      image: "/uploads/icons/clim.png",
+      icon: "/uploads/icons/clim.png",
       title: "Compétence 1",
       url: "/expertise#clim"
     },
     {
-      image: "/uploads/icons/eolienne.png",
+      icon: "/uploads/icons/eolienne.png",
       title: "Compétence 2",
       url: "/expertise#eolienne"
     },
     {
-      image: "/uploads/icons/elec.png",
+      icon: "/uploads/icons/elec.png",
       title: "Compétence 3",
       url: "/expertise#electricite"
     },
     {
-      image: "/uploads/icons/personne.png",
+      icon: "/uploads/icons/personne.png",
       title: "Compétence 4",
       url: "/expertise#accompagnement"
     }
   ]
 } = Astro.props;
+
+// Normaliser les chemins d'images TinaCMS
+function normalizePath(input?: string): string {
+  if (!input) return '';
+  let path = String(input).trim();
+  if (!path) return '';
+  // URLs absolues/data: retourner tel quel
+  if (/^(https?:)?\/\//i.test(path) || path.startsWith('data:')) return path;
+  // Retirer /public/ si présent
+  if (path.startsWith('/public/')) path = path.replace('/public/', '/');
+  // Ajouter / si manquant
+  if (!path.startsWith('/')) path = '/' + path;
+  return path;
+}
+
+// Extraire src et alt d'une compétence
+function getImageData(competence: Competence) {
+  const src = normalizePath(competence.icon || competence.image) || '/uploads/icons/placeholder.png';
+  const alt = competence.alt || competence.title;
+  return { src, alt };
+}
 ---
 
 <section class="competences" aria-labelledby="competences-title">
@@ -57,40 +80,61 @@ const {
     </header>
 
     <ul class="competences__grid" role="list">
-      {competences.map((c) => (
-        <li class="competences__item" role="listitem">
-          <figure class="competences__figure">
-            <img 
-              class="competences__image" 
-              src={c.image} 
-              alt={c.title} 
-              width="168" 
-              height="168" 
-              loading="lazy"
-            />
-            <figcaption class="visually-hidden">{c.title}</figcaption>
-          </figure>
-          <div class="competences__body">
-            <h3 class="competences__name">{c.title}</h3>
-            {c.description ? (
-              <p class="competences__description-item">{c.description}</p>
-            ) : (
-              <a 
-                class="competences__link" 
-                href={c.url || '#'} 
-                aria-label={`En savoir plus sur ${c.title}`}
-              >
-                <span>En savoir plus</span>
-              </a>
-            )}
-          </div>
-        </li>
-      ))}
+      {competences.map((c) => {
+        const { src, alt } = getImageData(c);
+        return (
+          <li class="competences__item" role="listitem">
+            <figure class="competences__figure">
+              <img 
+                class="competences__image" 
+                src={src} 
+                alt={alt} 
+                width="168" 
+                height="168" 
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption class="visually-hidden">{c.title}</figcaption>
+            </figure>
+            <div class="competences__body">
+              <h3 class="competences__name">{c.title}</h3>
+              {c.description ? (
+                <p class="competences__description-item">{c.description}</p>
+              ) : (
+                <a 
+                  class="competences__link" 
+                  href={c.url || '#'} 
+                  aria-label={`En savoir plus sur ${c.title}`}
+                >
+                  <span>En savoir plus</span>
+                </a>
+              )}
+            </div>
+          </li>
+        );
+      })}
     </ul>
   </div>
 </section>
 
-<style lang="scss">
-  @use '../assets/scss/astro-components' as *;
-  @use '../assets/scss/components/_competences' as *;
+<style>
+/* CSS extrait de wp-content/themes/oveco/style.css (main) */
+.competences__container { width: 100%; max-width: 1214px; display: flex; flex-direction: column; align-items: center; gap: 72px; }
+.competences__header { width: 100%; max-width: 706.82px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.competences__subtitle { color: #5C6D6F; font-size: 19.2px; font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif; font-weight: 700; text-transform: uppercase; line-height: 20px; letter-spacing: 1.92px; margin: 0; }
+.competences__title { align-self: stretch; color: #334749; font-size: 39.81px; font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif; font-weight: 800; line-height: 47.77px; margin: 0; }
+.competences__description { align-self: stretch; color: #5C6D6F; font-size: 16px; font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif; font-weight: 400; line-height: 28.8px; margin: 0; }
+.competences__grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 61px; row-gap: 42px; list-style: none; padding: 0; margin: 0; justify-items: center; }
+.competences__item { width: 364px; display: inline-flex; flex-direction: column; align-items: center; gap: 24px; }
+.competences__figure { margin: 0; width: 168px; height: 168px; display: flex; align-items: center; justify-content: center; }
+.competences__figure img, .competences__image { width: 100% !important; height: 100% !important; object-fit: contain; display: block; }
+.competences__body { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.competences__name { width: 324px; text-align: center; color: #334749; font-size: 27.65px; font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif; font-weight: 800; line-height: 30.42px; margin: 0; }
+.competences__link { display: inline-flex; align-items: center; gap: 6px; color: #048B9A; font-size: 16px; font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif; font-weight: 700; line-height: 19.2px; text-decoration: none; }
+.competences__link::after { content: ""; width: 10px; height: 8.57px; border: 1.5px solid currentColor; border-left: 0; border-bottom: 0; transform: rotate(45deg); display: inline-block; margin-top: 2px; }
+.competences__link:focus-visible { outline: 2px solid #048B9A; outline-offset: 2px; border-radius: 2px; }
+.competences__description-item { width: 364px; text-align: center; color: #5C6D6F; font-size: 16px; font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif; font-weight: 400; line-height: 28.8px; margin: 0; }
+@media (max-width: 768px) { .competences__description-item { width: 100%; } }
+@media (max-width: 1200px) { .competences__grid { grid-template-columns: repeat(2, 1fr); gap: 40px; row-gap: 32px; } }
+@media (max-width: 768px) { .competences { padding: 32px 16px; } .competences__grid { grid-template-columns: 1fr; gap: 28px; row-gap: 24px; } .competences__item { width: 100%; } .competences__name { width: 100%; } }
 </style>

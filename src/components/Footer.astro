@@ -30,7 +30,74 @@ const {
   </div>
 </footer>
 
-<style lang="scss">
-  @use '../assets/scss/astro-components' as *;
-  @use '../assets/scss/components/_footer' as *;
+<style>
+/* CSS extrait de wp-content/themes/oveco/style.css (footer section) */
+.footer {
+  width: 100%;
+  height: 162px;
+  position: relative;
+  background: #FFFEF8;
+  overflow: hidden;
+}
+
+.footer__container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 110px;
+  margin-top: 66px;
+}
+
+@media (max-width: 768px) {
+  .footer__container {
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0 2rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer__container {
+    padding: 0 1rem;
+  }
+}
+
+.footer__copyright {
+  color: #5C6D6F;
+  font-size: 18px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 18px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .footer__copyright {
+    order: 2;
+  }
+}
+
+.footer__legal {
+  color: #5C6D6F;
+  font-size: 16px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 28.8px;
+  text-align: right;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .footer__legal {
+    text-align: center;
+    order: 1;
+  }
+}
 </style>

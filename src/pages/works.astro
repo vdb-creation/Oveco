@@ -1,79 +1,81 @@
 ---
-import DynamicPage from '../components/DynamicPage.astro';
+import Layout from '../layouts/Layout.astro';
+import Nabar from '../components/Nabar.astro';
 import WorksHero from '../components/WorksHero.astro';
 import Projects from '../components/Projects.astro';
 import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import { getAllProjects, projectToCard } from '../lib/projects.ts';
 
-// Charger les données works.json
-let worksData: any = null;
-try {
-  const worksModule = await import('../../content/works.json');
-  worksData = worksModule.default;
-} catch (e) {
-  console.error('Erreur lors du chargement de works.json:', e);
-}
+// Charger tous les projets
+const allProjects = await getAllProjects();
+const projectCards = allProjects.map(projectToCard);
 
-const works = worksData || {};
+// Données pour le hero
+const heroData = {
+  subtitle: "Nos réalisations",
+  title: "Des projets qui ont du sens",
+  description: "Explorez une sélection de réalisations menées avec nos clients. Chaque projet témoigne de notre engagement pour l'excellence et l'innovation.",
+  ctaLabel: "Nous contacter",
+  ctaUrl: "#contact"
+};
+
+// Titre et description SEO
+const pageTitle = "Nos Réalisations - Projets Oveco";
+const pageDescription = "Découvrez tous nos projets d'auto-construction et de rénovation écologique. Maisons passives, énergies renouvelables et solutions durables.";
 ---
 
-<!-- @ts-expect-error - Astro slots are not recognized as children by TypeScript -->
-<DynamicPage 
-  title={works.title || "Nos Réalisations - Oveco"}
-  description={works.description || "Découvrez une sélection de nos projets d'auto-construction et de rénovation écologique."}
-  jsonFile="works"
-  lang="fr"
->
-  <main class="works-page" id="works">
-    <!-- Hero Section -->
-    <WorksHero 
-      id="works-hero-title"
-      subtitle={works.hero?.subtitle || "Nos réalisations"}
-      title={works.hero?.title || "Des projets qui ont du sens"}
-      description={works.hero?.description || "Explorez une sélection de réalisations menées avec nos clients."}
-      cta-label={works.hero?.ctaLabel || "Nous contacter"}
-      cta-url={works.hero?.ctaUrl || "#contact"}
-      media-left-src={works.hero?.mediaLeft?.src || "/uploads/imgs/maison-toit.png"}
-      media-left-alt={works.hero?.mediaLeft?.alt || "Maison avec panneaux solaires"}
-      media-right-src={works.hero?.mediaRight?.src || "/uploads/imgs/maison-build.png"}
-      media-right-alt={works.hero?.mediaRight?.alt || "Chantier de construction"}
-      media-right-overlay={works.hero?.mediaRight?.overlay ? "true" : "false"}
-    />
+<Layout title={pageTitle} description={pageDescription}>
+  <!-- Navigation -->
+  <Nabar />
 
-    <!-- Projects Section -->
-    <Projects 
-      title={works.title || "Nos Réalisations"}
-      description={works.description || "Découvrez une sélection de nos projets d'auto-construction et de rénovation écologique."}
-      linkText="Voir tous les projets"
-      linkUrl="/works"
-      cards={works.projects?.map((project: any) => ({
-        image: project.image,
-        type: project.category,
-        client: project.client,
-        title: project.title,
-        url: `/work/${project.id}`,
-        description: project.description
-      })) || []}
-    />
+  <!-- Hero Section -->
+  <WorksHero 
+    subtitle={heroData.subtitle}
+    title={heroData.title}
+    description={heroData.description}
+    ctaLabel={heroData.ctaLabel}
+    ctaHref={heroData.ctaUrl}
+    mediaLeft={{ src: "/uploads/hero/maison-build.png", alt: "Projets de construction" }}
+    mediaRight={{ src: "/uploads/hero/maison-build.png", alt: "Réalisations Oveco" }}
+  />
 
-    <!-- Contact Section -->
-    <Contact />
-  </main>
-</DynamicPage>
+  <!-- Section Projets -->
+  <Projects 
+    subtitle="Portfolio"
+    title="Tous nos Projets"
+    description="Découvrez l'ensemble de nos réalisations, de la conception à la livraison."
+    linkText="Voir le projet"
+    linkUrl="/work"
+    cards={projectCards}
+  />
 
-<style lang="scss">
-  @use '../assets/scss/astro-components' as *;
+  <!-- Contact -->
+  <Contact />
 
+  <!-- Footer -->
+  <Footer 
+    copyrightYear={new Date().getFullYear()}
+    companyName="Oveco"
+    legalText="Tous droits réservés"
+  />
+</Layout>
+
+<style>
+/* Styles spécifiques à la page works */
+.works-page {
+  /* La page utilise les styles globaux des composants */
+}
+
+/* Ajustements pour la page works si nécessaire */
+.works-hero {
+  background-image: url("/src/assets/imgs/BgGrille.svg");
+}
+
+/* Responsive pour la page works */
+@media (max-width: 768px) {
   .works-page {
-    // Styles spécifiques à la page works
+    /* Ajustements mobile si nécessaire */
   }
-
-  .works-page__intro {
-    padding: var(--space-4) 0;
-    text-align: center;
-    
-    &.is-gutenberg {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-  }
+}
 </style>

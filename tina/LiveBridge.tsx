@@ -16,7 +16,7 @@ const setAttr = (bind: string, attr: string, val?: string) =>
   });
 
 export default function LiveBridge(props: { home: Q }) {
-  const home = useTina(props.home);
+  const result = useTina(props.home);
 
   // Fonction pour réorganiser les sections dans le DOM
   const reorderSections = (sections: any[]) => {
@@ -69,7 +69,9 @@ export default function LiveBridge(props: { home: Q }) {
 
   // Fonction pour mettre à jour le DOM avec système de sections indexées
   const updateDOM = (data: any) => {
-    const H = data?.home;
+    // Extraire les données, quelle que soit la collection
+    const collectionData = data?.home || data?.about_fr || data?.about_en || data?.construction_fr || data?.construction_en || data?.homeEn;
+    const H = collectionData;
     if (!H || !H.sections) return;
 
     // Parcours toutes les sections
@@ -128,11 +130,13 @@ export default function LiveBridge(props: { home: Q }) {
   // Référence pour détecter le changement d'ordre
   const previousOrderRef = useRef<string>('');
 
-  // Mise à jour quand home.data change
+  // Mise à jour quand result.data change
   useEffect(() => {
-    console.log('[LiveBridge] home.data a changé !', home.data);
+    console.log('[LiveBridge] data a changé !', result.data);
     
-    const H = home.data?.home;
+    // Extraire les données, quelle que soit la collection
+    const collectionData = result.data?.home || result.data?.about_fr || result.data?.about_en || result.data?.construction_fr || result.data?.construction_en || result.data?.homeEn;
+    const H = collectionData;
     if (!H || !H.sections) return;
     
     // Créer une signature de l'ordre actuel
@@ -148,8 +152,8 @@ export default function LiveBridge(props: { home: Q }) {
     previousOrderRef.current = currentOrder;
     
     // Mettre à jour le contenu
-    updateDOM(home.data);
-  }, [home.data]);
+    updateDOM(result.data);
+  }, [result.data]);
 
   return null;
 }

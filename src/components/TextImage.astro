@@ -5,8 +5,6 @@
  * Compatible TinaCMS via props
  */
 
-import SmartImage from './SmartImage.astro';
-
 export interface Link {
   label: string;
   url: string;
@@ -24,6 +22,11 @@ export interface TextImageBlock {
   description?: string;
   link?: Link;
   image?: Image;
+}
+
+export interface Icon {
+  src: string;
+  alt?: string;
 }
 
 export interface Props {
@@ -48,6 +51,10 @@ export interface Props {
   description2?: string;
   link2?: Link;
   image2?: Image;
+
+  // Icônes optionnelles décoratives
+  icon1?: Icon;
+  icon2?: Icon;
 }
 
 const {
@@ -74,9 +81,67 @@ const {
   image2
 } = Astro.props;
 
+// Normaliser les chemins d'images TinaCMS
+function normalizePath(input?: string | { src?: string; url?: string; path?: string }): string {
+  if (!input) return '';
+  if (typeof input === 'string') {
+    let path = input.trim();
+    if (!path) return '';
+    if (/^(https?:)?\/\//i.test(path) || path.startsWith('data:')) return path;
+    if (path.startsWith('/public/')) path = path.replace('/public/', '/');
+    if (!path.startsWith('/')) path = '/' + path;
+    return path;
+  }
+  // Si c'est un objet, essayer src, url, path
+  const candidate = (input as any).src || (input as any).url || (input as any).path || '';
+  return normalizePath(candidate);
+}
+
+// Extraire le chemin d'une icône (gérer { src: "/path" } ou juste "/path")
+function getIconPath(icon?: Icon | any): string {
+  if (!icon) return '';
+  
+  // Cas 1: icon est déjà une string (path direct)
+  if (typeof icon === 'string') {
+    return normalizePath(icon);
+  }
+  
+  // Cas 2: icon.src existe
+  if (icon.src) {
+    // Si icon.src est une string
+    if (typeof icon.src === 'string') {
+      return normalizePath(icon.src);
+    }
+    // Si icon.src est un objet avec src/url/path
+    if (typeof icon.src === 'object') {
+      return normalizePath(icon.src);
+    }
+  }
+  
+  // Cas 3: icon a directement url ou path
+  if (icon.url) return normalizePath(icon.url);
+  if (icon.path) return normalizePath(icon.path);
+  
+  return '';
+}
+
 // Sécuriser les objets image pour éviter les erreurs null/undefined
 const safeImage = image || { src: "/uploads/hero/maison-build.png", alt: "Réalisation Oveco" };
 const safeImage2 = image2 || safeImage;
+
+// Normaliser les icônes - Debug pour comprendre la structure
+const icon1Src = getIconPath(Astro.props.icon1);
+const icon2Src = getIconPath(Astro.props.icon2);
+
+// Debug en dev
+if (import.meta.env.DEV) {
+  console.log('🔍 TextImage Debug:', {
+    icon1: Astro.props.icon1,
+    icon1Src,
+    icon2: Astro.props.icon2,
+    icon2Src
+  });
+}
 ---
 
 <section class="oveco-section" itemscope itemtype="https://schema.org/Organization">
@@ -115,20 +180,38 @@ const safeImage2 = image2 || safeImage;
 
       {/* Zone visuelle */}
       <div class="oveco__visual">
-        <SmartImage 
-          cmsSrc={safeImage.src} 
+        <img 
+          src={safeImage.src} 
           alt={safeImage.alt} 
           loading={safeImage.loading || 'lazy'} 
-          width={362} 
-          height={472} 
-          class="oveco__main-image" 
-          itemprop="image"
+          decoding="async"
+          width="362" 
+          height="436" 
+          class="oveco__main-image"
         />
-        {Astro.props.icon1?.src && (
-          <img src={Astro.props.icon1.src} alt={Astro.props.icon1.alt || ''} class="oveco__icon oveco__icon--house" aria-hidden="true" />
+        {icon1Src && (
+          <img 
+            src={icon1Src} 
+            alt={Astro.props.icon1?.alt || ''} 
+            class="oveco__icon oveco__icon--house" 
+            width="100" 
+            height="100"
+            loading="lazy"
+            decoding="async"
+            aria-hidden="true" 
+          />
         )}
-        {Astro.props.icon2?.src && (
-          <img src={Astro.props.icon2.src} alt={Astro.props.icon2.alt || ''} class="oveco__icon oveco__icon--pencil" aria-hidden="true" />
+        {icon2Src && (
+          <img 
+            src={icon2Src} 
+            alt={Astro.props.icon2?.alt || ''} 
+            class="oveco__icon oveco__icon--pencil" 
+            width="104" 
+            height="104"
+            loading="lazy"
+            decoding="async"
+            aria-hidden="true" 
+          />
         )}
       </div>
     </div>
@@ -156,20 +239,38 @@ const safeImage2 = image2 || safeImage;
 
         {/* Zone visuelle du 2e bloc */}
         <div class="oveco__visual">
-          <SmartImage 
-            cmsSrc={safeImage2.src} 
+          <img 
+            src={safeImage2.src} 
             alt={safeImage2.alt} 
             loading={safeImage2.loading || 'lazy'} 
-            width={362} 
-            height={472} 
-            class="oveco__main-image" 
-            itemprop="image"
+            decoding="async"
+            width="362" 
+            height="436" 
+            class="oveco__main-image"
           />
-          {Astro.props.icon1?.src && (
-            <img src={Astro.props.icon1.src} alt={Astro.props.icon1.alt || ''} class="oveco__icon oveco__icon--house" aria-hidden="true" />
+          {icon1Src && (
+            <img 
+              src={icon1Src} 
+              alt={Astro.props.icon1?.alt || ''} 
+              class="oveco__icon oveco__icon--house" 
+              width="100" 
+              height="100"
+              loading="lazy"
+              decoding="async"
+              aria-hidden="true" 
+            />
           )}
-          {Astro.props.icon2?.src && (
-            <img src={Astro.props.icon2.src} alt={Astro.props.icon2.alt || ''} class="oveco__icon oveco__icon--pencil" aria-hidden="true" />
+          {icon2Src && (
+            <img 
+              src={icon2Src} 
+              alt={Astro.props.icon2?.alt || ''} 
+              class="oveco__icon oveco__icon--pencil" 
+              width="104" 
+              height="104"
+              loading="lazy"
+              decoding="async"
+              aria-hidden="true" 
+            />
           )}
         </div>
       </div>
@@ -177,6 +278,417 @@ const safeImage2 = image2 || safeImage;
   </div>
 </section>
 
-<style lang="scss">
-  @use '../assets/scss/astro-components' as *;
+<style>
+/* CSS extrait de wp-content/themes/oveco/style.css (oveco section) */
+.oveco-section {
+  padding: 0;
+  background: #FFFEF8;
+}
+
+.oveco-section h2,
+.oveco-section h3,
+.oveco-section p {
+  margin: 0 !important;
+}
+
+.oveco-section .container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.wp-block-group.oveco-section,
+section.oveco-section,
+.wp-block-group .oveco-section {
+  padding: 0 !important;
+}
+
+.oveco__section-header {
+  align-self: stretch;
+  padding-inline: clamp(16px, 6vw, 109px);
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+  margin-bottom: clamp(24px, 6vw, 64px);
+}
+
+@media (max-width: 768px) {
+  .oveco__section-header {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    margin-bottom: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__section-header {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.oveco__section-content {
+  width: min(100%, 706.82px);
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+
+.oveco__section-subtitle {
+  text-align: center;
+  color: #5C6D6F;
+  font-size: 19.2px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 20px;
+  letter-spacing: 1.92px;
+  margin: 0 !important;
+}
+
+.oveco__section-title {
+  align-self: stretch;
+  text-align: center;
+  color: #334749;
+  font-size: 39.81px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 800;
+  line-height: 47.77px;
+  margin: 0 !important;
+}
+
+@media (max-width: 480px) {
+  .oveco__section-title {
+    font-size: 28px;
+    line-height: 34px;
+  }
+}
+
+.oveco__section-description {
+  align-self: stretch;
+  text-align: center;
+  color: #5C6D6F;
+  font-size: 16px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 28.8px;
+  margin: 0 !important;
+}
+
+.oveco__container {
+  justify-content: space-between;
+  align-items: center;
+  gap: clamp(24px, 8vw, 130px);
+  display: flex;
+  margin-bottom: 0;
+  padding-inline: clamp(16px, 4vw, 32px);
+}
+
+.oveco__container + .oveco__container {
+  margin-top: clamp(64px, 10vw, 128px);
+}
+
+@media (max-width: 768px) {
+  .oveco__container + .oveco__container {
+    margin-top: clamp(48px, 8vw, 96px);
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__container + .oveco__container {
+    margin-top: clamp(32px, 6vw, 64px);
+  }
+}
+
+.oveco__container.is-reverse {
+  flex-direction: row-reverse;
+}
+
+@media (max-width: 768px) {
+  .oveco__container {
+    flex-direction: column;
+    gap: clamp(32px, 6vw, 40px);
+    text-align: center;
+    padding-inline: clamp(16px, 4vw, 24px);
+  }
+  .oveco__container.is-reverse {
+    flex-direction: column-reverse;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__container {
+    gap: clamp(24px, 5vw, 32px);
+    padding-inline: clamp(12px, 3vw, 16px);
+  }
+}
+
+.oveco__content {
+  width: 100%;
+  max-width: 600px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 21px;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .oveco__content {
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__content {
+    gap: 1.5rem;
+  }
+}
+
+.oveco__header {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 6px;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .oveco__header {
+    align-items: center;
+  }
+}
+
+.oveco__subtitle {
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif !important;
+  font-feature-settings: "liga" 1, "kern" 1 !important;
+  font-optical-sizing: auto !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: antialiased !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0.1em !important;
+  margin-bottom: 0.5rem !important;
+  text-transform: uppercase;
+  align-self: stretch;
+  color: #5C6D6F;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12rem;
+  margin: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .oveco__subtitle {
+    text-align: center;
+  }
+}
+
+.oveco__title {
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif !important;
+  font-feature-settings: "liga" 1, "kern" 1 !important;
+  font-optical-sizing: auto !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: antialiased !important;
+  font-size: 2.488rem !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 1rem !important;
+  align-self: stretch;
+  color: #334749;
+  margin: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .oveco__title {
+    font-size: calc(2.488rem * 0.85);
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__title {
+    font-size: calc(2.488rem * 0.7);
+  }
+}
+
+.oveco__description {
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif !important;
+  font-feature-settings: "liga" 1, "kern" 1 !important;
+  font-optical-sizing: auto !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: antialiased !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.8 !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 1rem !important;
+  align-self: stretch;
+  color: #5C6D6F;
+  margin: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .oveco__description {
+    text-align: center;
+  }
+}
+
+.oveco__link {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+  text-decoration: none;
+}
+
+.oveco__link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.oveco__link span {
+  color: #048B9A;
+  font-size: 1rem;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  line-height: 1.2rem;
+}
+
+.oveco__arrow {
+  width: 16px;
+  height: 14px;
+}
+
+.oveco__visual {
+  width: min(100%, 452px);
+  height: 562px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .oveco__visual {
+    width: 100%;
+    max-width: 452px;
+    height: auto;
+    aspect-ratio: 452/562;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__visual {
+    max-width: 350px;
+    margin: 0 auto;
+  }
+}
+
+.oveco__main-image {
+  position: absolute;
+  left: 45px;
+  top: 63.26px;
+  width: 362px;
+  height: 436px;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 40.83px;
+  background: linear-gradient(0deg, rgba(2, 139, 154, 0.05) 0%, rgba(2, 139, 154, 0.05) 100%);
+  background-blend-mode: color, normal;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .oveco__main-image {
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(100%, 362px);
+    height: auto;
+    aspect-ratio: 362/436;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__main-image {
+    width: 280px;
+  }
+}
+
+.oveco__decoration--white {
+  width: 69.76px;
+  height: 74.74px;
+  left: 410.73px;
+  top: 527.7px;
+  position: absolute;
+  transform: rotate(-171deg);
+  transform-origin: top left;
+  background: #FFFEF8;
+}
+
+@media (max-width: 768px) {
+  .oveco__decoration--white {
+    display: none;
+  }
+}
+
+.oveco__icon {
+  position: absolute;
+  display: block;
+  z-index: 3;
+  object-fit: contain;
+}
+
+.oveco__icon--house {
+  width: 100.9px !important;
+  height: 100.9px !important;
+  left: 330.82px;
+  top: 427.82px;
+  transform-origin: top left;
+}
+
+@media (max-width: 768px) {
+  .oveco__icon--house {
+    left: 70%;
+    top: 75%;
+    transform: scale(0.8);
+  }
+}
+
+.oveco__icon--pencil {
+  width: 104px !important;
+  height: 104px !important;
+  left: 8px;
+  top: 61px;
+}
+
+@media (max-width: 768px) {
+  .oveco__icon--pencil {
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: -180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .oveco__icon--pencil {
+    width: 80px !important;
+    height: 80px !important;
+    margin-left: -140px;
+    left: max(10px, 50%);
+  }
+}
 </style>

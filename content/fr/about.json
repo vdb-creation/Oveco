@@ -1,91 +1,169 @@
 {
-  "title": "À propos d'Oveco",
-  "subtitle": "Notre histoire",
-  "description": "Oveco est née de la conviction que l'habitat peut être à la fois durable, accessible et humain. Nous accompagnons les particuliers dans leurs projets d'auto-construction et de rénovation écologique.",
-  "hero": {
-    "title": "Construire ensemble un habitat durable",
-    "subtitle": "Notre mission",
-    "description": "Chez Oveco, nous croyons que chacun peut devenir acteur de son habitat. Notre mission est de démocratiser l'auto-construction et les techniques de construction durable.",
-    "image": "/uploads/team/wallpapper-big.jpg",
-    "imageAlt": "Équipe Oveco en action"
-  },
-  "story": {
-    "title": "Notre histoire",
-    "content": "Fondée en 2020 par des passionnés de construction durable, Oveco est née d'un constat simple : trop de projets d'habitat écologique restent inaccessibles aux particuliers. Nous avons décidé de changer cela en proposant un accompagnement personnalisé et des formations pratiques.\n\nDepuis nos débuts, nous avons accompagné plus de 50 familles dans leurs projets d'auto-construction et de rénovation écologique. Chaque projet est unique, et c'est cette diversité qui nous enrichit et nous pousse à toujours innover.",
-    "image": "/uploads/imgs/maison-build.png",
-    "imageAlt": "Chantier d'auto-construction accompagné par Oveco"
-  },
-  "values": {
-    "title": "Nos valeurs",
-    "subtitle": "Ce qui nous guide",
-    "items": [
-      {
-        "icon": "/uploads/icon/house.svg",
-        "title": "Durabilité",
-        "description": "Nous privilégions toujours les solutions les plus durables, tant sur le plan environnemental qu'économique."
+  "title": "À propos - Oveco",
+  "description": "Découvrez Oveco, des ingénieurs-installateurs qui conçoivent.",
+  "sections": [
+    {
+      "siteName": "Oveco",
+      "siteUrl": "/",
+      "links": [
+        {
+          "label": "Accueil",
+          "url": "/"
+        },
+        {
+          "label": "Réalisations",
+          "url": "/works"
+        },
+        {
+          "label": "À propos",
+          "url": "/about"
+        },
+        {
+          "label": "Auto-construction",
+          "url": "/construction"
+        }
+      ],
+      "ctaButton": {
+        "label": "Nous contacter",
+        "url": "#contact"
       },
-      {
-        "icon": "/uploads/icon/pencil.svg",
-        "title": "Accompagnement",
-        "description": "Chaque projet est unique. Nous nous adaptons à vos besoins et à votre rythme d'apprentissage."
+      "_template": "navbar"
+    },
+    {
+      "subtitle": "À propos",
+      "title": "Des ingénieurs au service",
+      "description": "Chez Oveco, nous allions savoir-faire technique et engagement humain pour inspirer des installations sur mesure, performantes, et responsables.",
+      "ctaLabel": "Nous contacter",
+      "ctaHref": "#contact",
+      "mediaLeft": {
+        "src": "/uploads/hero/maison-build.png",
+        "alt": "Équipe Oveco"
       },
-      {
-        "icon": "/uploads/compétance/personne.png",
-        "title": "Transmission",
-        "description": "Notre objectif est de vous rendre autonome. Nous transmettons nos connaissances pour que vous puissiez continuer seul."
-      }
-    ]
-  },
-  "team": {
-    "title": "Notre équipe",
-    "subtitle": "Des experts à votre service",
-    "description": "Notre équipe réunit des compétences complémentaires : architectes, ingénieurs, artisans et formateurs. Tous partagent la même passion pour la construction durable et l'accompagnement humain.",
-    "members": [
-      {
-        "name": "Jean Dupont",
-        "role": "Fondateur & Architecte",
-        "description": "Architecte spécialisé en construction passive, Jean accompagne les projets depuis la conception jusqu'à la réalisation.",
-        "image": "/uploads/team/pic.jpg",
-        "imageAlt": "Jean Dupont, fondateur d'Oveco"
+      "mediaRight": {
+        "src": "/uploads/hero/maison-build.png",
+        "alt": "Projet Oveco",
+        "overlay": true
       },
-      {
-        "name": "Marie Martin",
-        "role": "Ingénieure Énergies Renouvelables",
-        "description": "Spécialiste des systèmes photovoltaïques et éoliens, Marie optimise l'efficacité énergétique de vos projets.",
-        "image": "/uploads/team/pic.jpg",
-        "imageAlt": "Marie Martin, ingénieure énergies renouvelables"
-      }
-    ]
-  },
-  "stats": {
-    "title": "Nos réalisations en chiffres",
-    "items": [
-      {
-        "value": "50+",
-        "label": "Projets accompagnés",
-        "description": "Depuis notre création"
+      "_template": "worksHero"
+    },
+    {
+      "subtitle": "Notre approche",
+      "title": "Une vision globale de l'énergie",
+      "description": "Nous pensons que chaque projet mérite une réflexion sur mesure. Notre équipe d'ingénieurs analyse vos besoins, conçoit des solutions adaptées et les met en œuvre avec rigueur.",
+      "_template": "expertise"
+    },
+    {
+      "title": "Nos valeurs",
+      "competences": [
+        {
+          "icon": "/uploads/compétance/maison.png",
+          "alt": "Expertise technique",
+          "title": "Expertise technique",
+          "description": "Des ingénieurs qualifiés pour concevoir et réaliser vos installations énergétiques."
+        },
+        {
+          "icon": "/uploads/compétance/personne.png",
+          "alt": "Accompagnement humain",
+          "title": "Accompagnement humain",
+          "description": "Un suivi personnalisé de la conception à la mise en service de votre projet."
+        },
+        {
+          "icon": "/uploads/compétance/eolienne.png",
+          "alt": "Durabilité",
+          "title": "Durabilité",
+          "description": "Des solutions pérennes qui respectent l'environnement et votre budget."
+        },
+        {
+          "icon": "/uploads/compétance/crayon.png",
+          "alt": "Innovation",
+          "title": "Innovation",
+          "description": "Les dernières technologies au service de votre projet énergétique."
+        }
+      ],
+      "_template": "competences"
+    },
+    {
+      "image": {
+        "src": "/uploads/hero/maison-build.png",
+        "alt": "Équipe Oveco au travail"
       },
-      {
-        "value": "100%",
-        "label": "Énergies renouvelables",
-        "description": "Dans nos nouvelles constructions"
+      "icon1": {
+        "src": "/uploads/icon/house.svg",
+        "alt": "Icône maison"
       },
-      {
-        "value": "45+",
-        "label": "Panneaux solaires",
-        "description": "Installés sur nos projets"
+      "icon2": {
+        "src": "/uploads/icon/pencil.svg",
+        "alt": "Icône crayon"
       },
-      {
-        "value": "95%",
-        "label": "Clients satisfaits",
-        "description": "Qui recommandent nos services"
-      }
-    ]
-  },
-  "cta": {
-    "title": "Prêt à démarrer votre projet ?",
-    "description": "Contactez-nous pour discuter de votre projet d'auto-construction ou de rénovation écologique.",
-    "buttonText": "Nous contacter",
-    "buttonUrl": "#contact"
-  }
+      "subtitle": "Qui sommes-nous ?",
+      "title": "Une équipe passionnée",
+      "description": "Oveco rassemble des ingénieurs et des installateurs qui partagent la même vision : créer des projets énergétiques durables, performants et accessibles. Nous mettons notre expertise technique au service de votre autonomie énergétique.",
+      "ctaLabel": "Découvrir nos réalisations",
+      "ctaUrl": "/works",
+      "_template": "textImage"
+    },
+    {
+      "title": "Nos certifications",
+      "cards": [
+        {
+          "logo": "/uploads/partenaire/Google.svg",
+          "alt": "Certification 1",
+          "title": "Qualification RGE",
+          "text": "Reconnu Garant de l'Environnement"
+        },
+        {
+          "logo": "/uploads/partenaire/Facebook.svg",
+          "alt": "Certification 2",
+          "title": "Certifié Qualifelec",
+          "text": "Installations électriques conformes"
+        },
+        {
+          "logo": "/uploads/partenaire/Youtube.svg",
+          "alt": "Certification 3",
+          "title": "QualiPV",
+          "text": "Spécialiste photovoltaïque"
+        }
+      ],
+      "_template": "certifications"
+    },
+    {
+      "title": "Nos chiffres",
+      "stats": [
+        {
+          "value": "150+",
+          "label": "Projets réalisés",
+          "description": "Installations réussies depuis notre création"
+        },
+        {
+          "value": "98%",
+          "label": "Clients satisfaits",
+          "description": "Un taux de satisfaction élevé"
+        },
+        {
+          "value": "10+",
+          "label": "Années d'expérience",
+          "description": "Une expertise reconnue"
+        }
+      ],
+      "_template": "stats"
+    },
+    {
+      "subtitle": "Nous contacter",
+      "title": "Vous avez une idée, un projet, ou simplement des questions ?",
+      "description": "Écrivez-nous ou appelez-nous, on sera ravi d'en discuter.",
+      "contactInfo": {
+        "email": "contact@oveco.be",
+        "phone": "+32 473 / 68.99.02",
+        "location": "Région de Beauvechain"
+      },
+      "formAction": "#contact",
+      "_template": "contact"
+    },
+    {
+      "copyrightYear": 2025,
+      "companyName": "Oveco",
+      "legalText": "Tous droits réservés | Mentions légales | Politique de confidentialité",
+      "_template": "footer"
+    }
+  ]
 }

@@ -18,20 +18,6 @@
       "_template": "navbar"
     },
     {
-      "subtitle": "lorem",
-      "title": "gsdfqhqisug",
-      "description": "sgqoisugçs!yguçsd",
-      "ctaLabel": "Clique stp",
-      "ctaHref": "/about",
-      "mediaLeft": {
-        "src": "/uploads/imgs/Charpantier.opt.webp"
-      },
-      "mediaRight": {
-        "src": "/uploads/imgs/maison-toit-2.opt.webp"
-      },
-      "_template": "worksHero"
-    },
-    {
       "subtitle": "oveco",
       "title": "Construisons l'avenir",
       "description": "Des ingénieurs-installateurs à vos côtés.",
@@ -62,6 +48,51 @@
       "_template": "hero"
     },
     {
+      "subtitle": "Nos compétences",
+      "title": "Ce que nous maîtrisons",
+      "description": "Domaines d'expertise clés.",
+      "competences": [
+        {
+          "icon": "/uploads/comp%C3%A9tance/clim.opt.webp",
+          "alt": "Compétencesqdfqsdfqsdfsdqf",
+          "title": "Ossature bois",
+          "description": "Structures et enveloppes performantes."
+        },
+        {
+          "icon": "/uploads/comp%C3%A9tance/elec.opt.webp",
+          "title": "sfsdfsdfqsdfqs",
+          "description": "fqsdfqsdfqsdfqsdfsqdfsdqfsdqfqsdfqdsfqsdf"
+        },
+        {
+          "icon": "/uploads/comp%C3%A9tance/eolienne.opt.webp",
+          "title": "fsqdfsdqfqsd",
+          "description": "fqsdfaerzaterezrtertezrughfjghkhlkho,"
+        }
+      ],
+      "_template": "competences"
+    },
+    {
+      "title": "En chiffres",
+      "stats": [
+        {
+          "value": "+100",
+          "label": "Projets",
+          "description": "Réalisés"
+        },
+        {
+          "value": "15 ans",
+          "label": "D'expertise",
+          "description": "Construction durable"
+        },
+        {
+          "value": "+100",
+          "label": "Projets",
+          "description": "Construction durable"
+        }
+      ],
+      "_template": "stats"
+    },
+    {
       "services": [
         {
           "image": "/uploads/imgs/Charpantier.opt.webp",
@@ -77,6 +108,23 @@
       "_template": "autoconstruction"
     },
     {
+      "cards": [
+        {
+          "icon": "/uploads/comp%C3%A9tance/clim.png",
+          "title": "Énergies renouvelables",
+          "description": "Pompes à chaleur, chaudières, panneaux solaires…\nDes systèmes performants, bien dimensionnés, pour plus d'autonomie."
+        },
+        {
+          "icon": "/uploads/comp%C3%A9tance/elec.png",
+          "title": "Énergies",
+          "description": "Pompes à chaleur, chaudières, panneaux solaires… Des systèmes performants, bien dimensionnés, pour plus d'autonomie."
+        },
+        {
+          "icon": "/uploads/comp%C3%A9tance/eolienne.png",
+          "title": "Énergies renouvelables",
+          "description": "ompes à chaleur, chaudières, panneaux solaires… Des systèmes performants, bien dimensionnés, pour plus d'autonomie."
+        }
+      ],
       "_template": "expertise"
     },
     {
@@ -87,9 +135,15 @@
           "src": "/uploads/imgs/maison-build.png",
           "alt": "Photo"
         },
-        {},
-        {},
-        {}
+        {
+          "src": "/uploads/imgs/architrech.png"
+        },
+        {
+          "src": "/uploads/imgs/maison-toit-2.png"
+        },
+        {
+          "src": "/uploads/imgs/maison-toit.png"
+        }
       ],
       "_template": "gallerie"
     },
@@ -98,21 +152,21 @@
       "sectionTitle": "Titre de section",
       "sectionDescription": "Description de section",
       "showSectionHeader": false,
-      "subtitle": "Bloc 1",
-      "title": "Titre bloc 1",
-      "description": "Texte bloc 1",
+      "subtitle": "nostrud do occaecat",
+      "title": "Nulla cillum dolore aute",
+      "description": "Labore velit est duis exercitation ullamco incididunt officia cupidatat mollit laborum proident deserunt.",
       "image": {
         "src": "/uploads/imgs/maison-toit.png",
         "alt": "Image"
       },
+      "icon1": {
+        "src": "/uploads/icons/crayon.opt.avif"
+      },
+      "icon2": {
+        "src": "/uploads/icons/maison.opt.webp"
+      },
       "reverse": false,
       "_template": "textimage"
-    },
-    {
-      "copyrightYear": 2024,
-      "companyName": "Oveco",
-      "legalText": "All Rights Reserved",
-      "_template": "footer"
     },
     {
       "title": "Nos certifications",
@@ -132,6 +186,20 @@
       "_template": "certifications"
     },
     {
+      "number": "01",
+      "title": "Titre",
+      "description": "Description",
+      "cta": {
+        "label": "En savoir plus",
+        "href": "/contact"
+      },
+      "image": {
+        "src": "/uploads/comp%C3%A9tance/clim.opt.webp",
+        "alt": ""
+      },
+      "_template": "simplecompetence"
+    },
+    {
       "subtitle": "Nos réalisations",
       "title": "Projets récents",
       "description": "Une sélection de projets accompagnés.",
@@ -148,6 +216,38 @@
         }
       ],
       "_template": "projects"
+    },
+    {
+      "subtitle": "Avis",
+      "title": "Ce qu'ils disent",
+      "description": "Retours de nos clients",
+      "testimonials": [
+        {
+          "thumbnail": {
+            "src": "/uploads/team/pic.jpg",
+            "alt": "Client"
+          },
+          "client_name": "Client",
+          "client_position": "",
+          "client_company": "",
+          "content": "Super accompagnement.",
+          "card_content": "Accompagnement au top.",
+          "linked_project": {
+            "title": "Projet",
+            "link": "/works"
+          }
+        }
+      ],
+      "_template": "testimonials"
+    },
+    {
+      "_template": "contact"
+    },
+    {
+      "copyrightYear": 2024,
+      "companyName": "Oveco",
+      "legalText": "All Rights Reserved",
+      "_template": "footer"
     }
   ]
 }

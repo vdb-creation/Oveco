@@ -1,0 +1,178 @@
+{
+  "title": "Auto-construction - Oveco",
+  "description": "Apprendre en faisant, construire en étant accompagné. Oveco vous forme et vous guide dans vos projets d'auto-construction énergétique.",
+  "sections": [
+    {
+      "siteName": "Oveco",
+      "siteUrl": "/",
+      "links": [
+        {
+          "label": "Accueil",
+          "url": "/"
+        },
+        {
+          "label": "Réalisations",
+          "url": "/works"
+        },
+        {
+          "label": "À propos",
+          "url": "/about"
+        },
+        {
+          "label": "Auto-construction",
+          "url": "/construction"
+        }
+      ],
+      "ctaButton": {
+        "label": "Nous contacter",
+        "url": "#contact"
+      },
+      "_template": "navbar"
+    },
+    {
+      "subtitle": "Auto-construction",
+      "title": "Construisez votre autonomie énergétique",
+      "description": "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat. En vous formant, en vous conseillant et en vous fournissant les bons outils, nous vous permettons de participer activement aux installations en toute sécurité.",
+      "ctaLabel": "Démarrer un projet",
+      "ctaHref": "#contact",
+      "mediaLeft": {
+        "src": "/uploads/hero/maison-build.png",
+        "alt": "Chantier auto-construction"
+      },
+      "mediaRight": {
+        "src": "/uploads/hero/maison-build.png",
+        "alt": "Formation sur site",
+        "overlay": true
+      },
+      "_template": "worksHero"
+    },
+    {
+      "subtitle": "l'auto-construction",
+      "title": "Apprendre en faisant, construire en étant accompagné",
+      "description": "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat. En vous formant, en vous conseillant et en vous fournissant les bons outils, nous vous permettons de participer activement aux installations en toute sécurité.",
+      "services": [
+        {
+          "image": "/uploads/hero/maison-build.png",
+          "alt": "Accompagnement personnalisé pour l'auto-construction",
+          "title": "Accompagnement sur mesure",
+          "description": "Chaque projet est unique : nous adaptons nos conseils, nos formations et nos outils à vos compétences et vos objectifs."
+        },
+        {
+          "image": "/uploads/hero/maison-build.png",
+          "alt": "Formation et transmission de savoir-faire",
+          "title": "Formation et transmission",
+          "description": "Des sessions de formation sont prévues avant les étapes clés du chantier. Vous devenez autonome tout en étant épaulé."
+        },
+        {
+          "image": "/uploads/hero/maison-build.png",
+          "alt": "Matériel professionnel pour l'auto-construction",
+          "title": "Matériel professionnel accessible",
+          "description": "Nous vous proposons les équipements professionnels à prix préférentiels, avec livraison et support technique."
+        }
+      ],
+      "ctaLabel": "En savoir plus",
+      "ctaHref": "#contact",
+      "_template": "autoconstruction"
+    },
+    {
+      "number": "01",
+      "title": "Formation initiale",
+      "description": "Avant de commencer, nous vous formons aux bases de l'installation énergétique : sécurité, outils, techniques. Vous apprenez les gestes essentiels dans un environnement contrôlé.",
+      "cta": {
+        "label": "Découvrir nos formations",
+        "url": "#contact"
+      },
+      "image": {
+        "src": "/uploads/hero/maison-build.png",
+        "alt": "Formation technique",
+        "isPng": true
+      },
+      "_template": "simpleCompetence"
+    },
+    {
+      "number": "02",
+      "title": "Accompagnement sur chantier",
+      "description": "Un ingénieur Oveco est présent aux étapes clés de votre projet. Il vous guide, valide vos installations et s'assure que tout est conforme aux normes.",
+      "cta": {
+        "label": "Voir nos projets",
+        "url": "/works"
+      },
+      "image": {
+        "src": "/uploads/hero/maison-build.png",
+        "alt": "Accompagnement chantier",
+        "isPng": true
+      },
+      "_template": "simpleCompetence"
+    },
+    {
+      "number": "03",
+      "title": "Mise en service",
+      "description": "Une fois les travaux terminés, nous procédons à la mise en service complète de votre installation. Vous repartez avec toutes les connaissances pour gérer votre système en autonomie.",
+      "cta": {
+        "label": "Planifier une visite",
+        "url": "#contact"
+      },
+      "image": {
+        "src": "/uploads/hero/maison-build.png",
+        "alt": "Mise en service",
+        "isPng": true
+      },
+      "_template": "simpleCompetence"
+    },
+    {
+      "subtitle": "Témoignages",
+      "title": "Ils ont construit avec nous",
+      "ctaLabel": "Voir tous les témoignages",
+      "ctaHref": "/works",
+      "testimonials": [
+        {
+          "clientName": "Jean Dupont",
+          "position": "Propriétaire",
+          "company": "Maison individuelle",
+          "quote": "Grâce à Oveco, j'ai pu installer moi-même mes panneaux solaires. L'accompagnement était parfait, je me sens capable de gérer mon installation.",
+          "rating": 5,
+          "backgroundImage": "/uploads/hero/maison-build.png",
+          "priority": "high"
+        },
+        {
+          "clientName": "Marie Martin",
+          "position": "Auto-constructrice",
+          "company": "Projet familial",
+          "quote": "Les formations sont claires et pratiques. J'ai appris énormément et j'ai économisé sur les coûts d'installation.",
+          "rating": 5,
+          "backgroundImage": "/uploads/hero/maison-build.png",
+          "priority": "high"
+        },
+        {
+          "clientName": "Pierre Leroy",
+          "position": "Bricoleur",
+          "company": "Rénovation énergétique",
+          "quote": "L'équipe Oveco m'a guidé à chaque étape. Je recommande vivement pour ceux qui veulent s'impliquer dans leur projet.",
+          "rating": 5,
+          "backgroundImage": "/uploads/hero/maison-build.png",
+          "priority": "medium"
+        }
+      ],
+      "_template": "testimonials"
+    },
+    {
+      "subtitle": "Nous contacter",
+      "title": "Prêt à vous lancer dans l'auto-construction ?",
+      "description": "Contactez-nous pour discuter de votre projet et découvrir comment nous pouvons vous accompagner.",
+      "contactInfo": {
+        "email": "contact@oveco.be",
+        "phone": "+32 473 / 68.99.02",
+        "location": "Région de Beauvechain"
+      },
+      "formAction": "#contact",
+      "_template": "contact"
+    },
+    {
+      "copyrightYear": 2025,
+      "companyName": "Oveco",
+      "legalText": "Tous droits réservés | Mentions légales | Politique de confidentialité",
+      "_template": "footer"
+    }
+  ]
+}
+

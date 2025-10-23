@@ -45,7 +45,7 @@ const about = aboutData || {};
         <div class="container">
           <div class="about-story__content">
             <h2 class="about-story__title">{about.story.title}</h2>
-            <div class="about-story__text" set:html={about.story.content?.split('\n').map(paragraph => 
+            <div class="about-story__text" set:html={about.story.content?.split('\n').map((paragraph: string) => 
               paragraph.trim() ? `<p>${paragraph}</p>` : ''
             ).join('')}></div>
           </div>
@@ -140,11 +140,6 @@ const about = aboutData || {};
 </DynamicPage>
 
 <style lang="scss">
-  @use '../assets/scss/astro-components' as *;
-
-  .about-page {
-    // Styles spécifiques à la page about
-  }
 
   .page-body {
     padding: var(--space-4) 0;

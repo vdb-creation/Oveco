@@ -122,7 +122,20 @@ const priorityClass = testimonial.priority ? `is-${testimonial.priority.slug}` :
   </footer>
 </article>
 
-<style lang="scss">
-  @use '../assets/scss/astro-components' as *;
-  @use '../assets/scss/components/_testimonials' as *;
+<style>
+/* Les styles des cartes sont définis dans Projects.astro et sont réutilisés ici */
+/* Classes utilisées (identiques aux cartes projets) :
+ * - .projects__card (388x548px, background-image, border-radius, padding)
+ * - .projects__card-overlay (gradient overlay avec backdrop-filter)
+ * - .projects__card-header (position: absolute, top-right)
+ * - .projects__card-type (texte "Témoignage", blanc, uppercase, text-shadow)
+ * - .projects__card-content (flex column, space-between)
+ * - .projects__card-info (flex column, gap)
+ * - .projects__card-client (position/entreprise, texte blanc semi-transparent)
+ * - .projects__card-title (nom du client, texte blanc, font-size 27.65px, bold)
+ * - .projects__card-description (citation tronquée, texte blanc semi-transparent)
+ * - .projects__card-footer (padding-top, inline-flex)
+ * - .projects__card-link ("Voir le projet", flex, gap)
+ * - .projects__card-arrow (SVG icon, 10x8.57px)
+ */
 </style>

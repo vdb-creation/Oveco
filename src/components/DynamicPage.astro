@@ -23,6 +23,7 @@ import {
 
 import { client } from '../../tina/__generated__/client';
 import LiveBridge from '../../tina/LiveBridge.tsx';
+import { getAllProjects, projectToCard } from '../lib/projects.ts';
 
 export interface Props {
   title?: string;
@@ -57,25 +58,54 @@ const pageData = await loadPageData(jsonFile || 'home', lang);
 const pageContent = pageData || {};
 const sections = pageContent.sections || [];
 
+// Charger les projets dynamiquement pour la page home
+let dynamicProjects: any[] = [];
+if (currentJson === 'home') {
+  try {
+    const allProjects = await getAllProjects();
+    dynamicProjects = allProjects.map(projectToCard);
+  } catch (e) {
+    console.error('Erreur lors du chargement des projets:', e);
+  }
+}
+
 // Titre et description par défaut
 const pageTitle = title || pageContent.title || "Oveco - Auto-construction et Rénovation Écologique";
 const pageDescription = description || pageContent.description || "Oveco accompagne vos projets d'auto-construction et de rénovation écologique. Expertise en maisons passives et énergies renouvelables.";
 
-// Configuration TinaCMS (uniquement pour la page home)
-const isHomePage = currentJson === 'home';
-const forceLive = isHomePage && (import.meta.env.DEV || Astro.url.searchParams.get('live') === '1' || import.meta.env.PUBLIC_TINA_LIVE === '1');
+// Configuration TinaCMS (pour toutes les pages)
+const forceLive = (import.meta.env.DEV || Astro.url.searchParams.get('live') === '1' || import.meta.env.PUBLIC_TINA_LIVE === '1');
 let tinaData: any = null;
 
-if (forceLive && isHomePage) {
+if (forceLive) {
   try {
     const file = `${currentJson}.json`;
-    if (lang === 'en') {
+    
+    // Mapper les fichiers JSON vers les queries TinaCMS
+    const queryMap: Record<string, Record<string, string>> = {
+      'home': { fr: 'home', en: 'homeEn' },
+      'about': { fr: 'about_fr', en: 'about_en' },
+      'construction': { fr: 'construction_fr', en: 'construction_en' },
+    };
+    
+    const queryName = (queryMap[currentJson] && queryMap[currentJson][lang]) || (lang === 'en' ? 'homeEn' : 'home');
+    
+    // Utiliser la query appropriée
+    if (queryName === 'homeEn') {
       tinaData = await client.queries.homeEn({ relativePath: file });
+    } else if (queryName === 'about_fr') {
+      tinaData = await client.queries.about_fr({ relativePath: file });
+    } else if (queryName === 'about_en') {
+      tinaData = await client.queries.about_en({ relativePath: file });
+    } else if (queryName === 'construction_fr') {
+      tinaData = await client.queries.construction_fr({ relativePath: file });
+    } else if (queryName === 'construction_en') {
+      tinaData = await client.queries.construction_en({ relativePath: file });
     } else {
       tinaData = await client.queries.home({ relativePath: file });
     }
   } catch (e) {
-    console.log('TinaCMS data not available, using static data');
+    console.log('TinaCMS data not available, using static data:', e);
   }
 }
 ---
@@ -232,6 +262,11 @@ if (forceLive && isHomePage) {
     }
     
     if (template === 'projects') {
+      // Utiliser les projets dynamiques pour la page home, sinon utiliser les cartes définies
+      const cardsToUse = (currentJson === 'home' && dynamicProjects.length > 0) 
+        ? dynamicProjects 
+        : section.cards || [];
+        
       return (
         <Projects
           subtitle={section.subtitle}
@@ -239,7 +274,7 @@ if (forceLive && isHomePage) {
           description={section.description}
           linkText={section.linkText}
           linkUrl={section.linkUrl}
-          cards={section.cards}
+          cards={cardsToUse}
         />
       );
     }

@@ -1,0 +1,173 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nabar from '../../components/Nabar.astro';
+import WorksHero from '../../components/WorksHero.astro';
+import Competences from '../../components/Competences.astro';
+import TextImage from '../../components/TextImage.astro';
+import Stats from '../../components/Stats.astro';
+import Gallerie from '../../components/Gallerie.astro';
+import Projects from '../../components/Projects.astro';
+import Contact from '../../components/Contact.astro';
+import Footer from '../../components/Footer.astro';
+import { getAllProjects, getProjectBySlug } from '../../lib/projects.ts';
+
+// Génération des pages statiques
+export async function getStaticPaths() {
+  const projects = await getAllProjects();
+  
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project }
+  }));
+}
+
+// Charger les données du projet pour cette page
+const { slug } = Astro.params;
+const project = await getProjectBySlug(slug!);
+
+if (!project) {
+  throw new Error(`Projet ${slug} non trouvé`);
+}
+
+// Données par défaut pour les sections
+const defaultCompetences = [
+  {
+    icon: "/uploads/icons/icon-value1.svg",
+    alt: "Innovation",
+    title: "Innovation",
+    description: "Utilisation des dernières technologies écologiques"
+  },
+  {
+    icon: "/uploads/icons/icon-value2.svg", 
+    alt: "Qualité",
+    title: "Qualité",
+    description: "Matériaux de haute qualité et savoir-faire artisanal"
+  },
+  {
+    icon: "/uploads/icons/icon-value3.svg",
+    alt: "Durabilité", 
+    title: "Durabilité",
+    description: "Solutions durables et respectueuses de l'environnement"
+  }
+];
+
+const defaultStats = [
+  {
+    value: "100+",
+    label: "Projets réalisés"
+  },
+  {
+    value: "15",
+    label: "Années d'expérience"
+  },
+  {
+    value: "98%",
+    label: "Clients satisfaits"
+  }
+];
+
+const defaultProjects = [
+  {
+    image: "/uploads/hero/maison-build.png",
+    type: "Construction",
+    client: "Client Exemple",
+    title: "Projet Similaire",
+    url: "/work/projet-similaire",
+    description: "Découvrez d'autres projets similaires réalisés par notre équipe."
+  }
+];
+
+// Titre et description SEO
+const pageTitle = project.metaTitle || `${project.title} - Projet Oveco`;
+const pageDescription = project.metaDescription || project.excerpt || `Découvrez le projet ${project.title} réalisé par Oveco.`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <!-- Navigation -->
+  <Nabar />
+
+  <!-- Hero Section Projet -->
+  <WorksHero 
+    subtitle={project.category}
+    title={project.title}
+    description={project.excerpt || project.description || ''}
+    ctaLabel="Nous contacter"
+    ctaHref="#contact"
+    mediaLeft={project.heroImage ? { src: project.heroImage, alt: project.title } : { src: "/uploads/hero/maison-build.png", alt: "Image projet" }}
+    mediaRight={project.thumbnail ? { src: project.thumbnail, alt: project.title } : { src: "/uploads/hero/maison-build.png", alt: "Image projet" }}
+  />
+
+  <!-- Compétences utilisées -->
+  <Competences 
+    title="Compétences Utilisées"
+    competences={project.competences || defaultCompetences}
+  />
+
+  <!-- Section Texte + Image -->
+  {project.textImage && (
+    <TextImage 
+      subtitle={project.textImage.subtitle || "À propos"}
+      title={project.textImage.title || project.title}
+      description={project.textImage.description || project.description || ''}
+      image={project.textImage.image ? { src: project.textImage.image, alt: project.title } : { src: "/uploads/hero/maison-build.png", alt: "Image projet" }}
+      reverse={project.textImage.reverse || false}
+    />
+  )}
+
+  <!-- Statistiques du projet -->
+  <Stats 
+    title="Chiffres Clés"
+    stats={project.stats || defaultStats}
+  />
+
+  <!-- Galerie d'images -->
+  {project.gallery && project.gallery.length > 0 && (
+    <Gallerie 
+      title="Galerie Photos"
+      gallery={project.gallery.map((item: any, index: number) => ({
+        src: item.image,
+        alt: item.alt,
+        mod: ['a', 'b', 'c', 'd'][index % 4] as 'a' | 'b' | 'c' | 'd'
+      }))}
+    />
+  )}
+
+  <!-- Projets similaires -->
+  <Projects 
+    subtitle="Découvrez aussi"
+    title="Autres Projets"
+    description="Explorez d'autres réalisations de notre équipe."
+    linkText="Voir tous les projets"
+    linkUrl="/works"
+    cards={defaultProjects}
+  />
+
+  <!-- Contact -->
+  <Contact />
+
+  <!-- Footer -->
+  <Footer 
+    copyrightYear={new Date().getFullYear()}
+    companyName="Oveco"
+    legalText="Tous droits réservés"
+  />
+</Layout>
+
+<style>
+/* Styles spécifiques à la page work */
+.work-page {
+  /* La page utilise les styles globaux des composants */
+}
+
+/* Ajustements pour la page work si nécessaire */
+.works-hero {
+  background-image: url("/src/assets/imgs/BgGrille.svg");
+}
+
+/* Responsive pour la page work */
+@media (max-width: 768px) {
+  .work-page {
+    /* Ajustements mobile si nécessaire */
+  }
+}
+</style>

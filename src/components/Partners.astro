@@ -1,23 +1,305 @@
+---
+/**
+ * Composant: Partners
+ * Section des partenaires industriels
+ * Compatible TinaCMS via props
+ */
+
+export interface Partner {
+  logo: string;
+  alt: string;
+  name?: string;
+}
+
+export interface Props {
+  subtitle?: string;
+  title?: string;
+  description?: string;
+  partners?: Partner[];
+}
+
+const {
+  subtitle = "Nos partenaires industriels",
+  title = "La fiabilité et durabilité comme objectifs",
+  description = "Nous travaillons avec des fabricants reconnus pour la fiabilité, la durabilité et la performance de leurs équipements. Ces partenariats nous permettent de garantir un excellent suivi technique, des prix justes, et des installations pérennes.",
+  partners = [
+    { logo: "/uploads/partenaire/Google.svg", alt: "Google - Partenaire technologique", name: "Google" },
+    { logo: "/uploads/partenaire/Facebook.svg", alt: "Facebook - Partenaire digital", name: "Facebook" },
+    { logo: "/uploads/partenaire/Youtube.svg", alt: "Youtube - Partenaire média", name: "Youtube" },
+    { logo: "/uploads/partenaire/Pinterest.svg", alt: "Pinterest - Partenaire créatif", name: "Pinterest" },
+    { logo: "/uploads/partenaire/Twitch.svg", alt: "Twitch - Partenaire streaming", name: "Twitch" },
+    { logo: "/uploads/partenaire/Webflow.svg", alt: "Webflow - Partenaire design", name: "Webflow" }
+  ]
+} = Astro.props;
+---
+
 <section class="partners-section" id="partenaires" aria-labelledby="partners-title">
-    <div class="container">
-        <div class="partners__container">
-            <header class="partners__header">
-                <h3 class="partners__subtitle" aria-label="Section nos partenaires industriels">Nos partenaires industriels</h3>
-                <h2 class="partners__title" id="partners-title">La fiabilité et durabilité<br/>comme objectifs</h2>
-                <p class="partners__description">Nous travaillons avec des fabricants reconnus pour la fiabilité, la durabilité et la performance de leurs équipements.<br/>Ces partenariats nous permettent de garantir un excellent suivi technique, des prix justes, et des installations pérennes.</p>
-            </header>
-            <div class="partners__logos" role="list" aria-label="Liste de nos partenaires industriels">
-                <img src="{{ assets_url }}/icons/Google.svg" alt="Google - Partenaire technologique" class="partners__logo" loading="lazy" role="listitem">
-                <img src="{{ assets_url }}/icons/Facebook.svg" alt="Facebook - Partenaire digital" class="partners__logo" loading="lazy" role="listitem">
-                <img src="{{ assets_url }}/icons/Youtube.svg" alt="Youtube - Partenaire média" class="partners__logo" loading="lazy" role="listitem">
-                <img src="{{ assets_url }}/icons/Pinterest.svg" alt="Pinterest - Partenaire créatif" class="partners__logo" loading="lazy" role="listitem">
-                <img src="{{ assets_url }}/icons/Twitch.svg" alt="Twitch - Partenaire streaming" class="partners__logo" loading="lazy" role="listitem">
-                <img src="{{ assets_url }}/icons/Webflow.svg" alt="Webflow - Partenaire design" class="partners__logo" loading="lazy" role="listitem">
-            </div>
-        </div>
+  <div class="partners__container">
+    <header class="partners__header">
+      <h3 class="partners__subtitle" aria-label="Section nos partenaires industriels">{subtitle}</h3>
+      <h2 class="partners__title" id="partners-title" set:html={title} />
+      <p class="partners__description" set:html={description} />
+    </header>
+    <div class="partners__logos" role="list" aria-label="Liste de nos partenaires industriels">
+      {partners.map((partner) => (
+        <figure class="partners__logo" role="listitem">
+          <img 
+            src={partner.logo} 
+            alt={partner.alt} 
+            loading="lazy"
+            decoding="async"
+            width="140"
+            height="60"
+          />
+        </figure>
+      ))}
     </div>
+  </div>
 </section>
-<style lang="scss">
-  @use '../assets/scss/astro-components' as *;
-  @use '../assets/scss/components/_partners' as *;
+
+<style>
+/* CSS extrait de wp-content/themes/oveco/style.css (partners section) */
+.partners-section {
+  padding: 70px 111px;
+  overflow: hidden;
+  background: #FFFEF8;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 42px;
+  display: flex;
+}
+
+@media (max-width: 1200px) {
+  .partners-section {
+    padding: 60px 80px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .partners-section {
+    padding: 50px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .partners-section {
+    padding: 40px 2rem;
+    gap: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners-section {
+    padding: 30px 1rem;
+    gap: 30px;
+  }
+}
+
+.partners__container {
+  width: 100%;
+  max-width: 1214px;
+  margin: 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 42px;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .partners__container {
+    gap: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners__container {
+    gap: 30px;
+  }
+}
+
+.partners__header {
+  width: 706.82px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .partners__header {
+    width: 100%;
+    max-width: 706.82px;
+  }
+}
+
+.partners__subtitle {
+  text-align: center;
+  color: #5C6D6F;
+  font-size: 19.2px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 20px;
+  letter-spacing: 1.92px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .partners__subtitle {
+    font-size: 17px;
+    letter-spacing: 1.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners__subtitle {
+    font-size: 15px;
+    line-height: 18px;
+    letter-spacing: 1.2px;
+  }
+}
+
+.partners__title {
+  align-self: stretch;
+  text-align: center;
+  color: #334749;
+  font-size: 39.81px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 800;
+  line-height: 47.77px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .partners__title {
+    font-size: 32px;
+    line-height: 38px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners__title {
+    font-size: 26px;
+    line-height: 30px;
+  }
+}
+
+.partners__description {
+  align-self: stretch;
+  text-align: center;
+  color: #5C6D6F;
+  font-size: 16px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 28.8px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .partners__description {
+    font-size: 15px;
+    line-height: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners__description {
+    font-size: 14px;
+    line-height: 24px;
+  }
+}
+
+.partners__logos {
+  opacity: 0.3;
+  justify-content: center;
+  align-items: center;
+  gap: 92px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1400px) {
+  .partners__logos {
+    gap: 60px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .partners__logos {
+    gap: 40px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .partners__logos {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .partners__logos {
+    gap: 25px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners__logos {
+    gap: 20px;
+    justify-content: center;
+  }
+}
+
+.partners__logo {
+  margin: 0;
+  width: 140px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  filter: grayscale(100%);
+}
+
+.partners__logo img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+  display: block;
+}
+
+.partners__logo:hover {
+  opacity: 0.8;
+  filter: grayscale(0%);
+  transform: translateY(-2px);
+}
+
+.partners__logo:focus {
+  outline: 2px solid #048B9A;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .partners__logo {
+    width: 120px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners__logo {
+    width: 100px;
+    height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partners__logo {
+    transition: none !important;
+  }
+}
 </style>

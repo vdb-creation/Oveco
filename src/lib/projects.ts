@@ -1,0 +1,111 @@
+// src/lib/projects.ts
+// Utilitaires pour la gestion des projets
+
+export interface Project {
+  title: string;
+  slug: string;
+  category: string;
+  client?: string;
+  excerpt?: string;
+  description?: string;
+  location?: string;
+  year?: string;
+  duration?: string;
+  budget?: string;
+  status?: string;
+  heroImage?: string;
+  thumbnail?: string;
+  gallery?: Array<{
+    image: string;
+    alt: string;
+    caption?: string;
+  }>;
+  competences?: Array<{
+    title: string;
+    description: string;
+    icon?: string;
+  }>;
+  stats?: Array<{
+    value: string;
+    label: string;
+    unit?: string;
+  }>;
+  textImage?: {
+    subtitle?: string;
+    title?: string;
+    description?: string;
+    image?: string;
+    reverse?: boolean;
+  };
+  metaTitle?: string;
+  metaDescription?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+// Fonction pour charger tous les projets
+export async function getAllProjects(): Promise<Project[]> {
+  try {
+    const projectFiles = await import.meta.glob('../../content/projects/*.json');
+    const projects: Project[] = [];
+    
+    for (const path in projectFiles) {
+      try {
+        const projectData = await projectFiles[path]();
+        const project = projectData.default as Project;
+        if (project && project.slug) {
+          projects.push(project);
+        }
+      } catch (e) {
+        console.error(`Erreur lors du chargement du projet ${path}:`, e);
+      }
+    }
+    
+    // Trier par date de création (plus récent en premier)
+    return projects.sort((a, b) => {
+      const dateA = new Date(a.createdAt || '1900-01-01');
+      const dateB = new Date(b.createdAt || '1900-01-01');
+      return dateB.getTime() - dateA.getTime();
+    });
+  } catch (e) {
+    console.error('Erreur lors du chargement des projets:', e);
+    return [];
+  }
+}
+
+// Fonction pour charger un projet par slug
+export async function getProjectBySlug(slug: string): Promise<Project | null> {
+  try {
+    const projectData = await import(`../../content/projects/${slug}.json`);
+    return projectData.default as Project;
+  } catch (e) {
+    console.error(`Projet ${slug} non trouvé:`, e);
+    return null;
+  }
+}
+
+// Fonction pour convertir un projet en format carte pour la section Projects
+export function projectToCard(project: Project) {
+  return {
+    image: project.thumbnail || project.heroImage || '/uploads/hero/maison-build.png',
+    type: project.category,
+    client: project.client || 'Client',
+    title: project.title,
+    url: `/work/${project.slug}`,
+    description: project.excerpt || project.description || ''
+  };
+}
+
+// Fonction pour obtenir les projets récents (pour la page home)
+export async function getRecentProjects(limit: number = 6): Promise<Project[]> {
+  const allProjects = await getAllProjects();
+  return allProjects.slice(0, limit);
+}
+
+// Fonction pour obtenir les projets par catégorie
+export async function getProjectsByCategory(category: string): Promise<Project[]> {
+  const allProjects = await getAllProjects();
+  return allProjects.filter(project => 
+    project.category.toLowerCase() === category.toLowerCase()
+  );
+}

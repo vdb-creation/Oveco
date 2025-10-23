@@ -1,6 +1,7 @@
 ---
 import "../styles/global.scss";
 import { ViewTransitions } from 'astro:transitions';
+import Nabar from '../components/Nabar.astro';
 
 export interface SEOProps {
   title?: string;
@@ -149,6 +150,7 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-
 		<ViewTransitions />
 	</head>
 	<body>
+		<Nabar />
 		<slot />
 		<script is:inline>
 // Système "reveal once" : fige les éléments après leur première apparition

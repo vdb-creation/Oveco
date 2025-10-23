@@ -40,7 +40,7 @@ const {
 
 <section class="stats" aria-labelledby="stats-title">
   <div class="container stats__container">
-    <h2 id="stats-title" class="stats__title visually-hidden">{title}</h2>
+    {title && <h2 id="stats-title" class="stats__title">{title}</h2>}
 
     <ul class="stats__grid" role="list">
       {stats.map((stat) => (
@@ -56,7 +56,120 @@ const {
   </div>
 </section>
 
-<style lang="scss">
-  @use '../assets/scss/astro-components' as *;
-  @use '../assets/scss/components/_stats' as *;
+<style>
+/* CSS extrait de wp-content/themes/oveco/style.css (stats section) */
+.stats {
+  width: 100%;
+  background: #FFFEF8;
+  display: flex;
+  justify-content: center;
+  padding: 42px 24px;
+}
+
+.stats__container {
+  width: 100%;
+  max-width: 1219px;
+}
+
+.stats__title {
+  text-align: center;
+  color: #334749;
+  font-size: 39.81px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 800;
+  line-height: 47.77px;
+  margin: 0 0 48px 0;
+}
+
+@media (max-width: 768px) {
+  .stats__title {
+    font-size: 32px;
+    line-height: 38px;
+    margin-bottom: 32px;
+  }
+}
+
+.stats__grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 61px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  justify-items: center;
+}
+
+.stats__item {
+  width: 364px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.stats__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.stats__value {
+  width: 324px;
+  text-align: center;
+  color: #5C6D6F;
+  font-size: 47.78px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 800;
+  line-height: 57.34px;
+  margin: 0;
+}
+
+.stats__label {
+  width: 324px;
+  text-align: center;
+  color: #334749;
+  font-size: 27.65px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  line-height: 30.42px;
+  margin: 0;
+}
+
+.stats__desc {
+  width: 364px;
+  text-align: center;
+  color: #5C6D6F;
+  font-size: 16px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 28.8px;
+  margin: 0;
+}
+
+@media (max-width: 1200px) {
+  .stats__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats {
+    padding: 32px 16px;
+  }
+  .stats__grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .stats__item,
+  .stats__desc {
+    width: 100%;
+  }
+  .stats__value,
+  .stats__label {
+    width: 100%;
+  }
+}
 </style>

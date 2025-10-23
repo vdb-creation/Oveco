@@ -6,8 +6,6 @@
  * @component
  */
 
-import SmartImage from './SmartImage.astro';
-
 export interface HeroProps {
   subtitle?: string;
   title: string;
@@ -50,6 +48,32 @@ const {
     }
   ]
 } = Astro.props;
+
+function mapImageClassAndId(image: { class?: string }, index: number) {
+  const raw = (image.class || '').toLowerCase().trim();
+  let positionNumber: number | null = null;
+  if (raw === 'image 1' || raw === 'image1') positionNumber = 1;
+  if (raw === 'image 2' || raw === 'image2') positionNumber = 2;
+  if (raw === 'image 3' || raw === 'image3') positionNumber = 3;
+  if (raw === 'image 4' || raw === 'image4') positionNumber = 4;
+
+  // Fallback to index order if Tina class not set
+  const num = positionNumber ?? (index + 1);
+
+  // Map numbers to internal size modifiers
+  const sizeClass = (num === 1)
+    ? 'large-1'
+    : (num === 2)
+    ? 'large-2'
+    : (num === 3)
+    ? 'medium-1'
+    : 'medium-2';
+
+  return {
+    id: `img${num}`,
+    className: `hero__image hero__image--${sizeClass}`
+  };
+}
 ---
 
 <div class="home-page">
@@ -59,15 +83,18 @@ const {
     
     <div class="container">
       <div class="hero__container">
-        {images && images.length > 0 && images.map((image: { src: string; alt: string; class?: string }, index: number) => (
-          <SmartImage 
-            cmsSrc={image.src} 
-            alt={image.alt} 
-            loading="lazy" 
-            class={image.class || `hero__image hero__image--${index < 2 ? 'large' : 'medium'}-${(index % 2) + 1}`}
-            id={`img${index + 1}`}
-          />
-        ))}
+        {images && images.length > 0 && images.map((image: { src: string; alt: string; class?: string }, index: number) => {
+          const mapped = mapImageClassAndId(image, index);
+          return (
+            <img 
+              src={image.src} 
+              alt={image.alt} 
+              loading="lazy"
+              class={mapped.className}
+              id={mapped.id}
+            />
+          );
+        })}
         
         <div class="hero__content">
           <div class="hero__header">
@@ -157,7 +184,336 @@ if (document.readyState === 'loading') {
 }
 </script>
 
-<style lang="scss">
-  @use '../assets/scss/astro-components' as *;
-  @use '../assets/scss/components/_hero' as *;
+<style>
+/* CSS extrait de wp-content/themes/oveco/style.css (hero section) */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  background-image: url("/src/assets/imgs/BgHome.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 6rem 2rem;
+}
+
+@media (max-width: 1200px) {
+  .hero {
+    padding: 5rem 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 4rem 1.5rem;
+    min-height: 80vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    min-height: 70vh;
+    padding: 3rem 1rem;
+  }
+}
+
+.hero__container {
+  position: static;
+  z-index: 2;
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: clamp(16px, 4vw, 80px);
+}
+
+/* Cercle suiveur de souris */
+.hero__mouse-follower {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle at 50% 50%, rgba(4,139,154,0.28), rgba(4,139,154,0.10) 60%, rgba(4,139,154,0.0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  will-change: transform, opacity;
+  mix-blend-mode: normal;
+  left: 50%;
+  top: 50%;
+  filter: blur(6px);
+  box-shadow: 0 0 24px rgba(4, 139, 154, 0.22), 0 0 48px rgba(4, 139, 154, 0.12);
+}
+
+@media (max-width: 1200px) {
+  .hero__mouse-follower {
+    width: 100px;
+    height: 100px;
+    filter: blur(5px);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero__mouse-follower {
+    width: 90px;
+    height: 90px;
+    filter: blur(4px);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__mouse-follower {
+    display: none;
+  }
+}
+
+/* Positionnement des 4 images - ajusté selon le design */
+.hero #img1 {
+  left: clamp(20px, 5vw, 80px);
+  top: clamp(80px, 12vh, 160px);
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .hero #img1 {
+    display: none;
+  }
+}
+
+.hero #img2 {
+  right: clamp(20px, 5vw, 80px);
+  top: clamp(80px, 12vh, 160px);
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .hero #img2 {
+    display: none;
+  }
+}
+
+.hero #img3 {
+  left: clamp(40px, 8vw, 120px);
+  bottom: clamp(60px, 10vh, 140px);
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .hero #img3 {
+    display: none;
+  }
+}
+
+.hero #img4 {
+  right: clamp(40px, 8vw, 120px);
+  bottom: clamp(60px, 10vh, 140px);
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .hero #img4 {
+    display: none;
+  }
+}
+
+/* Écrans moyens */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .hero #img1 {
+    left: clamp(15px, 4vw, 60px);
+    top: clamp(60px, 10vh, 120px);
+  }
+  
+  .hero #img2 {
+    right: clamp(15px, 4vw, 60px);
+    top: clamp(60px, 10vh, 120px);
+  }
+  
+  .hero #img3 {
+    left: clamp(30px, 6vw, 90px);
+    bottom: clamp(50px, 8vh, 100px);
+  }
+  
+  .hero #img4 {
+    right: clamp(30px, 6vw, 90px);
+    bottom: clamp(50px, 8vh, 100px);
+  }
+}
+
+/* Très grands écrans */
+@media (min-width: 1400px) {
+  .hero #img1 {
+    left: 100px;
+    top: 180px;
+  }
+  
+  .hero #img2 {
+    right: 100px;
+    top: 180px;
+  }
+  
+  .hero #img3 {
+    left: 140px;
+    bottom: 160px;
+  }
+  
+  .hero #img4 {
+    right: 140px;
+    bottom: 160px;
+  }
+}
+
+.hero__image {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 30px;
+  z-index: 1;
+  object-fit: cover;
+  transition: none;
+}
+
+@media (max-width: 768px) {
+  .hero__image {
+    display: none;
+  }
+}
+
+.hero__image--large-1,
+.hero__image--large-2 {
+  width: clamp(260px, 20vw, 320px);
+  height: clamp(320px, 25vw, 380px);
+}
+
+.hero__image--medium-1,
+.hero__image--medium-2 {
+  width: clamp(220px, 18vw, 280px);
+  height: clamp(160px, 12vw, 200px);
+}
+
+.hero__content {
+  width: min(656px, 100%);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: clamp(0.75rem, 2vw, 1.125rem);
+  z-index: 3;
+  padding-inline: clamp(0.75rem, 3vw, 1.5rem);
+  max-width: clamp(320px, 90vw, 720px);
+}
+
+.hero__content::before {
+  content: "";
+  width: 334px;
+  height: 334px;
+  left: -92px;
+  top: 369px;
+  position: absolute;
+  opacity: 0.4;
+  background: #334749;
+  box-shadow: 531.3636474609px 531.3636474609px 531.3636474609px;
+  border-radius: 9999px;
+  filter: blur(265.68px);
+  z-index: -1;
+}
+
+@media (max-width: 1023px) {
+  .hero__content::before {
+    display: none;
+  }
+}
+
+.hero__header {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.hero__subtitle {
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.12rem;
+  align-self: stretch;
+  text-align: center;
+  color: #5C6D6F;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.hero__title {
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-size: 2.986rem;
+  font-weight: 800;
+  line-height: 1.2;
+  align-self: stretch;
+  text-align: center;
+  color: #334749;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .hero__title {
+    font-size: calc(2.986rem * 0.8);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__title {
+    font-size: calc(2.986rem * 0.65);
+  }
+}
+
+.hero__description {
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.4;
+  align-self: stretch;
+  text-align: center;
+  color: #5C6D6F;
+  margin: 0;
+}
+
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 18px 30px;
+  background: #334749;
+  border-radius: 30px;
+  color: #FFFEF8;
+  font-size: 19.2px;
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 700;
+  line-height: 23.04px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.hero__cta:hover {
+  background: #048B9A;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+  .hero__cta {
+    font-size: 16px;
+    padding: 16px 24px;
+  }
+}
 </style>

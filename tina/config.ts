@@ -48,6 +48,9 @@ export default defineConfig({
         label: "Accueil (FR)",
         path: "content/fr",
         format: "json",
+        match: {
+          include: "home",
+        },
         ui: {
           router: () => "/fr/",
         },
@@ -556,6 +559,9 @@ export default defineConfig({
         label: "Accueil (EN)",
         path: "content/en",
         format: "json",
+        match: {
+          include: "home",
+        },
         ui: {
           router: () => "/en/",
         },
@@ -816,6 +822,940 @@ export default defineConfig({
               },
             ],
           } as any,
+        ],
+      },
+
+      // ==================== ABOUT FR ====================
+      {
+        name: "about_fr",
+        label: "À propos (FR)",
+        path: "content/fr",
+        format: "json",
+        match: {
+          include: "about",
+        },
+        ui: {
+          router: () => "/fr/about",
+        },
+        fields: [
+          { type: "string", name: "title", label: "Titre" },
+          { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+          {
+            type: "object",
+            name: "sections",
+            label: "Sections",
+            list: true,
+            ui: {
+              itemProps: (item: any) => {
+                const template = item?._template || 'section';
+                const title = item?.title || item?.subtitle || item?.companyName || '';
+                return { label: title ? `${template} – ${title}` : template };
+              },
+            } as any,
+            // Réutilise tous les templates de la collection home
+            templates: [
+              {
+                name: "navbar",
+                label: "Navigation",
+                fields: [
+                  { type: "string", name: "siteName", label: "Nom du site" },
+                  { type: "string", name: "siteUrl", label: "URL du site" },
+                  {
+                    type: "object",
+                    name: "links",
+                    label: "Liens",
+                    list: true,
+                    fields: [
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "ctaButton",
+                    label: "Bouton CTA",
+                    fields: [
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "worksHero",
+                label: "Hero Works",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  { type: "string", name: "ctaLabel", label: "Label CTA" },
+                  { type: "string", name: "ctaHref", label: "URL CTA" },
+                  {
+                    type: "object",
+                    name: "mediaLeft",
+                    label: "Image gauche",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "mediaRight",
+                    label: "Image droite",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                      { type: "boolean", name: "overlay", label: "Overlay" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "expertise",
+                label: "Expertise",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                ],
+              },
+              {
+                name: "competences",
+                label: "Compétences",
+                fields: [
+                  { type: "string", name: "title", label: "Titre" },
+                  {
+                    type: "object",
+                    name: "competences",
+                    label: "Compétences",
+                    list: true,
+                    fields: [
+                      imageField("icon", "Icône", "compétance"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                      { type: "string", name: "title", label: "Titre" },
+                      { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "textImage",
+                label: "Texte + Image (Oveco)",
+                fields: [
+                  {
+                    type: "object",
+                    name: "image",
+                    label: "Image principale",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "icon1",
+                    label: "Icône 1",
+                    fields: [
+                      imageField("src", "Icône", "icon"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "icon2",
+                    label: "Icône 2",
+                    fields: [
+                      imageField("src", "Icône", "icon"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                    ],
+                  },
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  { type: "string", name: "ctaLabel", label: "Label CTA" },
+                  { type: "string", name: "ctaUrl", label: "URL CTA" },
+                ],
+              },
+              {
+                name: "certifications",
+                label: "Certifications",
+                fields: [
+                  { type: "string", name: "title", label: "Titre" },
+                  {
+                    type: "object",
+                    name: "cards",
+                    label: "Cartes",
+                    list: true,
+                    fields: [
+                      imageField("logo", "Logo", "partenaire"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                      { type: "string", name: "title", label: "Titre" },
+                      { type: "string", name: "text", label: "Texte" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "stats",
+                label: "Statistiques",
+                fields: [
+                  { type: "string", name: "title", label: "Titre" },
+                  {
+                    type: "object",
+                    name: "stats",
+                    label: "Stats",
+                    list: true,
+                    fields: [
+                      { type: "string", name: "value", label: "Valeur" },
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "description", label: "Description" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "contact",
+                label: "Contact",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "contactInfo",
+                    label: "Informations de contact",
+                    fields: [
+                      { type: "string", name: "email", label: "Email" },
+                      { type: "string", name: "phone", label: "Téléphone" },
+                      { type: "string", name: "location", label: "Localisation" },
+                    ],
+                  },
+                  { type: "string", name: "formAction", label: "Action du formulaire (URL)" },
+                ],
+              },
+              {
+                name: "footer",
+                label: "Footer",
+                fields: [
+                  { type: "number", name: "copyrightYear", label: "Année" },
+                  { type: "string", name: "companyName", label: "Nom de l'entreprise" },
+                  { type: "string", name: "legalText", label: "Texte légal" },
+                ],
+              },
+            ],
+          } as any,
+        ],
+      },
+
+      // ==================== CONSTRUCTION FR ====================
+      {
+        name: "construction_fr",
+        label: "Auto-construction (FR)",
+        path: "content/fr",
+        format: "json",
+        match: {
+          include: "construction",
+        },
+        ui: {
+          router: () => "/fr/construction",
+        },
+        fields: [
+          { type: "string", name: "title", label: "Titre" },
+          { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+          {
+            type: "object",
+            name: "sections",
+            label: "Sections",
+            list: true,
+            ui: {
+              itemProps: (item: any) => {
+                const template = item?._template || 'section';
+                const title = item?.title || item?.subtitle || item?.number || item?.companyName || '';
+                return { label: title ? `${template} – ${title}` : template };
+              },
+            } as any,
+            templates: [
+              {
+                name: "navbar",
+                label: "Navigation",
+                fields: [
+                  { type: "string", name: "siteName", label: "Nom du site" },
+                  { type: "string", name: "siteUrl", label: "URL du site" },
+                  {
+                    type: "object",
+                    name: "links",
+                    label: "Liens",
+                    list: true,
+                    fields: [
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "ctaButton",
+                    label: "Bouton CTA",
+                    fields: [
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "worksHero",
+                label: "Hero Works",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  { type: "string", name: "ctaLabel", label: "Label CTA" },
+                  { type: "string", name: "ctaHref", label: "URL CTA" },
+                  {
+                    type: "object",
+                    name: "mediaLeft",
+                    label: "Image gauche",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "mediaRight",
+                    label: "Image droite",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                      { type: "boolean", name: "overlay", label: "Overlay" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "autoconstruction",
+                label: "Auto-construction",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "services",
+                    label: "Services",
+                    list: true,
+                    fields: [
+                      imageField("image", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                      { type: "string", name: "title", label: "Titre" },
+                      { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                    ],
+                  },
+                  { type: "string", name: "ctaLabel", label: "Label CTA" },
+                  { type: "string", name: "ctaHref", label: "URL CTA" },
+                ],
+              },
+              {
+                name: "simpleCompetence",
+                label: "Compétence Simple",
+                fields: [
+                  { type: "string", name: "number", label: "Numéro" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "cta",
+                    label: "CTA",
+                    fields: [
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "image",
+                    label: "Image",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Texte alternatif" },
+                      { type: "boolean", name: "isPng", label: "Est PNG (pas de rotation)" },
+                      { type: "boolean", name: "rotate180", label: "Rotation 180°" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "testimonials",
+                label: "Témoignages",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "ctaLabel", label: "Label CTA" },
+                  { type: "string", name: "ctaHref", label: "URL CTA" },
+                  {
+                    type: "object",
+                    name: "testimonials",
+                    label: "Témoignages",
+                    list: true,
+                    fields: [
+                      { type: "string", name: "clientName", label: "Nom du client" },
+                      { type: "string", name: "position", label: "Position" },
+                      { type: "string", name: "company", label: "Entreprise" },
+                      { type: "string", name: "quote", label: "Citation", ui: { component: "textarea" } },
+                      { type: "number", name: "rating", label: "Note (1-5)" },
+                      imageField("backgroundImage", "Image de fond", "hero"),
+                      {
+                        type: "string",
+                        name: "priority",
+                        label: "Priorité",
+                        options: ["high", "medium", "low"],
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "contact",
+                label: "Contact",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Sous-titre" },
+                  { type: "string", name: "title", label: "Titre" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "contactInfo",
+                    label: "Informations de contact",
+                    fields: [
+                      { type: "string", name: "email", label: "Email" },
+                      { type: "string", name: "phone", label: "Téléphone" },
+                      { type: "string", name: "location", label: "Localisation" },
+                    ],
+                  },
+                  { type: "string", name: "formAction", label: "Action du formulaire (URL)" },
+                ],
+              },
+              {
+                name: "footer",
+                label: "Footer",
+                fields: [
+                  { type: "number", name: "copyrightYear", label: "Année" },
+                  { type: "string", name: "companyName", label: "Nom de l'entreprise" },
+                  { type: "string", name: "legalText", label: "Texte légal" },
+                ],
+              },
+            ],
+          } as any,
+        ],
+      },
+
+      // ==================== ABOUT EN ====================
+      {
+        name: "about_en",
+        label: "About (EN)",
+        path: "content/en",
+        format: "json",
+        match: {
+          include: "about",
+        },
+        ui: {
+          router: () => "/en/about",
+        },
+        fields: [
+          { type: "string", name: "title", label: "Title" },
+          { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+          {
+            type: "object",
+            name: "sections",
+            label: "Sections",
+            list: true,
+            ui: {
+              itemProps: (item: any) => {
+                const template = item?._template || 'section';
+                const title = item?.title || item?.subtitle || item?.companyName || '';
+                return { label: title ? `${template} – ${title}` : template };
+              },
+            } as any,
+            templates: [
+              {
+                name: "navbar",
+                label: "Navigation",
+                fields: [
+                  { type: "string", name: "siteName", label: "Site name" },
+                  { type: "string", name: "siteUrl", label: "Site URL" },
+                  {
+                    type: "object",
+                    name: "links",
+                    label: "Links",
+                    list: true,
+                    fields: [
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "ctaButton",
+                    label: "CTA Button",
+                    fields: [
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "worksHero",
+                label: "Hero Works",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Subtitle" },
+                  { type: "string", name: "title", label: "Title" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  { type: "string", name: "ctaLabel", label: "CTA Label" },
+                  { type: "string", name: "ctaHref", label: "CTA URL" },
+                  {
+                    type: "object",
+                    name: "mediaLeft",
+                    label: "Left image",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Alt text" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "mediaRight",
+                    label: "Right image",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Alt text" },
+                      { type: "boolean", name: "overlay", label: "Overlay" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "expertise",
+                label: "Expertise",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Subtitle" },
+                  { type: "string", name: "title", label: "Title" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                ],
+              },
+              {
+                name: "competences",
+                label: "Skills",
+                fields: [
+                  { type: "string", name: "title", label: "Title" },
+                  {
+                    type: "object",
+                    name: "competences",
+                    label: "Skills",
+                    list: true,
+                    fields: [
+                      imageField("icon", "Icon", "compétance"),
+                      { type: "string", name: "alt", label: "Alt text" },
+                      { type: "string", name: "title", label: "Title" },
+                      { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "textImage",
+                label: "Text + Image (Oveco)",
+                fields: [
+                  {
+                    type: "object",
+                    name: "image",
+                    label: "Main image",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Alt text" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "icon1",
+                    label: "Icon 1",
+                    fields: [
+                      imageField("src", "Icon", "icon"),
+                      { type: "string", name: "alt", label: "Alt text" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "icon2",
+                    label: "Icon 2",
+                    fields: [
+                      imageField("src", "Icon", "icon"),
+                      { type: "string", name: "alt", label: "Alt text" },
+                    ],
+                  },
+                  { type: "string", name: "subtitle", label: "Subtitle" },
+                  { type: "string", name: "title", label: "Title" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  { type: "string", name: "ctaLabel", label: "CTA Label" },
+                  { type: "string", name: "ctaUrl", label: "CTA URL" },
+                ],
+              },
+              {
+                name: "certifications",
+                label: "Certifications",
+                fields: [
+                  { type: "string", name: "title", label: "Title" },
+                  {
+                    type: "object",
+                    name: "cards",
+                    label: "Cards",
+                    list: true,
+                    fields: [
+                      imageField("logo", "Logo", "partenaire"),
+                      { type: "string", name: "alt", label: "Alt text" },
+                      { type: "string", name: "title", label: "Title" },
+                      { type: "string", name: "text", label: "Text" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "stats",
+                label: "Statistics",
+                fields: [
+                  { type: "string", name: "title", label: "Title" },
+                  {
+                    type: "object",
+                    name: "stats",
+                    label: "Stats",
+                    list: true,
+                    fields: [
+                      { type: "string", name: "value", label: "Value" },
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "description", label: "Description" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "contact",
+                label: "Contact",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Subtitle" },
+                  { type: "string", name: "title", label: "Title" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "contactInfo",
+                    label: "Contact information",
+                    fields: [
+                      { type: "string", name: "email", label: "Email" },
+                      { type: "string", name: "phone", label: "Phone" },
+                      { type: "string", name: "location", label: "Location" },
+                    ],
+                  },
+                  { type: "string", name: "formAction", label: "Form action (URL)" },
+                ],
+              },
+              {
+                name: "footer",
+                label: "Footer",
+                fields: [
+                  { type: "number", name: "copyrightYear", label: "Year" },
+                  { type: "string", name: "companyName", label: "Company name" },
+                  { type: "string", name: "legalText", label: "Legal text" },
+                ],
+              },
+            ],
+          } as any,
+        ],
+      },
+
+      // ==================== CONSTRUCTION EN ====================
+      {
+        name: "construction_en",
+        label: "Self-build (EN)",
+        path: "content/en",
+        format: "json",
+        match: {
+          include: "construction",
+        },
+        ui: {
+          router: () => "/en/construction",
+        },
+        fields: [
+          { type: "string", name: "title", label: "Title" },
+          { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+          {
+            type: "object",
+            name: "sections",
+            label: "Sections",
+            list: true,
+            ui: {
+              itemProps: (item: any) => {
+                const template = item?._template || 'section';
+                const title = item?.title || item?.subtitle || item?.number || item?.companyName || '';
+                return { label: title ? `${template} – ${title}` : template };
+              },
+            } as any,
+            templates: [
+              {
+                name: "navbar",
+                label: "Navigation",
+                fields: [
+                  { type: "string", name: "siteName", label: "Site name" },
+                  { type: "string", name: "siteUrl", label: "Site URL" },
+                  {
+                    type: "object",
+                    name: "links",
+                    label: "Links",
+                    list: true,
+                    fields: [
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "ctaButton",
+                    label: "CTA Button",
+                    fields: [
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "worksHero",
+                label: "Hero Works",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Subtitle" },
+                  { type: "string", name: "title", label: "Title" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  { type: "string", name: "ctaLabel", label: "CTA Label" },
+                  { type: "string", name: "ctaHref", label: "CTA URL" },
+                  {
+                    type: "object",
+                    name: "mediaLeft",
+                    label: "Left image",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Alt text" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "mediaRight",
+                    label: "Right image",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Alt text" },
+                      { type: "boolean", name: "overlay", label: "Overlay" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "autoconstruction",
+                label: "Self-build",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Subtitle" },
+                  { type: "string", name: "title", label: "Title" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "services",
+                    label: "Services",
+                    list: true,
+                    fields: [
+                      imageField("image", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Alt text" },
+                      { type: "string", name: "title", label: "Title" },
+                      { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                    ],
+                  },
+                  { type: "string", name: "ctaLabel", label: "CTA Label" },
+                  { type: "string", name: "ctaHref", label: "CTA URL" },
+                ],
+              },
+              {
+                name: "simpleCompetence",
+                label: "Simple Skill",
+                fields: [
+                  { type: "string", name: "number", label: "Number" },
+                  { type: "string", name: "title", label: "Title" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "cta",
+                    label: "CTA",
+                    fields: [
+                      { type: "string", name: "label", label: "Label" },
+                      { type: "string", name: "url", label: "URL" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "image",
+                    label: "Image",
+                    fields: [
+                      imageField("src", "Image", "hero"),
+                      { type: "string", name: "alt", label: "Alt text" },
+                      { type: "boolean", name: "isPng", label: "Is PNG (no rotation)" },
+                      { type: "boolean", name: "rotate180", label: "Rotate 180°" },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "testimonials",
+                label: "Testimonials",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Subtitle" },
+                  { type: "string", name: "title", label: "Title" },
+                  { type: "string", name: "ctaLabel", label: "CTA Label" },
+                  { type: "string", name: "ctaHref", label: "CTA URL" },
+                  {
+                    type: "object",
+                    name: "testimonials",
+                    label: "Testimonials",
+                    list: true,
+                    fields: [
+                      { type: "string", name: "clientName", label: "Client name" },
+                      { type: "string", name: "position", label: "Position" },
+                      { type: "string", name: "company", label: "Company" },
+                      { type: "string", name: "quote", label: "Quote", ui: { component: "textarea" } },
+                      { type: "number", name: "rating", label: "Rating (1-5)" },
+                      imageField("backgroundImage", "Background image", "hero"),
+                      {
+                        type: "string",
+                        name: "priority",
+                        label: "Priority",
+                        options: ["high", "medium", "low"],
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "contact",
+                label: "Contact",
+                fields: [
+                  { type: "string", name: "subtitle", label: "Subtitle" },
+                  { type: "string", name: "title", label: "Title" },
+                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  {
+                    type: "object",
+                    name: "contactInfo",
+                    label: "Contact information",
+                    fields: [
+                      { type: "string", name: "email", label: "Email" },
+                      { type: "string", name: "phone", label: "Phone" },
+                      { type: "string", name: "location", label: "Location" },
+                    ],
+                  },
+                  { type: "string", name: "formAction", label: "Form action (URL)" },
+                ],
+              },
+              {
+                name: "footer",
+                label: "Footer",
+                fields: [
+                  { type: "number", name: "copyrightYear", label: "Year" },
+                  { type: "string", name: "companyName", label: "Company name" },
+                  { type: "string", name: "legalText", label: "Legal text" },
+                ],
+              },
+            ],
+          } as any,
+        ],
+      },
+
+      // ==================== PROJETS ====================
+      {
+        name: "projects",
+        label: "Projets",
+        path: "content/projects",
+        format: "json",
+        ui: {
+          router: ({ document }) => {
+            return `/work/${document._sys.filename}`;
+          },
+        },
+        fields: [
+          { type: "string", name: "title", label: "Titre du projet", required: true },
+          { type: "string", name: "slug", label: "Slug (URL)", required: true },
+          { type: "string", name: "category", label: "Catégorie", required: true },
+          { type: "string", name: "client", label: "Client" },
+          { type: "string", name: "excerpt", label: "Description courte", ui: { component: "textarea" } },
+          { type: "string", name: "description", label: "Description complète", ui: { component: "textarea" } },
+          { type: "string", name: "location", label: "Localisation" },
+          { type: "string", name: "year", label: "Année" },
+          { type: "string", name: "duration", label: "Durée" },
+          { type: "string", name: "budget", label: "Budget" },
+          { type: "string", name: "status", label: "Statut", options: ["completed", "in-progress", "planned"] },
+          
+          // Images
+          { type: "image", name: "heroImage", label: "Image principale" },
+          { type: "image", name: "thumbnail", label: "Miniature (pour les cartes)" },
+          {
+            type: "object",
+            name: "gallery",
+            label: "Galerie d'images",
+            list: true,
+            fields: [
+              { type: "image", name: "image", label: "Image" },
+              { type: "string", name: "alt", label: "Texte alternatif" },
+              { type: "string", name: "caption", label: "Légende" },
+            ],
+          },
+          
+          // Sections spécifiques au projet
+          {
+            type: "object",
+            name: "competences",
+            label: "Compétences utilisées",
+            list: true,
+            fields: [
+              { type: "string", name: "title", label: "Titre" },
+              { type: "string", name: "description", label: "Description" },
+              { type: "image", name: "icon", label: "Icône" },
+            ],
+          },
+          
+          {
+            type: "object",
+            name: "stats",
+            label: "Statistiques du projet",
+            list: true,
+            fields: [
+              { type: "string", name: "value", label: "Valeur" },
+              { type: "string", name: "label", label: "Label" },
+              { type: "string", name: "unit", label: "Unité" },
+            ],
+          },
+          
+          {
+            type: "object",
+            name: "textImage",
+            label: "Section Texte + Image",
+            fields: [
+              { type: "string", name: "subtitle", label: "Sous-titre" },
+              { type: "string", name: "title", label: "Titre" },
+              { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+              { type: "image", name: "image", label: "Image" },
+              { type: "boolean", name: "reverse", label: "Ordre inversé" },
+            ],
+          },
+          
+          // SEO
+          { type: "string", name: "metaTitle", label: "Titre SEO" },
+          { type: "string", name: "metaDescription", label: "Description SEO", ui: { component: "textarea" } },
+          
+          // Dates
+          { type: "datetime", name: "createdAt", label: "Date de création" },
+          { type: "datetime", name: "updatedAt", label: "Date de mise à jour" },
         ],
       },
     ],

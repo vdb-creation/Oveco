@@ -1,0 +1,89 @@
+{
+  "title": "Rénovation Écologique",
+  "slug": "renovation-ecologique-exemple",
+  "category": "Rénovation",
+  "client": "M. et Mme Dubois",
+  "excerpt": "Rénovation complète d'une maison des années 70 avec isolation thermique et installation de panneaux solaires.",
+  "description": "Ce projet de rénovation écologique consistait à transformer une maison des années 70 en habitation moderne et économe en énergie. Les travaux incluaient l'isolation thermique complète, l'installation de panneaux solaires, et la modernisation du système de chauffage.",
+  "location": "Liège, Belgique",
+  "year": "2023",
+  "duration": "6 mois",
+  "budget": "180 000€",
+  "status": "completed",
+  
+  "heroImage": "/uploads/projects/renovation-hero.jpg",
+  "thumbnail": "/uploads/projects/renovation-thumb.jpg",
+  
+  "gallery": [
+    {
+      "image": "/uploads/projects/renovation-1.jpg",
+      "alt": "Maison avant rénovation",
+      "caption": "État initial de la maison des années 70"
+    },
+    {
+      "image": "/uploads/projects/renovation-2.jpg",
+      "alt": "Travaux d'isolation",
+      "caption": "Mise en place de l'isolation thermique"
+    },
+    {
+      "image": "/uploads/projects/renovation-3.jpg",
+      "alt": "Installation panneaux solaires",
+      "caption": "Installation des panneaux solaires photovoltaïques"
+    },
+    {
+      "image": "/uploads/projects/renovation-4.jpg",
+      "alt": "Résultat final",
+      "caption": "Maison rénovée avec façade moderne"
+    }
+  ],
+  
+  "competences": [
+    {
+      "title": "Isolation Thermique",
+      "description": "Isolation complète des murs, toit et sols avec des matériaux écologiques",
+      "icon": "/uploads/icons/icon-isolation.svg"
+    },
+    {
+      "title": "Énergies Renouvelables",
+      "description": "Installation de panneaux solaires et pompe à chaleur",
+      "icon": "/uploads/icons/icon-solar.svg"
+    },
+    {
+      "title": "Rénovation",
+      "description": "Modernisation complète de l'habitation",
+      "icon": "/uploads/icons/icon-renovation.svg"
+    }
+  ],
+  
+  "stats": [
+    {
+      "value": "120",
+      "label": "Surface rénovée",
+      "unit": "m²"
+    },
+    {
+      "value": "60",
+      "label": "Réduction consommation",
+      "unit": "%"
+    },
+    {
+      "value": "25",
+      "label": "Années de retour",
+      "unit": "ans"
+    }
+  ],
+  
+  "textImage": {
+    "subtitle": "Transformation",
+    "title": "De l'Ancien au Moderne",
+    "description": "Cette rénovation écologique démontre qu'il est possible de transformer une habitation ancienne en maison moderne et économe en énergie, tout en préservant le caractère architectural original.",
+    "image": "/uploads/projects/renovation-comparison.jpg",
+    "reverse": true
+  },
+  
+  "metaTitle": "Rénovation Écologique - Projet Oveco",
+  "metaDescription": "Découvrez cette rénovation écologique complète avec isolation thermique et panneaux solaires.",
+  
+  "createdAt": "2023-06-01T00:00:00.000Z",
+  "updatedAt": "2023-11-15T00:00:00.000Z"
+}
