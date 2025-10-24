@@ -1,5 +1,7 @@
 // src/lib/projects.ts
-// Utilitaires pour la gestion des projets
+// Utilitaires pour la gestion des projets - Version optimisée 2025
+
+import { cache } from './cache';
 
 export interface Project {
   title: string;
@@ -44,33 +46,58 @@ export interface Project {
   updatedAt?: string;
 }
 
-// Fonction pour charger tous les projets
-export async function getAllProjects(): Promise<Project[]> {
+// Cache des projets pour éviter les rechargements
+let projectsCache: Project[] | null = null;
+let projectsCacheTime = 0;
+const PROJECTS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+// Fonction optimisée pour charger tous les projets avec cache
+export async function getAllProjects(forceRefresh: boolean = false): Promise<Project[]> {
+  const now = Date.now();
+  
+  // Utiliser le cache si disponible et valide
+  if (!forceRefresh && projectsCache && (now - projectsCacheTime) < PROJECTS_CACHE_TTL) {
+    return projectsCache;
+  }
+
   try {
-    const projectFiles = await import.meta.glob('../../content/projects/*.json');
-    const projects: Project[] = [];
+    // Chargement asynchrone optimisé avec import.meta.glob
+    const projectFiles = await import.meta.glob('../../content/projects/*.json', { 
+      eager: false // Lazy loading pour optimiser les performances
+    });
     
-    for (const path in projectFiles) {
+    const projects: Project[] = [];
+    const loadPromises = Object.entries(projectFiles).map(async ([path, loader]) => {
       try {
-        const projectData = await projectFiles[path]();
+        const projectData = await loader();
         const project = projectData.default as Project;
         if (project && project.slug) {
-          projects.push(project);
+          return project;
         }
       } catch (e) {
         console.error(`Erreur lors du chargement du projet ${path}:`, e);
       }
-    }
+      return null;
+    });
+
+    const loadedProjects = await Promise.all(loadPromises);
+    projects.push(...loadedProjects.filter((project): project is Project => project !== null));
     
     // Trier par date de création (plus récent en premier)
-    return projects.sort((a, b) => {
+    projects.sort((a, b) => {
       const dateA = new Date(a.createdAt || '1900-01-01');
       const dateB = new Date(b.createdAt || '1900-01-01');
       return dateB.getTime() - dateA.getTime();
     });
+
+    // Mettre à jour le cache
+    projectsCache = projects;
+    projectsCacheTime = now;
+    
+    return projects;
   } catch (e) {
     console.error('Erreur lors du chargement des projets:', e);
-    return [];
+    return projectsCache || [];
   }
 }
 

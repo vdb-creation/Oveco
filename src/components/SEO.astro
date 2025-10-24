@@ -1,0 +1,134 @@
+---
+/**
+ * Composant SEO avancé pour optimiser le référencement
+ */
+
+export interface SEOComponentProps {
+  title?: string;
+  description?: string;
+  keywords?: string[];
+  canonical?: string;
+  ogImage?: string;
+  ogType?: string;
+  noindex?: boolean;
+  structuredData?: object;
+  breadcrumbs?: Array<{
+    name: string;
+    url: string;
+  }>;
+  author?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  section?: string;
+  tags?: string[];
+}
+
+const {
+  title,
+  description,
+  keywords = [],
+  canonical,
+  ogImage,
+  ogType = "website",
+  noindex = false,
+  structuredData,
+  breadcrumbs = [],
+  author = "Oveco",
+  publishedTime,
+  modifiedTime,
+  section,
+  tags = []
+} = Astro.props;
+
+// Générer les données structurées enrichies
+const enhancedStructuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${canonical}#webpage`,
+      "url": canonical,
+      "name": title,
+      "description": description,
+      "isPartOf": {
+        "@id": `${Astro.site}/#website`
+      },
+      "datePublished": publishedTime || new Date().toISOString(),
+      "dateModified": modifiedTime || new Date().toISOString(),
+      "inLanguage": "fr-FR",
+      "author": {
+        "@type": "Organization",
+        "name": author
+      },
+      "publisher": {
+        "@id": `${Astro.site}/#organization`
+      },
+      ...(breadcrumbs.length > 0 && {
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": breadcrumbs.map((crumb, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": crumb.name,
+            "item": crumb.url
+          }))
+        }
+      }),
+      ...(section && { "articleSection": section }),
+      ...(tags.length > 0 && { "keywords": tags.join(", ") })
+    },
+    ...(structuredData ? [structuredData] : [])
+  ]
+};
+
+// Générer les robots meta
+const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+---
+
+<!-- SEO Meta Tags -->
+<meta name="robots" content={robotsContent} />
+<meta name="googlebot" content={robotsContent} />
+<meta name="bingbot" content={robotsContent} />
+
+<!-- Keywords -->
+{keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonical} />
+
+<!-- Open Graph -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:site_name" content="Oveco" />
+<meta property="og:updated_time" content={modifiedTime || new Date().toISOString()} />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@oveco_be" />
+<meta name="twitter:creator" content="@oveco_be" />
+<meta name="twitter:url" content={canonical} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={title} />
+
+<!-- Additional SEO -->
+<meta name="format-detection" content="telephone=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!-- Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify(enhancedStructuredData)}></script>
+
+<!-- Preconnect pour les performances -->
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+<link rel="dns-prefetch" href="https://fonts.gstatic.com" />

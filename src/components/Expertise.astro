@@ -5,6 +5,8 @@
  * Compatible TinaCMS via props
  */
 
+import SmartImage from './SmartImage.astro';
+
 export interface ExpertiseCard {
   icon: string;
   alt: string;
@@ -63,13 +65,14 @@ const {
         <div class="expertise__grid" role="list" aria-label="Liste de nos expertises">
           {cards.map((card) => (
             <article class="expertise__card" role="listitem" itemscope itemtype="https://schema.org/Service">
-              <img 
-                src={card.icon}
+              <SmartImage
+                cmsSrc={card.icon}
                 alt={card.alt}
-                class="expertise__icon"
+                width={168}
+                height={168}
+                context="default"
                 loading="lazy"
-                width="168"
-                height="168"
+                class="expertise__icon"
               />
               <div class="expertise__card-content">
                 <h4 class="expertise__card-title" itemprop="name" set:html={card.title} />

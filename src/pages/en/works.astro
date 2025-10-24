@@ -1,0 +1,69 @@
+---
+/**
+ * Page Works EN - Oveco
+ * Works page in English
+ */
+
+import Layout from '../../layouts/Layout.astro';
+import WorksHero from '../../components/WorksHero.astro';
+import Projects from '../../components/Projects.astro';
+
+// Load works data from TinaCMS
+const worksData = {
+  subtitle: "Our achievements",
+  title: "Realized projects",
+  description: "Discover our completed projects in sustainable construction and energy renovation.",
+  mediaLeft: {
+    src: "/uploads/works/maison-toit.png",
+    alt: "House with solar panels"
+  },
+  mediaRight: {
+    src: "/uploads/works/maison-toit.png", 
+    alt: "Sustainable construction project"
+  }
+};
+
+const projectsData = {
+  subtitle: "Our projects",
+  title: "Portfolio",
+  description: "A selection of our most successful projects in sustainable construction.",
+  projects: [
+    {
+      title: "Passive house in Beauvechain",
+      description: "Complete renovation of a family home with passive house standards.",
+      image: "/uploads/works/maison-toit.png",
+      alt: "Passive house renovation",
+      url: "/en/work/maison-passive-beauvechain"
+    },
+    {
+      title: "Ecological extension",
+      title: "Ecological extension", 
+      description: "Self-construction project with ecological materials and renewable energies.",
+      image: "/uploads/works/maison-toit.png",
+      alt: "Ecological extension project",
+      url: "/en/work/extension-ecologique"
+    },
+    {
+      title: "Renovation with solar heating",
+      description: "Energy renovation with solar heating system and thermal insulation.",
+      image: "/uploads/works/maison-toit.png",
+      alt: "Solar heating renovation",
+      url: "/en/work/renovation-chauffage-solaire"
+    }
+  ]
+};
+---
+
+<Layout 
+  title="Our Achievements - Oveco | Sustainable Construction Projects"
+  description="Discover our completed projects in sustainable construction, passive houses, and energy renovation. Realized projects by Oveco."
+  keywords={["achievements", "projects", "sustainable construction", "passive house", "energy renovation", "Oveco", "Belgium"]}
+>
+  <main>
+    <!-- Hero Section -->
+    <WorksHero {...worksData} />
+
+    <!-- Projects Section -->
+    <Projects {...projectsData} />
+  </main>
+</Layout>

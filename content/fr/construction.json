@@ -3,33 +3,6 @@
   "description": "Apprendre en faisant, construire en étant accompagné. Oveco vous forme et vous guide dans vos projets d'auto-construction énergétique.",
   "sections": [
     {
-      "siteName": "Oveco",
-      "siteUrl": "/",
-      "links": [
-        {
-          "label": "Accueil",
-          "url": "/"
-        },
-        {
-          "label": "Réalisations",
-          "url": "/works"
-        },
-        {
-          "label": "À propos",
-          "url": "/about"
-        },
-        {
-          "label": "Auto-construction",
-          "url": "/construction"
-        }
-      ],
-      "ctaButton": {
-        "label": "Nous contacter",
-        "url": "#contact"
-      },
-      "_template": "navbar"
-    },
-    {
       "subtitle": "Auto-construction",
       "title": "Construisez votre autonomie énergétique",
       "description": "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat. En vous formant, en vous conseillant et en vous fournissant les bons outils, nous vous permettons de participer activement aux installations en toute sécurité.",
@@ -166,13 +139,6 @@
       },
       "formAction": "#contact",
       "_template": "contact"
-    },
-    {
-      "copyrightYear": 2025,
-      "companyName": "Oveco",
-      "legalText": "Tous droits réservés | Mentions légales | Politique de confidentialité",
-      "_template": "footer"
     }
   ]
 }
-

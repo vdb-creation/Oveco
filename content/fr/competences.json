@@ -1,0 +1,32 @@
+{
+  "_template": "competences",
+  "subtitle": "Nos compétences",
+  "title": "Domaines d'expertise",
+  "description": "Découvrez nos compétences techniques et notre savoir-faire dans la construction durable et les énergies renouvelables.",
+  "competences": [
+    {
+      "icon": "/uploads/compétance/clim.opt.webp",
+      "alt": "Climatisation et chauffage",
+      "title": "Climatisation & Chauffage",
+      "description": "Installation et maintenance de systèmes de climatisation et chauffage performants et économes en énergie."
+    },
+    {
+      "icon": "/uploads/compétance/eolienne.opt.webp",
+      "alt": "Énergies renouvelables", 
+      "title": "Énergies Renouvelables",
+      "description": "Panneaux solaires, éoliennes, pompes à chaleur et autres solutions d'énergie verte pour votre autonomie énergétique."
+    },
+    {
+      "icon": "/uploads/compétance/elec.opt.webp",
+      "alt": "Installations électriques",
+      "title": "Installations Électriques", 
+      "description": "Conception et installation d'infrastructures électriques modernes, sécurisées et optimisées pour vos besoins."
+    },
+    {
+      "icon": "/uploads/compétance/personne.opt.webp",
+      "alt": "Accompagnement personnalisé",
+      "title": "Accompagnement Personnalisé",
+      "description": "Conseil et suivi personnalisé pour vos projets de construction durable et de rénovation énergétique."
+    }
+  ]
+}

@@ -3,33 +3,6 @@
   "description": "Découvrez Oveco, des ingénieurs-installateurs qui conçoivent.",
   "sections": [
     {
-      "siteName": "Oveco",
-      "siteUrl": "/",
-      "links": [
-        {
-          "label": "Accueil",
-          "url": "/"
-        },
-        {
-          "label": "Réalisations",
-          "url": "/works"
-        },
-        {
-          "label": "À propos",
-          "url": "/about"
-        },
-        {
-          "label": "Auto-construction",
-          "url": "/construction"
-        }
-      ],
-      "ctaButton": {
-        "label": "Nous contacter",
-        "url": "#contact"
-      },
-      "_template": "navbar"
-    },
-    {
       "subtitle": "À propos",
       "title": "Des ingénieurs au service",
       "description": "Chez Oveco, nous allions savoir-faire technique et engagement humain pour inspirer des installations sur mesure, performantes, et responsables.",
@@ -158,12 +131,6 @@
       },
       "formAction": "#contact",
       "_template": "contact"
-    },
-    {
-      "copyrightYear": 2025,
-      "companyName": "Oveco",
-      "legalText": "Tous droits réservés | Mentions légales | Politique de confidentialité",
-      "_template": "footer"
     }
   ]
 }

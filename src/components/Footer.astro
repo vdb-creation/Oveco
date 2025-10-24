@@ -19,14 +19,16 @@ const {
 } = Astro.props;
 ---
 
-<footer class="footer">
+<footer class="footer" role="contentinfo" aria-label="Pied de page">
   <div class="footer__container">
     <p class="footer__copyright">
-      Copyright © {copyrightYear} {companyName}
+      Copyright © {copyrightYear} {companyName}. Tous droits réservés.
     </p>
-    <p class="footer__legal">
-      {legalText}
-    </p>
+    <nav class="footer__legal" aria-label="Liens légaux">
+      <p class="footer__legal-text">
+        {legalText}
+      </p>
+    </nav>
   </div>
 </footer>
 

@@ -173,14 +173,35 @@ const titleId = `${sectionId}-title`;
 
     if (!prevBtn || !nextBtn) return;
 
-    const scrollAmount = 412; // 388px (card width) + 24px (gap)
+    // Carrousel responsive - même système que Projects
+    const getScrollAmount = () => {
+      const screenWidth = window.innerWidth;
+      let cardWidth = 388; // Largeur par défaut
+      let gap = 24; // Espacement par défaut
+      
+      if (screenWidth <= 480) {
+        cardWidth = Math.min(300, screenWidth * 0.8);
+        gap = 16;
+      } else if (screenWidth <= 768) {
+        cardWidth = Math.min(350, screenWidth * 0.45);
+        gap = 20;
+      } else if (screenWidth <= 1024) {
+        cardWidth = Math.min(380, screenWidth * 0.3);
+        gap = 22;
+      } else {
+        cardWidth = Math.min(388, screenWidth * 0.25);
+        gap = 24;
+      }
+      
+      return cardWidth + gap;
+    };
 
     prevBtn.addEventListener('click', () => {
-      grid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      grid.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
     });
 
     nextBtn.addEventListener('click', () => {
-      grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      grid.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
     });
 
     // Drag to scroll
@@ -205,10 +226,14 @@ const titleId = `${sectionId}-title`;
       grid.classList.remove('is-grabbing');
     });
 
-    grid.addEventListener('mousemove', (e: MouseEvent) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - grid.offsetLeft;
+    // Touch events pour mobile
+    grid.addEventListener('touchstart', (e: TouchEvent) => {
+      startX = e.touches[0].pageX - grid.offsetLeft;
+      scrollLeft = grid.scrollLeft;
+    });
+
+    grid.addEventListener('touchmove', (e: TouchEvent) => {
+      const x = e.touches[0].pageX - grid.offsetLeft;
       const walk = (x - startX) * 2;
       grid.scrollLeft = scrollLeft - walk;
     });
@@ -449,8 +474,8 @@ const titleId = `${sectionId}-title`;
 }
 
 .testimonials__grid > .projects__card {
-  width: 388px;
-  height: 548px;
+  width: clamp(280px, 25vw, 388px);
+  height: clamp(400px, 50vw, 548px);
   flex: 0 0 auto;
 }
 
@@ -458,11 +483,28 @@ const titleId = `${sectionId}-title`;
   height: auto;
 }
 
+@media (max-width: 1024px) {
+  .testimonials__grid {
+    gap: clamp(16px, 2vw, 22px);
+  }
+  
+  .testimonials__grid > .projects__card {
+    width: clamp(300px, 30vw, 380px);
+    height: clamp(420px, 45vw, 520px);
+  }
+}
+
+@media (max-width: 768px) {
+  .testimonials__grid > .projects__card {
+    width: clamp(280px, 40vw, 350px);
+    height: clamp(380px, 55vw, 480px);
+  }
+}
+
 @media (max-width: 480px) {
   .testimonials__grid > .projects__card {
-    width: 80%;
-    height: auto;
-    aspect-ratio: 388/548;
+    width: clamp(260px, 80vw, 300px);
+    height: clamp(350px, 60vw, 420px);
   }
 }
 

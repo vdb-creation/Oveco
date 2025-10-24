@@ -1,0 +1,22 @@
+{
+  "navbar": {
+    "siteName": "Oveco",
+    "siteUrl": "/",
+    "logoUrl": "/src/assets/imgs/logo/image.png",
+    "links": [
+      { "label": "Qui sommes nous ?", "url": "/about" },
+      { "label": "L'auto-construction", "url": "/fr/construction" },
+      { "label": "Nos réalisations", "url": "/works" },
+      { "label": "Nos compétences", "url": "/competences" }
+    ],
+    "ctaButton": {
+      "label": "Nous contacter",
+      "url": "/#contact"
+    }
+  },
+  "footer": {
+    "copyrightYear": 2024,
+    "companyName": "Oveco",
+    "legalText": "Tous droits réservés"
+  }
+}

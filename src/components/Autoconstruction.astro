@@ -5,6 +5,8 @@
  * Compatible TinaCMS via props
  */
 
+import SmartImage from './SmartImage.astro';
+
 export interface AutoconstructionService {
   image: string;
   alt: string;
@@ -63,12 +65,14 @@ const {
         <div class="autoconstruction__services" role="list" aria-labelledby="autoconstruction-title">
           {services.map((service) => (
             <article class="autoconstruction__service" role="listitem" itemscope itemtype="https://schema.org/Service">
-              <img 
-                src={service.image}
+              <SmartImage
+                cmsSrc={service.image}
                 alt={service.alt}
+                width={400}
+                height={300}
+                context="about"
                 loading="lazy"
                 class="autoconstruction__service-image"
-                itemprop="image"
               />
               <div class="autoconstruction__service-content">
                 <h3 class="autoconstruction__service-title" itemprop="name">{service.title}</h3>

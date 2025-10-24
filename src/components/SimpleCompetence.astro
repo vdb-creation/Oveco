@@ -7,6 +7,8 @@
  * @tinacms Template : simpleCompetence
  */
 
+import SmartImage from './SmartImage.astro';
+
 export interface Props {
   number: string;
   title: string;
@@ -34,14 +36,14 @@ if (image.rotate180) imageClasses.push('rotate-180');
 <div class="simple-competence">
   <div class="simple-competence__visual">
     <div class="simple-competence__bg" aria-hidden="true"></div>
-    <img 
-      src={image.src} 
+    <SmartImage
+      cmsSrc={image.src}
       alt={image.alt}
-      class:list={['simple-competence__image', ...imageClasses]}
+      width={233}
+      height={233}
+      context="default"
       loading="lazy"
-      decoding="async"
-      width="233"
-      height="233"
+      class:list={['simple-competence__image', ...imageClasses]}
     />
   </div>
 

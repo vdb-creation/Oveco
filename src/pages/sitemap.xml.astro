@@ -1,0 +1,53 @@
+---
+import { getAllProjects } from '../lib/projects.ts';
+
+// Générer le sitemap dynamiquement
+export async function getStaticPaths() {
+  const allProjects = await getAllProjects();
+  
+  // Pages statiques principales
+  const staticPages = [
+    { url: '/', priority: 1.0, changefreq: 'weekly' },
+    { url: '/about', priority: 0.8, changefreq: 'monthly' },
+    { url: '/works', priority: 0.9, changefreq: 'weekly' },
+    { url: '/work', priority: 0.7, changefreq: 'monthly' },
+    { url: '/fr/', priority: 0.9, changefreq: 'weekly' },
+    { url: '/fr/about', priority: 0.8, changefreq: 'monthly' },
+    { url: '/fr/construction', priority: 0.8, changefreq: 'monthly' },
+    { url: '/en/', priority: 0.9, changefreq: 'weekly' },
+    { url: '/en/about', priority: 0.8, changefreq: 'monthly' },
+    { url: '/en/construction', priority: 0.8, changefreq: 'monthly' },
+  ];
+
+  // Pages de projets dynamiques
+  const projectPages = allProjects.map(project => ({
+    url: `/work/${project.slug}`,
+    priority: 0.6,
+    changefreq: 'monthly',
+    lastmod: new Date().toISOString()
+  }));
+
+  return [...staticPages, ...projectPages].map(page => ({
+    params: { url: page.url },
+    props: {
+      url: page.url,
+      priority: page.priority,
+      changefreq: page.changefreq,
+      lastmod: page.lastmod || new Date().toISOString()
+    }
+  }));
+}
+
+const { url, priority, changefreq, lastmod } = Astro.props;
+const site = Astro.site || 'https://oveco.be';
+---
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{site}{url}</loc>
+    <lastmod>{lastmod}</lastmod>
+    <changefreq>{changefreq}</changefreq>
+    <priority>{priority}</priority>
+  </url>
+</urlset>

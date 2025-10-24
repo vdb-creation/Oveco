@@ -93,7 +93,7 @@ const {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 61px;
+  gap: clamp(32px, 5vw, 61px);
   list-style: none;
   padding: 0;
   margin: 0;
@@ -101,75 +101,97 @@ const {
 }
 
 .stats__item {
-  width: 364px;
+  width: 100%;
+  max-width: 364px;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: clamp(16px, 3vw, 24px);
 }
 
 .stats__content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: clamp(6px, 1vw, 8px);
 }
 
 .stats__value {
-  width: 324px;
+  width: 100%;
+  max-width: 324px;
   text-align: center;
   color: #5C6D6F;
-  font-size: 47.78px;
+  font-size: clamp(32px, 5vw, 47.78px);
   font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
   font-weight: 800;
-  line-height: 57.34px;
+  line-height: clamp(38px, 6vw, 57.34px);
   margin: 0;
 }
 
 .stats__label {
-  width: 324px;
+  width: 100%;
+  max-width: 324px;
   text-align: center;
   color: #334749;
-  font-size: 27.65px;
+  font-size: clamp(20px, 3vw, 27.65px);
   font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
   font-weight: 700;
-  line-height: 30.42px;
+  line-height: clamp(24px, 3.5vw, 30.42px);
   margin: 0;
 }
 
 .stats__desc {
-  width: 364px;
+  width: 100%;
+  max-width: 364px;
   text-align: center;
   color: #5C6D6F;
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, 16px);
   font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
   font-weight: 400;
-  line-height: 28.8px;
+  line-height: clamp(20px, 3vw, 28.8px);
   margin: 0;
 }
 
+/* Responsive amélioré */
 @media (max-width: 1200px) {
   .stats__grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
+    gap: clamp(24px, 4vw, 40px);
   }
 }
 
 @media (max-width: 768px) {
   .stats {
-    padding: 32px 16px;
+    padding: clamp(24px, 4vw, 32px) clamp(16px, 3vw, 24px);
   }
+  
   .stats__grid {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: clamp(20px, 3vw, 28px);
   }
-  .stats__item,
+  
+  .stats__item {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .stats__value,
+  .stats__label,
   .stats__desc {
     width: 100%;
+    max-width: 100%;
   }
-  .stats__value,
-  .stats__label {
-    width: 100%;
+}
+
+@media (max-width: 480px) {
+  .stats__title {
+    font-size: clamp(24px, 5vw, 32px);
+    line-height: clamp(28px, 6vw, 38px);
+    margin-bottom: clamp(20px, 4vw, 32px);
+  }
+  
+  .stats__item {
+    gap: clamp(12px, 2.5vw, 20px);
   }
 }
 </style>

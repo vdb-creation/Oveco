@@ -1,0 +1,22 @@
+{
+  "navbar": {
+    "siteName": "Oveco",
+    "siteUrl": "/",
+    "logoUrl": "/src/assets/imgs/logo/image.png",
+    "links": [
+      { "label": "About us", "url": "/en/about" },
+      { "label": "Self-construction", "url": "/en/construction" },
+      { "label": "Our achievements", "url": "/en/works" },
+      { "label": "Our skills", "url": "/en/competences" }
+    ],
+    "ctaButton": {
+      "label": "Contact us",
+      "url": "/#contact"
+    }
+  },
+  "footer": {
+    "copyrightYear": 2024,
+    "companyName": "Oveco",
+    "legalText": "All Rights Reserved"
+  }
+}

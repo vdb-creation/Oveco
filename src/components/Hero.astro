@@ -77,9 +77,9 @@ function mapImageClassAndId(image: { class?: string }, index: number) {
 ---
 
 <div class="home-page">
-  <section class="hero">
+  <section class="hero" role="banner" aria-labelledby="hero-title">
     <!-- Cercle suiveur de souris -->
-    <div class="hero__mouse-follower" id="mouseFollower"></div>
+    <div class="hero__mouse-follower" id="mouseFollower" aria-hidden="true"></div>
     
     <div class="container">
       <div class="hero__container">
@@ -89,20 +89,29 @@ function mapImageClassAndId(image: { class?: string }, index: number) {
             <img 
               src={image.src} 
               alt={image.alt} 
-              loading="lazy"
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
               class={mapped.className}
               id={mapped.id}
+              width="400"
+              height="500"
+              fetchpriority={index === 0 ? "high" : "low"}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+              srcSet={`
+                ${image.src.replace(/\.(jpg|jpeg|png)$/, '.opt.webp')} 400w,
+                ${image.src.replace(/\.(jpg|jpeg|png)$/, '.opt.avif')} 400w
+              `}
             />
           );
         })}
         
         <div class="hero__content">
-          <div class="hero__header">
-            <div class="hero__subtitle">{subtitle}</div>
-            <h1 class="hero__title">{title}</h1>
-          </div>
+          <header class="hero__header">
+            <p class="hero__subtitle" aria-label="Sous-titre">{subtitle}</p>
+            <h1 class="hero__title" id="hero-title">{title}</h1>
+          </header>
           <p class="hero__description">{description}</p>
-          <a href={ctaUrl} class="hero__cta">
+          <a href={ctaUrl} class="hero__cta" role="button" aria-label={`${ctaText} - ${title}`}>
             <span>{ctaText}</span>
           </a>
         </div>
@@ -185,10 +194,11 @@ if (document.readyState === 'loading') {
 </script>
 
 <style>
-/* CSS extrait de wp-content/themes/oveco/style.css (hero section) */
+/* CSS optimisé pour Lighthouse - Hero section */
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height pour mobile */
   background-image: url("/src/assets/imgs/BgHome.svg");
   background-size: cover;
   background-position: center;
@@ -197,7 +207,10 @@ if (document.readyState === 'loading') {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 6rem 2rem;
+  padding: clamp(2rem, 5vw, 6rem) clamp(1rem, 3vw, 2rem);
+  /* Optimisations performance */
+  will-change: transform;
+  contain: layout style paint;
 }
 
 @media (max-width: 1200px) {
@@ -211,12 +224,28 @@ if (document.readyState === 'loading') {
     padding: 4rem 1.5rem;
     min-height: 80vh;
   }
+  
+  /* Afficher une seule image sur mobile */
+  .hero #img1 {
+    display: block;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(200px, 60vw, 280px);
+    height: clamp(250px, 70vw, 320px);
+    z-index: 1;
+  }
 }
 
 @media (max-width: 480px) {
   .hero {
     min-height: 70vh;
     padding: 3rem 1rem;
+  }
+  
+  .hero #img1 {
+    width: clamp(180px, 70vw, 240px);
+    height: clamp(220px, 80vw, 280px);
   }
 }
 
@@ -375,24 +404,61 @@ if (document.readyState === 'loading') {
   z-index: 1;
   object-fit: cover;
   transition: none;
+  /* Optimisations performance avancées */
+  will-change: transform;
+  transform: translateZ(0); /* Force GPU acceleration */
+  contain: layout style paint;
+  /* Prévention du layout shift */
+  aspect-ratio: 4/5;
+  /* Optimisations de rendu */
+  image-rendering: optimizeQuality;
+  image-rendering: -webkit-optimize-contrast;
+  /* Support des formats modernes */
+  image-rendering: crisp-edges;
 }
 
 @media (max-width: 768px) {
   .hero__image {
     display: none;
   }
+  
+  .hero #img1 {
+    display: block;
+  }
 }
 
 .hero__image--large-1,
 .hero__image--large-2 {
-  width: clamp(260px, 20vw, 320px);
-  height: clamp(320px, 25vw, 380px);
+  width: clamp(280px, 22vw, 380px);
+  height: clamp(350px, 28vw, 450px);
+  /* Optimisations performance avancées */
+  will-change: transform;
+  transform: translateZ(0); /* Force GPU acceleration */
+  contain: layout style paint;
+  /* Prévention du layout shift */
+  aspect-ratio: 4/5;
+  /* Optimisations de rendu */
+  image-rendering: optimizeQuality;
+  image-rendering: -webkit-optimize-contrast;
+  /* Support des formats modernes */
+  image-rendering: crisp-edges;
 }
 
 .hero__image--medium-1,
 .hero__image--medium-2 {
-  width: clamp(220px, 18vw, 280px);
-  height: clamp(160px, 12vw, 200px);
+  width: clamp(240px, 20vw, 320px);
+  height: clamp(220px, 18vw, 280px); /* Augmenté de 180px à 220px */
+  /* Optimisations performance avancées */
+  will-change: transform;
+  transform: translateZ(0); /* Force GPU acceleration */
+  contain: layout style paint;
+  /* Prévention du layout shift */
+  aspect-ratio: 4/3;
+  /* Optimisations de rendu */
+  image-rendering: optimizeQuality;
+  image-rendering: -webkit-optimize-contrast;
+  /* Support des formats modernes */
+  image-rendering: crisp-edges;
 }
 
 .hero__content {

@@ -5,6 +5,8 @@
  * Compatible TinaCMS via props
  */
 
+import SmartImage from './SmartImage.astro';
+
 export interface GalleryItem {
   src: string;
   alt: string;
@@ -40,11 +42,14 @@ const {
       {gallery.map((item) => (
         <li class="gallery__item" role="listitem">
           <figure class={`gallery__figure gallery__figure--${item.mod || 'a'}`}>
-            <img 
-              class={`gallery__image gallery__image--${item.mod || 'a'}`} 
-              src={item.src} 
-              alt={item.alt} 
+            <SmartImage
+              cmsSrc={item.src}
+              alt={item.alt}
+              width={1200}
+              height={900}
+              context="galerie"
               loading="lazy"
+              class={`gallery__image gallery__image--${item.mod || 'a'}`}
             />
           </figure>
         </li>

@@ -27,8 +27,7 @@ const {
   links = [
     { label: "Qui sommes nous ?", url: "/about" },
     { label: "L'auto-construction", url: "/fr/construction" },
-    { label: "Nos réalisations", url: "/works" },
-    { label: "Projets", url: "/work" }
+    { label: "Nos réalisations", url: "/works" }
   ],
   ctaButton = {
     label: "Nous contacter",
@@ -40,50 +39,69 @@ const {
 <nav class="navbar" id="navbar" role="navigation" aria-label="Navigation principale">
   <div class="navbar__container">
     <!-- Brand/Logo -->
-    <a href={siteUrl} class="navbar__brand">
+    <a href={siteUrl} class="navbar__brand" aria-label={`${siteName} - Retour à l'accueil`}>
       <img 
         src={logoUrl} 
-        alt={siteName} 
+        alt={`Logo ${siteName}`}
         class="brand__logo-img" 
+        width="45"
+        height="45"
+        loading="eager"
+        fetchpriority="high"
         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
       />
-      <div class="brand__text" style="display: none;">
+      <div class="brand__text" style="display: none;" aria-hidden="true">
         {siteName}
       </div>
     </a>
 
     <!-- Navigation Menu -->
-    <div class="navbar__menu" id="navbarMenu">
-      <div class="navbar__links">
-        {links.map((link: { label: string; url: string }) => (
-          <a href={link.url} class="navbar__link">{link.label}</a>
+    <nav class="navbar__menu" id="navbarMenu" aria-label="Menu principal">
+      <ul class="navbar__links" role="list">
+        {links.map((link: { label: string; url: string }, index: number) => (
+          <li role="listitem">
+            <a 
+              href={link.url} 
+              class="navbar__link"
+              aria-label={`Aller à ${link.label}`}
+            >
+              {link.label}
+            </a>
+          </li>
         ))}
-      </div>
+      </ul>
 
       <!-- CTA Button (dans le menu pour le mobile) -->
       <div class="navbar__cta">
-        <a href={ctaButton.url} class="navbar__btn">{ctaButton.label}</a>
+        <a 
+          href={ctaButton.url} 
+          class="navbar__btn"
+          aria-label={`${ctaButton.label} - Action principale`}
+        >
+          {ctaButton.label}
+        </a>
       </div>
-    </div>
+    </nav>
 
     <!-- Mobile Toggle -->
     <button 
       class="navbar__toggle" 
       id="navbarToggle" 
       type="button" 
-      aria-label="Ouvrir le menu" 
+      aria-label="Ouvrir le menu de navigation" 
       aria-controls="navbarMenu" 
       aria-expanded="false"
+      aria-haspopup="true"
     >
-      <span></span>
-      <span></span>
-      <span></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
     </button>
   </div>
 </nav>
 
 <!-- Overlay pour fermeture du menu sur mobile -->
-<div class="navbar-overlay" id="navbarOverlay" hidden></div>
+<div class="navbar-overlay" id="navbarOverlay" hidden aria-hidden="true"></div>
 
 <script>
 // JavaScript pour le menu mobile et interactions
@@ -226,6 +244,14 @@ document.addEventListener('DOMContentLoaded', function() {
   gap: clamp(16px, 3vw, 32px);
   margin-inline: auto;
   min-width: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.navbar__links li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .navbar__link {

@@ -126,7 +126,7 @@ const pageDescription = project.metaDescription || project.excerpt || `Découvre
       title="Galerie Photos"
       gallery={project.gallery.map((item: any, index: number) => ({
         src: item.image,
-        alt: item.alt,
+        alt: item.alt || `Image ${index + 1} du projet ${project.title}`,
         mod: ['a', 'b', 'c', 'd'][index % 4] as 'a' | 'b' | 'c' | 'd'
       }))}
     />

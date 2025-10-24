@@ -1,0 +1,39 @@
+---
+const site = Astro.site || 'https://oveco.be';
+---
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: {site}/sitemap.xml
+
+# Crawl-delay pour éviter la surcharge
+Crawl-delay: 1
+
+# Bloquer l'admin et les fichiers sensibles
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_astro/
+Disallow: /node_modules/
+Disallow: /*.json$
+Disallow: /*.ts$
+Disallow: /*.js$
+
+# Autoriser les images et assets
+Allow: /uploads/
+Allow: /favicon.png
+Allow: /site.webmanifest
+
+# Spécifique aux moteurs de recherche
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2

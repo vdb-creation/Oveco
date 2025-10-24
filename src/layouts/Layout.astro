@@ -2,6 +2,21 @@
 import "../styles/global.scss";
 import { ViewTransitions } from 'astro:transitions';
 import Nabar from '../components/Nabar.astro';
+import Footer from '../components/Footer.astro';
+import { getGlobalComponents } from '../lib/global-components.ts';
+
+// Détecter la langue depuis l'URL
+function detectLanguage(url: URL): 'fr' | 'en' {
+  const pathname = url.pathname;
+  if (pathname.startsWith('/en/') || pathname === '/en') {
+    return 'en';
+  }
+  return 'fr';
+}
+
+// Charger les composants globaux selon la langue détectée
+const currentLang = detectLanguage(Astro.url);
+const globalComponents = await getGlobalComponents(currentLang);
 
 export interface SEOProps {
   title?: string;
@@ -16,15 +31,19 @@ export interface SEOProps {
 }
 
 const {
-  title = "Template Astro - Site Web Moderne et Performant",
-  description = "Template Astro optimisé pour créer des sites web rapides, modernes et SEO-friendly. Intégration TinaCMS, animations fluides et composants réutilisables.",
+  title = "Oveco - Auto-construction et Rénovation Écologique | Maisons Passives",
+  description = "Oveco accompagne vos projets d'auto-construction et de rénovation écologique. Expertise en maisons passives, énergies renouvelables et construction durable en Belgique.",
   canonical = Astro.url.href,
   ogImage = `${Astro.url.origin}/og-image.png`,
-  keywords = ["astro", "template", "web design", "cms", "performance", "seo"],
+  keywords = [
+    "auto-construction", "rénovation écologique", "maison passive", "énergies renouvelables", 
+    "construction durable", "isolation thermique", "chauffage écologique", "Belgique",
+    "ossature bois", "panneaux solaires", "pompe à chaleur", "rénovation énergétique"
+  ],
   structuredData,
   noindex = false,
   ogType = "website",
-  author = "Votre Entreprise",
+  author = "Oveco",
 } = Astro.props as SEOProps;
 
 // Structured data par défaut Organization + WebSite
@@ -34,34 +53,91 @@ const defaultStructuredData = {
     {
       "@type": "Organization",
       "@id": `${Astro.url.origin}/#organization`,
-      "name": "Votre Entreprise",
+      "name": "Oveco",
+      "alternateName": "Oveco Construction",
       "url": Astro.url.origin,
       "logo": {
         "@type": "ImageObject",
         "url": `${Astro.url.origin}/favicon.png`,
+        "width": 512,
+        "height": 512
       },
-      "sameAs": [
-        "https://twitter.com/yourcompany",
-        "https://linkedin.com/company/yourcompany",
-        "https://github.com/yourcompany"
-      ],
+      "description": "Entreprise spécialisée dans l'auto-construction et la rénovation écologique. Expertise en maisons passives et énergies renouvelables.",
+      "foundingDate": "2010",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "BE",
+        "addressRegion": "Wallonie"
+      },
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "Customer Service",
-        "email": "contact@example.com",
-        "availableLanguage": ["fr", "en"]
+        "email": "contact@oveco.be",
+        "availableLanguage": ["fr", "en"],
+        "areaServed": "BE"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/oveco",
+        "https://www.facebook.com/oveco"
+      ],
+      "serviceArea": {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+          "@type": "GeoCoordinates",
+          "latitude": 50.8503,
+          "longitude": 4.3517
+        },
+        "geoRadius": "100000"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Services de construction écologique",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Auto-construction",
+              "description": "Accompagnement dans vos projets d'auto-construction écologique"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Rénovation écologique",
+              "description": "Rénovation énergétique et écologique de votre habitat"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Maisons passives",
+              "description": "Conception et construction de maisons passives"
+            }
+          }
+        ]
       }
     },
     {
       "@type": "WebSite",
       "@id": `${Astro.url.origin}/#website`,
       "url": Astro.url.origin,
-      "name": title,
-      "description": description,
+      "name": "Oveco - Auto-construction et Rénovation Écologique",
+      "description": "Site officiel d'Oveco, spécialiste de l'auto-construction et de la rénovation écologique en Belgique.",
       "publisher": {
         "@id": `${Astro.url.origin}/#organization`
       },
-      "inLanguage": "fr-FR"
+      "inLanguage": "fr-FR",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": `${Astro.url.origin}/works?q={search_term_string}`
+        },
+        "query-input": "required name=search_term_string"
+      }
     },
     {
       "@type": "WebPage",
@@ -74,7 +150,18 @@ const defaultStructuredData = {
       },
       "datePublished": "2025-01-01T00:00:00+00:00",
       "dateModified": new Date().toISOString(),
-      "inLanguage": "fr-FR"
+      "inLanguage": "fr-FR",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Accueil",
+            "item": Astro.url.origin
+          }
+        ]
+      }
     }
   ]
 };
@@ -124,17 +211,20 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-
 		<meta property="og:image" content={ogImage} />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={title} />
 		<meta property="og:locale" content="fr_FR" />
-		<meta property="og:site_name" content="Template Astro" />
+		<meta property="og:site_name" content="Oveco" />
+		<meta property="og:updated_time" content={new Date().toISOString()} />
 		
 		<!-- Twitter Card -->
 		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@oveco_be" />
+		<meta name="twitter:creator" content="@oveco_be" />
 		<meta name="twitter:url" content={canonical} />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={ogImage} />
 		<meta name="twitter:image:alt" content={title} />
-		<meta name="twitter:creator" content="@yourcompany" />
 		
 		<!-- Additional SEO -->
 		<meta name="format-detection" content="telephone=no" />
@@ -150,70 +240,27 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-
 		<ViewTransitions />
 	</head>
 	<body>
-		<Nabar />
-		<slot />
+		<Nabar 
+			siteName={globalComponents.navbar.siteName}
+			siteUrl={globalComponents.navbar.siteUrl}
+			logoUrl={globalComponents.navbar.logoUrl}
+			links={globalComponents.navbar.links}
+			ctaButton={globalComponents.navbar.ctaButton}
+		/>
+		
+		<main id="main-content" role="main">
+			<slot />
+		</main>
+		
+		<Footer 
+			copyrightYear={globalComponents.footer.copyrightYear}
+			companyName={globalComponents.footer.companyName}
+			legalText={globalComponents.footer.legalText}
+		/>
+		<!-- Scripts d'animation désactivés pour éviter les problèmes de loader -->
 		<script is:inline>
-// Système "reveal once" : fige les éléments après leur première apparition
-(() => {
-	const selectors = [
-		'.scroll-reveal',
-		'.scroll-reveal-delayed',
-		'.scroll-reveal-scale',
-		'.animate-on-scroll',
-		'.animate-on-scroll-delayed',
-		'.reveal-tilt-scale'
-	];
-	const nodes = document.querySelectorAll(selectors.join(','));
-	if (!nodes.length) return;
-
-	const preferOnce = true; // mettre false pour réactiver animations multi-scroll
-
-	const markRevealed = (el) => {
-		el.classList.add('is-revealed');
-		// Supprime les propriétés scroll-timeline pour éviter re-trigger (navigateurs modernes)
-		el.style.animationTimeline = 'none';
-	};
-
-	if (preferOnce) {
-		nodes.forEach(el => {
-			// Ajout automatique du modificateur si pas déjà présent
-			if (!el.classList.contains('reveal-once')) {
-				el.classList.add('reveal-once');
-			}
-		});
-	}
-
-		const supportsViewTimeline = CSS.supports('animation-timeline: view()');
-
-		// Fallback intersection observer pour marquer .is-revealed et déclencher animation
-		const io = new IntersectionObserver((entries) => {
-		entries.forEach(entry => {
-			if (entry.isIntersecting) {
-				const el = entry.target;
-					if (!supportsViewTimeline) {
-						// Appliquer animation classique seulement maintenant (évite apparition sans transition)
-						const baseAnim = el.classList.contains('scroll-reveal-scale') || el.classList.contains('reveal-tilt-scale')
-							? 'scroll-reveal-scale'
-							: 'scroll-reveal-rise';
-						const delay = el.classList.contains('scroll-reveal-delayed') || el.classList.contains('animate-on-scroll-delayed') ? 150 : 0;
-						el.style.animation = `${baseAnim} var(--reveal-duration,700ms) var(--reveal-ease, cubic-bezier(0.16,1,0.3,1)) both`;
-						if (delay) el.style.animationDelay = delay + 'ms';
-					}
-							// Si support view-timeline: marquer révélé dès première intersection pour garder état final
-							if (supportsViewTimeline && el.classList.contains('reveal-once') && !el.classList.contains('is-revealed')) {
-								markRevealed(el);
-							} else if (!supportsViewTimeline && el.classList.contains('reveal-once') && !el.classList.contains('is-revealed')) {
-								const onEnd = () => { markRevealed(el); el.removeEventListener('animationend', onEnd); };
-								el.addEventListener('animationend', onEnd, { once: true });
-							}
-				// Une fois intersecté on n'observe plus pour performance
-				io.unobserve(el);
-			}
-		});
-	}, { threshold: 0.35 });
-
-	nodes.forEach(el => io.observe(el));
-})();
+// Système d'animation simplifié - désactivé temporairement
+console.log('Animations désactivées pour éviter les problèmes de loader');
 		</script>
 		
 		<!-- Scripts d'animation désactivés temporairement pour diagnostiquer le blanc -->

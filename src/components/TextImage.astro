@@ -5,6 +5,8 @@
  * Compatible TinaCMS via props
  */
 
+import SmartImage from './SmartImage.astro';
+
 export interface Link {
   label: string;
   url: string;
@@ -180,37 +182,37 @@ if (import.meta.env.DEV) {
 
       {/* Zone visuelle */}
       <div class="oveco__visual">
-        <img 
-          src={safeImage.src} 
-          alt={safeImage.alt} 
-          loading={safeImage.loading || 'lazy'} 
-          decoding="async"
-          width="362" 
-          height="436" 
+        <SmartImage
+          cmsSrc={safeImage.src}
+          alt={safeImage.alt}
+          width={362}
+          height={436}
+          context="about"
+          loading={safeImage.loading || 'lazy'}
           class="oveco__main-image"
         />
         {icon1Src && (
-          <img 
-            src={icon1Src} 
-            alt={Astro.props.icon1?.alt || ''} 
-            class="oveco__icon oveco__icon--house" 
-            width="100" 
-            height="100"
+          <SmartImage
+            cmsSrc={icon1Src}
+            alt={Astro.props.icon1?.alt || ''}
+            width={100}
+            height={100}
+            context="default"
             loading="lazy"
-            decoding="async"
-            aria-hidden="true" 
+            class="oveco__icon oveco__icon--house"
+            aria-hidden="true"
           />
         )}
         {icon2Src && (
-          <img 
-            src={icon2Src} 
-            alt={Astro.props.icon2?.alt || ''} 
-            class="oveco__icon oveco__icon--pencil" 
-            width="104" 
-            height="104"
+          <SmartImage
+            cmsSrc={icon2Src}
+            alt={Astro.props.icon2?.alt || ''}
+            width={104}
+            height={104}
+            context="default"
             loading="lazy"
-            decoding="async"
-            aria-hidden="true" 
+            class="oveco__icon oveco__icon--pencil"
+            aria-hidden="true"
           />
         )}
       </div>
@@ -239,37 +241,37 @@ if (import.meta.env.DEV) {
 
         {/* Zone visuelle du 2e bloc */}
         <div class="oveco__visual">
-          <img 
-            src={safeImage2.src} 
-            alt={safeImage2.alt} 
-            loading={safeImage2.loading || 'lazy'} 
-            decoding="async"
-            width="362" 
-            height="436" 
+          <SmartImage
+            cmsSrc={safeImage2.src}
+            alt={safeImage2.alt}
+            width={362}
+            height={436}
+            context="about"
+            loading={safeImage2.loading || 'lazy'}
             class="oveco__main-image"
           />
           {icon1Src && (
-            <img 
-              src={icon1Src} 
-              alt={Astro.props.icon1?.alt || ''} 
-              class="oveco__icon oveco__icon--house" 
-              width="100" 
-              height="100"
+            <SmartImage
+              cmsSrc={icon1Src}
+              alt={Astro.props.icon1?.alt || ''}
+              width={100}
+              height={100}
+              context="default"
               loading="lazy"
-              decoding="async"
-              aria-hidden="true" 
+              class="oveco__icon oveco__icon--house"
+              aria-hidden="true"
             />
           )}
           {icon2Src && (
-            <img 
-              src={icon2Src} 
-              alt={Astro.props.icon2?.alt || ''} 
-              class="oveco__icon oveco__icon--pencil" 
-              width="104" 
-              height="104"
+            <SmartImage
+              cmsSrc={icon2Src}
+              alt={Astro.props.icon2?.alt || ''}
+              width={104}
+              height={104}
+              context="default"
               loading="lazy"
-              decoding="async"
-              aria-hidden="true" 
+              class="oveco__icon oveco__icon--pencil"
+              aria-hidden="true"
             />
           )}
         </div>

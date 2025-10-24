@@ -1,0 +1,126 @@
+---
+/**
+ * Page Compétences - Oveco
+ * Page dédiée aux compétences et expertises de l'entreprise
+ */
+
+import Layout from '../layouts/Layout.astro';
+import WorksHero from '../components/WorksHero.astro';
+import Competences from '../components/Competences.astro';
+import Expertise from '../components/Expertise.astro';
+import Stats from '../components/Stats.astro';
+
+// Charger les données de compétences depuis TinaCMS
+const heroData = {
+  subtitle: "Nos compétences",
+  title: "Domaines d'expertise",
+  description: "Découvrez nos compétences techniques et notre savoir-faire dans la construction durable et les énergies renouvelables.",
+  mediaLeft: {
+    src: "/uploads/compétance/clim.opt.webp",
+    alt: "Climatisation et chauffage"
+  },
+  mediaRight: {
+    src: "/uploads/compétance/eolienne.opt.webp",
+    alt: "Énergies renouvelables"
+  }
+};
+
+const competencesData = {
+  subtitle: "Nos compétences",
+  title: "Domaines d'expertise",
+  description: "Découvrez nos compétences techniques et notre savoir-faire dans la construction durable et les énergies renouvelables.",
+  competences: [
+    {
+      icon: "/uploads/compétance/clim.opt.webp",
+      alt: "Climatisation et chauffage",
+      title: "Climatisation & Chauffage",
+      description: "Installation et maintenance de systèmes de climatisation et chauffage performants et économes en énergie."
+    },
+    {
+      icon: "/uploads/compétance/eolienne.opt.webp", 
+      alt: "Énergies renouvelables",
+      title: "Énergies Renouvelables",
+      description: "Panneaux solaires, éoliennes, pompes à chaleur et autres solutions d'énergie verte pour votre autonomie énergétique."
+    },
+    {
+      icon: "/uploads/compétance/elec.opt.webp",
+      alt: "Installations électriques",
+      title: "Installations Électriques",
+      description: "Conception et installation d'infrastructures électriques modernes, sécurisées et optimisées pour vos besoins."
+    },
+    {
+      icon: "/uploads/compétance/personne.opt.webp",
+      alt: "Accompagnement personnalisé",
+      title: "Accompagnement Personnalisé",
+      description: "Conseil et suivi personnalisé pour vos projets de construction durable et de rénovation énergétique."
+    }
+  ]
+};
+
+const expertiseData = {
+  subtitle: "Nos expertises",
+  title: "Excellence technique",
+  description: "Des solutions techniques professionnelles adaptées à vos besoins spécifiques.",
+  cards: [
+    {
+      icon: "/uploads/compétance/clim.opt.webp",
+      alt: "Expertise climatisation",
+      title: "Systèmes de Climatisation",
+      description: "Installation et maintenance de systèmes de climatisation haute performance, économes en énergie et respectueux de l'environnement."
+    },
+    {
+      icon: "/uploads/compétance/eolienne.opt.webp",
+      alt: "Expertise énergies renouvelables", 
+      title: "Énergies Renouvelables",
+      description: "Conception et installation de solutions d'énergie verte : panneaux solaires, éoliennes, pompes à chaleur et systèmes de stockage."
+    },
+    {
+      icon: "/uploads/compétance/elec.opt.webp",
+      alt: "Expertise électrique",
+      title: "Installations Électriques",
+      description: "Infrastructures électriques modernes, sécurisées et optimisées pour la performance énergétique de vos bâtiments."
+    }
+  ]
+};
+
+const statsData = {
+  title: "Nos réalisations en chiffres",
+  stats: [
+    {
+      value: "+100",
+      label: "Projets réalisés",
+      description: "Plus de 100 projets de construction durable et de rénovation énergétique accompagnés avec succès."
+    },
+    {
+      value: "15 ans",
+      label: "D'expérience",
+      description: "Quinze années d'expertise dans le domaine de la construction durable et des énergies renouvelables."
+    },
+    {
+      value: "98%",
+      label: "Clients satisfaits",
+      description: "Un taux de satisfaction client exceptionnel grâce à notre approche personnalisée et notre expertise technique."
+    }
+  ]
+};
+---
+
+<Layout 
+  title="Compétences - Oveco | Expertise Construction Durable"
+  description="Découvrez nos compétences en construction durable, énergies renouvelables, climatisation et installations électriques. Expertise technique de 15 ans."
+  keywords={["compétences", "expertise", "construction durable", "énergies renouvelables", "climatisation", "installations électriques", "Oveco"]}
+>
+  <main>
+    <!-- Hero Section -->
+    <WorksHero {...heroData} />
+
+    <!-- Compétences Section -->
+    <Competences {...competencesData} />
+
+    <!-- Expertise Section -->
+    <Expertise {...expertiseData} />
+
+    <!-- Stats Section -->
+    <Stats {...statsData} />
+  </main>
+</Layout>

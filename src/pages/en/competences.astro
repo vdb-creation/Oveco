@@ -1,0 +1,126 @@
+---
+/**
+ * Page Compétences EN - Oveco
+ * Skills page in English
+ */
+
+import Layout from '../../layouts/Layout.astro';
+import WorksHero from '../../components/WorksHero.astro';
+import Competences from '../../components/Competences.astro';
+import Expertise from '../../components/Expertise.astro';
+import Stats from '../../components/Stats.astro';
+
+// Load skills data from TinaCMS
+const heroData = {
+  subtitle: "Our Skills",
+  title: "Areas of Expertise", 
+  description: "Discover our technical skills and expertise in sustainable construction and renewable energies.",
+  mediaLeft: {
+    src: "/uploads/compétance/clim.opt.webp",
+    alt: "Air conditioning and heating"
+  },
+  mediaRight: {
+    src: "/uploads/compétance/eolienne.opt.webp",
+    alt: "Renewable energies"
+  }
+};
+
+const competencesData = {
+  subtitle: "Our Skills",
+  title: "Areas of Expertise", 
+  description: "Discover our technical skills and expertise in sustainable construction and renewable energies.",
+  competences: [
+    {
+      icon: "/uploads/compétance/clim.opt.webp",
+      alt: "Air conditioning and heating",
+      title: "Air Conditioning & Heating",
+      description: "Installation and maintenance of high-performance, energy-efficient air conditioning and heating systems."
+    },
+    {
+      icon: "/uploads/compétance/eolienne.opt.webp",
+      alt: "Renewable energies",
+      title: "Renewable Energies",
+      description: "Solar panels, wind turbines, heat pumps and other green energy solutions for your energy independence."
+    },
+    {
+      icon: "/uploads/compétance/elec.opt.webp", 
+      alt: "Electrical installations",
+      title: "Electrical Installations",
+      description: "Design and installation of modern, secure and optimized electrical infrastructures for your needs."
+    },
+    {
+      icon: "/uploads/compétance/personne.opt.webp",
+      alt: "Personalized support",
+      title: "Personalized Support",
+      description: "Personalized advice and follow-up for your sustainable construction and energy renovation projects."
+    }
+  ]
+};
+
+const expertiseData = {
+  subtitle: "Our Expertise",
+  title: "Technical Excellence",
+  description: "Professional technical solutions adapted to your specific needs.",
+  cards: [
+    {
+      icon: "/uploads/compétance/clim.opt.webp",
+      alt: "Air conditioning expertise",
+      title: "Air Conditioning Systems",
+      description: "Installation and maintenance of high-performance air conditioning systems, energy-efficient and environmentally friendly."
+    },
+    {
+      icon: "/uploads/compétance/eolienne.opt.webp",
+      alt: "Renewable energy expertise", 
+      title: "Renewable Energies",
+      description: "Design and installation of green energy solutions: solar panels, wind turbines, heat pumps and storage systems."
+    },
+    {
+      icon: "/uploads/compétance/elec.opt.webp",
+      alt: "Electrical expertise",
+      title: "Electrical Installations",
+      description: "Modern, secure and optimized electrical infrastructures for the energy performance of your buildings."
+    }
+  ]
+};
+
+const statsData = {
+  title: "Our achievements in figures",
+  stats: [
+    {
+      value: "+100",
+      label: "Projects completed",
+      description: "More than 100 sustainable construction and energy renovation projects successfully accompanied."
+    },
+    {
+      value: "15 years",
+      label: "Of experience",
+      description: "Fifteen years of expertise in sustainable construction and renewable energies."
+    },
+    {
+      value: "98%",
+      label: "Satisfied customers",
+      description: "Exceptional customer satisfaction rate thanks to our personalized approach and technical expertise."
+    }
+  ]
+};
+---
+
+<Layout 
+  title="Skills - Oveco | Sustainable Construction Expertise"
+  description="Discover our skills in sustainable construction, renewable energies, air conditioning and electrical installations. 15 years of technical expertise."
+  keywords={["skills", "expertise", "sustainable construction", "renewable energies", "air conditioning", "electrical installations", "Oveco"]}
+>
+  <main>
+    <!-- Hero Section -->
+    <WorksHero {...heroData} />
+
+    <!-- Competences Section -->
+    <Competences {...competencesData} />
+
+    <!-- Expertise Section -->
+    <Expertise {...expertiseData} />
+
+    <!-- Stats Section -->
+    <Stats {...statsData} />
+  </main>
+</Layout>

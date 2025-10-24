@@ -5,6 +5,8 @@
  * Compatible TinaCMS via props
  */
 
+import SmartImage from './SmartImage.astro';
+
 export interface MediaImage {
   src: string;
   alt: string;
@@ -49,14 +51,14 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   <div class="works-hero__inner">
     <div class="works-hero__side works-hero__side--left" aria-hidden="true">
       <figure class="works-hero__figure">
-        <img 
-          src={safeMediaLeft.src} 
-          alt={safeMediaLeft.alt} 
-          loading="lazy" 
-          decoding="async"
-          width="266"
-          height="320"
-          class="works-hero__image" 
+        <SmartImage
+          cmsSrc={safeMediaLeft.src}
+          alt={safeMediaLeft.alt}
+          width={266}
+          height={320}
+          context="galerie"
+          loading="lazy"
+          class="works-hero__image"
         />
       </figure>
     </div>
@@ -72,14 +74,14 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
 
     <div class="works-hero__side works-hero__side--right" aria-hidden="true">
       <figure class={`works-hero__figure ${safeMediaRight.overlay ? 'works-hero__figure--overlay' : ''}`}>
-        <img 
-          src={safeMediaRight.src} 
-          alt={safeMediaRight.alt} 
+        <SmartImage
+          cmsSrc={safeMediaRight.src}
+          alt={safeMediaRight.alt}
+          width={266}
+          height={320}
+          context="galerie"
           loading="lazy"
-          decoding="async"
-          width="266"
-          height="320"
-          class="works-hero__image" 
+          class="works-hero__image"
         />
       </figure>
     </div>
@@ -93,7 +95,9 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   background-repeat: repeat-x;
   background-position: center top;
   background-size: auto;
-  padding: clamp(32px, 8vw, 150px) clamp(16px, 6vw, 75px);
+  padding: clamp(60px, 12vw, 180px) clamp(16px, 6vw, 75px);
+  margin-top: clamp(40px, 8vw, 80px);
+  margin-bottom: clamp(40px, 8vw, 80px);
   position: relative;
   overflow: visible;
 }

@@ -3,12 +3,12 @@
 import Layout from '../layouts/Layout.astro';
 import { pageConfig } from '../lib/routing.ts';
 
-// Composants Oveco disponibles partout
+// Composants Oveco - Import statique optimisé
 import {
   Autoconstruction,
   WorksHero,
   Contact,
-         Hero,
+  Hero,
   Expertise,
   Stats,
   Competences,
@@ -24,6 +24,7 @@ import {
 import { client } from '../../tina/__generated__/client';
 import LiveBridge from '../../tina/LiveBridge.tsx';
 import { getAllProjects, projectToCard } from '../lib/projects.ts';
+import { cache } from '../lib/cache.ts';
 
 export interface Props {
   title?: string;
@@ -53,16 +54,16 @@ async function loadPageData(jsonFile: string, lang: string = 'fr') {
   }
 }
 
-// Charger les données JSON
-const pageData = await loadPageData(jsonFile || 'home', lang);
+// Charger les données JSON avec cache
+const pageData = await cache.getPageData(jsonFile || 'home', lang);
 const pageContent = pageData || {};
 const sections = pageContent.sections || [];
 
-// Charger les projets dynamiquement pour la page home
+// Charger les projets dynamiquement pour la page home avec cache
 let dynamicProjects: any[] = [];
 if (currentJson === 'home') {
   try {
-    const allProjects = await getAllProjects();
+    const allProjects = await cache.getProjects();
     dynamicProjects = allProjects.map(projectToCard);
   } catch (e) {
     console.error('Erreur lors du chargement des projets:', e);
@@ -115,12 +116,12 @@ if (forceLive) {
     <LiveBridge client:load home={tinaData} />
   )}
 
-         {sections.map((section: any, index: number) => {
-           const typename = section?.__typename || '';
-           const rawTemplate = section?._template || typename.replace('HomeSections', '');
-           const template = (rawTemplate || '').toString().trim().replace(/\s+/g, '').toLowerCase();
+  {sections.map((section: any, index: number) => {
+    const typename = section?.__typename || '';
+    const rawTemplate = section?._template || typename.replace('HomeSections', '');
+    const template = (rawTemplate || '').toString().trim().replace(/\s+/g, '').toLowerCase();
 
-    // ========== Composants Oveco disponibles partout ==========
+    // ========== Composants Oveco avec rendu optimisé ==========
     
     if (template === 'autoconstruction') {
       return (
@@ -149,19 +150,18 @@ if (forceLive) {
       );
     }
 
-           // Hero (accueil) – 4 images, background BgHome.svg via SCSS
-           if (template === 'hero') {
-             return (
-               <Hero
-                 subtitle={section.subtitle}
-                 title={section.title}
-                 description={section.description}
-                 ctaText={section.ctaText}
-                 ctaUrl={section.ctaUrl}
-                 images={section.images}
-               />
-             );
-           }
+    if (template === 'hero') {
+      return (
+        <Hero
+          subtitle={section.subtitle}
+          title={section.title}
+          description={section.description}
+          ctaText={section.ctaText}
+          ctaUrl={section.ctaUrl}
+          images={section.images}
+        />
+      );
+    }
     
     if (template === 'contact') {
       return (
@@ -208,16 +208,6 @@ if (forceLive) {
       );
     }
     
-           if (template === 'certifications') {
-             return (
-               <Certifications
-                 title={section.title}
-                 description={section.description}
-                 cards={section.cards}
-               />
-             );
-           }
-
     if (template === 'certifications') {
       return (
         <Certifications
