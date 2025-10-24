@@ -24,8 +24,8 @@ const imageField = (name: string, label: string, dir: string) => ({
 
 export default defineConfig({
   branch,
-  clientId: "local",
-  token: "local",
+  clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID || "local",
+  token: process.env.TINA_TOKEN || "local",
 
   build: {
     outputFolder: "admin",
