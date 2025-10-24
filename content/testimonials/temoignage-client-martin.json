@@ -1,0 +1,14 @@
+{
+  "title": "Témoignage Client Martin",
+  "slug": "temoignage-client-martin",
+  "clientName": "M. et Mme Martin",
+  "clientPosition": "Propriétaires",
+  "clientCompany": "Maison Passive Moderne",
+  "content": "Nous sommes ravis de notre maison passive ! L'équipe d'Oveco nous a accompagnés tout au long du projet avec professionnalisme et expertise. La qualité de construction et l'attention aux détails dépassent nos attentes. Nous recommandons vivement leurs services.",
+  "rating": 5,
+  "thumbnail": "/uploads/imgs/homme.avif",
+  "backgroundImage": "/uploads/imgs/maison-build.png",
+  "linkedProjectSlug": "test",
+  "status": "published",
+  "date": "2024-01-15T10:00:00.000Z"
+}

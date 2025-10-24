@@ -7,6 +7,8 @@ export default defineConfig({
   branch,
   clientId: "local",
   token: "local",
+  seed: false,
+  isLocalClient: true,
   
   build: {
     outputFolder: "admin",

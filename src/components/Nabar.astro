@@ -21,18 +21,18 @@ export interface NavbarProps {
 }
 
 const {
-  logoUrl,
+  logoUrl = "/src/assets/imgs/logo/image.png",
   siteName = "Oveco",
   siteUrl = "/",
   links = [
     { label: "Qui sommes nous ?", url: "/about" },
-    { label: "L'auto-construction", url: "/auto-construction" },
-    { label: "Compétences", url: "/competences" },
-    { label: "Réalisations", url: "/works" }
+    { label: "L'auto-construction", url: "/fr/construction" },
+    { label: "Nos réalisations", url: "/works" },
+    { label: "Projets", url: "/work" }
   ],
   ctaButton = {
     label: "Nous contacter",
-    url: "/contact"
+    url: "/#contact"
   }
 } = Astro.props;
 ---
@@ -41,14 +41,12 @@ const {
   <div class="navbar__container">
     <!-- Brand/Logo -->
     <a href={siteUrl} class="navbar__brand">
-      {logoUrl ? (
-        <img 
-          src={logoUrl} 
-          alt={siteName} 
-          class="brand__logo-img" 
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-        />
-      ) : null}
+      <img 
+        src={logoUrl} 
+        alt={siteName} 
+        class="brand__logo-img" 
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      />
       <div class="brand__text" style="display: none;">
         {siteName}
       </div>

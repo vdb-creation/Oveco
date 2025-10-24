@@ -1,20 +1,252 @@
 {
-  "title": "Home",
-  "description": "Home page",
+  "title": "HomePage",
+  "description": "Homepage",
   "sections": [
+    {
+      "siteName": "Oveco",
+      "siteUrl": "/",
+      "links": [
+        {
+          "label": "Projects",
+          "url": "/works"
+        }
+      ],
+      "ctaButton": {
+        "label": "Contact us",
+        "url": "/contact"
+      },
+      "_template": "navbar"
+    },
+    {
+      "subtitle": "oveco",
+      "title": "Building the future",
+      "description": "Engineers-installers by your side.",
+      "ctaText": "Contact us",
+      "ctaUrl": "/contact",
+      "images": [
+        {
+          "src": "/uploads/hero/maison-build.png",
+          "alt": "Image 1",
+          "class": "hero__image hero__image--large-1"
+        },
+        {
+          "src": "/uploads/hero/maison-build.png",
+          "alt": "Image 2",
+          "class": "hero__image hero__image--large-2"
+        },
+        {
+          "src": "/uploads/hero/maison-build.png",
+          "alt": "Image 3",
+          "class": "hero__image hero__image--medium-1"
+        },
+        {
+          "src": "/uploads/hero/maison-build.png",
+          "alt": "Image 4",
+          "class": "hero__image hero__image--medium-2"
+        }
+      ],
+      "_template": "hero"
+    },
+    {
+      "subtitle": "Our skills",
+      "title": "What we master",
+      "description": "Key areas of expertise.",
+      "competences": [
+        {
+          "icon": "/uploads/comp%C3%A9tance/clim.opt.webp",
+          "alt": "Skills example",
+          "title": "Timber frame",
+          "description": "High-performance structures and envelopes."
+        },
+        {
+          "icon": "/uploads/comp%C3%A9tance/elec.opt.webp",
+          "title": "Example title",
+          "description": "Example placeholder text."
+        },
+        {
+          "icon": "/uploads/comp%C3%A9tance/eolienne.opt.webp",
+          "title": "Example skill",
+          "description": "Example placeholder description."
+        }
+      ],
+      "_template": "competences"
+    },
+    {
+      "title": "In numbers",
+      "stats": [
+        {
+          "value": "+100",
+          "label": "Projects",
+          "description": "Completed"
+        },
+        {
+          "value": "15 years",
+          "label": "Of expertise",
+          "description": "Sustainable construction"
+        },
+        {
+          "value": "+100",
+          "label": "Projects",
+          "description": "Sustainable construction"
+        }
+      ],
+      "_template": "stats"
+    },
+    {
+      "services": [
+        {
+          "image": "/uploads/imgs/Charpantier.opt.webp",
+          "title": "Lorem?",
+          "description": "Whoever exerts or incurs guilt in training or work. Pain and excellence in nothing, but in the consequence of elite pain, cillum dolor."
+        },
+        {
+          "image": "/uploads/imgs/plan.opt.webp",
+          "title": "Lorim?",
+          "description": "Whoever exerts or incurs guilt in training or work. Pain and excellence in nothing, but in the consequence of elite pain, cillum dolor."
+        }
+      ],
+      "_template": "autoconstruction"
+    },
+    {
+      "cards": [
+        {
+          "icon": "/uploads/comp%C3%A9tance/clim.png",
+          "title": "Renewable energy",
+          "description": "Heat pumps, boilers, solar panels…\nEfficient, well-sized systems for greater autonomy."
+        },
+        {
+          "icon": "/uploads/comp%C3%A9tance/elec.png",
+          "title": "Energy",
+          "description": "Heat pumps, boilers, solar panels… Efficient, well-sized systems for greater autonomy."
+        },
+        {
+          "icon": "/uploads/comp%C3%A9tance/eolienne.png",
+          "title": "Renewable energy",
+          "description": "Heat pumps, boilers, solar panels… Efficient, well-sized systems for greater autonomy."
+        }
+      ],
+      "_template": "expertise"
+    },
+    {
+      "subtitle": "Gallery",
+      "title": "In pictures",
+      "gallery": [
+        {
+          "src": "/uploads/imgs/maison-build.png",
+          "alt": "Photo"
+        },
+        {
+          "src": "/uploads/imgs/architrech.png"
+        },
+        {
+          "src": "/uploads/imgs/maison-toit-2.png"
+        },
+        {
+          "src": "/uploads/imgs/maison-toit.png"
+        }
+      ],
+      "_template": "gallery"
+    },
+    {
+      "sectionSubtitle": "Section",
+      "sectionTitle": "Section title",
+      "sectionDescription": "Section description",
+      "showSectionHeader": false,
+      "subtitle": "nostrud do occaecat",
+      "title": "Nulla cillum dolore aute",
+      "description": "Work value is to perform training, official cupidatat mollit laborum proident deserunt.",
+      "image": {
+        "src": "/uploads/imgs/maison-toit.png",
+        "alt": "Image"
+      },
+      "icon1": {
+        "src": "/uploads/icons/crayon.opt.avif"
+      },
+      "icon2": {
+        "src": "/uploads/icons/maison.opt.webp"
+      },
+      "reverse": false,
+      "_template": "textimage"
+    },
+    {
+      "title": "Our certifications",
+      "description": "Labels and recognitions.",
+      "cards": [
+        {
+          "logo": "/uploads/partenaire/Google.svg",
+          "title": "Google",
+          "text": "Whoever suffers no pain, but pleasure, from ex who wants it. Except for temporary proident aliqua, enim cillum dolore exercitation."
+        },
+        {
+          "logo": "/uploads/partenaire/Webflow.svg",
+          "title": "Webflow",
+          "text": "Whoever suffers no pain, but pleasure, from ex who wants it. Except for temporary proident aliqua, enim cillum dolore exercitation."
+        }
+      ],
+      "_template": "certifications"
+    },
+    {
+      "number": "01",
+      "title": "Title",
+      "description": "Description",
+      "cta": {
+        "label": "Learn more",
+        "href": "/contact"
+      },
+      "image": {
+        "src": "/uploads/comp%C3%A9tance/clim.opt.webp",
+        "alt": ""
+      },
+      "_template": "simplecompetence"
+    },
+    {
+      "subtitle": "Our projects",
+      "title": "Recent projects",
+      "description": "A selection of supported projects.",
+      "linkText": "See all projects",
+      "linkUrl": "/works",
+      "cards": [
+        {
+          "image": "/uploads/imgs/maison-toit.png",
+          "type": "Renovation",
+          "client": "Martin Family",
+          "title": "Passive house",
+          "url": "/work/maison-passive-beauvechain",
+          "description": "Passive insulation and PV."
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "subtitle": "Testimonials",
+      "title": "What they say",
+      "description": "Client feedback",
+      "testimonials": [
+        {
+          "thumbnail": {
+            "src": "/uploads/team/pic.jpg",
+            "alt": "Client"
+          },
+          "client_name": "Client",
+          "client_position": "",
+          "client_company": "",
+          "content": "Great support.",
+          "card_content": "Excellent guidance.",
+          "linked_project": {
+            "title": "Project",
+            "link": "/works"
+          }
+        }
+      ],
+      "_template": "testimonials"
+    },
     {
       "_template": "contact"
     },
     {
-      "_template": "worksHero"
-    },
-    {
-      "_template": "autoconstruction"
-    },
-    {
-      "_template": "projects"
-    },
-    {
+      "copyrightYear": 2024,
+      "companyName": "Oveco",
+      "legalText": "All Rights Reserved",
       "_template": "footer"
     }
   ]

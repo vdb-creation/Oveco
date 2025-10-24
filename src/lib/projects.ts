@@ -13,6 +13,7 @@ export interface Project {
   duration?: string;
   budget?: string;
   status?: string;
+  tags?: string[];
   heroImage?: string;
   thumbnail?: string;
   gallery?: Array<{
@@ -108,4 +109,24 @@ export async function getProjectsByCategory(category: string): Promise<Project[]
   return allProjects.filter(project => 
     project.category.toLowerCase() === category.toLowerCase()
   );
+}
+
+// Fonction pour obtenir les projets par tag
+export async function getProjectsByTag(tag: string): Promise<Project[]> {
+  const allProjects = await getAllProjects();
+  return allProjects.filter(project => 
+    project.tags && project.tags.includes(tag)
+  );
+}
+
+// Fonction pour obtenir tous les tags uniques
+export async function getAllTags(): Promise<string[]> {
+  const allProjects = await getAllProjects();
+  const allTags = allProjects
+    .filter(project => project.tags && project.tags.length > 0)
+    .flatMap(project => project.tags!)
+    .filter((tag, index, array) => array.indexOf(tag) === index) // Supprimer les doublons
+    .sort();
+  
+  return allTags;
 }

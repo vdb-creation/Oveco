@@ -8,6 +8,7 @@
  */
 
 import TestimonialCard from './TestimonialCard.astro';
+import { getTestimonialCards } from '../lib/testimonials';
 
 export interface Props {
   subtitle?: string;
@@ -45,11 +46,11 @@ const {
   testimonials = []
 } = Astro.props;
 
+// Charger tous les témoignages dynamiquement
+const dynamicTestimonials = await getTestimonialCards();
 
-// Sécuriser testimonials pour éviter les erreurs null/undefined
-
-// Sécuriser testimonials pour éviter les erreurs null/undefined
-const safeTestimonials = Array.isArray(testimonials) ? testimonials : [];
+// Utiliser les témoignages dynamiques au lieu des témoignages passés en props
+const safeTestimonials = dynamicTestimonials;
 
 // ID unique pour l'accessibilité
 const sectionId = 'temoignages';

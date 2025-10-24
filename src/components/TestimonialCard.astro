@@ -42,13 +42,10 @@ const truncatedText = cardText.replace(/<[^>]*>/g, '').substring(0, 160);
 
 // URL du lien : projet lié en priorité, sinon témoignage
 const linkedUrl = testimonial.linked_project?.link || testimonial.link || '#';
-
-// Classes de priorité
-const priorityClass = testimonial.priority ? `is-${testimonial.priority.slug}` : '';
 ---
 
 <article 
-  class:list={['projects__card', 'projects__card--testimonial', priorityClass]}
+  class="projects__card"
   role="listitem"
   itemscope 
   itemtype="https://schema.org/Review"
@@ -65,22 +62,17 @@ const priorityClass = testimonial.priority ? `is-${testimonial.priority.slug}` :
   <!-- Contenu principal -->
   <div class="projects__card-content">
     <div class="projects__card-info">
-      {(testimonial.client_company || testimonial.client_position) && (
-        <p class="projects__card-client">
-          {testimonial.client_position && <>{testimonial.client_position}</>}
-          {testimonial.client_position && testimonial.client_company && <> chez </>}
-          {testimonial.client_company && <>{testimonial.client_company}</>}
+      {testimonial.client_name && (
+        <p class="projects__card-client" itemprop="author" itemscope itemtype="https://schema.org/Person">
+          <span itemprop="name">{testimonial.client_name}</span>
         </p>
       )}
       
-      {testimonial.client_name && (
-        <h3 
-          class="projects__card-title" 
-          itemprop="author" 
-          itemscope 
-          itemtype="https://schema.org/Person"
-        >
-          <span itemprop="name">{testimonial.client_name}</span>
+      {(testimonial.client_position || testimonial.client_company) && (
+        <h3 class="projects__card-title">
+          {testimonial.client_position && <>{testimonial.client_position}</>}
+          {testimonial.client_position && testimonial.client_company && <> chez </>}
+          {testimonial.client_company && <>{testimonial.client_company}</>}
         </h3>
       )}
       

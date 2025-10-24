@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Nabar from '../components/Nabar.astro';
 import WorksHero from '../components/WorksHero.astro';
-import Projects from '../components/Projects.astro';
+import Card from '../components/Card.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 import { getAllProjects, projectToCard } from '../lib/projects.ts';
@@ -10,6 +10,16 @@ import { getAllProjects, projectToCard } from '../lib/projects.ts';
 // Charger tous les projets
 const allProjects = await getAllProjects();
 const projectCards = allProjects.map(projectToCard);
+
+// Compétences disponibles pour les filtres
+const competences = [
+  "Ossature bois",
+  "Énergies renouvelables", 
+  "Isolation thermique",
+  "Chauffage écologique",
+  "Rénovation passive",
+  "Construction durable"
+];
 
 // Données pour le hero
 const heroData = {
@@ -40,15 +50,111 @@ const pageDescription = "Découvrez tous nos projets d'auto-construction et de r
     mediaRight={{ src: "/uploads/hero/maison-build.png", alt: "Réalisations Oveco" }}
   />
 
-  <!-- Section Projets -->
-  <Projects 
-    subtitle="Portfolio"
-    title="Tous nos Projets"
-    description="Découvrez l'ensemble de nos réalisations, de la conception à la livraison."
-    linkText="Voir le projet"
-    linkUrl="/work"
-    cards={projectCards}
-  />
+  <!-- Section de recherche et filtres -->
+  <section class="search-section">
+    <div class="container">
+      <div class="search-container">
+        <!-- Barre de recherche -->
+        <div class="search-bar">
+          <input 
+            type="text" 
+            id="projectSearch" 
+            placeholder="Chercher un projet" 
+            class="search-input"
+          />
+          <div class="search-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="m10.5 10.5 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Filtres par compétences -->
+        <div class="filters-container">
+          {competences.map((competence, index) => (
+            <button 
+              class={`filter-tag ${index === 0 ? 'active' : ''}`}
+              data-competence={competence}
+            >
+              {competence}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section des projets avec nouvelle disposition -->
+  <section class="projects-section">
+    <div class="container">
+      <div class="projects-grid" id="projectsGrid">
+        {projectCards.map((card) => (
+          <article 
+            class="projects__card"
+            role="listitem"
+            itemscope 
+            itemtype="https://schema.org/CreativeWork"
+            style={`background-image: url('${card.image || '/uploads/imgs/maison-build.png'}');`}
+          >
+            <meta itemprop="image" content={card.image || '/uploads/imgs/maison-build.png'} />
+            <div class="projects__card-overlay" aria-hidden="true"></div>
+
+            <!-- Header: Type en haut à droite -->
+            {card.type && (
+              <div class="projects__card-header">
+                <span class="projects__card-type">{card.type}</span>
+              </div>
+            )}
+
+            <!-- Contenu principal -->
+            <div class="projects__card-content">
+              <div class="projects__card-info">
+                {card.client && (
+                  <p class="projects__card-client">{card.client}</p>
+                )}
+                
+                <h3 class="projects__card-title" itemprop="name">{card.title}</h3>
+                
+                {card.description && (
+                  <p class="projects__card-description" itemprop="description">{card.description}</p>
+                )}
+              </div>
+            </div>
+
+            <!-- Footer: Lien vers le projet -->
+            <footer class="projects__card-footer">
+              <a 
+                href={card.url || '/work'} 
+                class="projects__card-link" 
+                itemprop="url" 
+                aria-label={`Voir le projet ${card.title}`}
+              >
+                <span>Voir le projet</span>
+                <svg 
+                  class="projects__card-arrow" 
+                  width="10" 
+                  height="9" 
+                  viewBox="0 0 10 9" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  aria-hidden="true"
+                >
+                  <path 
+                    d="M1 4.5H9M9 4.5L5.5 1M9 4.5L5.5 8" 
+                    stroke="#048B9A" 
+                    stroke-width="1.5" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </a>
+            </footer>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
 
   <!-- Contact -->
   <Contact />
@@ -61,21 +167,488 @@ const pageDescription = "Découvrez tous nos projets d'auto-construction et de r
   />
 </Layout>
 
+<script>
+// Fonctionnalité de recherche et filtres
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('projectSearch') as HTMLInputElement;
+  const filterTags = document.querySelectorAll('.filter-tag');
+  const projectsGrid = document.getElementById('projectsGrid') as HTMLElement;
+  const allCards = Array.from(projectsGrid.children) as HTMLElement[];
+
+  // Fonction de filtrage
+  function filterProjects() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const activeFilter = document.querySelector('.filter-tag.active')?.textContent?.toLowerCase() || '';
+
+    allCards.forEach(card => {
+      const cardText = card.textContent?.toLowerCase() || '';
+      const matchesSearch = cardText.includes(searchTerm);
+      const matchesFilter = !activeFilter || cardText.includes(activeFilter);
+
+      if (matchesSearch && matchesFilter) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // Événements de recherche
+  searchInput.addEventListener('input', filterProjects);
+
+  // Événements des filtres
+  filterTags.forEach(tag => {
+    tag.addEventListener('click', (event) => {
+      const clickedTag = event.currentTarget as HTMLElement;
+      
+      // Retirer la classe active de tous les tags
+      filterTags.forEach(t => t.classList.remove('active'));
+      
+      // Ajouter la classe active au tag cliqué
+      clickedTag.classList.add('active');
+      
+      // Filtrer les projets
+      filterProjects();
+    });
+  });
+});
+</script>
+
 <style>
 /* Styles spécifiques à la page works */
-.works-page {
-  /* La page utilise les styles globaux des composants */
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 4vw, 80px);
 }
 
-/* Ajustements pour la page works si nécessaire */
-.works-hero {
-  background-image: url("/src/assets/imgs/BgGrille.svg");
+/* Section de recherche */
+.search-section {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(40px, 8vw, 80px) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Responsive pour la page works */
+.search-container {
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: clamp(20px, 4vw, 40px);
+  flex-wrap: wrap;
+  padding-inline: clamp(16px, 3vw, 40px);
+  overflow: hidden;
+}
+
+/* Barre de recherche */
+.search-bar {
+  position: relative;
+  flex: 1;
+  min-width: clamp(280px, 30vw, 400px);
+  max-width: clamp(300px, 35vw, 500px);
+}
+
+.search-input {
+  width: 100%;
+  padding: clamp(12px, 2vw, 16px) clamp(16px, 3vw, 24px) clamp(12px, 2vw, 16px) clamp(40px, 6vw, 50px);
+  background: #f5f5f4;
+  border: 1.5px solid #6b7280;
+  border-radius: 50px;
+  font-family: "Nunito Sans", system-ui, sans-serif;
+  font-size: clamp(14px, 2vw, 16px);
+  color: #374151;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: #048B9A;
+  background: #fff;
+}
+
+.search-input::placeholder {
+  color: #6b7280;
+}
+
+.search-icon {
+  position: absolute;
+  left: clamp(16px, 3vw, 20px);
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  pointer-events: none;
+  width: clamp(14px, 2vw, 16px);
+  height: clamp(14px, 2vw, 16px);
+}
+
+/* Filtres */
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(6px, 1vw, 10px);
+  max-width: clamp(200px, 25vw, 300px);
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-tag {
+  padding: clamp(6px, 1vw, 10px) clamp(10px, 2vw, 16px);
+  border-radius: 16px;
+  border: 1px solid #6b7280;
+  background: #f5f5f4;
+  color: #6b7280;
+  font-family: "Nunito Sans", system-ui, sans-serif;
+  font-size: clamp(12px, 1.5vw, 14px);
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(32px, 4vw, 40px);
+}
+
+.filter-tag:hover {
+  background: #e5e7eb;
+  border-color: #374151;
+}
+
+.filter-tag.active {
+  background: #6b7280;
+  color: #fef3c7;
+  border-color: #f5f5f4;
+}
+
+/* Section des projets */
+.projects-section {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(40px, 8vw, 80px) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.projects-grid {
+  width: 100%;
+  max-width: 1280px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(20px, 4vw, 40px);
+  margin-top: clamp(30px, 6vw, 50px);
+  justify-items: center;
+  padding-inline: clamp(16px, 3vw, 40px);
+}
+
+/* Import des styles des cartes projets */
+.projects__card {
+  width: 100%;
+  max-width: clamp(300px, 40vw, 500px);
+  height: clamp(400px, 50vw, 600px);
+  padding: clamp(16px, 2vw, 20px) clamp(16px, 2vw, 20px) clamp(24px, 3vw, 32px) clamp(16px, 2vw, 20px);
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.projects__card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0) 0%, rgba(17, 24, 39, 0.25) 35%, rgba(17, 24, 39, 0.55) 65%, rgba(17, 24, 39, 0.65) 100%), linear-gradient(200deg, rgba(255, 249, 237, 0) 0%, rgba(255, 249, 237, 0.12) 50%, rgba(255, 249, 237, 0.2) 100%);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  pointer-events: none;
+}
+
+.projects__card-content {
+  align-self: stretch;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  position: static;
+  z-index: 1;
+  gap: 14px;
+}
+
+.projects__card-header {
+  position: absolute;
+  top: clamp(16px, 2vw, 20px);
+  right: clamp(16px, 2vw, 20px);
+  z-index: 2;
+  text-align: right;
+}
+
+.projects__card-type {
+  color: #FFFEF8;
+  font-size: clamp(12px, 1.5vw, 14px);
+  font-family: "DM Sans", "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: clamp(18px, 2.5vw, 22px);
+  letter-spacing: clamp(1px, 0.2vw, 1.4px);
+  text-align: right;
+  display: inline-block;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.projects__card-info {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 1vw, 8px);
+}
+
+.projects__card-client {
+  color: rgba(255, 254, 248, 0.85);
+  font-size: clamp(12px, 1.5vw, 14px);
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: clamp(18px, 2.5vw, 22px);
+  letter-spacing: clamp(1px, 0.2vw, 1.4px);
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.projects__card-title {
+  align-self: stretch;
+  color: #FFFEF8;
+  font-size: clamp(20px, 3vw, 28px);
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 800;
+  line-height: clamp(24px, 3.5vw, 32px);
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.projects__card-description {
+  align-self: stretch;
+  color: rgba(255, 254, 248, 0.92);
+  font-size: clamp(12px, 1.5vw, 14px);
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: clamp(18px, 2.5vw, 21px);
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.projects__card-footer {
+  padding-top: 12px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.projects__card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: none;
+}
+
+.projects__card-link:focus {
+  outline: 2px solid #048B9A;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.projects__card-link span {
+  color: #048B9A;
+  font-size: 16px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  line-height: 19.2px;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.25), 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.projects__card-arrow {
+  width: 10px;
+  height: 8.57px;
+  flex-shrink: 0;
+  display: block;
+  transform: translateY(0.5px);
+}
+
+/* Responsive - Tablettes */
+@media (max-width: 1024px) {
+  .search-container {
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(20px, 4vw, 30px);
+  }
+  
+  .search-bar {
+    min-width: clamp(250px, 40vw, 350px);
+    max-width: clamp(280px, 50vw, 400px);
+  }
+  
+  .filters-container {
+    max-width: clamp(180px, 30vw, 250px);
+    gap: clamp(4px, 0.8vw, 8px);
+  }
+  
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(20px, 4vw, 30px);
+  }
+}
+
+/* Responsive - Tablettes moyennes */
 @media (max-width: 768px) {
-  .works-page {
-    /* Ajustements mobile si nécessaire */
+  .search-container {
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(20px, 4vw, 25px);
+  }
+  
+  .search-bar {
+    min-width: clamp(200px, 50vw, 300px);
+    max-width: clamp(250px, 60vw, 350px);
+  }
+  
+  .filters-container {
+    max-width: clamp(160px, 35vw, 220px);
+    gap: clamp(4px, 1vw, 6px);
+  }
+  
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: clamp(20px, 4vw, 25px);
+    justify-items: center;
+  }
+  
+  .projects__card {
+    max-width: clamp(280px, 70vw, 400px);
+    height: clamp(350px, 45vw, 500px);
+  }
+}
+
+/* Responsive - Mobiles */
+@media (max-width: 480px) {
+  .search-container {
+    gap: clamp(15px, 3vw, 20px);
+  }
+  
+  .search-bar {
+    min-width: clamp(150px, 60vw, 250px);
+    max-width: clamp(180px, 70vw, 280px);
+  }
+  
+  .filters-container {
+    max-width: clamp(140px, 40vw, 200px);
+    gap: clamp(3px, 0.8vw, 5px);
+  }
+  
+  .filter-tag {
+    padding: clamp(4px, 1vw, 8px) clamp(8px, 2vw, 12px);
+    font-size: clamp(10px, 2vw, 12px);
+    min-height: clamp(28px, 5vw, 36px);
+  }
+  
+  .projects-grid {
+    gap: clamp(15px, 3vw, 20px);
+  }
+  
+  .projects__card {
+    max-width: clamp(250px, 80vw, 350px);
+    height: clamp(300px, 40vw, 450px);
+  }
+}
+
+/* Responsive - Très petits écrans */
+@media (max-width: 360px) {
+  .search-container {
+    gap: clamp(10px, 2vw, 15px);
+  }
+  
+  .search-bar {
+    min-width: clamp(120px, 70vw, 200px);
+    max-width: clamp(140px, 80vw, 220px);
+  }
+  
+  .filters-container {
+    max-width: clamp(120px, 45vw, 180px);
+    gap: clamp(2px, 0.6vw, 4px);
+  }
+  
+  .filter-tag {
+    padding: clamp(3px, 0.8vw, 6px) clamp(6px, 1.5vw, 10px);
+    font-size: clamp(9px, 1.8vw, 11px);
+    min-height: clamp(24px, 6vw, 32px);
+  }
+  
+  .projects-grid {
+    gap: clamp(10px, 2vw, 15px);
+  }
+  
+  .projects__card {
+    max-width: clamp(200px, 85vw, 300px);
+    height: clamp(250px, 35vw, 400px);
+  }
+}
+
+/* Responsive - Écrans très larges */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1600px;
+  }
+  
+  .search-section {
+    max-width: 1600px;
+  }
+  
+  .projects-section {
+    max-width: 1600px;
+  }
+  
+  .search-container {
+    max-width: 1400px;
+    gap: clamp(30px, 5vw, 50px);
+  }
+  
+  .search-bar {
+    min-width: clamp(400px, 25vw, 600px);
+    max-width: clamp(450px, 30vw, 700px);
+  }
+  
+  .filters-container {
+    min-width: clamp(350px, 20vw, 450px);
+    max-width: clamp(400px, 25vw, 500px);
+  }
+  
+  .projects-grid {
+    max-width: 1400px;
+    gap: clamp(30px, 5vw, 50px);
+  }
+  
+  .projects__card {
+    max-width: clamp(400px, 30vw, 600px);
+    height: clamp(500px, 40vw, 700px);
   }
 }
 </style>
