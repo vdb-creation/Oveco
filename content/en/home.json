@@ -12,11 +12,11 @@
       "ctaLabel": "Contact us",
       "ctaHref": "/contact",
       "mediaLeft": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Building the future"
       },
       "mediaRight": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Engineers-installers",
         "overlay": true
       },
@@ -87,17 +87,17 @@
     {
       "cards": [
         {
-          "icon": "/uploads/comp%C3%A9tance/clim.png",
+          "icon": "/uploads/comp%C3%A9tance/clim.webp",
           "title": "Renewable energy",
           "description": "Heat pumps, boilers, solar panels…\nEfficient, well-sized systems for greater autonomy."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/elec.png",
+          "icon": "/uploads/comp%C3%A9tance/elec.webp",
           "title": "Energy",
           "description": "Heat pumps, boilers, solar panels… Efficient, well-sized systems for greater autonomy."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/eolienne.png",
+          "icon": "/uploads/comp%C3%A9tance/eolienne.webp",
           "title": "Renewable energy",
           "description": "Heat pumps, boilers, solar panels… Efficient, well-sized systems for greater autonomy."
         }
@@ -110,7 +110,7 @@
       "description": "A selection of our work.",
       "cards": [
         {
-          "image": "/uploads/imgs/maison-build.png",
+          "image": "/uploads/imgs/maison-build.webp",
           "type": "Construction",
           "client": "Gallery",
           "title": "House construction",
@@ -118,7 +118,7 @@
           "description": "Beautiful construction work."
         },
         {
-          "image": "/uploads/imgs/architrech.png",
+          "image": "/uploads/imgs/architrech.webp",
           "type": "Architecture",
           "client": "Gallery",
           "title": "Architectural design",
@@ -126,7 +126,7 @@
           "description": "Modern architectural solutions."
         },
         {
-          "image": "/uploads/imgs/maison-toit-2.png",
+          "image": "/uploads/imgs/maison-toit-2.webp",
           "type": "Renovation",
           "client": "Gallery",
           "title": "Roof renovation",
@@ -134,7 +134,7 @@
           "description": "Professional roof work."
         },
         {
-          "image": "/uploads/imgs/maison-toit.png",
+          "image": "/uploads/imgs/maison-toit.webp",
           "type": "Construction",
           "client": "Gallery",
           "title": "House construction",
@@ -190,7 +190,7 @@
       "linkUrl": "/works",
       "cards": [
         {
-          "image": "/uploads/imgs/maison-toit.png",
+          "image": "/uploads/imgs/maison-toit.webp",
           "type": "Renovation",
           "client": "Martin Family",
           "title": "Passive house",

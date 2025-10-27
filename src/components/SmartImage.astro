@@ -5,6 +5,18 @@ import path from "node:path";
 import { stat as fsStat } from "node:fs/promises";
 
 const PUBLIC_DIR = path.join(process.cwd(), "public");
+
+/** Retourne true si le fichier existe */
+async function exists(p: string) {
+  try { 
+    await fsStat(path.join(PUBLIC_DIR, p.replace(/^\//, ""))); 
+    return true; 
+  } catch { 
+    return false; 
+  }
+}
+
+/** Ajoute un query ?v=mtime aux chemins locaux */
 async function versioned(p?: string) {
   if (!p || !p.startsWith("/")) return p;
   try {
@@ -14,7 +26,7 @@ async function versioned(p?: string) {
   } catch { return p; }
 }
 
-// Manifests (LQIP d’abord, puis BlurHash)
+// Manifests (LQIP d'abord, puis BlurHash)
 import lqipManifest from "../lqip-manifest.json";
 import blurManifest from "../blurhash-manifest.json";
 
@@ -71,8 +83,19 @@ const {
 } = Astro.props as Props;
 
 // Helpers
-const normalizeCmsSrc = (src?: string) =>
-  src?.startsWith("/public/") ? src.replace("/public/", "/") : src;
+const normalizeCmsSrc = (src?: string) => {
+  if (!src) return src;
+  
+  // Nettoyer /public/
+  let cleaned = src.startsWith("/public/") ? src.replace("/public/", "/") : src;
+  
+  // Convertir .png/.jpg en .webp automatiquement (car les originaux sont supprimés)
+  if (cleaned.includes(".png") || cleaned.includes(".jpg") || cleaned.includes(".jpeg")) {
+    cleaned = cleaned.replace(/\.(png|jpg|jpeg)$/i, ".webp");
+  }
+  
+  return cleaned;
+};
 
 const isRemoteUrl = (src?: string | ImageMetadata) =>
   typeof src === "string" && /^https?:\/\//i.test(src);
@@ -165,9 +188,6 @@ if (typeof quality === "number") astroOps.quality = quality;
 if (fit) astroOps.fit = fit;
 
 // Résolution des dérivés *.opt.avif / *.opt.webp (si présents)
-async function exists(p: string) {
-  try { await fsStat(p); return true; } catch { return false; }
-}
 function replaceExtToOpt(src: string, ext: "avif" | "webp") {
   const i = src.lastIndexOf(".");
   const base = i > -1 ? src.slice(0, i) : src;
@@ -181,10 +201,14 @@ if (normalizedSrcString && isStringLocalUpload(normalizedSrcString)) {
   const rel = normalizedSrcString.replace(/^\//, "");
   const i = rel.lastIndexOf(".");
   const relNoExt = i > -1 ? rel.slice(0, i) : rel;
-  const avifAbs = path.join(PUBLIC_DIR, `${relNoExt}.opt.avif`);
-  const webpAbs = path.join(PUBLIC_DIR, `${relNoExt}.opt.webp`);
-  if (await exists(avifAbs)) srcAvif = `/${relNoExt}.opt.avif`;
-  if (await exists(webpAbs)) srcWebp = `/${relNoExt}.opt.webp`;
+  
+  // AVIF dans optimized/ (caché de TinaCMS)
+  const avifPath = `/optimized/${relNoExt}.opt.avif`;
+  // WebP dans uploads/ (version que voit l'utilisateur)
+  const webpPath = `/${relNoExt}.webp`;
+  
+  if (await exists(avifPath)) srcAvif = avifPath;
+  if (await exists(webpPath)) srcWebp = webpPath;
 }
 
 // Version the local URLs to bust caches when file mtime changes

@@ -1,3 +1,12 @@
 [build]
-  command = "npx tinacms build && pnpm run build"
+  command = "pnpm gen:lqip && pnpm gen:blur && pnpm optimize:uploads && pnpm purge:originals && npx tinacms build && pnpm run build"
   publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+  force = true

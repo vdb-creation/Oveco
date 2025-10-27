@@ -14,11 +14,28 @@ const imageField = (name: string, label: string, dir: string) => ({
   label,
   ui: {
     uploadDir: () => `/uploads/${dir}`,
-    parse: (media: unknown) =>
-      typeof media === "string"
+    parse: (media: unknown) => {
+      // Convertir le chemin original en .webp automatiquement
+      // car les originaux PNG/JPG sont supprimés et convertis en WebP
+      const path = typeof media === "string"
         ? media
-        : (media as any)?.id ?? (media as any)?.src ?? "",
-    previewSrc: (values: Record<string, any>) => values?.[name],
+        : (media as any)?.id ?? (media as any)?.src ?? "";
+      
+      // Si le chemin se termine par .png/.jpg/.jpeg → convertir en .webp
+      if (path && (path.endsWith('.png') || path.endsWith('.jpg') || path.endsWith('.jpeg'))) {
+        return path.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+      }
+      
+      return path;
+    },
+    previewSrc: (values: Record<string, any>) => {
+      const src = values?.[name];
+      // Aussi convertir pour l'aperçu
+      if (src && (src.endsWith('.png') || src.endsWith('.jpg') || src.endsWith('.jpeg'))) {
+        return src.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+      }
+      return src;
+    },
   },
 });
 
@@ -26,6 +43,13 @@ export default defineConfig({
   branch,
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID || "local",
   token: process.env.TINA_TOKEN || "local",
+  
+  // Mode local pour le développement
+  // En production, ces options sont gérées automatiquement
+  ...(process.env.NEXT_PUBLIC_TINA_CLIENT_ID === undefined && {
+    seed: false,
+    isLocalClient: true,
+  }),
 
   build: {
     outputFolder: "admin",

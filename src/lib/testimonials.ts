@@ -1,11 +1,14 @@
-// src/lib/testimonials.ts
-import { readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
+/**
+ * Fonctions pour charger les témoignages
+ */
+
+import fs from 'fs/promises';
+import path from 'path';
 
 export interface Testimonial {
   title: string;
   slug: string;
-  clientName: string;
+  clientName?: string;
   clientPosition?: string;
   clientCompany?: string;
   content: string;
@@ -13,7 +16,7 @@ export interface Testimonial {
   thumbnail?: string;
   backgroundImage?: string;
   linkedProjectSlug?: string;
-  status: "published" | "draft";
+  status?: string;
   date?: string;
 }
 
@@ -32,129 +35,66 @@ export interface TestimonialCard {
     title: string;
   };
   link?: string;
-  priority?: {
-    slug: string;
-  };
 }
 
 /**
- * Récupère tous les témoignages publiés
+ * Charge tous les témoignages depuis content/testimonials/
  */
 export async function getAllTestimonials(): Promise<Testimonial[]> {
   try {
-    const testimonialsDir = join(process.cwd(), 'content', 'testimonials');
-    const files = readdirSync(testimonialsDir).filter(file => file.endsWith('.json'));
+    const testimonialsDir = path.join(process.cwd(), 'content', 'testimonials');
+    const files = await fs.readdir(testimonialsDir);
     
     const testimonials: Testimonial[] = [];
     
     for (const file of files) {
-      try {
-        const filePath = join(testimonialsDir, file);
-        const content = readFileSync(filePath, 'utf-8');
-        const data = JSON.parse(content);
-        
-        // Ajouter le slug basé sur le nom du fichier
-        const slug = file.replace('.json', '');
-        
-        testimonials.push({
-          ...data,
-          slug,
-        });
-      } catch (error) {
-        console.error(`Erreur lors de la lecture du fichier ${file}:`, error);
+      if (file.endsWith('.json')) {
+        try {
+          const filePath = path.join(testimonialsDir, file);
+          const content = await fs.readFile(filePath, 'utf-8');
+          const testimonial = JSON.parse(content) as Testimonial;
+          testimonials.push(testimonial);
+        } catch (e) {
+          console.error(`Erreur lors du chargement de ${file}:`, e);
+        }
       }
     }
     
-    return testimonials
-      .filter((testimonial) => testimonial.status === "published")
-      .sort((a, b) => {
-        // Trier par date décroissante si disponible, sinon par slug
-        if (a.date && b.date) {
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
-        }
-        return a.slug.localeCompare(b.slug);
-      });
-  } catch (error) {
-    console.error("Erreur lors de la récupération des témoignages:", error);
+    return testimonials;
+  } catch (e) {
+    console.error('Erreur lors du chargement des témoignages:', e);
     return [];
   }
 }
 
 /**
- * Récupère un témoignage par son slug
- */
-export async function getTestimonialBySlug(slug: string): Promise<Testimonial | null> {
-  try {
-    const testimonials = await getAllTestimonials();
-    return testimonials.find((testimonial) => testimonial.slug === slug) || null;
-  } catch (error) {
-    console.error(`Erreur lors de la récupération du témoignage ${slug}:`, error);
-    return null;
-  }
-}
-
-/**
- * Récupère les témoignages liés à un projet spécifique
- */
-export async function getTestimonialsByProject(projectSlug: string): Promise<Testimonial[]> {
-  try {
-    const testimonials = await getAllTestimonials();
-    return testimonials.filter(
-      (testimonial) => testimonial.linkedProjectSlug === projectSlug
-    );
-  } catch (error) {
-    console.error(`Erreur lors de la récupération des témoignages pour le projet ${projectSlug}:`, error);
-    return [];
-  }
-}
-
-/**
- * Convertit un témoignage en format carte pour l'affichage
+ * Convertit un témoignage en carte pour l'affichage
  */
 export function testimonialToCard(testimonial: Testimonial): TestimonialCard {
+  const thumbnail = testimonial.thumbnail || testimonial.backgroundImage;
+  
   return {
-    thumbnail: testimonial.thumbnail ? {
-      src: testimonial.thumbnail,
-      alt: `Photo de ${testimonial.clientName}`,
+    thumbnail: thumbnail ? {
+      src: thumbnail,
+      alt: `Photo de ${testimonial.clientName || 'client'}`
     } : undefined,
     client_name: testimonial.clientName,
     client_position: testimonial.clientPosition,
     client_company: testimonial.clientCompany,
-    card_content: testimonial.content,
     content: testimonial.content,
+    card_content: testimonial.content,
     linked_project: testimonial.linkedProjectSlug ? {
       link: `/work/${testimonial.linkedProjectSlug}`,
-      title: `Voir le projet ${testimonial.linkedProjectSlug}`,
-    } : undefined,
-    link: testimonial.linkedProjectSlug ? `/work/${testimonial.linkedProjectSlug}` : undefined,
-    priority: {
-      slug: "high", // Par défaut, tous les témoignages sont prioritaires
-    },
+      title: `Voir le projet`
+    } : undefined
   };
 }
 
 /**
- * Récupère les témoignages formatés pour l'affichage en cartes
+ * Charge tous les témoignages et les convertit en cartes
  */
 export async function getTestimonialCards(): Promise<TestimonialCard[]> {
-  try {
-    const testimonials = await getAllTestimonials();
-    return testimonials.map(testimonialToCard);
-  } catch (error) {
-    console.error("Erreur lors de la récupération des cartes de témoignages:", error);
-    return [];
-  }
+  const testimonials = await getAllTestimonials();
+  return testimonials.map(testimonialToCard);
 }
 
-/**
- * Récupère les témoignages liés à un projet formatés pour l'affichage
- */
-export async function getTestimonialCardsByProject(projectSlug: string): Promise<TestimonialCard[]> {
-  try {
-    const testimonials = await getTestimonialsByProject(projectSlug);
-    return testimonials.map(testimonialToCard);
-  } catch (error) {
-    console.error(`Erreur lors de la récupération des cartes de témoignages pour le projet ${projectSlug}:`, error);
-    return [];
-  }
-}

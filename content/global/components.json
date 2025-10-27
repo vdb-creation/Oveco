@@ -2,12 +2,12 @@
   "navbar": {
     "siteName": "Oveco",
     "siteUrl": "/",
-    "logoUrl": "/src/assets/imgs/logo/image.png",
+    "logoUrl": "/uploads/icons/logo.webp",
     "links": [
-      { "label": "Qui sommes nous ?", "url": "/about" },
+      { "label": "Qui sommes nous ?", "url": "/fr/about" },
       { "label": "L'auto-construction", "url": "/fr/construction" },
-      { "label": "Nos réalisations", "url": "/works" },
-      { "label": "Nos compétences", "url": "/competences" }
+      { "label": "Nos réalisations", "url": "/fr/works" },
+      { "label": "Nos compétences", "url": "/fr/competences" }
     ],
     "ctaButton": {
       "label": "Nous contacter",

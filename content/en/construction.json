@@ -36,11 +36,11 @@
       "ctaLabel": "Start a project",
       "ctaHref": "#contact",
       "mediaLeft": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Self-build site"
       },
       "mediaRight": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "On-site training",
         "overlay": true
       },
@@ -52,19 +52,19 @@
       "description": "We believe that self-build is a powerful way to take ownership of your habitat. By training you, advising you, and providing the right tools, we enable you to actively participate in installations safely.",
       "services": [
         {
-          "image": "/uploads/hero/maison-build.png",
+          "image": "/uploads/hero/maison-build.webp",
           "alt": "Personalized support for self-build",
           "title": "Custom support",
           "description": "Each project is unique: we adapt our advice, training, and tools to your skills and goals."
         },
         {
-          "image": "/uploads/hero/maison-build.png",
+          "image": "/uploads/hero/maison-build.webp",
           "alt": "Training and knowledge transfer",
           "title": "Training and transmission",
           "description": "Training sessions are scheduled before key stages of the construction. You become autonomous while being supported."
         },
         {
-          "image": "/uploads/hero/maison-build.png",
+          "image": "/uploads/hero/maison-build.webp",
           "alt": "Professional equipment for self-build",
           "title": "Accessible professional equipment",
           "description": "We offer professional equipment at preferential prices, with delivery and technical support."
@@ -83,7 +83,7 @@
         "url": "#contact"
       },
       "image": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Technical training",
         "isPng": true
       },
@@ -98,7 +98,7 @@
         "url": "/en/works"
       },
       "image": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Site support",
         "isPng": true
       },
@@ -113,7 +113,7 @@
         "url": "#contact"
       },
       "image": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Commissioning",
         "isPng": true
       },
@@ -131,7 +131,7 @@
           "company": "Single-family home",
           "quote": "Thanks to Oveco, I was able to install my solar panels myself. The support was perfect, I feel capable of managing my installation.",
           "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.png",
+          "backgroundImage": "/uploads/hero/maison-build.webp",
           "priority": "high"
         },
         {
@@ -140,7 +140,7 @@
           "company": "Family project",
           "quote": "The training is clear and practical. I learned a lot and saved on installation costs.",
           "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.png",
+          "backgroundImage": "/uploads/hero/maison-build.webp",
           "priority": "high"
         },
         {
@@ -149,7 +149,7 @@
           "company": "Energy renovation",
           "quote": "The Oveco team guided me every step of the way. I highly recommend for those who want to be involved in their project.",
           "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.png",
+          "backgroundImage": "/uploads/hero/maison-build.webp",
           "priority": "medium"
         }
       ],
