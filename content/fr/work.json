@@ -8,7 +8,7 @@
     "year": "2023",
     "location": "Beauvechain, Belgique",
     "description": "Rénovation complète d'une maison familiale des années 70 en maison passive. Ce projet exemplaire démontre qu'il est possible de transformer un habitat énergivore en maison passive performante.",
-    "heroImage": "/uploads/imgs/maison-toit.png",
+    "heroImage": "/uploads/imgs/maison-toit.webp",
     "heroImageAlt": "Maison passive rénovée à Beauvechain",
     "challenge": {
       "title": "Le défi",
@@ -21,27 +21,27 @@
         {
           "name": "Isolation par l'extérieur",
           "description": "Isolation de 20cm en laine de roche pour atteindre une résistance thermique de 5 m².K/W",
-          "icon": "/uploads/compétance/maison.png"
+          "icon": "/uploads/compétance/maison.webp"
         },
         {
           "name": "Triple vitrage",
           "description": "Fenêtres triple vitrage avec coefficient Uw de 0,8 W/m².K pour minimiser les déperditions",
-          "icon": "/uploads/compétance/maison.png"
+          "icon": "/uploads/compétance/maison.webp"
         },
         {
           "name": "VMC double flux",
           "description": "Ventilation mécanique contrôlée avec récupération de chaleur de 85%",
-          "icon": "/uploads/compétance/clim.png"
+          "icon": "/uploads/compétance/clim.webp"
         },
         {
           "name": "Panneaux photovoltaïques",
           "description": "Installation de 8kW de panneaux solaires pour l'autoconsommation",
-          "icon": "/uploads/compétance/eolienne.png"
+          "icon": "/uploads/compétance/eolienne.webp"
         },
         {
           "name": "Pompe à chaleur",
           "description": "Chauffage par pompe à chaleur air-eau avec coefficient de performance de 4,2",
-          "icon": "/uploads/compétance/clim.png"
+          "icon": "/uploads/compétance/clim.webp"
         }
       ]
     },
@@ -126,22 +126,22 @@
     },
     "gallery": [
       {
-        "src": "/uploads/imgs/maison-toit.png",
+        "src": "/uploads/imgs/maison-toit.webp",
         "alt": "Vue extérieure de la maison passive rénovée",
         "caption": "Vue extérieure après rénovation"
       },
       {
-        "src": "/uploads/imgs/maison-build.png",
+        "src": "/uploads/imgs/maison-build.webp",
         "alt": "Travaux d'isolation par l'extérieur",
         "caption": "Travaux d'isolation par l'extérieur"
       },
       {
-        "src": "/uploads/imgs/maison-toit-2.png",
+        "src": "/uploads/imgs/maison-toit-2.webp",
         "alt": "Installation des panneaux photovoltaïques",
         "caption": "Installation des panneaux photovoltaïques"
       },
       {
-        "src": "/uploads/imgs/plan.png",
+        "src": "/uploads/imgs/plan.webp",
         "alt": "Plans de rénovation",
         "caption": "Plans de rénovation énergétique"
       }

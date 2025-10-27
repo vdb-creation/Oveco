@@ -1,7 +1,9 @@
 {
   "title": "Projet Alpha",
+  "slug": "project-alpha",
   "category": "Web",
   "description": "E-commerce.",
-  "image": "/uploads/team/wallpapper-big.jpg"
+  "thumbnail": "/uploads/team/wallpapper-big.jpg",
+  "heroImage": "/uploads/team/wallpapper-big.jpg"
 }
 

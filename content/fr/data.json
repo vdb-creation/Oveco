@@ -20,13 +20,13 @@
       "description": "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat.",
       "services": [
         {
-          "image": "/uploads/imgs/maison-build.png",
+          "image": "/uploads/imgs/maison-build.webp",
           "alt": "Accompagnement personnalisé",
           "title": "Accompagnement personnalisé",
           "description": "Nous vous guidons à chaque étape de votre projet d'auto-construction."
         },
         {
-          "image": "/uploads/imgs/plan.png",
+          "image": "/uploads/imgs/plan.webp",
           "alt": "Formation pratique",
           "title": "Formation pratique",
           "description": "Apprenez les techniques de construction directement sur le terrain."
@@ -43,11 +43,11 @@
       "ctaLabel": "Nous contacter",
       "ctaHref": "#contact",
       "mediaLeft": {
-        "src": "/uploads/imgs/maison-toit.png",
+        "src": "/uploads/imgs/maison-toit.webp",
         "alt": "Maison avec panneaux solaires"
       },
       "mediaRight": {
-        "src": "/uploads/imgs/maison-build.png",
+        "src": "/uploads/imgs/maison-build.webp",
         "alt": "Chantier de construction",
         "overlay": true
       },
@@ -59,25 +59,25 @@
       "description": "Chez Oveco, la technique n'est jamais un but en soi, mais toujours un moyen au service de vos projets.",
       "cards": [
         {
-          "icon": "/uploads/compétance/maison.png",
+          "icon": "/uploads/compétance/maison.webp",
           "alt": "Construction durable",
           "title": "Construction durable",
           "description": "Techniques et matériaux respectueux de l'environnement."
         },
         {
-          "icon": "/uploads/compétance/personne.png",
+          "icon": "/uploads/compétance/personne.webp",
           "alt": "Auto-construction",
           "title": "Auto-construction",
           "description": "Accompagnement personnalisé pour vos projets d'auto-construction."
         },
         {
-          "icon": "/uploads/compétance/eolienne.png",
+          "icon": "/uploads/compétance/eolienne.webp",
           "alt": "Énergies renouvelables",
           "title": "Énergies renouvelables",
           "description": "Installation de systèmes photovoltaïques et éoliens."
         },
         {
-          "icon": "/uploads/compétance/clim.png",
+          "icon": "/uploads/compétance/clim.webp",
           "alt": "Efficacité énergétique",
           "title": "Efficacité énergétique",
           "description": "Optimisation de la performance énergétique de votre habitat."
@@ -111,7 +111,7 @@
       "linkUrl": "/works",
       "cards": [
         {
-          "image": "/uploads/imgs/maison-toit.png",
+          "image": "/uploads/imgs/maison-toit.webp",
           "type": "Rénovation",
           "client": "Famille Martin",
           "title": "Maison passive à Beauvechain",
@@ -119,7 +119,7 @@
           "description": "Rénovation complète d'une maison familiale avec isolation passive et panneaux solaires."
         },
         {
-          "image": "/uploads/imgs/maison-build.png",
+          "image": "/uploads/imgs/maison-build.webp",
           "type": "Auto-construction",
           "client": "Couple Dubois",
           "title": "Extension écologique",
@@ -127,7 +127,7 @@
           "description": "Accompagnement à l'auto-construction d'une extension en matériaux naturels."
         },
         {
-          "image": "/uploads/imgs/maison-toit-2.png",
+          "image": "/uploads/imgs/maison-toit-2.webp",
           "type": "Rénovation énergétique",
           "client": "Famille Leroy",
           "title": "Rénovation avec chauffage solaire",

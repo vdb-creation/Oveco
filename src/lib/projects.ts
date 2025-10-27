@@ -1,12 +1,14 @@
-// src/lib/projects.ts
-// Utilitaires pour la gestion des projets - Version optimisée 2025
+/**
+ * Fonctions pour charger les projets depuis content/projects/
+ */
 
-import { cache } from './cache';
+import fs from 'fs/promises';
+import path from 'path';
 
 export interface Project {
   title: string;
   slug: string;
-  category: string;
+  category?: string;
   client?: string;
   excerpt?: string;
   description?: string;
@@ -15,18 +17,17 @@ export interface Project {
   duration?: string;
   budget?: string;
   status?: string;
-  tags?: string[];
   heroImage?: string;
   thumbnail?: string;
   gallery?: Array<{
     image: string;
-    alt: string;
+    alt?: string;
     caption?: string;
   }>;
   competences?: Array<{
     title: string;
     description: string;
-    icon?: string;
+    icon: string;
   }>;
   stats?: Array<{
     value: string;
@@ -34,10 +35,10 @@ export interface Project {
     unit?: string;
   }>;
   textImage?: {
-    subtitle?: string;
-    title?: string;
-    description?: string;
-    image?: string;
+    subtitle: string;
+    title: string;
+    description: string;
+    image: string;
     reverse?: boolean;
   };
   metaTitle?: string;
@@ -46,114 +47,70 @@ export interface Project {
   updatedAt?: string;
 }
 
-// Cache des projets pour éviter les rechargements
-let projectsCache: Project[] | null = null;
-let projectsCacheTime = 0;
-const PROJECTS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+export interface ProjectCard {
+  image: string;
+  type?: string;
+  client?: string;
+  title: string;
+  url: string;
+  description?: string;
+}
 
-// Fonction optimisée pour charger tous les projets avec cache
-export async function getAllProjects(forceRefresh: boolean = false): Promise<Project[]> {
-  const now = Date.now();
-  
-  // Utiliser le cache si disponible et valide
-  if (!forceRefresh && projectsCache && (now - projectsCacheTime) < PROJECTS_CACHE_TTL) {
-    return projectsCache;
-  }
-
+/**
+ * Charge tous les projets depuis content/projects/
+ */
+export async function getAllProjects(): Promise<Project[]> {
   try {
-    // Chargement asynchrone optimisé avec import.meta.glob
-    const projectFiles = await import.meta.glob('../../content/projects/*.json', { 
-      eager: false // Lazy loading pour optimiser les performances
-    });
+    const projectsDir = path.join(process.cwd(), 'content', 'projects');
+    const files = await fs.readdir(projectsDir);
     
     const projects: Project[] = [];
-    const loadPromises = Object.entries(projectFiles).map(async ([path, loader]) => {
-      try {
-        const projectData = await loader();
-        const project = projectData.default as Project;
-        if (project && project.slug) {
-          return project;
-        }
-      } catch (e) {
-        console.error(`Erreur lors du chargement du projet ${path}:`, e);
-      }
-      return null;
-    });
-
-    const loadedProjects = await Promise.all(loadPromises);
-    projects.push(...loadedProjects.filter((project): project is Project => project !== null));
     
-    // Trier par date de création (plus récent en premier)
-    projects.sort((a, b) => {
-      const dateA = new Date(a.createdAt || '1900-01-01');
-      const dateB = new Date(b.createdAt || '1900-01-01');
-      return dateB.getTime() - dateA.getTime();
-    });
-
-    // Mettre à jour le cache
-    projectsCache = projects;
-    projectsCacheTime = now;
+    for (const file of files) {
+      if (file.endsWith('.json')) {
+        try {
+          const filePath = path.join(projectsDir, file);
+          const content = await fs.readFile(filePath, 'utf-8');
+          const project = JSON.parse(content) as Project;
+          
+          // Si le slug n'existe pas, le créer depuis le nom du fichier
+          if (!project.slug) {
+            project.slug = file.replace('.json', '');
+          }
+          
+          projects.push(project);
+        } catch (e) {
+          console.error(`Erreur lors du chargement de ${file}:`, e);
+        }
+      }
+    }
     
     return projects;
   } catch (e) {
     console.error('Erreur lors du chargement des projets:', e);
-    return projectsCache || [];
+    return [];
   }
 }
 
-// Fonction pour charger un projet par slug
+/**
+ * Charge un projet par son slug
+ */
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
-  try {
-    const projectData = await import(`../../content/projects/${slug}.json`);
-    return projectData.default as Project;
-  } catch (e) {
-    console.error(`Projet ${slug} non trouvé:`, e);
-    return null;
-  }
+  const projects = await getAllProjects();
+  return projects.find(p => p.slug === slug) || null;
 }
 
-// Fonction pour convertir un projet en format carte pour la section Projects
-export function projectToCard(project: Project) {
+/**
+ * Convertit un projet en carte pour l'affichage
+ */
+export function projectToCard(project: Project): ProjectCard {
   return {
-    image: project.thumbnail || project.heroImage || '/uploads/hero/maison-build.png',
+    image: project.thumbnail || project.heroImage || '/uploads/imgs/default-placeholder.png',
     type: project.category,
-    client: project.client || 'Client',
+    client: project.client,
     title: project.title,
     url: `/work/${project.slug}`,
-    description: project.excerpt || project.description || ''
+    description: project.excerpt || project.description,
   };
 }
 
-// Fonction pour obtenir les projets récents (pour la page home)
-export async function getRecentProjects(limit: number = 6): Promise<Project[]> {
-  const allProjects = await getAllProjects();
-  return allProjects.slice(0, limit);
-}
-
-// Fonction pour obtenir les projets par catégorie
-export async function getProjectsByCategory(category: string): Promise<Project[]> {
-  const allProjects = await getAllProjects();
-  return allProjects.filter(project => 
-    project.category.toLowerCase() === category.toLowerCase()
-  );
-}
-
-// Fonction pour obtenir les projets par tag
-export async function getProjectsByTag(tag: string): Promise<Project[]> {
-  const allProjects = await getAllProjects();
-  return allProjects.filter(project => 
-    project.tags && project.tags.includes(tag)
-  );
-}
-
-// Fonction pour obtenir tous les tags uniques
-export async function getAllTags(): Promise<string[]> {
-  const allProjects = await getAllProjects();
-  const allTags = allProjects
-    .filter(project => project.tags && project.tags.length > 0)
-    .flatMap(project => project.tags!)
-    .filter((tag, index, array) => array.indexOf(tag) === index) // Supprimer les doublons
-    .sort();
-  
-  return allTags;
-}

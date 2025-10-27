@@ -9,11 +9,11 @@
       "ctaLabel": "Démarrer un projet",
       "ctaHref": "#contact",
       "mediaLeft": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Chantier auto-construction"
       },
       "mediaRight": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Formation sur site",
         "overlay": true
       },
@@ -25,19 +25,19 @@
       "description": "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat. En vous formant, en vous conseillant et en vous fournissant les bons outils, nous vous permettons de participer activement aux installations en toute sécurité.",
       "services": [
         {
-          "image": "/uploads/hero/maison-build.png",
+          "image": "/uploads/hero/maison-build.webp",
           "alt": "Accompagnement personnalisé pour l'auto-construction",
           "title": "Accompagnement sur mesure",
           "description": "Chaque projet est unique : nous adaptons nos conseils, nos formations et nos outils à vos compétences et vos objectifs."
         },
         {
-          "image": "/uploads/hero/maison-build.png",
+          "image": "/uploads/hero/maison-build.webp",
           "alt": "Formation et transmission de savoir-faire",
           "title": "Formation et transmission",
           "description": "Des sessions de formation sont prévues avant les étapes clés du chantier. Vous devenez autonome tout en étant épaulé."
         },
         {
-          "image": "/uploads/hero/maison-build.png",
+          "image": "/uploads/hero/maison-build.webp",
           "alt": "Matériel professionnel pour l'auto-construction",
           "title": "Matériel professionnel accessible",
           "description": "Nous vous proposons les équipements professionnels à prix préférentiels, avec livraison et support technique."
@@ -56,7 +56,7 @@
         "url": "#contact"
       },
       "image": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Formation technique",
         "isPng": true
       },
@@ -71,7 +71,7 @@
         "url": "/works"
       },
       "image": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Accompagnement chantier",
         "isPng": true
       },
@@ -86,7 +86,7 @@
         "url": "#contact"
       },
       "image": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Mise en service",
         "isPng": true
       },
@@ -104,7 +104,7 @@
           "company": "Maison individuelle",
           "quote": "Grâce à Oveco, j'ai pu installer moi-même mes panneaux solaires. L'accompagnement était parfait, je me sens capable de gérer mon installation.",
           "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.png",
+          "backgroundImage": "/uploads/hero/maison-build.webp",
           "priority": "high"
         },
         {
@@ -113,7 +113,7 @@
           "company": "Projet familial",
           "quote": "Les formations sont claires et pratiques. J'ai appris énormément et j'ai économisé sur les coûts d'installation.",
           "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.png",
+          "backgroundImage": "/uploads/hero/maison-build.webp",
           "priority": "high"
         },
         {
@@ -122,7 +122,7 @@
           "company": "Rénovation énergétique",
           "quote": "L'équipe Oveco m'a guidé à chaque étape. Je recommande vivement pour ceux qui veulent s'impliquer dans leur projet.",
           "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.png",
+          "backgroundImage": "/uploads/hero/maison-build.webp",
           "priority": "medium"
         }
       ],

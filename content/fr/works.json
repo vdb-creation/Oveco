@@ -9,11 +9,11 @@
     "ctaLabel": "Nous contacter",
     "ctaUrl": "#contact",
     "mediaLeft": {
-      "src": "/uploads/imgs/maison-toit.png",
+      "src": "/uploads/imgs/maison-toit.webp",
       "alt": "Maison avec panneaux solaires"
     },
     "mediaRight": {
-      "src": "/uploads/imgs/maison-build.png",
+      "src": "/uploads/imgs/maison-build.webp",
       "alt": "Chantier de construction",
       "overlay": true
     }
@@ -25,7 +25,7 @@
       "category": "Rénovation",
       "client": "Famille Martin",
       "description": "Rénovation complète d'une maison familiale des années 70 en maison passive. Isolation par l'extérieur, triple vitrage, VMC double flux et installation photovoltaïque de 8kW.",
-      "image": "/uploads/imgs/maison-toit.png",
+      "image": "/uploads/imgs/maison-toit.webp",
       "imageAlt": "Maison passive rénovée à Beauvechain",
       "year": "2023",
       "surface": "120 m²",
@@ -49,9 +49,9 @@
         "role": "Propriétaire"
       },
       "gallery": [
-        "/uploads/imgs/maison-toit.png",
-        "/uploads/imgs/maison-build.png",
-        "/uploads/imgs/maison-toit-2.png"
+        "/uploads/imgs/maison-toit.webp",
+        "/uploads/imgs/maison-build.webp",
+        "/uploads/imgs/maison-toit-2.webp"
       ]
     },
     {
@@ -60,7 +60,7 @@
       "category": "Auto-construction",
       "client": "Couple Dubois",
       "description": "Accompagnement à l'auto-construction d'une extension de 40m² en ossature bois et isolation paille. Formation pratique et suivi technique tout au long du projet.",
-      "image": "/uploads/imgs/maison-build.png",
+      "image": "/uploads/imgs/maison-build.webp",
       "imageAlt": "Extension écologique en auto-construction",
       "year": "2023",
       "surface": "40 m²",
@@ -84,9 +84,9 @@
         "role": "Auto-constructeur"
       },
       "gallery": [
-        "/uploads/imgs/maison-build.png",
-        "/uploads/imgs/maison-toit.png",
-        "/uploads/imgs/plan.png"
+        "/uploads/imgs/maison-build.webp",
+        "/uploads/imgs/maison-toit.webp",
+        "/uploads/imgs/plan.webp"
       ]
     },
     {
@@ -95,7 +95,7 @@
       "category": "Rénovation énergétique",
       "client": "Famille Leroy",
       "description": "Rénovation énergétique complète avec installation d'un système de chauffage solaire combiné. Isolation des combles, changement des fenêtres et installation d'un chauffe-eau solaire.",
-      "image": "/uploads/imgs/maison-toit-2.png",
+      "image": "/uploads/imgs/maison-toit-2.webp",
       "imageAlt": "Maison avec système de chauffage solaire",
       "year": "2024",
       "surface": "150 m²",
@@ -119,9 +119,9 @@
         "role": "Propriétaire"
       },
       "gallery": [
-        "/uploads/imgs/maison-toit-2.png",
-        "/uploads/imgs/maison-toit.png",
-        "/uploads/imgs/maison-build.png"
+        "/uploads/imgs/maison-toit-2.webp",
+        "/uploads/imgs/maison-toit.webp",
+        "/uploads/imgs/maison-build.webp"
       ]
     },
     {
@@ -130,7 +130,7 @@
       "category": "Auto-construction",
       "client": "Famille Rousseau",
       "description": "Accompagnement complet pour la construction d'une maison en paille de 100m². Formation aux techniques de construction en paille, ossature bois et enduits terre.",
-      "image": "/uploads/imgs/maison-build.png",
+      "image": "/uploads/imgs/maison-build.webp",
       "imageAlt": "Maison en paille auto-construite",
       "year": "2022",
       "surface": "100 m²",
@@ -154,9 +154,9 @@
         "role": "Auto-constructeur"
       },
       "gallery": [
-        "/uploads/imgs/maison-build.png",
-        "/uploads/imgs/maison-toit.png",
-        "/uploads/imgs/plan.png"
+        "/uploads/imgs/maison-build.webp",
+        "/uploads/imgs/maison-toit.webp",
+        "/uploads/imgs/plan.webp"
       ]
     }
   ],

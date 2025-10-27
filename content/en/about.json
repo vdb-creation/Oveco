@@ -36,11 +36,11 @@
       "ctaLabel": "Contact us",
       "ctaHref": "#contact",
       "mediaLeft": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Oveco team"
       },
       "mediaRight": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Oveco project",
         "overlay": true
       },
@@ -56,25 +56,25 @@
       "title": "Our values",
       "competences": [
         {
-          "icon": "/uploads/compétance/maison.png",
+          "icon": "/uploads/compétance/maison.webp",
           "alt": "Technical expertise",
           "title": "Technical expertise",
           "description": "Qualified engineers to design and build your energy installations."
         },
         {
-          "icon": "/uploads/compétance/personne.png",
+          "icon": "/uploads/compétance/personne.webp",
           "alt": "Human support",
           "title": "Human support",
           "description": "Personalized follow-up from design to commissioning of your project."
         },
         {
-          "icon": "/uploads/compétance/eolienne.png",
+          "icon": "/uploads/compétance/eolienne.webp",
           "alt": "Sustainability",
           "title": "Sustainability",
           "description": "Sustainable solutions that respect the environment and your budget."
         },
         {
-          "icon": "/uploads/compétance/crayon.png",
+          "icon": "/uploads/compétance/crayon.webp",
           "alt": "Innovation",
           "title": "Innovation",
           "description": "Latest technologies serving your energy project."
@@ -84,7 +84,7 @@
     },
     {
       "image": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Oveco team at work"
       },
       "icon1": {

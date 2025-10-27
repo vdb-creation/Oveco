@@ -9,11 +9,11 @@
     "ctaLabel": "Contact us",
     "ctaUrl": "#contact",
     "mediaLeft": {
-      "src": "/uploads/imgs/maison-toit.png",
+      "src": "/uploads/imgs/maison-toit.webp",
       "alt": "House with solar panels"
     },
     "mediaRight": {
-      "src": "/uploads/imgs/maison-build.png",
+      "src": "/uploads/imgs/maison-build.webp",
       "alt": "Construction site",
       "overlay": true
     }
@@ -25,7 +25,7 @@
       "category": "Renovation",
       "client": "Martin Family",
       "description": "Complete renovation of a 1970s family home into a passive house. External insulation, triple glazing, double flow VMC and 8kW photovoltaic installation.",
-      "image": "/uploads/imgs/maison-toit.png",
+      "image": "/uploads/imgs/maison-toit.webp",
       "imageAlt": "Renovated passive house in Beauvechain",
       "year": "2023",
       "surface": "120 m²",
@@ -49,9 +49,9 @@
         "role": "Owner"
       },
       "gallery": [
-        "/uploads/imgs/maison-toit.png",
-        "/uploads/imgs/maison-build.png",
-        "/uploads/imgs/maison-toit-2.png"
+        "/uploads/imgs/maison-toit.webp",
+        "/uploads/imgs/maison-build.webp",
+        "/uploads/imgs/maison-toit-2.webp"
       ]
     },
     {
@@ -60,7 +60,7 @@
       "category": "Self-build",
       "client": "Dubois Couple",
       "description": "Support for self-building a 40m² extension in wooden frame and straw insulation. Practical training and technical follow-up throughout the project.",
-      "image": "/uploads/imgs/maison-build.png",
+      "image": "/uploads/imgs/maison-build.webp",
       "imageAlt": "Ecological extension in self-build",
       "year": "2023",
       "surface": "40 m²",
@@ -84,9 +84,9 @@
         "role": "Self-builder"
       },
       "gallery": [
-        "/uploads/imgs/maison-build.png",
-        "/uploads/imgs/maison-toit.png",
-        "/uploads/imgs/plan.png"
+        "/uploads/imgs/maison-build.webp",
+        "/uploads/imgs/maison-toit.webp",
+        "/uploads/imgs/plan.webp"
       ]
     },
     {
@@ -95,7 +95,7 @@
       "category": "Energy renovation",
       "client": "Leroy Family",
       "description": "Complete energy renovation with installation of a combined solar heating system. Attic insulation, window replacement and solar water heater installation.",
-      "image": "/uploads/imgs/maison-toit-2.png",
+      "image": "/uploads/imgs/maison-toit-2.webp",
       "imageAlt": "House with solar heating system",
       "year": "2024",
       "surface": "150 m²",
@@ -119,9 +119,9 @@
         "role": "Owner"
       },
       "gallery": [
-        "/uploads/imgs/maison-toit-2.png",
-        "/uploads/imgs/maison-toit.png",
-        "/uploads/imgs/maison-build.png"
+        "/uploads/imgs/maison-toit-2.webp",
+        "/uploads/imgs/maison-toit.webp",
+        "/uploads/imgs/maison-build.webp"
       ]
     },
     {
@@ -130,7 +130,7 @@
       "category": "Self-build",
       "client": "Rousseau Family",
       "description": "Complete support for building a 100m² straw house. Training in straw construction techniques, wooden frame and earth plasters.",
-      "image": "/uploads/imgs/maison-build.png",
+      "image": "/uploads/imgs/maison-build.webp",
       "imageAlt": "Self-built straw house",
       "year": "2022",
       "surface": "100 m²",
@@ -154,9 +154,9 @@
         "role": "Self-builder"
       },
       "gallery": [
-        "/uploads/imgs/maison-build.png",
-        "/uploads/imgs/maison-toit.png",
-        "/uploads/imgs/plan.png"
+        "/uploads/imgs/maison-build.webp",
+        "/uploads/imgs/maison-toit.webp",
+        "/uploads/imgs/plan.webp"
       ]
     }
   ],

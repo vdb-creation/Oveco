@@ -10,22 +10,22 @@
       "ctaUrl": "/contact",
       "images": [
         {
-          "src": "/uploads/hero/maison-build.png",
+          "src": "/uploads/hero/maison-build.webp",
           "alt": "Maison passive en construction avec panneaux solaires et isolation thermique",
           "class": "hero__image hero__image--large-1"
         },
         {
-          "src": "/uploads/hero/maison-build.png",
+          "src": "/uploads/imgs/plan.webp",
           "alt": "Projet d'auto-construction écologique avec ossature bois et énergies renouvelables",
           "class": "hero__image hero__image--large-2"
         },
         {
-          "src": "/uploads/hero/maison-build.png",
+          "src": "/uploads/imgs/maison-toit-2.webp",
           "alt": "Rénovation énergétique de maison avec pompe à chaleur et isolation",
           "class": "hero__image hero__image--medium-1"
         },
         {
-          "src": "/uploads/hero/maison-build.png",
+          "src": "/uploads/hero/maison-build.webp",
           "alt": "Construction durable et écologique avec matériaux naturels",
           "class": "hero__image hero__image--medium-2"
         }
@@ -38,18 +38,18 @@
       "description": "Domaines d'expertise clés.",
       "competences": [
         {
-          "icon": "/uploads/comp%C3%A9tance/clim.opt.webp",
+          "icon": "/uploads/comp%C3%A9tance/crayon.webp",
           "alt": "Compétencesqdfqsdfqsdfsdqf",
           "title": "Ossature bois",
           "description": "Structures et enveloppes performantes."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/elec.opt.webp",
+          "icon": "/uploads/comp%C3%A9tance/eolienne.webp",
           "title": "sfsdfsdfqsdfqs",
           "description": "fqsdfqsdfqsdfqsdfsqdfsdqfsdqfqsdfqdsfqsdf"
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/eolienne.opt.webp",
+          "icon": "/uploads/comp%C3%A9tance/personne.webp",
           "title": "fsqdfsdqfqsd",
           "description": "fqsdfaerzaterezrtertezrughfjghkhlkho,"
         }
@@ -80,12 +80,12 @@
     {
       "services": [
         {
-          "image": "/uploads/imgs/Charpantier.opt.webp",
+          "image": "/uploads/imgs/architrech.webp",
           "title": "Lorem?",
           "description": "Quis qui occaecat qui incididunt velit qui culpa ad exercitation laborum ipsum aliquip. Dolor elit amet nulla mollit ex consequat fugiat elit consectetur cillum dolor. "
         },
         {
-          "image": "/uploads/imgs/plan.opt.webp",
+          "image": "/uploads/imgs/cie.webp",
           "title": "Lorim ?",
           "description": "Quis qui occaecat qui incididunt velit qui culpa ad exercitation laborum ipsum aliquip. Dolor elit amet nulla mollit ex consequat fugiat elit consectetur cillum dolor. "
         }
@@ -95,17 +95,17 @@
     {
       "cards": [
         {
-          "icon": "/uploads/comp%C3%A9tance/clim.png",
+          "icon": "/uploads/comp%C3%A9tance/clim.webp",
           "title": "Énergies renouvelables",
           "description": "Pompes à chaleur, chaudières, panneaux solaires…\nDes systèmes performants, bien dimensionnés, pour plus d'autonomie."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/elec.png",
+          "icon": "/uploads/comp%C3%A9tance/elec.webp",
           "title": "Énergies",
           "description": "Pompes à chaleur, chaudières, panneaux solaires… Des systèmes performants, bien dimensionnés, pour plus d'autonomie."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/eolienne.png",
+          "icon": "/uploads/comp%C3%A9tance/eolienne.webp",
           "title": "Énergies renouvelables",
           "description": "ompes à chaleur, chaudières, panneaux solaires… Des systèmes performants, bien dimensionnés, pour plus d'autonomie."
         }
@@ -117,17 +117,17 @@
       "title": "En images",
       "gallery": [
         {
-          "src": "/uploads/imgs/maison-build.png",
+          "src": "/uploads/imgs/maison-build.webp",
           "alt": "Photo"
         },
         {
-          "src": "/uploads/imgs/architrech.png"
+          "src": "/uploads/imgs/architrech.webp"
         },
         {
-          "src": "/uploads/imgs/maison-toit-2.png"
+          "src": "/uploads/imgs/maison-toit-2.webp"
         },
         {
-          "src": "/uploads/imgs/maison-toit.png"
+          "src": "/uploads/imgs/maison-toit.webp"
         }
       ],
       "_template": "gallerie"
@@ -141,7 +141,7 @@
       "title": "Nulla cillum dolore aute",
       "description": "Labore velit est duis exercitation ullamco incididunt officia cupidatat mollit laborum proident deserunt.",
       "image": {
-        "src": "/uploads/imgs/maison-toit.png",
+        "src": "/uploads/imgs/maison-toit.webp",
         "alt": "Image"
       },
       "icon1": {
@@ -176,7 +176,7 @@
       "description": "Services et solutions professionnelles.",
       "cards": [
         {
-          "icon": "/uploads/comp%C3%A9tance/clim.opt.webp",
+          "icon": "/uploads/comp%C3%A9tance/elec.webp",
           "alt": "Expertise technique",
           "title": "Expertise technique",
           "description": "Solutions techniques professionnelles et expertise."
@@ -192,7 +192,7 @@
       "linkUrl": "/works",
       "cards": [
         {
-          "image": "/uploads/imgs/maison-toit.png",
+          "image": "/uploads/imgs/maison-toit.webp",
           "type": "Rénovation",
           "client": "Famille Martin",
           "title": "Maison passive",

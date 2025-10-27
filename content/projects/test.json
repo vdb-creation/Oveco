@@ -1,4 +1,7 @@
 {
+  "tags": [
+    "test"
+  ],
   "title": "Test",
   "slug": "test",
   "category": "blablabla",
@@ -10,11 +13,8 @@
   "duration": "10 ans",
   "budget": "1000",
   "status": "completed",
-  "tags": [
-    "test"
-  ],
-  "heroImage": "/uploads/imgs/Charpantier.opt.webp",
-  "thumbnail": "/uploads/imgs/architrech.opt.webp",
+  "heroImage": "/uploads/imgs/Charpantier.webp",
+  "thumbnail": "/uploads/imgs/Charpantier.webp",
   "gallery": [
     {
       "image": "/uploads/imgs/Charpantier.opt.webp"
@@ -33,7 +33,7 @@
     {
       "title": "excepteur et irure",
       "description": "velit esse irure magna ut ipsum non ea do voluptate Lorem adipisicing cillum",
-      "icon": "/uploads/comp%C3%A9tance/clim.opt.webp"
+      "icon": "/uploads/comp%C3%A9tance/personne.webp"
     },
     {
       "title": "officia veniam reprehenderit",

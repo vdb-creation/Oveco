@@ -20,13 +20,13 @@
       "description": "We believe that self-build is a powerful way to take ownership of your habitat.",
       "services": [
         {
-          "image": "/uploads/imgs/maison-build.png",
+          "image": "/uploads/imgs/maison-build.webp",
           "alt": "Personalized support",
           "title": "Personalized support",
           "description": "We guide you through every step of your self-build project."
         },
         {
-          "image": "/uploads/imgs/plan.png",
+          "image": "/uploads/imgs/plan.webp",
           "alt": "Practical training",
           "title": "Practical training",
           "description": "Learn construction techniques directly in the field."
@@ -43,11 +43,11 @@
       "ctaLabel": "Contact us",
       "ctaHref": "#contact",
       "mediaLeft": {
-        "src": "/uploads/imgs/maison-toit.png",
+        "src": "/uploads/imgs/maison-toit.webp",
         "alt": "House with solar panels"
       },
       "mediaRight": {
-        "src": "/uploads/imgs/maison-build.png",
+        "src": "/uploads/imgs/maison-build.webp",
         "alt": "Construction site",
         "overlay": true
       },
@@ -59,25 +59,25 @@
       "description": "At Oveco, technique is never an end in itself, but always a means at the service of your projects.",
       "cards": [
         {
-          "icon": "/uploads/compétance/maison.png",
+          "icon": "/uploads/compétance/maison.webp",
           "alt": "Sustainable construction",
           "title": "Sustainable construction",
           "description": "Environmentally friendly techniques and materials."
         },
         {
-          "icon": "/uploads/compétance/personne.png",
+          "icon": "/uploads/compétance/personne.webp",
           "alt": "Self-build",
           "title": "Self-build",
           "description": "Personalized support for your self-build projects."
         },
         {
-          "icon": "/uploads/compétance/eolienne.png",
+          "icon": "/uploads/compétance/eolienne.webp",
           "alt": "Renewable energy",
           "title": "Renewable energy",
           "description": "Installation of photovoltaic and wind systems."
         },
         {
-          "icon": "/uploads/compétance/clim.png",
+          "icon": "/uploads/compétance/clim.webp",
           "alt": "Energy efficiency",
           "title": "Energy efficiency",
           "description": "Optimization of your habitat's energy performance."
@@ -111,7 +111,7 @@
       "linkUrl": "/works",
       "cards": [
         {
-          "image": "/uploads/imgs/maison-toit.png",
+          "image": "/uploads/imgs/maison-toit.webp",
           "type": "Renovation",
           "client": "Martin Family",
           "title": "Passive house in Beauvechain",
@@ -119,7 +119,7 @@
           "description": "Complete renovation of a family home with passive insulation and solar panels."
         },
         {
-          "image": "/uploads/imgs/maison-build.png",
+          "image": "/uploads/imgs/maison-build.webp",
           "type": "Self-build",
           "client": "Dubois Couple",
           "title": "Ecological extension",
@@ -127,7 +127,7 @@
           "description": "Support for self-building an extension in natural materials."
         },
         {
-          "image": "/uploads/imgs/maison-toit-2.png",
+          "image": "/uploads/imgs/maison-toit-2.webp",
           "type": "Energy renovation",
           "client": "Leroy Family",
           "title": "Renovation with solar heating",

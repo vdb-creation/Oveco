@@ -2,7 +2,7 @@
   "navbar": {
     "siteName": "Oveco",
     "siteUrl": "/",
-    "logoUrl": "/src/assets/imgs/logo/image.png",
+    "logoUrl": "/uploads/icons/logo.webp",
     "links": [
       { "label": "About us", "url": "/en/about" },
       { "label": "Self-construction", "url": "/en/construction" },

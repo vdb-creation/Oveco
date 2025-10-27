@@ -9,11 +9,11 @@
       "ctaLabel": "Nous contacter",
       "ctaHref": "#contact",
       "mediaLeft": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Équipe Oveco"
       },
       "mediaRight": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Projet Oveco",
         "overlay": true
       },
@@ -29,25 +29,25 @@
       "title": "Nos valeurs",
       "competences": [
         {
-          "icon": "/uploads/compétance/maison.png",
+          "icon": "/uploads/compétance/maison.webp",
           "alt": "Expertise technique",
           "title": "Expertise technique",
           "description": "Des ingénieurs qualifiés pour concevoir et réaliser vos installations énergétiques."
         },
         {
-          "icon": "/uploads/compétance/personne.png",
+          "icon": "/uploads/compétance/personne.webp",
           "alt": "Accompagnement humain",
           "title": "Accompagnement humain",
           "description": "Un suivi personnalisé de la conception à la mise en service de votre projet."
         },
         {
-          "icon": "/uploads/compétance/eolienne.png",
+          "icon": "/uploads/compétance/eolienne.webp",
           "alt": "Durabilité",
           "title": "Durabilité",
           "description": "Des solutions pérennes qui respectent l'environnement et votre budget."
         },
         {
-          "icon": "/uploads/compétance/crayon.png",
+          "icon": "/uploads/compétance/crayon.webp",
           "alt": "Innovation",
           "title": "Innovation",
           "description": "Les dernières technologies au service de votre projet énergétique."
@@ -57,7 +57,7 @@
     },
     {
       "image": {
-        "src": "/uploads/hero/maison-build.png",
+        "src": "/uploads/hero/maison-build.webp",
         "alt": "Équipe Oveco au travail"
       },
       "icon1": {

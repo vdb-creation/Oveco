@@ -8,7 +8,7 @@
     "year": "2023",
     "location": "Beauvechain, Belgium",
     "description": "Complete renovation of a 1970s family home into a passive house. This exemplary project demonstrates that it is possible to transform an energy-consuming habitat into a high-performance passive house.",
-    "heroImage": "/uploads/imgs/maison-toit.png",
+    "heroImage": "/uploads/imgs/maison-toit.webp",
     "heroImageAlt": "Renovated passive house in Beauvechain",
     "challenge": {
       "title": "The challenge",
@@ -21,27 +21,27 @@
         {
           "name": "External insulation",
           "description": "20cm rock wool insulation to achieve a thermal resistance of 5 m².K/W",
-          "icon": "/uploads/compétance/maison.png"
+          "icon": "/uploads/compétance/maison.webp"
         },
         {
           "name": "Triple glazing",
           "description": "Triple glazed windows with Uw coefficient of 0.8 W/m².K to minimize heat loss",
-          "icon": "/uploads/compétance/maison.png"
+          "icon": "/uploads/compétance/maison.webp"
         },
         {
           "name": "Double flow VMC",
           "description": "Controlled mechanical ventilation with 85% heat recovery",
-          "icon": "/uploads/compétance/clim.png"
+          "icon": "/uploads/compétance/clim.webp"
         },
         {
           "name": "Photovoltaic panels",
           "description": "Installation of 8kW solar panels for self-consumption",
-          "icon": "/uploads/compétance/eolienne.png"
+          "icon": "/uploads/compétance/eolienne.webp"
         },
         {
           "name": "Heat pump",
           "description": "Air-water heat pump heating with performance coefficient of 4.2",
-          "icon": "/uploads/compétance/clim.png"
+          "icon": "/uploads/compétance/clim.webp"
         }
       ]
     },
@@ -126,22 +126,22 @@
     },
     "gallery": [
       {
-        "src": "/uploads/imgs/maison-toit.png",
+        "src": "/uploads/imgs/maison-toit.webp",
         "alt": "Exterior view of the renovated passive house",
         "caption": "Exterior view after renovation"
       },
       {
-        "src": "/uploads/imgs/maison-build.png",
+        "src": "/uploads/imgs/maison-build.webp",
         "alt": "External insulation work",
         "caption": "External insulation work"
       },
       {
-        "src": "/uploads/imgs/maison-toit-2.png",
+        "src": "/uploads/imgs/maison-toit-2.webp",
         "alt": "Photovoltaic panel installation",
         "caption": "Photovoltaic panel installation"
       },
       {
-        "src": "/uploads/imgs/plan.png",
+        "src": "/uploads/imgs/plan.webp",
         "alt": "Renovation plans",
         "caption": "Energy renovation plans"
       }

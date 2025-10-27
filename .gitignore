@@ -27,3 +27,18 @@ node_modules
 
 # Garder src/lib/anim comme dépôt séparé (ne pas suivre dans le repo parent)
 src/lib/anim/
+
+# Images uploadées - Structure finale
+# Originaux supprimés → convertis en WebP dans uploads/
+# AVIF caché dans optimized/
+public/uploads/**/*.jpg
+public/uploads/**/*.jpeg
+public/uploads/**/*.png
+public/uploads/**/*.JPG
+public/uploads/**/*.JPEG
+public/uploads/**/*.PNG
+# Mais garder les WebP dans uploads (visibles par TinaCMS)
+!public/uploads/**/*.webp
+# Et les AVIF dans optimized (cachés de TinaCMS)
+!public/optimized/**/*.opt.avif
+!public/optimized/.gitkeep
