@@ -1,5 +1,5 @@
 [build]
-  command = "pnpm gen:lqip && pnpm gen:blur && pnpm optimize:uploads && pnpm purge:originals && npx tinacms build && pnpm run build"
+  command = "pnpm gen:lqip && pnpm gen:blur && pnpm optimize:uploads && pnpm purge:originals && (npx tinacms build || echo 'TinaCMS build skipped') && pnpm run build"
   publish = "dist"
 
 [build.environment]
