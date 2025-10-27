@@ -1,8 +1,8 @@
 [phases.build]
 cmds = ["npx tinacms build && pnpm run build"]
 
-[phases.start]
-cmd = ""
+[start]
+cmd = "pnpm run preview"
 
 [static]
 publish = "dist"
