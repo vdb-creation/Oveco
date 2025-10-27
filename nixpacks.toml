@@ -13,3 +13,8 @@ publish = "dist"
   to = "/admin/index.html"
   status = 200
   force = true
+
+
+[phases.setup]
+# Forcer la version de Node supportée par Astro
+nixPkgs = ["nodejs_20", "pnpm-9_x"]
