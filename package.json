@@ -12,7 +12,7 @@
     "dev": "pnpm watch:media & tinacms dev -c \"astro dev\"",
     "dev:watch": "concurrently \"pnpm run dev\" \"node scripts/watch-webp.mjs\"",
     "dev:fast": "astro dev --host",
-    "build": "pnpm gen:lqip && pnpm gen:blur && pnpm optimize:uploads && pnpm purge:originals && astro build",
+    "build": "pnpm gen:lqip && pnpm gen:blur && pnpm optimize:uploads && pnpm purge:originals && astro build && node scripts/create-admin-page.mjs",
     "build:optimized": "node scripts/build-optimized.mjs",
     "build:astro": "astro build",
     "build:admin": "tinacms build",
