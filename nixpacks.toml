@@ -1,0 +1,15 @@
+[phases.build]
+cmds = ["npx tinacms build && pnpm run build"]
+
+[phases.start]
+cmd = ""
+
+[static]
+publish = "dist"
+
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+  force = true
