@@ -17,7 +17,8 @@
     "build:astro": "astro build",
     "build:admin": "tinacms build",
     "build:full": "node scripts/build-with-tina.mjs",
-    "preview": "astro preview",
+    "preview": "astro preview --host 0.0.0.0 --port 80",
+
     "preview:fast": "astro preview --host",
     "astro": "astro",
     "content:create": "bash scripts/create-content.sh",
