@@ -47,6 +47,7 @@ Si vous utilisez TinaCMS en production, vous devez:
 2. ✅ Ajouté `public/admin/index.html` au `.gitignore` (ne sera pas commité)
 3. ✅ Modifié `netlify.toml` pour ignorer les erreurs de build TinaCMS
 4. ✅ Le fichier admin est généré automatiquement par `tinacms dev` en développement local
+5. ✅ Créé un script pour générer une page admin simple en production (pas d'erreur)
 
 ## Prochaines étapes
 
