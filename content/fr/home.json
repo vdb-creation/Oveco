@@ -3,6 +3,30 @@
   "description": "Oveco accompagne vos projets d'auto-construction et de rénovation écologique en Belgique. Expertise en maisons passives, énergies renouvelables et construction durable. Devis gratuit.",
   "sections": [
     {
+      "subtitle": "Nos compétences",
+      "title": "Ce que nous maîtrisons",
+      "description": "Domaines d'expertise clés.",
+      "competences": [
+        {
+          "icon": "/uploads/comp%C3%A9tance/crayon.webp",
+          "alt": "Compétencesqdfqsdfqsdfsdqf",
+          "title": "Ossature bois",
+          "description": "Structures et enveloppes performantes."
+        },
+        {
+          "icon": "/uploads/comp%C3%A9tance/eolienne.webp",
+          "title": "sfsdfsdfqsdfqs",
+          "description": "fqsdfqsdfqsdfqsdfsqdfsdqfsdqfqsdfqdsfqsdf"
+        },
+        {
+          "icon": "/uploads/comp%C3%A9tance/personne.webp",
+          "title": "fsqdfsdqfqsd",
+          "description": "fqsdfaerzaterezrtertezrughfjghkhlkho,"
+        }
+      ],
+      "_template": "competences"
+    },
+    {
       "subtitle": "oveco",
       "title": "Construisons l'avenir",
       "description": "Des ingénieurs-installateurs à vos côtés.",
@@ -31,30 +55,6 @@
         }
       ],
       "_template": "hero"
-    },
-    {
-      "subtitle": "Nos compétences",
-      "title": "Ce que nous maîtrisons",
-      "description": "Domaines d'expertise clés.",
-      "competences": [
-        {
-          "icon": "/uploads/comp%C3%A9tance/crayon.webp",
-          "alt": "Compétencesqdfqsdfqsdfsdqf",
-          "title": "Ossature bois",
-          "description": "Structures et enveloppes performantes."
-        },
-        {
-          "icon": "/uploads/comp%C3%A9tance/eolienne.webp",
-          "title": "sfsdfsdfqsdfqs",
-          "description": "fqsdfqsdfqsdfqsdfsqdfsdqfsdqfqsdfqdsfqsdf"
-        },
-        {
-          "icon": "/uploads/comp%C3%A9tance/personne.webp",
-          "title": "fsqdfsdqfqsd",
-          "description": "fqsdfaerzaterezrtertezrughfjghkhlkho,"
-        }
-      ],
-      "_template": "competences"
     },
     {
       "title": "En chiffres",
