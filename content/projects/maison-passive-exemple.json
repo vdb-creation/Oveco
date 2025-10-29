@@ -11,22 +11,22 @@
   "budget": "350 000€",
   "status": "completed",
   
-  "heroImage": "/uploads/projects/maison-passive-hero.jpg",
-  "thumbnail": "/uploads/projects/maison-passive-thumb.jpg",
+  "heroImage": "/uploads/projects/maison-passive-hero.webp",
+  "thumbnail": "/uploads/projects/maison-passive-thumb.webp",
   
   "gallery": [
     {
-      "image": "/uploads/projects/maison-passive-1.jpg",
+      "image": "/uploads/projects/maison-passive-1.webp",
       "alt": "Façade principale de la maison passive",
       "caption": "Façade principale avec grandes baies vitrées orientées sud"
     },
     {
-      "image": "/uploads/projects/maison-passive-2.jpg",
+      "image": "/uploads/projects/maison-passive-2.webp",
       "alt": "Panneaux solaires sur le toit",
       "caption": "Installation des panneaux solaires photovoltaïques"
     },
     {
-      "image": "/uploads/projects/maison-passive-3.jpg",
+      "image": "/uploads/projects/maison-passive-3.webp",
       "alt": "Intérieur de la maison",
       "caption": "Séjour ouvert avec vue sur le jardin"
     }
@@ -72,7 +72,7 @@
     "subtitle": "Innovation",
     "title": "Technologies Écologiques",
     "description": "Cette maison passive utilise les dernières technologies écologiques pour minimiser son impact environnemental tout en maximisant le confort de ses occupants.",
-    "image": "/uploads/projects/maison-passive-tech.jpg",
+    "image": "/uploads/projects/maison-passive-tech.webp",
     "reverse": false
   },
   

@@ -11,27 +11,27 @@
   "budget": "180 000€",
   "status": "completed",
   
-  "heroImage": "/uploads/projects/renovation-hero.jpg",
-  "thumbnail": "/uploads/projects/renovation-thumb.jpg",
+  "heroImage": "/uploads/projects/renovation-hero.webp",
+  "thumbnail": "/uploads/projects/renovation-thumb.webp",
   
   "gallery": [
     {
-      "image": "/uploads/projects/renovation-1.jpg",
+      "image": "/uploads/projects/renovation-1.webp",
       "alt": "Maison avant rénovation",
       "caption": "État initial de la maison des années 70"
     },
     {
-      "image": "/uploads/projects/renovation-2.jpg",
+      "image": "/uploads/projects/renovation-2.webp",
       "alt": "Travaux d'isolation",
       "caption": "Mise en place de l'isolation thermique"
     },
     {
-      "image": "/uploads/projects/renovation-3.jpg",
+      "image": "/uploads/projects/renovation-3.webp",
       "alt": "Installation panneaux solaires",
       "caption": "Installation des panneaux solaires photovoltaïques"
     },
     {
-      "image": "/uploads/projects/renovation-4.jpg",
+      "image": "/uploads/projects/renovation-4.webp",
       "alt": "Résultat final",
       "caption": "Maison rénovée avec façade moderne"
     }
@@ -77,7 +77,7 @@
     "subtitle": "Transformation",
     "title": "De l'Ancien au Moderne",
     "description": "Cette rénovation écologique démontre qu'il est possible de transformer une habitation ancienne en maison moderne et économe en énergie, tout en préservant le caractère architectural original.",
-    "image": "/uploads/projects/renovation-comparison.jpg",
+    "image": "/uploads/projects/renovation-comparison.webp",
     "reverse": true
   },
   

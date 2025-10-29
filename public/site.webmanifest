@@ -1,0 +1,22 @@
+{
+  "name": "Oveco - Auto-construction et Rénovation Écologique",
+  "short_name": "Oveco",
+  "description": "Oveco accompagne vos projets d'auto-construction et de rénovation écologique",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#048B9A",
+  "icons": [
+    {
+      "src": "/uploads/icons/logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    },
+    {
+      "src": "/uploads/icons/logo.webp",
+      "sizes": "180x180",
+      "type": "image/webp"
+    }
+  ]
+}
+
