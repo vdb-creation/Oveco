@@ -65,11 +65,13 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
 
     <div class="works-hero__content">
       <header class="works-hero__header">
-        <p class="works-hero__subtitle">{subtitle}</p>
-        <h1 class="works-hero__title" id={id}>{title}</h1>
+        <p class="works-hero__subtitle" data-bind="sections.0.worksHero.subtitle">{subtitle}</p>
+        <h1 class="works-hero__title" id={id} data-bind="sections.0.worksHero.title">{title}</h1>
       </header>
-      <p class="works-hero__desc">{description}</p>
-      <a href={ctaHref} class="works-hero__cta">{ctaLabel}</a>
+      <p class="works-hero__desc" data-bind="sections.0.worksHero.description">{description}</p>
+      <a href={ctaHref} class="works-hero__cta" data-bind="sections.0.worksHero.ctaHref">
+        <span data-bind="sections.0.worksHero.ctaLabel">{ctaLabel}</span>
+      </a>
     </div>
 
     <div class="works-hero__side works-hero__side--right" aria-hidden="true">
@@ -177,6 +179,12 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
     width: 320px;
     height: 384px;
   }
+}
+
+/* Tablette: réduire légèrement pour éviter les chevauchements */
+@media (max-width: 1200px) and (min-width: 1025px) {
+  .works-hero__inner { gap: clamp(16px, 3vw, 40px); }
+  .works-hero__figure { width: 240px; height: 290px; }
 }
 
 .works-hero__figure--overlay::after {

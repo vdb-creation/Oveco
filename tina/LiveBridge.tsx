@@ -7,12 +7,30 @@ type Q = { query: string; variables: any; data: any };
 const $$ = <T extends Element = HTMLElement>(sel: string) =>
   Array.from(document.querySelectorAll<T>(sel));
 
+// Fonction pour ajouter data-tina-field aux éléments avec data-bind
+const addTinaField = (bind: string, fieldPath: string) => {
+  $$<HTMLElement>(`[data-bind="${bind}"]`).forEach((el) => {
+    // Ajouter data-tina-field pour que TinaCMS puisse détecter l'élément éditable
+    el.setAttribute("data-tina-field", fieldPath);
+  });
+};
+
 const setText = (bind: string, val?: string) =>
-  $$<HTMLElement>(`[data-bind="${bind}"]`).forEach((el) => (el.textContent = val ?? ""));
+  $$<HTMLElement>(`[data-bind="${bind}"]`).forEach((el) => {
+    el.textContent = val ?? "";
+    // Ajouter aussi data-tina-field pour TinaCMS
+    if (!el.hasAttribute("data-tina-field")) {
+      el.setAttribute("data-tina-field", bind);
+    }
+  });
 
 const setAttr = (bind: string, attr: string, val?: string) =>
   $$<HTMLElement>(`[data-bind="${bind}"]`).forEach((el) => {
     if (val != null) el.setAttribute(attr, val);
+    // Ajouter aussi data-tina-field pour TinaCMS
+    if (!el.hasAttribute("data-tina-field")) {
+      el.setAttribute("data-tina-field", bind);
+    }
   });
 
 export default function LiveBridge(props: { home: Q }) {
@@ -97,11 +115,17 @@ export default function LiveBridge(props: { home: Q }) {
 
       // HERO
       if (template === "hero") {
-        setText(`${prefix}.title`, section.title);
+        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        addTinaField(`${prefix}.ctaText`, `sections.${index}.ctaText`);
+        addTinaField(`${prefix}.ctaUrl`, `sections.${index}.ctaUrl`);
+        
         setText(`${prefix}.subtitle`, section.subtitle);
+        setText(`${prefix}.title`, section.title);
         setText(`${prefix}.description`, section.description);
-        setText(`${prefix}.ctaLabel`, section.ctaLabel);
-        setAttr(`${prefix}.ctaHref`, "href", section.ctaHref);
+        setText(`${prefix}.ctaText`, section.ctaText || section.ctaLabel);
+        setAttr(`${prefix}.ctaUrl`, "href", section.ctaUrl || section.ctaHref);
       }
 
       // SERVICES
@@ -113,13 +137,80 @@ export default function LiveBridge(props: { home: Q }) {
         });
       }
 
+      // WORKS HERO
+      if (template === "workshero") {
+        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        addTinaField(`${prefix}.ctaLabel`, `sections.${index}.ctaLabel`);
+        addTinaField(`${prefix}.ctaHref`, `sections.${index}.ctaHref`);
+        
+        setText(`${prefix}.subtitle`, section.subtitle);
+        setText(`${prefix}.title`, section.title);
+        setText(`${prefix}.description`, section.description);
+        setText(`${prefix}.ctaLabel`, section.ctaLabel);
+        setAttr(`${prefix}.ctaHref`, "href", section.ctaHref);
+      }
+
+      // EXPERTISE
+      if (template === "expertise") {
+        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        
+        setText(`${prefix}.subtitle`, section.subtitle);
+        setText(`${prefix}.title`, section.title);
+        setText(`${prefix}.description`, section.description);
+      }
+
+      // STATS
+      if (template === "stats") {
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        setText(`${prefix}.title`, section.title);
+      }
+
+      // PROJECTS
+      if (template === "projects") {
+        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        
+        setText(`${prefix}.subtitle`, section.subtitle);
+        setText(`${prefix}.title`, section.title);
+        setText(`${prefix}.description`, section.description);
+      }
+
+      // TESTIMONIALS
+      if (template === "testimonials") {
+        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        
+        setText(`${prefix}.subtitle`, section.subtitle);
+        setText(`${prefix}.title`, section.title);
+        setText(`${prefix}.description`, section.description);
+      }
+
+      // CONTACT
+      if (template === "contact") {
+        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        
+        setText(`${prefix}.subtitle`, section.subtitle);
+        setText(`${prefix}.title`, section.title);
+        setText(`${prefix}.description`, section.description);
+      }
+
       // FOOTER
       if (template === "footer") {
+        addTinaField(`${prefix}.companyName`, `sections.${index}.companyName`);
         setText(`${prefix}.companyName`, section.companyName);
-        setText(`${prefix}.description`, section.description);
         (section.links || []).forEach((link: any, i: number) => {
+          addTinaField(`${prefix}.links.${i}.label`, `sections.${index}.links.${i}.label`);
+          addTinaField(`${prefix}.links.${i}.href`, `sections.${index}.links.${i}.href`);
           setText(`${prefix}.links.${i}.label`, link.label);
-          setAttr(`${prefix}.links.${i}.href`, "href", link.href);
+          setAttr(`${prefix}.links.${i}.href`, "href", link.href || link.url);
         });
       }
 

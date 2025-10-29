@@ -162,92 +162,140 @@ const titleId = `${sectionId}-title`;
   // Navigation du carrousel de projets
   function initProjectsNavigation() {
     const grid = document.querySelector('[data-projects-grid]') as HTMLElement;
-    if (!grid) return;
+    if (!grid) {
+      console.warn('[Projects] Grid not found');
+      return;
+    }
 
     const prevBtn = document.querySelector('.projects__nav-btn--prev') as HTMLButtonElement;
     const nextBtn = document.querySelector('.projects__nav-btn--next') as HTMLButtonElement;
 
-    if (!prevBtn || !nextBtn) return;
+    if (!prevBtn || !nextBtn) {
+      console.warn('[Projects] Navigation buttons not found');
+      return;
+    }
 
-    // Carrousel sur toutes les tailles d'écran - amélioré
+    // Fonction pour calculer la largeur de scroll
     const getScrollAmount = () => {
       const screenWidth = window.innerWidth;
-      let cardWidth = 412; // Largeur par défaut
-      let gap = 14; // Espacement par défaut
+      const firstCard = grid.querySelector('.projects__card') as HTMLElement;
+      
+      if (firstCard) {
+        const cardRect = firstCard.getBoundingClientRect();
+        const gap = window.getComputedStyle(grid).gap;
+        const gapValue = parseInt(gap) || 14;
+        return cardRect.width + gapValue;
+      }
+      
+      // Fallback basé sur la taille d'écran
+      let cardWidth = 412;
+      let gap = 14;
       
       if (screenWidth <= 480) {
-        cardWidth = Math.min(300, screenWidth * 0.8);
+        cardWidth = Math.min(300, screenWidth * 0.85);
         gap = 8;
       } else if (screenWidth <= 768) {
-        cardWidth = Math.min(350, screenWidth * 0.45);
+        cardWidth = Math.min(350, screenWidth * 0.48);
         gap = 10;
       } else if (screenWidth <= 1024) {
-        cardWidth = Math.min(380, screenWidth * 0.3);
+        cardWidth = Math.min(380, screenWidth * 0.32);
         gap = 12;
       } else {
-        cardWidth = Math.min(412, screenWidth * 0.25);
+        cardWidth = Math.min(412, screenWidth * 0.26);
         gap = 14;
       }
       
       return cardWidth + gap;
     };
 
-    prevBtn.addEventListener('click', () => {
+    // Gestion des boutons de navigation
+    prevBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       grid.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
     });
 
-    nextBtn.addEventListener('click', () => {
+    nextBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       grid.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
     });
 
-    // Drag to scroll
+    // Drag to scroll (desktop)
     let isDown = false;
     let startX: number;
     let scrollLeft: number;
 
     grid.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return; // Only left click
       isDown = true;
       grid.classList.add('is-grabbing');
       startX = e.pageX - grid.offsetLeft;
       scrollLeft = grid.scrollLeft;
+      grid.style.cursor = 'grabbing';
     });
 
     grid.addEventListener('mouseleave', () => {
-      isDown = false;
-      grid.classList.remove('is-grabbing');
+      if (isDown) {
+        isDown = false;
+        grid.classList.remove('is-grabbing');
+        grid.style.cursor = 'grab';
+      }
     });
 
     grid.addEventListener('mouseup', () => {
-      isDown = false;
-      grid.classList.remove('is-grabbing');
+      if (isDown) {
+        isDown = false;
+        grid.classList.remove('is-grabbing');
+        grid.style.cursor = 'grab';
+      }
     });
 
     grid.addEventListener('mousemove', (e) => {
       if (!isDown) return;
       e.preventDefault();
       const x = e.pageX - grid.offsetLeft;
-      const walk = (x - startX) * 2;
+      const walk = (x - startX) * 1.5; // Facteur de sensibilité
       grid.scrollLeft = scrollLeft - walk;
     });
 
-    // Touch events
+    // Touch events (mobile)
+    let touchStartX: number;
+    let touchScrollLeft: number;
+    let isTouching = false;
+
     grid.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].pageX - grid.offsetLeft;
-      scrollLeft = grid.scrollLeft;
-    });
+      if (e.touches.length !== 1) return;
+      isTouching = true;
+      touchStartX = e.touches[0].pageX - grid.offsetLeft;
+      touchScrollLeft = grid.scrollLeft;
+    }, { passive: true });
 
     grid.addEventListener('touchmove', (e) => {
-      const x = e.touches[0].pageX - grid.offsetLeft;
-      const walk = (x - startX) * 2;
-      grid.scrollLeft = scrollLeft - walk;
+      if (!isTouching || e.touches.length !== 1) return;
+      const touchX = e.touches[0].pageX - grid.offsetLeft;
+      const walk = (touchX - touchStartX) * 1.5;
+      grid.scrollLeft = touchScrollLeft - walk;
+    }, { passive: true });
+
+    grid.addEventListener('touchend', () => {
+      isTouching = false;
     });
+
+    grid.addEventListener('touchcancel', () => {
+      isTouching = false;
+    });
+
+    // Initialiser le curseur
+    grid.style.cursor = 'grab';
   }
 
-  // Initialiser au chargement de la page
+  // Initialiser au chargement
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initProjectsNavigation);
   } else {
-    initProjectsNavigation();
+    // Attendre un peu pour être sûr que le DOM est prêt
+    setTimeout(initProjectsNavigation, 100);
   }
 </script>
 
@@ -504,22 +552,57 @@ const titleId = `${sectionId}-title`;
   height: 21px;
 }
 
+@media (max-width: 768px) {
+  .projects__nav-btn {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .projects__nav-btn svg {
+    width: 10px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .projects__nav-btn {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .projects__nav-btn svg {
+    width: 8px;
+    height: 16px;
+  }
+}
+
 .projects__grid {
   display: flex;
   align-items: stretch;
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   gap: 14px;
-  padding-right: 1rem;
+  padding: 0.5rem 1rem 1rem 0;
+  margin-right: -1rem;
   scrollbar-width: none;
   -ms-overflow-style: none;
   width: 100%;
+  position: relative;
+}
+
+.projects__grid::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .projects__grid > .projects__card {
-  width: clamp(280px, 25vw, 388px); /* Même largeur que les témoignages */
-  height: clamp(400px, 50vw, 548px);
+  width: clamp(280px, 85vw, 388px);
+  min-width: 280px;
+  max-width: 388px;
+  height: clamp(400px, 70vw, 548px);
   flex: 0 0 auto;
 }
 
@@ -527,28 +610,52 @@ const titleId = `${sectionId}-title`;
   height: auto;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .projects__grid {
-    gap: clamp(16px, 2vw, 22px); /* Même gap que les témoignages */
+    gap: 12px;
+    padding: 0.5rem 0.75rem 1rem 0;
   }
   
   .projects__grid > .projects__card {
-    width: clamp(300px, 30vw, 380px);
-    height: clamp(420px, 45vw, 520px);
+    width: clamp(300px, 38vw, 380px);
+    height: clamp(420px, 55vw, 520px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .projects__grid {
+    gap: 10px;
+    padding: 0.5rem 0.5rem 1rem 0;
+  }
+  
+  .projects__grid > .projects__card {
+    width: clamp(300px, 42vw, 360px);
+    height: clamp(400px, 58vw, 500px);
   }
 }
 
 @media (max-width: 768px) {
+  .projects__grid {
+    gap: 12px;
+    padding: 0.5rem 1rem 1rem 0;
+  }
+  
   .projects__grid > .projects__card {
-    width: clamp(280px, 40vw, 350px);
-    height: clamp(380px, 55vw, 480px);
+    width: clamp(280px, 85vw, 340px);
+    height: clamp(380px, 70vw, 460px);
   }
 }
 
 @media (max-width: 480px) {
+  .projects__grid {
+    gap: 10px;
+    padding: 0.5rem 0.75rem 1rem 0;
+  }
+  
   .projects__grid > .projects__card {
-    width: clamp(260px, 80vw, 300px);
-    height: clamp(350px, 60vw, 420px);
+    width: clamp(260px, 82vw, 300px);
+    min-width: 260px;
+    height: clamp(350px, 75vw, 420px);
   }
 }
 
@@ -568,15 +675,17 @@ const titleId = `${sectionId}-title`;
   align-items: flex-start;
   gap: 17px;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-@media (max-width: 480px) {
-  .projects__card {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 388/548;
-  }
+.projects__card * {
+  user-select: none;
+  -webkit-user-select: none;
 }
+
+/* Les cartes utilisent maintenant flex: 0 0 auto avec des largeurs dynamiques */
+/* Pas besoin de override sur mobile car elles sont déjà responsive */
 
 .projects__card-overlay {
   position: absolute;

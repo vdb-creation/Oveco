@@ -1,5 +1,5 @@
 {
-  "extends": "astro/tsconfigs/strict",
+  "extends": "./node_modules/astro/tsconfigs/strict.json",
   "include": [".astro/types.d.ts", "**/*"],
   "compilerOptions": {
     "baseUrl": ".",
@@ -8,11 +8,14 @@
     "moduleResolution": "Bundler",
     "ignoreDeprecations": "6.0",
     "jsx": "preserve",
-    "jsxImportSource": "astro"
+    "jsxImportSource": "astro",
+    "skipLibCheck": true,
+    "types": []
   },
   "exclude": [
     "dist",
     "src/pages/admin.astro",
-    "src/lib/anim/**/*.astro"
+    "src/lib/anim/**/*.astro",
+    "node_modules"
   ]
 }

@@ -75,7 +75,13 @@ const pageTitle = title || pageContent.title || "Oveco - Auto-construction et R�
 const pageDescription = description || pageContent.description || "Oveco accompagne vos projets d'auto-construction et de rénovation écologique. Expertise en maisons passives et énergies renouvelables.";
 
 // Configuration TinaCMS (pour toutes les pages)
-const forceLive = (import.meta.env.DEV || Astro.url.searchParams.get('live') === '1' || import.meta.env.PUBLIC_TINA_LIVE === '1');
+// En production, activer avec ?live=1 dans l'URL
+const forceLive = (
+  import.meta.env.DEV || 
+  Astro.url.searchParams.get('live') === '1' || 
+  import.meta.env.PUBLIC_TINA_LIVE === '1' ||
+  import.meta.env.PUBLIC_TINA_CLIENT_ID !== undefined
+);
 let tinaData: any = null;
 
 if (forceLive) {
@@ -277,6 +283,7 @@ if (forceLive) {
           description={section.description}
           linkText={section.linkText}
           linkUrl={section.linkUrl}
+          testimonials={section.testimonials || []}
         />
       );
     }
