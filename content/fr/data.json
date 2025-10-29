@@ -146,7 +146,7 @@
       "testimonials": [
         {
           "thumbnail": {
-            "src": "/uploads/team/pic.jpg",
+            "src": "/uploads/team/pic.webp",
             "alt": "Photo de Marie Martin"
           },
           "client_name": "Marie Martin",
@@ -161,7 +161,7 @@
         },
         {
           "thumbnail": {
-            "src": "/uploads/team/pic.jpg",
+            "src": "/uploads/team/pic.webp",
             "alt": "Photo de Pierre Dubois"
           },
           "client_name": "Pierre Dubois",

@@ -212,7 +212,7 @@
       "testimonials": [
         {
           "thumbnail": {
-            "src": "/uploads/team/pic.jpg",
+            "src": "/uploads/team/pic.webp",
             "alt": "Client"
           },
           "client_name": "Client",
