@@ -17,11 +17,13 @@ export interface Props {
   subtitle?: string;
   title?: string;
   gallery?: GalleryItem[];
+  sectionIndex?: number;
 }
 
 const {
   subtitle = "Galerie",
   title = "Quelques photos du projet",
+  sectionIndex = 0,
   gallery = [
     { src: "/uploads/imgs/Charpantier.png", alt: "Charpantier", mod: 'a' },
     { src: "/uploads/imgs/maison-build.png", alt: "Maison en construction", mod: 'b' },
@@ -34,12 +36,12 @@ const {
 <section class="gallery" aria-labelledby="gallery-title">
   <div class="container gallery__container">
     <header class="gallery__header" style="text-align:center">
-      <p class="gallery__subtitle">{subtitle}</p>
-      <h2 class="gallery__title" id="gallery-title">{title}</h2>
+      <p class="gallery__subtitle" data-bind={`sections.${sectionIndex}.gallerie.subtitle`}>{subtitle}</p>
+      <h2 class="gallery__title" id="gallery-title" data-bind={`sections.${sectionIndex}.gallerie.title`}>{title}</h2>
     </header>
 
     <ul class="gallery__grid" role="list">
-      {gallery.map((item) => (
+      {gallery.map((item, index) => (
         <li class="gallery__item" role="listitem">
           <figure class={`gallery__figure gallery__figure--${item.mod || 'a'}`}>
             <SmartImage
@@ -50,6 +52,7 @@ const {
               context="galerie"
               loading="lazy"
               class={`gallery__image gallery__image--${item.mod || 'a'}`}
+              data-bind={`sections.${sectionIndex}.gallery.${index}.src`}
             />
           </figure>
         </li>

@@ -16,6 +16,7 @@ export interface Props {
   description?: string;
   linkText?: string;
   linkUrl?: string;
+  sectionIndex?: number;
   // Les cartes sont maintenant générées dynamiquement depuis les projets
   // Le paramètre cards est conservé pour la compatibilité mais ne sera plus utilisé
   cards?: Array<{
@@ -34,6 +35,7 @@ const {
   description,
   linkText = "En savoir plus",
   linkUrl = "/works",
+  sectionIndex = 0,
   cards = []
 } = Astro.props;
 
@@ -59,17 +61,18 @@ const titleId = `${sectionId}-title`;
     <div class="projects__container">
       <header class="projects__header">
         <div class="projects__header-content">
-          <p class="projects__subtitle">{subtitle}</p>
-          <h2 class="projects__title" id={titleId} itemprop="name">{title}</h2>
+          <p class="projects__subtitle" data-bind={`sections.${sectionIndex}.projects.subtitle`}>{subtitle}</p>
+          <h2 class="projects__title" id={titleId} itemprop="name" data-bind={`sections.${sectionIndex}.projects.title`}>{title}</h2>
           {description && (
-            <p class="projects__description" itemprop="description">{description}</p>
+            <p class="projects__description" itemprop="description" data-bind={`sections.${sectionIndex}.projects.description`}>{description}</p>
           )}
           <a 
             href={linkUrl} 
             class="projects__link" 
             aria-label="Voir tous nos projets (page Réalisations)"
+            data-bind={`sections.${sectionIndex}.projects.linkUrl`}
           >
-            <span>{linkText}</span>
+            <span data-bind={`sections.${sectionIndex}.projects.linkText`}>{linkText}</span>
             <svg 
               class="projects__link-arrow" 
               width="10" 

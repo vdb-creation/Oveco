@@ -21,6 +21,7 @@ export interface Props {
   cards?: ExpertiseCard[];
   ctaLabel?: string;
   ctaHref?: string;
+  sectionIndex?: number;
 }
 
 const {
@@ -48,7 +49,8 @@ const {
     }
   ],
   ctaLabel = "Découvrir toutes nos expertises",
-  ctaHref = "#expertises-details"
+  ctaHref = "#expertises-details",
+  sectionIndex = 0
 } = Astro.props;
 ---
 
@@ -56,14 +58,14 @@ const {
   <div class="container">
     <div class="expertise__container">
       <header class="expertise__header">
-        <h3 class="expertise__subtitle" aria-label="Section nos expertises" data-bind="sections.0.expertise.subtitle">{subtitle}</h3>
-        <h2 class="expertise__title" id="expertise-title" data-bind="sections.0.expertise.title">{title}</h2>
-        <p class="expertise__description" set:html={description} data-bind="sections.0.expertise.description" />
+        <h3 class="expertise__subtitle" aria-label="Section nos expertises" data-bind={`sections.${sectionIndex}.expertise.subtitle`}>{subtitle}</h3>
+        <h2 class="expertise__title" id="expertise-title" data-bind={`sections.${sectionIndex}.expertise.title`}>{title}</h2>
+        <p class="expertise__description" set:html={description} data-bind={`sections.${sectionIndex}.expertise.description`} />
       </header>
       
       <div class="expertise__content">
         <div class="expertise__grid" role="list" aria-label="Liste de nos expertises">
-          {cards.map((card) => (
+          {cards.map((card, index) => (
             <article class="expertise__card" role="listitem" itemscope itemtype="https://schema.org/Service">
               <SmartImage
                 cmsSrc={card.icon}
@@ -75,8 +77,8 @@ const {
                 class="expertise__icon"
               />
               <div class="expertise__card-content">
-                <h4 class="expertise__card-title" itemprop="name" set:html={card.title} />
-                <p class="expertise__card-description" itemprop="description" set:html={card.description} />
+                <h4 class="expertise__card-title" itemprop="name" data-bind={`sections.${sectionIndex}.cards.${index}.title`} set:html={card.title} />
+                <p class="expertise__card-description" itemprop="description" data-bind={`sections.${sectionIndex}.cards.${index}.description`} set:html={card.description} />
               </div>
             </article>
           ))}

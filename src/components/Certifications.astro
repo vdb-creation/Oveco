@@ -17,11 +17,13 @@ export interface Props {
   title?: string;
   description?: string;
   cards?: CertificationCard[];
+  sectionIndex?: number;
 }
 
 const {
   title = "Des certifications à l'échelle européenne",
   description = "Notre savoir-faire est reconnu à l'échelle belge et européenne.<br>Nos projets respectent les normes en vigueur (PEB, RGIE…) et s'inscrivent dans une logique de transition énergétique cohérente, mesurable et durable.",
+  sectionIndex = 0,
   cards = [{}, {}, {}] // 3 cartes par défaut
 } = Astro.props;
 
@@ -42,8 +44,8 @@ function normalizePath(input?: string): string {
     <div class="certifications__container">
       <header class="certifications__header">
         <div class="certifications__header-content">
-          <h2 class="certifications__title" id="certifications-title" set:html={title} />
-          <p class="certifications__description" set:html={description} />
+          <h2 class="certifications__title" id="certifications-title" data-bind={`sections.${sectionIndex}.certifications.title`} set:html={title} />
+          <p class="certifications__description" data-bind={`sections.${sectionIndex}.certifications.description`} set:html={description} />
         </div>
       </header>
 
@@ -70,7 +72,7 @@ function normalizePath(input?: string): string {
               </div>
               
               {card.text && (
-                <p class="certifications__text">{card.text}</p>
+                <p class="certifications__text" data-bind={`sections.${sectionIndex}.cards.${index}.text`}>{card.text}</p>
               )}
             </article>
           );

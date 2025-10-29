@@ -80,7 +80,14 @@ const {
   class: imgClass, style, decoding, loading,
   formats = ["avif", "webp"],
   fallbackFormat = "webp", // => fallback <img> en WebP par défaut
-} = Astro.props as Props;
+  ...rest
+} = Astro.props as Props & { 'data-tina-field'?: string; 'data-bind'?: string };
+
+// Extraire data-tina-field et data-bind pour les propager vers les balises HTML finales
+const dataTinaField = rest['data-tina-field'];
+const dataBind = rest['data-bind'];
+delete rest['data-tina-field'];
+delete rest['data-bind'];
 
 // Helpers
 const normalizeCmsSrc = (src?: string) => {
@@ -318,6 +325,8 @@ const wrapperStyle = [
   <span 
     class={`si-wrap ${wrapClass}${!usePlaceholder ? ' no-placeholder' : ''}`} 
     style={wrapperStyle}
+    data-tina-field={dataTinaField}
+    data-bind={dataBind}
   >
     {/* En production, utiliser des balises <img> simples (pas d'Unpic) */}
     {!import.meta.env.DEV ? (
@@ -349,6 +358,8 @@ const wrapperStyle = [
           loading={effectiveLoading}
           style={`${fit ? `object-fit: ${fit};` : ''} background: transparent !important; background-image: none !important;`}
           onerror="console.warn('Image failed to load:', this.src); this.style.display='none';"
+          data-tina-field={dataTinaField}
+          data-bind={dataBind}
         />
       </picture>
     ) : (
@@ -396,6 +407,8 @@ const wrapperStyle = [
           decoding={decoding}
           loading={effectiveLoading}
           onload={usePlaceholder ? "const wrap = this.closest('.si-wrap'); if(wrap) { wrap.classList.add('is-loaded'); }" : undefined}
+          data-tina-field={dataTinaField}
+          data-bind={dataBind}
         />
       </picture>
     )}

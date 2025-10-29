@@ -1,6 +1,6 @@
 // tina/LiveBridge.tsx
 import { useEffect, useRef } from "react";
-import { useTina } from "tinacms/dist/react";
+import { useTina, tinaField } from "tinacms/dist/react";
 
 type Q = { query: string; variables: any; data: any };
 
@@ -35,6 +35,126 @@ const setAttr = (bind: string, attr: string, val?: string) =>
 
 export default function LiveBridge(props: { home: Q }) {
   const result = useTina(props.home);
+  
+  // Fonction pour trouver le document racine (selon tuto.md)
+  // Au lieu de deviner avec Object.keys(root)[0], on trouve l'objet qui a un tableau "sections"
+  function pickDocRoot(data: any) {
+    if (!data || typeof data !== 'object') return null;
+    
+    // 1) Si on connaît la clé: return data.home;
+    if (data.home && typeof data.home === 'object' && Array.isArray(data.home.sections)) {
+      return data.home;
+    }
+    
+    // 2) Sinon: choisis le premier objet qui a un tableau "sections"
+    for (const v of Object.values(data)) {
+      if (v && typeof v === 'object' && Array.isArray((v as any).sections)) {
+        return v;
+      }
+    }
+    
+    return null;
+  }
+  
+  // Fonction pour résoudre l'objet et la propriété depuis docRoot (selon tuto.md)
+  // Ne "devine" pas, traverse simplement en sautant uniquement les segments qui matchent _template
+  function resolveObjAndProp(docRoot: any, bind: string) {
+    if (!docRoot || !bind) return null;
+    
+    const parts = bind.split('.'); // ex: sections.2.hero.subtitle
+    if (parts.length < 2) return null;
+    
+    let cursor: any = docRoot;
+    
+    // On va jusqu'à l'avant-dernier segment (le dernier = prop finale)
+    for (let i = 0; i < parts.length - 1; i++) {
+      const seg = parts[i];
+      const isIndex = /^\d+$/.test(seg);
+      
+      // Si on est sur un tableau et qu'on a un index numérique
+      if (Array.isArray(cursor) && isIndex) {
+        const idx = Number(seg);
+        if (idx >= 0 && idx < cursor.length) {
+          cursor = cursor[idx];
+          continue;
+        } else {
+          console.warn(`[resolveObjAndProp] Index ${idx} out of bounds for array of length ${cursor.length}`, bind);
+          return null;
+        }
+      }
+      
+      // Cas "template" : vérifier AVANT de naviguer, si cursor._template ou __typename correspond à seg → on saute ce seg.
+      if (cursor && typeof cursor === 'object' && !Array.isArray(cursor)) {
+        // Récupérer le nom du template depuis _template ou __typename
+        const templateName = cursor._template || '';
+        const typename = cursor.__typename || '';
+        // Extraire le template depuis __typename (ex: "HomeSectionsHero" → "Hero")
+        const typenameTemplate = typename.replace(/^HomeSections/, '').replace(/^[A-Z]+Sections/, '');
+        
+        const templateLower = templateName.toString().toLowerCase().replace(/\s+/g, '');
+        const typenameLower = typenameTemplate.toLowerCase().replace(/\s+/g, '');
+        const segLower = seg.toLowerCase().replace(/\s+/g, '');
+        
+        // Si le segment correspond au template (case-insensitive, sans espaces), on le saute
+        if (templateLower === segLower || typenameLower === segLower || templateName === seg || typenameTemplate === seg) {
+          // on ignore ce segment et continue (c'est un template redondant dans le bind)
+          continue;
+        }
+      }
+      
+      // Si la clé existe dans l'objet, naviguer
+      if (cursor && typeof cursor === 'object' && seg in cursor) {
+        cursor = cursor[seg];
+        continue;
+      }
+      
+      // Rien ne matche → chemin invalide
+      console.warn(`[resolveObjAndProp] Cannot navigate to "${seg}" in`, { 
+        bind, 
+        'seg': seg,
+        'cursor type': typeof cursor,
+        'cursor keys': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? Object.keys(cursor).slice(0, 10) : 'N/A',
+        'cursor._template': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? cursor._template : 'N/A'
+      });
+      return null;
+    }
+    
+    const prop = parts[parts.length - 1];
+    
+    // Debug final pour voir ce qu'on a résolu (uniquement si nécessaire)
+    if (!cursor || typeof cursor !== 'object' || Array.isArray(cursor) || !(prop in cursor)) {
+      console.warn(`[resolveObjAndProp] ${bind} -> RÉSULTAT INVALIDE:`, {
+        'obj type': typeof cursor,
+        'obj keys': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? Object.keys(cursor).slice(0, 15) : 'N/A',
+        'prop': prop,
+        'prop in obj': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? (prop in cursor) : false,
+        'obj._template': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? cursor._template : 'N/A',
+        'obj preview': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? JSON.stringify(Object.keys(cursor).reduce((acc, k) => {
+          if (['_template', '__typename', prop].includes(k) || k.startsWith('_')) {
+            acc[k] = cursor[k];
+          }
+          return acc;
+        }, {} as any)).substring(0, 150) : 'N/A'
+      });
+    }
+    
+    return { obj: cursor, prop };
+  }
+  
+  // Fonction pour obtenir le CMS de manière sûre depuis le contexte global
+  const getCMS = (): any => {
+    try {
+      // Essayer d'accéder au CMS via window (TinaCMS l'expose parfois)
+      if (typeof window !== 'undefined' && (window as any).tinacms) {
+        return (window as any).tinacms;
+      }
+      // Sinon, essayer via le contexte React si disponible
+      // Note: On ne peut pas utiliser useCMS() ici car il nécessite un provider
+      return null;
+    } catch (err) {
+      return null;
+    }
+  };
 
   // Fonction pour réorganiser les sections dans le DOM
   const reorderSections = (sections: any[]) => {
@@ -115,6 +235,7 @@ export default function LiveBridge(props: { home: Q }) {
 
       // HERO
       if (template === "hero") {
+        // Les chemins TinaCMS utilisent sections.INDEX.FIELD (sans le template et sans crochets)
         addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
         addTinaField(`${prefix}.title`, `sections.${index}.title`);
         addTinaField(`${prefix}.description`, `sections.${index}.description`);
@@ -161,12 +282,56 @@ export default function LiveBridge(props: { home: Q }) {
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
         setText(`${prefix}.description`, section.description);
+        
+        // Gérer les items cards
+        (section.cards || []).forEach((card: any, i: number) => {
+          addTinaField(`${prefix}.cards.${i}.title`, `sections.${index}.cards.${i}.title`);
+          addTinaField(`${prefix}.cards.${i}.description`, `sections.${index}.cards.${i}.description`);
+          
+          setText(`${prefix}.cards.${i}.title`, card.title);
+          setText(`${prefix}.cards.${i}.description`, card.description);
+        });
       }
 
       // STATS
       if (template === "stats") {
         addTinaField(`${prefix}.title`, `sections.${index}.title`);
         setText(`${prefix}.title`, section.title);
+        
+        // Gérer les items stats
+        (section.stats || []).forEach((stat: any, i: number) => {
+          addTinaField(`${prefix}.stats.${i}.value`, `sections.${index}.stats.${i}.value`);
+          addTinaField(`${prefix}.stats.${i}.label`, `sections.${index}.stats.${i}.label`);
+          addTinaField(`${prefix}.stats.${i}.description`, `sections.${index}.stats.${i}.description`);
+          
+          setText(`${prefix}.stats.${i}.value`, stat.value);
+          setText(`${prefix}.stats.${i}.label`, stat.label);
+          setText(`${prefix}.stats.${i}.description`, stat.description);
+        });
+      }
+
+      // AUTOCONSTRUCTION
+      if (template === "autoconstruction") {
+        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        addTinaField(`${prefix}.ctaLabel`, `sections.${index}.ctaLabel`);
+        addTinaField(`${prefix}.ctaHref`, `sections.${index}.ctaHref`);
+        
+        setText(`${prefix}.subtitle`, section.subtitle);
+        setText(`${prefix}.title`, section.title);
+        setText(`${prefix}.description`, section.description);
+        setText(`${prefix}.ctaLabel`, section.ctaLabel);
+        setAttr(`${prefix}.ctaHref`, "href", section.ctaHref);
+        
+        // Gérer les items services
+        (section.services || []).forEach((service: any, i: number) => {
+          addTinaField(`${prefix}.services.${i}.title`, `sections.${index}.services.${i}.title`);
+          addTinaField(`${prefix}.services.${i}.description`, `sections.${index}.services.${i}.description`);
+          
+          setText(`${prefix}.services.${i}.title`, service.title);
+          setText(`${prefix}.services.${i}.description`, service.description);
+        });
       }
 
       // PROJECTS
@@ -174,10 +339,14 @@ export default function LiveBridge(props: { home: Q }) {
         addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
         addTinaField(`${prefix}.title`, `sections.${index}.title`);
         addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        addTinaField(`${prefix}.linkText`, `sections.${index}.linkText`);
+        addTinaField(`${prefix}.linkUrl`, `sections.${index}.linkUrl`);
         
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
         setText(`${prefix}.description`, section.description);
+        setText(`${prefix}.linkText`, section.linkText);
+        setAttr(`${prefix}.linkUrl`, "href", section.linkUrl);
       }
 
       // TESTIMONIALS
@@ -185,10 +354,14 @@ export default function LiveBridge(props: { home: Q }) {
         addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
         addTinaField(`${prefix}.title`, `sections.${index}.title`);
         addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        addTinaField(`${prefix}.linkText`, `sections.${index}.linkText`);
+        addTinaField(`${prefix}.linkUrl`, `sections.${index}.linkUrl`);
         
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
         setText(`${prefix}.description`, section.description);
+        setText(`${prefix}.linkText`, section.linkText);
+        setAttr(`${prefix}.linkUrl`, "href", section.linkUrl);
       }
 
       // CONTACT
@@ -202,6 +375,105 @@ export default function LiveBridge(props: { home: Q }) {
         setText(`${prefix}.description`, section.description);
       }
 
+      // COMPETENCES
+      if (template === "competences") {
+        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        
+        setText(`${prefix}.subtitle`, section.subtitle);
+        setText(`${prefix}.title`, section.title);
+        setText(`${prefix}.description`, section.description);
+        
+        // Gérer les items competences
+        (section.competences || []).forEach((competence: any, i: number) => {
+          addTinaField(`${prefix}.competences.${i}.title`, `sections.${index}.competences.${i}.title`);
+          addTinaField(`${prefix}.competences.${i}.description`, `sections.${index}.competences.${i}.description`);
+          addTinaField(`${prefix}.competences.${i}.url`, `sections.${index}.competences.${i}.url`);
+          
+          setText(`${prefix}.competences.${i}.title`, competence.title);
+          setText(`${prefix}.competences.${i}.description`, competence.description);
+          setAttr(`${prefix}.competences.${i}.url`, "href", competence.url);
+        });
+      }
+
+      // CERTIFICATIONS
+      if (template === "certifications") {
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        
+        setText(`${prefix}.title`, section.title);
+        setText(`${prefix}.description`, section.description);
+        
+        // Gérer les items cards
+        (section.cards || []).forEach((card: any, i: number) => {
+          addTinaField(`${prefix}.cards.${i}.text`, `sections.${index}.cards.${i}.text`);
+          
+          setText(`${prefix}.cards.${i}.text`, card.text);
+        });
+      }
+
+      // GALLERIE
+      if (template === "gallerie") {
+        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        
+        setText(`${prefix}.subtitle`, section.subtitle);
+        setText(`${prefix}.title`, section.title);
+        
+        // Gérer les items gallery
+        (section.gallery || []).forEach((item: any, i: number) => {
+          addTinaField(`${prefix}.gallery.${i}.src`, `sections.${index}.gallery.${i}.src`);
+          // Note: pour les images, on ne peut pas vraiment setText, mais on peut ajouter le data-tina-field
+        });
+      }
+
+      // TEXTIMAGE
+      if (template === "textimage") {
+        addTinaField(`${prefix}.sectionSubtitle`, `sections.${index}.sectionSubtitle`);
+        addTinaField(`${prefix}.sectionTitle`, `sections.${index}.sectionTitle`);
+        addTinaField(`${prefix}.sectionDescription`, `sections.${index}.sectionDescription`);
+        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        addTinaField(`${prefix}.link.label`, `sections.${index}.link.label`);
+        addTinaField(`${prefix}.link.url`, `sections.${index}.link.url`);
+        addTinaField(`${prefix}.subtitle2`, `sections.${index}.subtitle2`);
+        addTinaField(`${prefix}.title2`, `sections.${index}.title2`);
+        addTinaField(`${prefix}.description2`, `sections.${index}.description2`);
+        addTinaField(`${prefix}.link2.label`, `sections.${index}.link2.label`);
+        addTinaField(`${prefix}.link2.url`, `sections.${index}.link2.url`);
+        
+        setText(`${prefix}.sectionSubtitle`, section.sectionSubtitle);
+        setText(`${prefix}.sectionTitle`, section.sectionTitle);
+        setText(`${prefix}.sectionDescription`, section.sectionDescription);
+        setText(`${prefix}.subtitle`, section.subtitle);
+        setText(`${prefix}.title`, section.title);
+        setText(`${prefix}.description`, section.description);
+        setText(`${prefix}.link.label`, section.link?.label);
+        setAttr(`${prefix}.link.url`, "href", section.link?.url);
+        setText(`${prefix}.subtitle2`, section.subtitle2);
+        setText(`${prefix}.title2`, section.title2);
+        setText(`${prefix}.description2`, section.description2);
+        setText(`${prefix}.link2.label`, section.link2?.label);
+        setAttr(`${prefix}.link2.url`, "href", section.link2?.url);
+      }
+
+      // SIMPLECOMPETENCE
+      if (template === "simplecompetence") {
+        addTinaField(`${prefix}.number`, `sections.${index}.number`);
+        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        addTinaField(`${prefix}.cta.label`, `sections.${index}.cta.label`);
+        addTinaField(`${prefix}.cta.url`, `sections.${index}.cta.url`);
+        
+        setText(`${prefix}.number`, section.number);
+        setText(`${prefix}.title`, section.title);
+        setText(`${prefix}.description`, section.description);
+        setText(`${prefix}.cta.label`, section.cta?.label);
+        setAttr(`${prefix}.cta.url`, "href", section.cta?.url);
+      }
+
       // FOOTER
       if (template === "footer") {
         addTinaField(`${prefix}.companyName`, `sections.${index}.companyName`);
@@ -213,53 +485,1276 @@ export default function LiveBridge(props: { home: Q }) {
           setAttr(`${prefix}.links.${i}.href`, "href", link.href || link.url);
         });
       }
-
-      // Ajoute ici d'autres templates au besoin (team, projects, etc.)
     });
   };
 
   // Référence pour détecter le changement d'ordre
   const previousOrderRef = useRef<string>('');
 
+  // Fonction pour convertir le chemin data-bind en chemin TinaCMS
+  // Exemple: 
+  // - "sections.0.hero.subtitle" -> "sections.0.subtitle" (retirer le template)
+  // - "sections.0.stats.stats.0.value" -> "sections.0.stats.0.value" (retirer le template dupliqué)
+  // - "sections.0.expertise.cards.0.title" -> "sections.0.cards.0.title"
+  const convertBindToTinaPath = (bind: string): string => {
+    // Pattern: sections.INDEX.TEMPLATE.ITEMLIST.ITEMINDEX.FIELD
+    // Ex: sections.0.stats.stats.0.value -> sections.0.stats.0.value
+    const matchWithItems = bind.match(/^sections\.(\d+)\.(\w+)\.(\w+)\.(\d+)\.(.+)$/);
+    if (matchWithItems) {
+      const [, index, template, itemList, itemIndex, field] = matchWithItems;
+      // Si le template et itemList sont identiques (ex: stats.stats), retirer le doublon
+      if (template === itemList) {
+        return `sections.${index}.${itemList}.${itemIndex}.${field}`;
+      }
+      // Sinon, retirer le template et garder itemList.itemIndex.field
+      return `sections.${index}.${itemList}.${itemIndex}.${field}`;
+    }
+    
+    // Pattern: sections.INDEX.TEMPLATE.ITEMLIST.ITEMINDEX.FIELD (variante avec nested)
+    // Ex: sections.0.expertise.cards.0.title -> sections.0.cards.0.title
+    const matchNested = bind.match(/^sections\.(\d+)\.(\w+)\.(\w+\.\d+\.\w+)$/);
+    if (matchNested) {
+      const [, index, template, rest] = matchNested;
+      // Retirer le template et garder le reste
+      return `sections.${index}.${rest}`;
+    }
+    
+    // Pattern: sections.INDEX.TEMPLATE.FIELD (sans items)
+    // Convertir en: sections.INDEX.FIELD (retirer le template du milieu)
+    const match = bind.match(/^sections\.(\d+)\.(\w+)\.(.+)$/);
+    if (match) {
+      const [, index, template, field] = match;
+      // Si field contient déjà un chemin avec . (ex: stats.0.value), ne pas retirer template
+      if (field.includes('.')) {
+        return `sections.${index}.${field}`;
+      }
+      return `sections.${index}.${field}`;
+    }
+    
+    // Si le pattern ne match pas, essayer avec sections.INDEX.FIELD (sans template)
+    const match2 = bind.match(/^sections\.(\d+)\.(.+)$/);
+    if (match2) {
+      const [, index, field] = match2;
+      return `sections.${index}.${field}`;
+    }
+    
+    // Sinon retourner tel quel
+    return bind;
+  };
+
+  // Fonction pour ajouter data-tina-field aux images liées à un data-bind d'image
+  const addTinaFieldToImages = (el: HTMLElement, tinaFieldPath: string, bind: string) => {
+    // 1. Chercher le wrapper .si-wrap (SmartImage) parent ou enfant
+    const siWrap = el.closest('.si-wrap') || el.querySelector('.si-wrap');
+    
+    // 2. Si on trouve un wrapper, lui ajouter data-tina-field
+    if (siWrap && !siWrap.hasAttribute('data-tina-field')) {
+      (siWrap as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
+      console.log(`[LiveBridge] 🖼️ Wrapper .si-wrap lié: ${bind} -> ${tinaFieldPath}`);
+      
+      // Chercher les images dans le wrapper
+      const imagesInWrap = siWrap.querySelectorAll('img, picture img');
+      imagesInWrap.forEach((img) => {
+        if (!img.hasAttribute('data-tina-field')) {
+          (img as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
+          console.log(`[LiveBridge] 🖼️ Image dans wrapper: ${bind} -> ${tinaFieldPath}`);
+        }
+      });
+    }
+    
+    // 3. Si l'élément lui-même est dans un wrapper, chercher les images dans ce wrapper
+    if (el.classList.contains('si-wrap')) {
+      const imagesInElement = el.querySelectorAll('img, picture img');
+      imagesInElement.forEach((img) => {
+        if (!img.hasAttribute('data-tina-field')) {
+          (img as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
+          console.log(`[LiveBridge] 🖼️ Image dans élément si-wrap: ${bind} -> ${tinaFieldPath}`);
+        }
+      });
+    }
+    
+    // 4. Chercher dans les parents jusqu'à trouver un .si-wrap
+    let parent = el.parentElement;
+    let depth = 0;
+    while (parent && parent !== document.body && depth < 6) {
+      if (parent.classList.contains('si-wrap')) {
+        if (!parent.hasAttribute('data-tina-field')) {
+          (parent as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
+          console.log(`[LiveBridge] 🖼️ Wrapper trouvé dans parent (depth ${depth}): ${bind} -> ${tinaFieldPath}`);
+        }
+        const imagesInParentWrap = parent.querySelectorAll('img, picture img');
+        imagesInParentWrap.forEach((img) => {
+          if (!img.hasAttribute('data-tina-field')) {
+            (img as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
+            console.log(`[LiveBridge] 🖼️ Image dans wrapper parent: ${bind} -> ${tinaFieldPath}`);
+          }
+        });
+        break;
+      }
+      
+      // Aussi chercher les wrappers enfants dans les parents
+      const wrapsInParent = parent.querySelectorAll('.si-wrap');
+      wrapsInParent.forEach((wrap) => {
+        if (!wrap.hasAttribute('data-tina-field') && wrap.closest('[data-bind]') === el) {
+          (wrap as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
+          console.log(`[LiveBridge] 🖼️ Wrapper enfant trouvé: ${bind} -> ${tinaFieldPath}`);
+          const imagesInWrap = wrap.querySelectorAll('img, picture img');
+          imagesInWrap.forEach((img) => {
+            if (!img.hasAttribute('data-tina-field')) {
+              (img as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
+              console.log(`[LiveBridge] 🖼️ Image dans wrapper enfant: ${bind} -> ${tinaFieldPath}`);
+            }
+          });
+        }
+      });
+      
+      parent = parent.parentElement;
+      depth++;
+    }
+    
+    // 5. Dernière tentative : chercher toutes les images proches dans le DOM
+    if (!siWrap && !el.closest('.si-wrap')) {
+      const allImagesNearby = document.querySelectorAll(`img, picture img`);
+      allImagesNearby.forEach((img) => {
+        if (!img.hasAttribute('data-tina-field')) {
+          const imgParent = img.parentElement;
+          let imgAncestor = imgParent;
+          let foundRelated = false;
+          while (imgAncestor && imgAncestor !== document.body) {
+            if (imgAncestor === el || imgAncestor.contains(el)) {
+              foundRelated = true;
+              break;
+            }
+            imgAncestor = imgAncestor.parentElement;
+          }
+          if (foundRelated) {
+            (img as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
+            console.log(`[LiveBridge] 🖼️ Image liée (proximité DOM): ${bind} -> ${tinaFieldPath}`);
+          }
+        }
+      });
+    }
+  };
+
+  // Fonction pour trouver l'index réel d'une section dans le DOM
+  const findSectionIndex = (element: HTMLElement): number => {
+    // Trouver la section parente (section, div avec class section, etc.)
+    let sectionElement: HTMLElement | null = element;
+    while (sectionElement && sectionElement !== document.body) {
+      // Chercher les classes de section communes
+      const tagName = sectionElement.tagName.toLowerCase();
+      if (tagName === 'section' || 
+          sectionElement.className.includes('section') ||
+          sectionElement.className.includes('hero') ||
+          sectionElement.className.includes('autoconstruction') ||
+          sectionElement.className.includes('expertise') ||
+          sectionElement.className.includes('projects') ||
+          sectionElement.className.includes('testimonials') ||
+          sectionElement.className.includes('contact') ||
+          sectionElement.className.includes('stats') ||
+          sectionElement.className.includes('competences') ||
+          sectionElement.className.includes('certifications') ||
+          sectionElement.className.includes('gallery') ||
+          sectionElement.className.includes('textimage') ||
+          sectionElement.className.includes('simple-competence') ||
+          tagName === 'footer') {
+        break;
+      }
+      sectionElement = sectionElement.parentElement;
+    }
+    
+    if (!sectionElement) return 0;
+    
+    // Extraire le template depuis le data-bind ou les classes
+    const bind = element.getAttribute('data-bind') || '';
+    const bindMatch = bind.match(/^sections\.\d+\.(\w+)\./);
+    const template = bindMatch ? bindMatch[1] : '';
+    
+    // Compter toutes les sections qui précèdent celle-ci dans le DOM
+    const allSections = Array.from(document.querySelectorAll('section, footer, .autoconstruction-section, .hero-section, .projects-section, .testimonials-section, .contact-section, .stats, .competences, .certifications-section, .gallery, .oveco-section, .simple-competence'));
+    const index = allSections.indexOf(sectionElement);
+    
+    return Math.max(0, index);
+  };
+
   // Fonction pour scanner tous les data-bind et ajouter data-tina-field
+  // Selon tuto.md : utiliser TOUJOURS tinaField(), partir de docRoot (pas result.data), vérifier _content_source
   const scanAndAddTinaFields = () => {
+    if (!result.data) {
+      console.warn('[LiveBridge] ⚠️ result.data est vide, impossible de scanner');
+      return;
+    }
+    
+    // Trouver le document racine (selon tuto.md)
+    const docRoot = pickDocRoot(result.data);
+    if (!docRoot) {
+      console.warn('[LiveBridge] ⚠️ docRoot introuvable dans result.data');
+      return;
+    }
+    
     // Scanner tous les éléments avec data-bind
     const elementsWithBind = $$<HTMLElement>('[data-bind]');
     
     elementsWithBind.forEach((el) => {
       const bind = el.getAttribute('data-bind');
-      if (bind && !el.hasAttribute('data-tina-field')) {
-        // Ajouter data-tina-field basé sur data-bind
-        // Normaliser le chemin pour TinaCMS (enlever les index fixes si nécessaire)
-        el.setAttribute('data-tina-field', bind);
+      if (!bind || el.hasAttribute('data-tina-field')) return;
+      
+      try {
+        // Résoudre l'objet et la propriété depuis docRoot (pas result.data)
+        const resolved = resolveObjAndProp(docRoot, bind);
+        if (!resolved) {
+          console.warn(`[LiveBridge] ⚠️ resolveObjAndProp failed for ${bind}`);
+          return;
+        }
+        
+        const { obj, prop } = resolved;
+        
+        // GARDE-FOU: vérifie la présence de la prop sur l'objet
+        if (!obj) {
+          console.warn(`[LiveBridge] ⚠️ obj est null/undefined pour ${bind}`);
+          return;
+        }
+        
+        if (!(prop in obj)) {
+          console.warn(`[LiveBridge] ⚠️ prop "${prop}" pas dans obj pour ${bind}`, { 
+            'obj type': typeof obj,
+            'obj keys': obj && typeof obj === 'object' && !Array.isArray(obj) ? Object.keys(obj).slice(0, 15) : 'not object',
+            'prop': prop,
+            'prop exists': prop in (obj || {})
+          });
+          return;
+        }
+        
+        // Note: _content_source peut être absent pour les items de tableaux
+        // mais devrait être présent sur les sections et champs principaux
+        if (!('_content_source' in obj)) {
+          console.warn(`[LiveBridge] ⚠️ obj sans _content_source pour ${bind}`, { 
+            'obj keys': obj && typeof obj === 'object' && !Array.isArray(obj) ? Object.keys(obj).slice(0, 15) : 'N/A',
+            'has _content_source': '_content_source' in (obj || {}),
+            'obj preview': obj && typeof obj === 'object' ? JSON.stringify(obj).substring(0, 200) : 'N/A'
+          });
+          // On continue quand même et on essaie quand même tinaField()
+        }
+        
+        // TOUJOURS utiliser tinaField() - pas de fallback manuel selon tuto.md
+        try {
+          const attr = tinaField(obj, prop as any);
+          el.setAttribute('data-tina-field', attr);
+          
+          console.log(`[LiveBridge] ✅ ${bind} -> tinaField() = "${attr}"`, {
+            'has _content_source': '_content_source' in (obj || {}),
+            'prop': prop
+          });
+          
+          // Si image, propager vers les images
+          if (bind.includes('.src') || bind.includes('.image')) {
+            addTinaFieldToImages(el, attr, bind);
+          }
+        } catch (tinaFieldErr) {
+          console.error(`[LiveBridge] ❌ tinaField() error for ${bind}:`, tinaFieldErr, { obj, prop });
+        }
+      } catch (err) {
+        console.error(`[LiveBridge] ❌ Error resolving ${bind}:`, err);
       }
     });
     
     console.log(`[LiveBridge] ✅ ${elementsWithBind.length} éléments avec data-bind scannés`);
   };
 
+  // Pas de styles CSS personnalisés - TinaCMS utilise ses propres styles par défaut
+
+  // Fonction pour obtenir et utiliser l'API TinaCMS de manière sûre
+  // Recherche dans plusieurs emplacements possibles de l'API TinaCMS
+  const focusFieldInSidebar = (fieldPath: string) => {
+    try {
+      console.log('[LiveBridge] 🎯 focusFieldInSidebar called with:', fieldPath);
+      
+      // MÉTHODE 1 (PRIORITAIRE): Utiliser l'API globale TinaCMS (window.tinacms)
+      // ATTENTION: TinaCMS peut ne pas être chargé immédiatement, donc on essaie plusieurs fois
+      if (typeof window !== 'undefined') {
+        const cms = (window as any).tinacms || (window as any).__tinacms;
+        
+        console.log('[LiveBridge] 🔍 Checking for TinaCMS API...');
+        console.log('[LiveBridge]   window.tinacms:', typeof (window as any).tinacms);
+        console.log('[LiveBridge]   window.__tinacms:', typeof (window as any).__tinacms);
+        console.log('[LiveBridge]   cms found:', !!cms);
+        
+        if (cms) {
+          console.log('[LiveBridge] 🎯 TinaCMS API found!');
+          console.log('[LiveBridge]   cms.forms:', !!cms.forms);
+          console.log('[LiveBridge]   cms.sidebar:', !!cms.sidebar);
+          console.log('[LiveBridge]   cms.setActiveField:', typeof cms.setActiveField);
+          console.log('[LiveBridge]   cms.events:', !!cms.events);
+          console.log('[LiveBridge] Trying to focus field:', fieldPath);
+          
+          // Essayer plusieurs formats de chemin
+          const pathVariants = [
+            fieldPath, // Format original (ex: sections[0].title)
+            fieldPath.replace(/sections\[(\d+)\]\./g, 'sections.$1.'), // sections[0].title -> sections.0.title
+            fieldPath.replace(/sections\.(\d+)\./g, 'sections.$1.'), // déjà sections.0.title
+          ];
+          
+          // Méthode 1: cms.forms.open() - LA PLUS FABLE pour ouvrir un champ spécifique
+          if (cms.forms && typeof cms.forms.getAll === 'function') {
+            try {
+              const forms = cms.forms.getAll();
+              console.log(`[LiveBridge] 📋 Found ${forms.length} forms`);
+              
+              // Trouver le formulaire correspondant
+              let targetForm = null;
+              if (result.form) {
+                const resultFormId = (result.form as any).id || (result.form as any).name;
+                targetForm = forms.find((f: any) => (f.id === resultFormId || f.name === resultFormId || f.id === resultFormId));
+              }
+              
+              // Si pas trouvé, utiliser le premier form
+              if (!targetForm && forms.length > 0) {
+                targetForm = forms[0];
+              }
+              
+              if (targetForm) {
+                const formId = (targetForm as any).id || (targetForm as any).name;
+                console.log(`[LiveBridge] 🎯 Using form: ${formId}`);
+                
+                // Essayer avec chaque variant de chemin
+                for (const path of pathVariants) {
+                  try {
+                    if (typeof cms.forms.open === 'function') {
+                      cms.forms.open(formId, { field: path });
+                      console.log('[LiveBridge] ✅ cms.forms.open() called with:', path);
+                      return true;
+                    } else if (typeof (targetForm as any).open === 'function') {
+                      (targetForm as any).open({ field: path });
+                      console.log('[LiveBridge] ✅ form.open() called with:', path);
+                      return true;
+                    }
+                  } catch (err) {
+                    console.log('[LiveBridge] ⚠️ Error with forms.open() for path:', path, err);
+                    continue;
+                  }
+                }
+              }
+            } catch (err) {
+              console.log('[LiveBridge] ⚠️ Error accessing forms API:', err);
+            }
+          }
+          
+          // Méthode 2: setActiveField (si disponible)
+          if (typeof cms.setActiveField === 'function') {
+            for (const path of pathVariants) {
+              try {
+                cms.setActiveField(path);
+                console.log('[LiveBridge] ✅ setActiveField() called with:', path);
+                return true;
+              } catch (err) {
+                continue;
+              }
+            }
+          }
+          
+          // Méthode 3: Events API
+          if (cms.events && typeof cms.events.dispatch === 'function') {
+            for (const path of pathVariants) {
+              try {
+                cms.events.dispatch({
+                  type: 'forms:fields:focus',
+                  fieldName: path,
+                  fieldPath: path
+                });
+                console.log('[LiveBridge] ✅ Event dispatched for:', path);
+                return true;
+              } catch (err) {
+                continue;
+              }
+            }
+          }
+          
+          // Méthode 4: Sidebar API (ouvrir la sidebar)
+          if (cms.sidebar) {
+            try {
+              if (typeof cms.sidebar.open === 'function') {
+                cms.sidebar.open();
+                console.log('[LiveBridge] ✅ Sidebar opened');
+              }
+              if (typeof cms.sidebar.setActiveField === 'function') {
+                for (const path of pathVariants) {
+                  try {
+                    cms.sidebar.setActiveField(path);
+                    console.log('[LiveBridge] ✅ Sidebar.setActiveField() called with:', path);
+                    return true;
+                  } catch (err) {
+                    continue;
+                  }
+                }
+              }
+            } catch (err) {
+              console.log('[LiveBridge] ⚠️ Error with sidebar API:', err);
+            }
+          }
+          
+          // Méthode 5: Utiliser result.form si disponible
+          if (result.form) {
+            try {
+              for (const path of pathVariants) {
+                try {
+                  const field = (result.form as any).getField?.(path) || 
+                               (result.form as any).fields?.find?.((f: any) => f.name === path || f.name?.endsWith(path));
+                  
+                  if (field) {
+                    if (typeof field.focus === 'function') {
+                      field.focus();
+                      console.log('[LiveBridge] ✅ Field focused via form.getField():', path);
+                      return true;
+                    }
+                    if (typeof field.scrollIntoView === 'function') {
+                      field.scrollIntoView();
+                      console.log('[LiveBridge] ✅ Field scrolled via form.getField():', path);
+                      return true;
+                    }
+                  }
+                } catch (err) {
+                  continue;
+                }
+              }
+            } catch (err) {
+              console.log('[LiveBridge] ⚠️ Error using result.form:', err);
+            }
+          }
+        } else {
+          console.log('[LiveBridge] ⚠️ TinaCMS API not found on window. Maybe not loaded yet?');
+        }
+      }
+      
+      // Méthode 2: Via window.tinacms (API globale)
+      if (typeof window !== 'undefined') {
+        // Essayer plusieurs chemins d'accès à l'API TinaCMS
+        const cms = (window as any).tinacms || (window as any).__tinacms || (window as any).TinaCMS;
+        
+        if (cms) {
+          // Essayer setActiveField (méthode préférée)
+          if (typeof cms.setActiveField === 'function') {
+            cms.setActiveField(fieldPath);
+            console.log('[LiveBridge] ✅ Field focused via setActiveField:', fieldPath);
+            return true;
+          }
+          
+          // Essayer via events API
+          if (cms.events && typeof cms.events.dispatch === 'function') {
+            cms.events.dispatch({
+              type: 'forms:fields:focus',
+              fieldName: fieldPath,
+              fieldPath: fieldPath
+            });
+            console.log('[LiveBridge] ✅ Field focused via events API:', fieldPath);
+            return true;
+          }
+          
+          // Essayer via sidebar API
+          if (cms.sidebar) {
+            if (typeof cms.sidebar.open === 'function') {
+              cms.sidebar.open();
+            }
+            if (typeof cms.sidebar.setActiveField === 'function') {
+              cms.sidebar.setActiveField(fieldPath);
+              console.log('[LiveBridge] ✅ Field focused via sidebar API:', fieldPath);
+              return true;
+            }
+          }
+        }
+      }
+      
+      // Méthode 3: Chercher dans le DOM les éléments de formulaire TinaCMS
+      // et utiliser scrollIntoView pour naviguer vers le champ
+      if (typeof document !== 'undefined') {
+        // Chercher la sidebar TinaCMS dans le DOM avec plusieurs sélecteurs possibles
+        const sidebarSelectors = [
+          '[data-tinacms-sidebar]',
+          '.tinacms-sidebar',
+          '#tina-sidebar',
+          '[class*="tina-sidebar"]',
+          '[class*="tina-sidebar-content"]',
+          '[class*="TinaCMS"]',
+          '[class*="Sidebar"]',
+          '[id*="tina-sidebar"]',
+          '[id*="sidebar"]',
+          'aside[role="complementary"]',
+          'aside[aria-label*="sidebar" i]',
+          '[class*="sidebar"]',
+          // Chercher dans les iframes TinaCMS aussi
+          'iframe[src*="tinacms"]',
+          'iframe[title*="TinaCMS"]'
+        ];
+        
+        let sidebar: HTMLElement | null = null;
+        let sidebarIframe: HTMLIFrameElement | null = null;
+        
+        // Chercher dans le document principal
+        for (const selector of sidebarSelectors) {
+          try {
+            const element = document.querySelector(selector) as HTMLElement;
+            if (element) {
+              // Si c'est un iframe, chercher à l'intérieur
+              if (element instanceof HTMLIFrameElement) {
+                sidebarIframe = element;
+                try {
+                  const iframeDoc = element.contentDocument || element.contentWindow?.document;
+                  if (iframeDoc) {
+                    // Chercher dans l'iframe
+                    const iframeSidebar = iframeDoc.querySelector('aside, [class*="sidebar"], [id*="sidebar"]') as HTMLElement;
+                    if (iframeSidebar) {
+                      sidebar = iframeSidebar;
+                      console.log('[LiveBridge] 📍 Sidebar found in iframe via selector:', selector);
+                      break;
+                    }
+                  }
+                } catch (err) {
+                  // Cross-origin iframe, on ne peut pas y accéder
+                  console.log('[LiveBridge] ⚠️ Cannot access iframe content (cross-origin):', err);
+                }
+              } else {
+                sidebar = element;
+                console.log('[LiveBridge] 📍 Sidebar found via selector:', selector);
+                break;
+              }
+            }
+          } catch (err) {
+            continue;
+          }
+        }
+        
+        // Si pas de sidebar trouvée, chercher toutes les structures possibles pour debug
+        if (!sidebar) {
+          console.log('[LiveBridge] 🔍 Debugging: searching for any sidebar-like elements...');
+          
+          // Chercher tous les aside
+          const allAsides = document.querySelectorAll('aside');
+          console.log(`[LiveBridge]   Found ${allAsides.length} <aside> elements`);
+          allAsides.forEach((aside, i) => {
+            const classes = Array.from(aside.classList).join(', ');
+            const id = aside.id || 'no-id';
+            const styles = window.getComputedStyle(aside);
+            console.log(`[LiveBridge]     Aside ${i}: classes="${classes}", id="${id}", display="${styles.display}", position="${styles.position}"`);
+          });
+          
+          // Chercher tous les éléments avec "sidebar" dans la classe ou l'id
+          const sidebarLike = document.querySelectorAll('[class*="sidebar" i], [id*="sidebar" i], [class*="tina" i]');
+          console.log(`[LiveBridge]   Found ${sidebarLike.length} sidebar-like elements`);
+          
+          // Afficher les premiers pour debug avec plus de détails
+          Array.from(sidebarLike).slice(0, 10).forEach((el, i) => {
+            const classes = Array.from(el.classList).join(', ');
+            const id = el.id || 'no-id';
+            const tagName = el.tagName;
+            const styles = window.getComputedStyle(el);
+            const isVisible = styles.display !== 'none' && styles.visibility !== 'hidden';
+            console.log(`[LiveBridge]     Element ${i}: tag="${tagName}", classes="${classes}", id="${id}", visible=${isVisible}`);
+          });
+          
+          // Chercher les iframes (TinaCMS pourrait charger la sidebar dans un iframe)
+          const iframes = document.querySelectorAll('iframe');
+          console.log(`[LiveBridge]   Found ${iframes.length} iframes`);
+          iframes.forEach((iframe, i) => {
+            console.log(`[LiveBridge]     Iframe ${i}: src="${(iframe as HTMLIFrameElement).src}", title="${(iframe as HTMLIFrameElement).title}"`);
+          });
+          
+          // Chercher les portals React (TinaCMS utilise souvent React Portals)
+          const portals = document.querySelectorAll('[data-portal], [class*="Portal"], [id*="portal"]');
+          console.log(`[LiveBridge]   Found ${portals.length} portal-like elements`);
+          
+          // Chercher tous les forms
+          const allForms = document.querySelectorAll('form');
+          console.log(`[LiveBridge]   Found ${allForms.length} forms`);
+          Array.from(allForms).slice(0, 5).forEach((form, i) => {
+            const formId = form.id || 'no-id';
+            const formClasses = Array.from(form.classList).join(', ');
+            const inputs = form.querySelectorAll('input, textarea').length;
+            console.log(`[LiveBridge]     Form ${i}: id="${formId}", classes="${formClasses}", inputs=${inputs}`);
+          });
+          
+          // Si aucune sidebar trouvée, ne PAS chercher dans tout le document
+          // car ça risquerait de trouver des éléments de la page au lieu des champs de formulaire
+          console.log('[LiveBridge] ⚠️ Sidebar not found, cannot search for field in form');
+          
+          // Tentative alternative : chercher directement le formulaire TinaCMS
+          const forms = document.querySelectorAll('form[class*="tina" i], form[id*="tina" i]');
+          if (forms.length > 0) {
+            console.log(`[LiveBridge] 📋 Found ${forms.length} TinaCMS forms, trying to use first form`);
+            sidebar = forms[0] as HTMLElement;
+          } else {
+            // Essayer d'utiliser le premier form qui a des inputs (probablement le formulaire TinaCMS)
+            const formWithInputs = Array.from(allForms).find(f => f.querySelectorAll('input, textarea').length > 0);
+            if (formWithInputs) {
+              console.log(`[LiveBridge] 📋 Using form with inputs as sidebar`);
+              sidebar = formWithInputs as HTMLElement;
+            } else {
+              return false;
+            }
+          }
+        }
+        
+        // CHERCHER UNIQUEMENT DANS LA SIDEBAR pour éviter de matcher des éléments de la page
+        const searchContainer = sidebar;
+        
+        // Essayer de trouver le champ correspondant par plusieurs méthodes
+        const fieldPathParts = fieldPath.split('.');
+        const fieldName = fieldPathParts[fieldPathParts.length - 1];
+        
+        // Construire plusieurs variantes du nom de champ pour la recherche
+        // TinaCMS utilise souvent sections[0].title dans les formulaires (format React Hook Form)
+        // Mais data-tina-field peut être dans différents formats
+        
+        // Extraire l'index de section si présent (sections[0] ou sections.0)
+        const sectionIndexMatchBrackets = fieldPath.match(/sections\[(\d+)\]\./);
+        const sectionIndexMatchDots = fieldPath.match(/sections\.(\d+)\./);
+        const sectionIndex = sectionIndexMatchBrackets ? sectionIndexMatchBrackets[1] : 
+                            (sectionIndexMatchDots ? sectionIndexMatchDots[1] : null);
+        
+        // Convertir dans tous les formats possibles
+        const tinaPathWithBrackets = fieldPath.replace(/sections\[(\d+)\]\./g, 'sections[$1].')
+                                               .replace(/sections\.(\d+)\./g, 'sections[$1].');
+        const tinaPathWithDots = fieldPath.replace(/sections\[(\d+)\]\./g, 'sections.$1.');
+        
+        // Variantes avec underscores pour les noms d'attributs HTML
+        const tinaPathUnderscore = fieldPath.replace(/\./g, '_');
+        const tinaPathHyphen = fieldPath.replace(/\./g, '-');
+        
+        const fieldVariants = [
+          fieldPath, // sections.0.title
+          tinaPathWithBrackets, // sections[0].title (format React Hook Form)
+          fieldName, // title
+          tinaPathUnderscore, // sections_0_title
+          tinaPathHyphen, // sections-0-title
+          fieldPath.replace(/sections\.\d+\./, ''), // title (sans sections.0.)
+          tinaPathWithBrackets.replace(/sections\[\d+\]\./, ''), // title (sans sections[0].)
+          ...fieldPathParts.filter(p => p && p !== 'sections' && p !== '0') // ['title'] pour éviter 'sections' et '0'
+        ];
+        
+        // Si on a un index de section, chercher aussi avec cet index dans différents formats
+        if (sectionIndex !== null) {
+          fieldVariants.push(
+            `sections[${sectionIndex}].${fieldName}`,
+            `sections.${sectionIndex}.${fieldName}`,
+            `sections_${sectionIndex}_${fieldName}`,
+            `sections-${sectionIndex}-${fieldName}`
+          );
+        }
+        
+        // Chercher avec différents sélecteurs
+        // IMPORTANT: Ne chercher QUE dans les inputs/textarea pour éviter de matcher des éléments de la page
+        // TinaCMS utilise React Hook Form qui génère des noms comme "sections.0.title" (avec points)
+        const selectors: string[] = [];
+        for (const variant of fieldVariants) {
+          if (variant && typeof variant === 'string') {
+            // Prioriser les sélecteurs avec name (plus précis)
+            // TinaCMS utilise souvent le format avec points (sections.0.title)
+            selectors.push(
+              `input[name="${variant}"], textarea[name="${variant}"]`,
+              `input[name="${variant}" i], textarea[name="${variant}" i]`, // Case insensitive
+              `input[name^="${variant}"], textarea[name^="${variant}"]`,
+              `input[name*="${variant}"], textarea[name*="${variant}"]`,
+              // Essayer aussi avec des espaces/format différent
+              `input[name*="${variant.replace(/\./g, ' ')}"], textarea[name*="${variant.replace(/\./g, ' ')}"]`,
+              // Essayer avec le dernier segment (nom du champ seul)
+              `input[name*="${fieldName}"], textarea[name*="${fieldName}"]`
+            );
+          }
+        }
+        
+        // Ajouter des sélecteurs spécifiques à TinaCMS (uniquement pour inputs)
+        selectors.push(
+          `input[data-tina-field-path="${fieldPath}"], textarea[data-tina-field-path="${fieldPath}"]`,
+          `input[data-field-path="${fieldPath}"], textarea[data-field-path="${fieldPath}"]`,
+          // Essayer avec l'ID si présent
+          `input[id*="${fieldName}"], textarea[id*="${fieldName}"]`
+        );
+        
+        console.log('[LiveBridge] 🔍 Searching for field:', fieldPath, 'with', selectors.length, 'selectors');
+        console.log('[LiveBridge] 📋 Field variants:', fieldVariants);
+        
+        // D'abord, essayer de trouver tous les inputs/textarea dans la sidebar pour debug
+        if (sidebar) {
+          const allInputs = Array.from(sidebar.querySelectorAll('input, textarea'));
+          console.log('[LiveBridge] 📊 Total inputs/textarea in sidebar:', allInputs.length);
+          if (allInputs.length > 0 && allInputs.length < 20) {
+            // Logger les premiers pour voir la structure
+            allInputs.slice(0, 10).forEach((input, i) => {
+              const name = (input as HTMLInputElement).name || (input as HTMLInputElement).id || 'no-name';
+              console.log(`[LiveBridge]   Input ${i}: name="${name}"`);
+            });
+          }
+        }
+        
+        // Protection contre les boucles infinies : utiliser les refs du composant
+        const currentTime = Date.now();
+        if (lastFocusedFieldRef.current === fieldPath && 
+            currentTime - lastFocusedTimeRef.current < FOCUS_COOLDOWN) {
+          console.log('[LiveBridge] ⏸️ Field focus skipped (cooldown):', fieldPath);
+          return false;
+        }
+        
+        for (const selector of selectors) {
+          try {
+            // IMPORTANT: Chercher uniquement des inputs/textarea dans la sidebar
+            const fieldInput = searchContainer.querySelector(selector) as HTMLInputElement | HTMLTextAreaElement;
+            if (fieldInput && (fieldInput instanceof HTMLInputElement || fieldInput instanceof HTMLTextAreaElement)) {
+              // Vérifier que c'est bien un élément de formulaire (pas un élément de la page)
+              if (!fieldInput.hasAttribute('name') && !fieldInput.closest('form')) {
+                // Si pas d'attribut name et pas dans un form, c'est probablement pas un champ de formulaire
+                console.log('[LiveBridge] ⚠️ Skipping element (not a form field):', selector);
+                continue;
+              }
+              
+              console.log('[LiveBridge] ✅ Field found via selector:', selector);
+              
+              // Mettre à jour les refs pour éviter les boucles
+              lastFocusedFieldRef.current = fieldPath;
+              lastFocusedTimeRef.current = currentTime;
+              
+              // Scroller vers le champ et le focuser
+              fieldInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              
+              setTimeout(() => {
+                // Focuser directement (c'est déjà un input/textarea d'après le check ci-dessus)
+                try {
+                  fieldInput.focus();
+                  fieldInput.select?.();
+                  console.log('[LiveBridge] ✅ Input/textarea focused:', selector);
+                } catch (err) {
+                  console.log('[LiveBridge] ⚠️ Error focusing field:', err);
+                }
+              }, 200);
+              
+              console.log('[LiveBridge] ✅ Field scrolled to:', fieldPath);
+              return true;
+            }
+          } catch (err) {
+            // Ignorer les erreurs de sélecteur invalide
+            continue;
+          }
+        }
+        
+        // Si aucun champ trouvé, essayer une recherche plus large par contenu de label
+        // MAIS uniquement dans la sidebar et uniquement pour des inputs/textarea
+        if (searchContainer) {
+          const allLabels = Array.from(searchContainer.querySelectorAll('label'));
+          for (const label of allLabels) {
+            const labelText = label.textContent?.toLowerCase() || '';
+            const fieldNameLower = fieldName.toLowerCase();
+            // Si le label contient le nom du champ (mais pas trop générique)
+            if (labelText.includes(fieldNameLower) && fieldNameLower.length > 2) {
+              // Chercher l'input associé
+              const labelFor = label.getAttribute('for');
+              let input: HTMLInputElement | HTMLTextAreaElement | null = null;
+              
+              if (labelFor) {
+                const found = searchContainer.querySelector(`#${labelFor}`) as HTMLInputElement | HTMLTextAreaElement;
+                if (found && (found instanceof HTMLInputElement || found instanceof HTMLTextAreaElement)) {
+                  input = found;
+                }
+              }
+              
+              // Sinon chercher dans le label
+              if (!input) {
+                const found = label.querySelector('input, textarea') as HTMLInputElement | HTMLTextAreaElement;
+                if (found && (found instanceof HTMLInputElement || found instanceof HTMLTextAreaElement)) {
+                  input = found;
+                }
+              }
+              
+              // Ou chercher juste après le label
+              if (!input && label.nextElementSibling) {
+                const found = label.nextElementSibling.querySelector('input, textarea') as HTMLInputElement | HTMLTextAreaElement;
+                if (found && (found instanceof HTMLInputElement || found instanceof HTMLTextAreaElement)) {
+                  input = found;
+                }
+              }
+              
+              if (input && input.hasAttribute('name')) {
+                // Vérifier que le nom correspond approximativement au fieldPath
+                const inputName = input.name.toLowerCase();
+                if (inputName.includes(fieldNameLower) || inputName.includes(fieldPath.toLowerCase().replace(/sections\.\d+\./, ''))) {
+                  console.log('[LiveBridge] ✅ Field found via label text matching:', fieldName);
+                  
+                  // Protection contre les boucles
+                  if (lastFocusedFieldRef.current === fieldPath && 
+                      currentTime - lastFocusedTimeRef.current < FOCUS_COOLDOWN) {
+                    return false;
+                  }
+                  
+                  lastFocusedFieldRef.current = fieldPath;
+                  lastFocusedTimeRef.current = currentTime;
+                  
+                  input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  setTimeout(() => {
+                    input?.focus();
+                    input?.select?.();
+                  }, 200);
+                  return true;
+                }
+              }
+            }
+          }
+        }
+        
+        console.log('[LiveBridge] ⚠️ Field not found in DOM:', fieldPath);
+      }
+      
+      // Méthode 3: Utiliser l'API native de TinaCMS pour l'édition visuelle
+      // Dans le mode visual editing, TinaCMS gère automatiquement les clics sur data-tina-field
+      // On peut essayer de simuler un clic sur le champ dans le formulaire
+      try {
+        // Chercher tous les éléments de formulaire dans le document qui pourraient correspondre
+        // et essayer de les ouvrir/focuser via l'API TinaCMS
+        if (typeof window !== 'undefined') {
+          // TinaCMS expose parfois une API globale
+          const tinacmsAPI = (window as any).tinacms || (window as any).__tinacms || (window as any).TinaCMS;
+          
+          if (tinacmsAPI) {
+            // Essayer d'utiliser l'API pour ouvrir/focuser le champ
+            if (tinacmsAPI.setActiveField) {
+              tinacmsAPI.setActiveField(fieldPath);
+              console.log('[LiveBridge] ✅ Field activated via TinaCMS API:', fieldPath);
+              return true;
+            }
+            
+            // Essayer via les forms
+            if (tinacmsAPI.forms) {
+              const forms = tinacmsAPI.forms.getAll();
+              for (const form of forms) {
+                if (form && form.fields) {
+                  // Chercher le champ dans le formulaire
+                  const field = form.fields.find((f: any) => {
+                    const fieldName = f.name || '';
+                    return fieldName === fieldPath || 
+                           fieldName.endsWith(fieldPath) ||
+                           fieldPath.endsWith(fieldName);
+                  });
+                  
+                  if (field) {
+                    // Focuser le champ
+                    if (field.focus) {
+                      field.focus();
+                      console.log('[LiveBridge] ✅ Field focused via form API:', fieldPath);
+                      return true;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          
+          // Essayer de déclencher un événement que TinaCMS écoute
+          // TinaCMS écoute parfois les événements sur window ou document
+          const tinacmsEvents = [
+            new CustomEvent('tinacms:focus-field', {
+              detail: { fieldPath, fieldName: fieldPath.split('.').pop() },
+              bubbles: true,
+              cancelable: true
+            }),
+            new CustomEvent('tinacms:field-click', {
+              detail: { fieldPath },
+              bubbles: true,
+              cancelable: true
+            }),
+            new CustomEvent('tinacms:edit-field', {
+              detail: { fieldPath },
+              bubbles: true,
+              cancelable: true
+            })
+          ];
+          
+          // Dispatcher sur window aussi (TinaCMS peut l'écouter là)
+          tinacmsEvents.forEach(event => {
+            window.dispatchEvent(event);
+            document.dispatchEvent(event);
+          });
+          
+          console.log('[LiveBridge] 📢 Events dispatched to window and document:', fieldPath);
+        }
+      } catch (err) {
+        console.log('[LiveBridge] ⚠️ Error in Method 3:', err);
+      }
+      
+      console.log('[LiveBridge] ⚠️ Could not focus field:', fieldPath);
+      return false;
+    } catch (err) {
+      console.log('[LiveBridge] ❌ Error focusing field:', err);
+      return false;
+    }
+  };
+
+  // Gestion du double-clic avec un système de debounce pour éviter les conflits
+  // Variables partagées en dehors du useEffect
+  const clickStateRef = useRef({ lastClickTime: 0, clickTimeout: null as ReturnType<typeof setTimeout> | null });
+  
+  // Protection contre les boucles infinies : éviter de traiter le même champ plusieurs fois
+  const lastFocusedFieldRef = useRef<string | null>(null);
+  const lastFocusedTimeRef = useRef<number>(0);
+  const FOCUS_COOLDOWN = 1000; // 1 seconde de cooldown
+
+  // IMPORTANT: D'après le tuto, TinaCMS gère AUTOMATIQUEMENT les clics sur data-tina-field
+  // Il faut donc NE PAS intercepter ces clics ou les empêcher de remonter à TinaCMS
+  // On peut seulement s'assurer que les attributs data-tina-field sont correctement définis
+  // Le code suivant est commenté car TinaCMS devrait gérer les clics automatiquement
+  
+  /*
+  useEffect(() => {
+    // NE PAS écouter les clics - TinaCMS le fait déjà
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      
+      // Ignorer les clics sur les boutons, liens de navigation (sauf ceux avec data-tina-field)
+      if (target.closest('button:not([data-tina-field]), a[href^="#"]:not([data-tina-field]), a[href^="/"]:not([data-tina-field])')) {
+        return;
+      }
+      
+      // Trouver l'élément avec data-tina-field le plus proche
+      let editableElement: HTMLElement | null = target.closest('[data-tina-field]');
+      
+      if (editableElement && editableElement.hasAttribute('data-tina-field')) {
+        const fieldPath = editableElement.getAttribute('data-tina-field');
+        
+        if (fieldPath) {
+          // Gérer le double-clic : si un double-clic est détecté, annuler ce clic
+          const currentTime = Date.now();
+          const timeSinceLastClick = currentTime - clickStateRef.current.lastClickTime;
+          clickStateRef.current.lastClickTime = currentTime;
+          
+          // Si c'est un double-clic (moins de 300ms depuis le dernier clic), laisser le handler double-clic s'en occuper
+          if (timeSinceLastClick < 300 && timeSinceLastClick > 0) {
+            return;
+          }
+          
+          // Sinon, gérer comme un clic simple avec un délai pour permettre le double-clic
+          if (clickStateRef.current.clickTimeout) {
+            clearTimeout(clickStateRef.current.clickTimeout);
+          }
+          
+          clickStateRef.current.clickTimeout = setTimeout(() => {
+            // Feedback visuel uniquement (ne pas interférer avec TinaCMS)
+            // Pas de style visuel personnalisé - TinaCMS gère ses propres styles
+            
+            const path = editableElement?.getAttribute('data-tina-field');
+            if (!path) return;
+            
+            console.log('[LiveBridge] 🖱️ Single click detected on:', path);
+            
+            // Essayer d'ouvrir la sidebar et focuser le champ
+            const openAndFocus = () => {
+              try {
+                if (typeof window !== 'undefined') {
+                  const cms = (window as any).tinacms || (window as any).__tinacms;
+                  
+                  if (cms) {
+                    // Ouvrir la sidebar si elle n'est pas ouverte
+                    if (cms.sidebar) {
+                      if (typeof cms.sidebar.isOpen === 'function' && !cms.sidebar.isOpen()) {
+                        cms.sidebar.open();
+                        console.log('[LiveBridge] ✅ Sidebar opened');
+                      } else if (typeof cms.sidebar.open === 'function') {
+                        // Ouvrir même si on ne sait pas si elle est ouverte
+                        cms.sidebar.open();
+                        console.log('[LiveBridge] ✅ Sidebar open() called');
+                      }
+                    }
+                    
+                    // Essayer cms.forms.open() avec le formulaire actif
+                    if (cms.forms && typeof cms.forms.getAll === 'function' && result.form) {
+                      const forms = cms.forms.getAll();
+                      const formId = (result.form as any).id || (forms[0] as any)?.id;
+                      if (formId && typeof cms.forms.open === 'function') {
+                        try {
+                          cms.forms.open(formId, { field: path });
+                          console.log('[LiveBridge] ✅ Form opened with field:', path);
+                          return;
+                        } catch (err) {
+                          console.log('[LiveBridge] ⚠️ Error with forms.open:', err);
+                        }
+                      }
+                    }
+                    
+                    // Essayer setActiveField
+                    if (typeof cms.setActiveField === 'function') {
+                      try {
+                        cms.setActiveField(path);
+                        console.log('[LiveBridge] ✅ Field set active:', path);
+                        return;
+                      } catch (err) {
+                        console.log('[LiveBridge] ⚠️ Error with setActiveField:', err);
+                      }
+                    }
+                    
+                    // Essayer events API
+                    if (cms.events && typeof cms.events.dispatch === 'function') {
+                      try {
+                        cms.events.dispatch({
+                          type: 'forms:fields:focus',
+                          fieldName: path,
+                          fieldPath: path
+                        });
+                        console.log('[LiveBridge] ✅ Event dispatched:', path);
+                        return;
+                      } catch (err) {
+                        console.log('[LiveBridge] ⚠️ Error with events.dispatch:', err);
+                      }
+                    }
+                  }
+                }
+                
+                // Fallback: Essayer de focuser dans le DOM
+                focusFieldInSidebar(path);
+              } catch (err) {
+                console.log('[LiveBridge] ⚠️ Error in openAndFocus:', err);
+              }
+            };
+            
+            // TinaCMS devrait déjà avoir traité le clic, mais on aide avec plusieurs tentatives
+            openAndFocus();
+            setTimeout(openAndFocus, 300);
+            setTimeout(openAndFocus, 600);
+            setTimeout(openAndFocus, 1000);
+          }, 150); // Délai court mais suffisant pour laisser TinaCMS traiter le clic d'abord
+        }
+      }
+    };
+    
+    const handleDoubleClick = (e: MouseEvent) => {
+      console.log('[LiveBridge] 🖱️ handleDoubleClick FIRED!', e.target);
+      
+      const target = e.target as HTMLElement;
+      
+      // Trouver l'élément avec data-tina-field le plus proche
+      let editableElement: HTMLElement | null = target.closest('[data-tina-field]');
+      
+      console.log('[LiveBridge] 🔍 editableElement found:', !!editableElement);
+      
+      if (editableElement && editableElement.hasAttribute('data-tina-field')) {
+        const fieldPath = editableElement.getAttribute('data-tina-field');
+        
+        console.log('[LiveBridge] 📍 fieldPath:', fieldPath);
+        
+        if (fieldPath) {
+          // Annuler le timeout du clic simple s'il existe
+          if (clickStateRef.current.clickTimeout) {
+            clearTimeout(clickStateRef.current.clickTimeout);
+            clickStateRef.current.clickTimeout = null;
+          }
+          
+          // NE PAS preventDefault pour laisser TinaCMS gérer le double-clic aussi
+          // e.preventDefault();
+          // e.stopPropagation();
+          
+          console.log('[LiveBridge] 🎯 Double-click detected on:', fieldPath);
+          
+          // Pour le double-clic, essayer plusieurs méthodes pour ouvrir et focuser
+          const openAndFocus = () => {
+            console.log('[LiveBridge] 🎯 openAndFocus() called for:', fieldPath);
+            try {
+              if (typeof window !== 'undefined') {
+                const cms = (window as any).tinacms || (window as any).__tinacms;
+                
+                console.log('[LiveBridge] 🔍 Checking TinaCMS in openAndFocus...');
+                console.log('[LiveBridge]   cms exists:', !!cms);
+                console.log('[LiveBridge]   result.form exists:', !!result.form);
+                
+                if (cms) {
+                  console.log('[LiveBridge] ✅ TinaCMS API available in openAndFocus');
+                  
+                  // Méthode 1: Ouvrir la sidebar
+                  if (cms.sidebar && typeof cms.sidebar.open === 'function') {
+                    try {
+                      cms.sidebar.open();
+                      console.log('[LiveBridge] ✅ Sidebar.open() called');
+                    } catch (err) {
+                      console.log('[LiveBridge] ⚠️ Error opening sidebar:', err);
+                    }
+                  } else {
+                    console.log('[LiveBridge] ⚠️ cms.sidebar.open not available');
+                  }
+                  
+                  // Méthode 2: Utiliser cms.forms.open() avec le formulaire actif
+                  if (cms.forms && typeof cms.forms.getAll === 'function') {
+                    try {
+                      const forms = cms.forms.getAll();
+                      console.log(`[LiveBridge] 📋 Found ${forms.length} forms`);
+                      
+                      let formId: string | undefined;
+                      if (result.form) {
+                        formId = (result.form as any).id || (result.form as any).name;
+                        console.log('[LiveBridge] 📋 result.form.id:', formId);
+                      }
+                      
+                      if (!formId && forms.length > 0) {
+                        formId = (forms[0] as any)?.id || (forms[0] as any)?.name;
+                        console.log('[LiveBridge] 📋 Using first form id:', formId);
+                      }
+                      
+                      if (formId && typeof cms.forms.open === 'function') {
+                        try {
+                          console.log('[LiveBridge] 🚀 Calling cms.forms.open() with formId:', formId, 'field:', fieldPath);
+                          cms.forms.open(formId, { field: fieldPath });
+                          console.log('[LiveBridge] ✅ cms.forms.open() called successfully');
+                          return;
+                        } catch (err) {
+                          console.log('[LiveBridge] ⚠️ Error with forms.open:', err);
+                        }
+                      } else {
+                        console.log('[LiveBridge] ⚠️ formId or cms.forms.open not available');
+                        console.log('[LiveBridge]   formId:', formId);
+                        console.log('[LiveBridge]   cms.forms.open type:', typeof cms.forms.open);
+                      }
+                    } catch (err) {
+                      console.log('[LiveBridge] ⚠️ Error accessing forms:', err);
+                    }
+                  } else {
+                    console.log('[LiveBridge] ⚠️ cms.forms.getAll not available');
+                  }
+                  
+                  // Méthode 3: setActiveField
+                  if (typeof cms.setActiveField === 'function') {
+                    try {
+                      console.log('[LiveBridge] 🚀 Calling cms.setActiveField() with:', fieldPath);
+                      cms.setActiveField(fieldPath);
+                      console.log('[LiveBridge] ✅ setActiveField() called successfully');
+                      return;
+                    } catch (err) {
+                      console.log('[LiveBridge] ⚠️ Error with setActiveField:', err);
+                    }
+                  } else {
+                    console.log('[LiveBridge] ⚠️ cms.setActiveField not available');
+                  }
+                  
+                  // Méthode 4: Events API
+                  if (cms.events && typeof cms.events.dispatch === 'function') {
+                    try {
+                      console.log('[LiveBridge] 🚀 Dispatching event for:', fieldPath);
+                      cms.events.dispatch({
+                        type: 'forms:fields:focus',
+                        fieldName: fieldPath,
+                        fieldPath: fieldPath
+                      });
+                      console.log('[LiveBridge] ✅ Event dispatched successfully');
+                      return;
+                    } catch (err) {
+                      console.log('[LiveBridge] ⚠️ Error with events.dispatch:', err);
+                    }
+                  } else {
+                    console.log('[LiveBridge] ⚠️ cms.events.dispatch not available');
+                  }
+                } else {
+                  console.log('[LiveBridge] ⚠️ TinaCMS API not found on window');
+                }
+              }
+              
+              // Méthode 5: Essayer de focuser dans le DOM (fallback)
+              console.log('[LiveBridge] 🔍 Falling back to DOM search for:', fieldPath);
+              
+              // Essayer plusieurs variantes du chemin de champ
+              const pathVariants = [
+                fieldPath,
+                fieldPath.replace(/\[(\d+)\]/g, '.$1'), // sections[0] -> sections.0
+                fieldPath.replace(/\.(\d+)\./g, '[$1].'), // sections.0. -> sections[0].
+                fieldPath.replace(/sections\.(\d+)\./g, 'sections[$1].'),
+              ];
+              
+              let focused = false;
+              for (const variant of pathVariants) {
+                focused = focusFieldInSidebar(variant);
+                if (focused) {
+                  console.log('[LiveBridge] ✅ DOM focus succeeded with variant:', variant);
+                  break;
+                }
+              }
+              
+              if (!focused) {
+                console.log('[LiveBridge] ⚠️ DOM focus failed for all variants');
+              }
+            } catch (err) {
+              console.log('[LiveBridge] ❌ Error in openAndFocus:', err);
+            }
+          };
+          
+          // Essayer plusieurs fois avec des délais progressifs
+          openAndFocus();
+          setTimeout(openAndFocus, 200);
+          setTimeout(openAndFocus, 500);
+          setTimeout(openAndFocus, 1000);
+          
+          // Feedback visuel plus prononcé pour double-clic
+          // Pas de style visuel personnalisé - TinaCMS gère ses propres styles
+        }
+      }
+    };
+    
+    // CRITIQUE: Écouter en phase de bubbling (false) et NON en capture (true)
+    // Cela permet à TinaCMS de traiter le clic d'abord, puis on peut aider après
+    // TinaCMS écoute probablement aussi en bubbling, donc on sera après lui
+    document.addEventListener('click', handleClick, false);
+    document.addEventListener('dblclick', handleDoubleClick, false);
+    
+    // Aussi écouter les événements personnalisés que TinaCMS pourrait déclencher
+    const handleTinaFieldClick = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const fieldPath = customEvent.detail?.fieldPath || customEvent.detail?.fieldName;
+      if (fieldPath) {
+        console.log('[LiveBridge] 📢 TinaCMS field click event detected:', fieldPath);
+        // Aider à focuser après que TinaCMS ait fait son travail
+        setTimeout(() => {
+          focusFieldInSidebar(fieldPath);
+        }, 500);
+      }
+    };
+    
+    // Écouter les événements possibles de TinaCMS
+    document.addEventListener('tinacms:field-click', handleTinaFieldClick);
+    document.addEventListener('tinacms:focus-field', handleTinaFieldClick);
+    
+    return () => {
+      document.removeEventListener('click', handleClick, false);
+      document.removeEventListener('dblclick', handleDoubleClick, false);
+      document.removeEventListener('tinacms:field-click', handleTinaFieldClick);
+      document.removeEventListener('tinacms:focus-field', handleTinaFieldClick);
+      // Nettoyer le timeout au démontage
+      if (clickStateRef.current.clickTimeout) {
+        clearTimeout(clickStateRef.current.clickTimeout);
+      }
+    };
+  }, [result]);
+  */
+  
+  // TinaCMS gère automatiquement les clics - pas besoin d'intervenir
+
   // Scanner une fois au montage et quand le DOM change
   useEffect(() => {
-    // Scanner immédiatement
-    scanAndAddTinaFields();
+    // Fonction de scan avec retry multiple pour capturer tous les composants
+    const scanWithRetry = () => {
+      scanAndAddTinaFields();
+      // Retry après plusieurs délais pour capturer les composants chargés progressivement
+      setTimeout(scanAndAddTinaFields, 100);
+      setTimeout(scanAndAddTinaFields, 500);
+      setTimeout(scanAndAddTinaFields, 1000);
+    };
     
-    // Scanner après un court délai pour les composants chargés dynamiquement
-    const timeout = setTimeout(scanAndAddTinaFields, 100);
+    // Scanner immédiatement avec retry
+    scanWithRetry();
     
     // Observer les changements du DOM
+    let timeoutId: ReturnType<typeof setTimeout>;
     const observer = new MutationObserver(() => {
-      scanAndAddTinaFields();
+      // Debounce pour éviter trop de scans
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(scanAndAddTinaFields, 100);
     });
     
     observer.observe(document.body, {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['data-bind']
+      attributeFilter: ['data-bind', 'data-tina-field']
     });
     
     return () => {
-      clearTimeout(timeout);
+      clearTimeout(timeoutId);
       observer.disconnect();
     };
   }, []);
@@ -287,12 +1782,18 @@ export default function LiveBridge(props: { home: Q }) {
       
       // Mettre à jour le contenu
       updateDOM(result.data);
+      // Scanner après updateDOM pour capturer tous les éléments
+      setTimeout(scanAndAddTinaFields, 100);
     } else {
       // Même sans données, scanner les data-bind pour ajouter data-tina-field
       console.log('[LiveBridge] Pas de données GraphQL, scan des data-bind...');
       scanAndAddTinaFields();
+      // Retry multiple fois pour être sûr de capturer tous les éléments
+      setTimeout(scanAndAddTinaFields, 200);
+      setTimeout(scanAndAddTinaFields, 500);
     }
   }, [result.data]);
 
   return null;
 }
+

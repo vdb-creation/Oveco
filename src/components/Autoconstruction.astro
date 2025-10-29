@@ -21,12 +21,14 @@ export interface Props {
   services?: AutoconstructionService[];
   ctaLabel?: string;
   ctaHref?: string;
+  sectionIndex?: number;
 }
 
 const {
   subtitle = "l'auto-construction",
   title = "Apprendre en faisant, construire en étant accompagné",
   description = "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat. En vous formant, en vous conseillant et en vous fournissant les bons outils, nous vous permettons de participer activement aux installations en toute sécurité.",
+  sectionIndex = 0,
   services = [
     {
       image: "/uploads/hero/maison-build.png",
@@ -56,14 +58,14 @@ const {
   <div class="autoconstruction">
     <div class="autoconstruction__container">
       <header class="autoconstruction__header">
-        <p class="autoconstruction__subtitle">{subtitle}</p>
-        <h2 class="autoconstruction__title" itemprop="name" set:html={title} />
-        <p class="autoconstruction__description" itemprop="description" set:html={description} />
+        <p class="autoconstruction__subtitle" data-bind={`sections.${sectionIndex}.autoconstruction.subtitle`}>{subtitle}</p>
+        <h2 class="autoconstruction__title" itemprop="name" data-bind={`sections.${sectionIndex}.autoconstruction.title`} set:html={title} />
+        <p class="autoconstruction__description" itemprop="description" data-bind={`sections.${sectionIndex}.autoconstruction.description`} set:html={description} />
       </header>
 
       <div class="autoconstruction__content">
         <div class="autoconstruction__services" role="list" aria-labelledby="autoconstruction-title">
-          {services.map((service) => (
+          {services.map((service, index) => (
             <article class="autoconstruction__service" role="listitem" itemscope itemtype="https://schema.org/Service">
               <SmartImage
                 cmsSrc={service.image}
@@ -75,8 +77,8 @@ const {
                 class="autoconstruction__service-image"
               />
               <div class="autoconstruction__service-content">
-                <h3 class="autoconstruction__service-title" itemprop="name">{service.title}</h3>
-                <p class="autoconstruction__service-description" itemprop="description">
+                <h3 class="autoconstruction__service-title" itemprop="name" data-bind={`sections.${sectionIndex}.services.${index}.title`}>{service.title}</h3>
+                <p class="autoconstruction__service-description" itemprop="description" data-bind={`sections.${sectionIndex}.services.${index}.description`}>
                   {service.description}
                 </p>
               </div>
@@ -84,8 +86,8 @@ const {
           ))}
         </div>
 
-        <a href={ctaHref} class="autoconstruction__cta" aria-label={`${ctaLabel} sur l'auto-construction`}>
-          <span>{ctaLabel}</span>
+        <a href={ctaHref} class="autoconstruction__cta" aria-label={`${ctaLabel} sur l'auto-construction`} data-bind={`sections.${sectionIndex}.autoconstruction.ctaHref`}>
+          <span data-bind={`sections.${sectionIndex}.autoconstruction.ctaLabel`}>{ctaLabel}</span>
         </a>
       </div>
     </div>

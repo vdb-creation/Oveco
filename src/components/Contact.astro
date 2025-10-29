@@ -17,6 +17,7 @@ export interface Props {
   description?: string;
   contactInfo?: ContactInfo;
   formAction?: string;
+  sectionIndex?: number;
 }
 
 const {
@@ -28,7 +29,8 @@ const {
     phone: "+32 473 / 68.99.02",
     location: "Région de Beauvechain"
   },
-  formAction = "#contact"
+  formAction = "#contact",
+  sectionIndex = 0
 } = Astro.props;
 ---
 
@@ -37,10 +39,10 @@ const {
     <div class="contact__container">
       <aside class="contact__info" aria-labelledby="contact-title contact-subtitle">
         <div class="contact__info-header">
-          <p class="contact__subtitle" id="contact-subtitle">{subtitle}</p>
-          <h2 class="contact__title" id="contact-title">{title}</h2>
+          <p class="contact__subtitle" id="contact-subtitle" data-bind={`sections.${sectionIndex}.contact.subtitle`}>{subtitle}</p>
+          <h2 class="contact__title" id="contact-title" data-bind={`sections.${sectionIndex}.contact.title`}>{title}</h2>
         </div>
-        <p class="contact__description">{description}</p>
+        <p class="contact__description" data-bind={`sections.${sectionIndex}.contact.description`}>{description}</p>
 
         <ul class="contact__list" role="list">
           {contactInfo.email && (

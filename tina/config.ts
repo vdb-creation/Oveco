@@ -12,6 +12,7 @@ const imageField = (name: string, label: string, dir: string) => ({
   type: "image" as const,
   name,
   label,
+  required: false,
   ui: {
     uploadDir: () => `/uploads/${dir}`,
     parse: (media: unknown) => {
@@ -149,7 +150,7 @@ export default defineConfig({
                 const title = item?.title || item?.subtitle || item?.companyName || '';
                 return { label: title ? `${template} – ${title}` : template };
               },
-            } as any,
+            },
             templates: [
               // CONTACT
               {
@@ -361,7 +362,7 @@ export default defineConfig({
               {
                 name: "certifications",
                 label: "Certifications",
-                ui: { defaultItem: { title: "Nos certifications", description: "Labels et reconnaissances.", cards: [] } },
+                ui: { defaultItem: { title: "Nos certifications", description: "Labels et reconnaissances." } },
                 fields: [
                   { type: "string", name: "title", label: "Titre" },
                   { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
@@ -383,7 +384,7 @@ export default defineConfig({
               {
                 name: "gallerie",
                 label: "Galerie",
-                ui: { defaultItem: { subtitle: "Galerie", title: "En images", gallery: [ { src: "/uploads/imgs/maison-build.png", alt: "Photo" } ] } },
+                ui: { defaultItem: { subtitle: "Galerie", title: "En images" } },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -450,7 +451,7 @@ export default defineConfig({
               {
                 name: "partners",
                 label: "Partenaires",
-                ui: { defaultItem: { title: "Nos partenaires", logos: [ { src: "/uploads/partenaire/Google.svg", alt: "Google" } ] } },
+                ui: { defaultItem: { title: "Nos partenaires" } },
                 fields: [
                   { type: "string", name: "title", label: "Titre" },
                   {
@@ -467,7 +468,7 @@ export default defineConfig({
               {
                 name: "navbar",
                 label: "Navbar",
-                ui: { defaultItem: { siteName: "Oveco", siteUrl: "/", links: [ { label: "Réalisations", url: "/works" } ], ctaButton: { label: "Nous contacter", url: "/contact" } } },
+                ui: { defaultItem: { siteName: "Oveco", siteUrl: "/" } },
                 fields: [
                   { type: "string", name: "logoUrl", label: "Logo (URL)" },
                   { type: "string", name: "siteName", label: "Nom du site" },
@@ -481,7 +482,7 @@ export default defineConfig({
               {
                 name: "simplecompetence",
                 label: "Compétence simple",
-                ui: { defaultItem: { number: "01", title: "Titre", description: "Description", cta: { label: "En savoir plus", href: "/contact" }, image: { src: "/uploads/imgs/maison-toit.png", alt: "" } } },
+                ui: { defaultItem: { number: "01", title: "Titre", description: "Description" } },
                 fields: [
                   { type: "string", name: "number", label: "Numéro" },
                   { type: "string", name: "title", label: "Titre" },
@@ -536,9 +537,6 @@ export default defineConfig({
                     description: "Une sélection de projets accompagnés.",
                     linkText: "Voir tous les projets",
                     linkUrl: "/works",
-                    cards: [
-                      { image: "/uploads/imgs/maison-toit.png", type: "Rénovation", client: "Famille Martin", title: "Maison passive", url: "/work/maison-passive-beauvechain", description: "Isolation passive et PV." },
-                    ],
                   },
                 },
                 fields: [
@@ -552,6 +550,11 @@ export default defineConfig({
                     name: "cards",
                     label: "Cartes de projets",
                     list: true,
+                    ui: {
+                      itemProps: (item: any) => {
+                        return { label: item?.title || item?.type || 'Carte de projet' };
+                      },
+                    },
                     fields: [
                       imageField("image", "Image", "imgs"),
                       { type: "string", name: "type", label: "Type de projet" },
@@ -573,9 +576,6 @@ export default defineConfig({
                     subtitle: "Avis",
                     title: "Ce qu'ils disent",
                     description: "Retours de nos clients",
-                    testimonials: [
-                      { thumbnail: { src: "/uploads/team/pic.jpg", alt: "Client" }, client_name: "Client", client_position: "", client_company: "", content: "Super accompagnement.", card_content: "Accompagnement au top.", linked_project: { title: "Projet", link: "/works" } },
-                    ],
                   },
                 },
                 fields: [
@@ -660,7 +660,7 @@ export default defineConfig({
                 const title = item?.title || item?.subtitle || item?.companyName || '';
                 return { label: title ? `${template} – ${title}` : template };
               },
-            } as any,
+            },
             templates: [
               // CONTACT
               {
@@ -791,7 +791,7 @@ export default defineConfig({
               {
                 name: "stats",
                 label: "Stats",
-                ui: { defaultItem: { title: "Key figures", stats: [ { value: "+100", label: "Projects", description: "Completed" } ] } },
+                ui: { defaultItem: { title: "Key figures" } },
                 fields: [
                   { type: "string", name: "title", label: "Title" },
                   {
@@ -849,7 +849,7 @@ export default defineConfig({
               {
                 name: "testimonials",
                 label: "Testimonials",
-                ui: { defaultItem: { subtitle: "Testimonials", title: "What they say", description: "", testimonials: [ { thumbnail: { src: "/uploads/team/pic.jpg", alt: "Client" }, client_name: "Client", content: "Great support.", card_content: "Great support." } ] } },
+                ui: { defaultItem: { subtitle: "Testimonials", title: "What they say", description: "" } },
                 fields: [
                   { type: "string", name: "subtitle", label: "Subtitle" },
                   { type: "string", name: "title", label: "Title" },
@@ -932,7 +932,7 @@ export default defineConfig({
                 const title = item?.title || item?.subtitle || item?.companyName || '';
                 return { label: title ? `${template} – ${title}` : template };
               },
-            } as any,
+            },
             // Réutilise tous les templates de la collection home
             templates: [
               {
@@ -1155,7 +1155,7 @@ export default defineConfig({
                 const title = item?.title || item?.subtitle || item?.number || item?.companyName || '';
                 return { label: title ? `${template} – ${title}` : template };
               },
-            } as any,
+            },
             templates: [
               {
                 name: "navbar",
@@ -1356,7 +1356,7 @@ export default defineConfig({
                 const title = item?.title || item?.subtitle || item?.companyName || '';
                 return { label: title ? `${template} – ${title}` : template };
               },
-            } as any,
+            },
             templates: [
               {
                 name: "navbar",
@@ -1578,7 +1578,7 @@ export default defineConfig({
                 const title = item?.title || item?.subtitle || item?.number || item?.companyName || '';
                 return { label: title ? `${template} – ${title}` : template };
               },
-            } as any,
+            },
             templates: [
               {
                 name: "navbar",

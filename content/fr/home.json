@@ -96,6 +96,9 @@
       "_template": "autoconstruction"
     },
     {
+      "subtitle": "zzzz",
+      "title": "zzzzz",
+      "description": "zzzzzzzzz",
       "cards": [
         {
           "icon": "/uploads/compétance/clim.webp",
@@ -229,6 +232,9 @@
       "_template": "testimonials"
     },
     {
+      "subtitle": "zzzz",
+      "title": "zzzzz",
+      "description": "zzzzz",
       "_template": "contact"
     }
   ]

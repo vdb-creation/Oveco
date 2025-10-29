@@ -17,6 +17,7 @@ export interface HeroProps {
     alt: string;
     class?: string;
   }>;
+  sectionIndex?: number;
 }
 
 const {
@@ -25,6 +26,7 @@ const {
   description = "Des ingénieurs-installateurs qui conçoivent et réalisent votre projet sur mesure.",
   ctaText = "Nous contacter",
   ctaUrl = "#contact",
+  sectionIndex = 0,
   images = [
     {
       src: "/uploads/hero/maison-build.png",
@@ -107,12 +109,12 @@ function mapImageClassAndId(image: { class?: string }, index: number) {
         
         <div class="hero__content">
           <header class="hero__header">
-            <p class="hero__subtitle" data-bind="sections.0.hero.subtitle" aria-label="Sous-titre">{subtitle}</p>
-            <h1 class="hero__title" id="hero-title" data-bind="sections.0.hero.title">{title}</h1>
+            <p class="hero__subtitle" data-bind={`sections.${sectionIndex}.hero.subtitle`} aria-label="Sous-titre">{subtitle}</p>
+            <h1 class="hero__title" id="hero-title" data-bind={`sections.${sectionIndex}.hero.title`}>{title}</h1>
           </header>
-          <p class="hero__description" data-bind="sections.0.hero.description">{description}</p>
-          <a href={ctaUrl} class="hero__cta" role="button" data-bind="sections.0.hero.ctaUrl" aria-label={`${ctaText} - ${title}`}>
-            <span data-bind="sections.0.hero.ctaText">{ctaText}</span>
+          <p class="hero__description" data-bind={`sections.${sectionIndex}.hero.description`}>{description}</p>
+          <a href={ctaUrl} class="hero__cta" role="button" data-bind={`sections.${sectionIndex}.hero.ctaUrl`} aria-label={`${ctaText} - ${title}`}>
+            <span data-bind={`sections.${sectionIndex}.hero.ctaText`}>{ctaText}</span>
           </a>
         </div>
       </div>

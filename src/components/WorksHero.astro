@@ -22,6 +22,7 @@ export interface Props {
   mediaLeft?: MediaImage;
   mediaRight?: MediaImage;
   id?: string;
+  sectionIndex?: number;
 }
 
 const {
@@ -31,6 +32,7 @@ const {
   description = "Description courte ipsum dolor sit amet consectetur adipiscing elit tortor eu egestas morbi sem vulputate etiam facilisis pellentesque ut quis.",
   ctaLabel = "Nous contacter",
   ctaHref = "#contact",
+  sectionIndex = 0,
   mediaLeft = {
     src: "/uploads/hero/maison-build.png",
     alt: "Maison avec panneaux solaires"
@@ -65,12 +67,12 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
 
     <div class="works-hero__content">
       <header class="works-hero__header">
-        <p class="works-hero__subtitle" data-bind="sections.0.worksHero.subtitle">{subtitle}</p>
-        <h1 class="works-hero__title" id={id} data-bind="sections.0.worksHero.title">{title}</h1>
+        <p class="works-hero__subtitle" data-bind={`sections.${sectionIndex}.worksHero.subtitle`}>{subtitle}</p>
+        <h1 class="works-hero__title" id={id} data-bind={`sections.${sectionIndex}.worksHero.title`}>{title}</h1>
       </header>
-      <p class="works-hero__desc" data-bind="sections.0.worksHero.description">{description}</p>
-      <a href={ctaHref} class="works-hero__cta" data-bind="sections.0.worksHero.ctaHref">
-        <span data-bind="sections.0.worksHero.ctaLabel">{ctaLabel}</span>
+      <p class="works-hero__desc" data-bind={`sections.${sectionIndex}.worksHero.description`}>{description}</p>
+      <a href={ctaHref} class="works-hero__cta" data-bind={`sections.${sectionIndex}.worksHero.ctaHref`}>
+        <span data-bind={`sections.${sectionIndex}.worksHero.ctaLabel`}>{ctaLabel}</span>
       </a>
     </div>
 
