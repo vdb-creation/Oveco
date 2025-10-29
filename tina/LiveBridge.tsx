@@ -221,6 +221,49 @@ export default function LiveBridge(props: { home: Q }) {
   // Référence pour détecter le changement d'ordre
   const previousOrderRef = useRef<string>('');
 
+  // Fonction pour scanner tous les data-bind et ajouter data-tina-field
+  const scanAndAddTinaFields = () => {
+    // Scanner tous les éléments avec data-bind
+    const elementsWithBind = $$<HTMLElement>('[data-bind]');
+    
+    elementsWithBind.forEach((el) => {
+      const bind = el.getAttribute('data-bind');
+      if (bind && !el.hasAttribute('data-tina-field')) {
+        // Ajouter data-tina-field basé sur data-bind
+        // Normaliser le chemin pour TinaCMS (enlever les index fixes si nécessaire)
+        el.setAttribute('data-tina-field', bind);
+      }
+    });
+    
+    console.log(`[LiveBridge] ✅ ${elementsWithBind.length} éléments avec data-bind scannés`);
+  };
+
+  // Scanner une fois au montage et quand le DOM change
+  useEffect(() => {
+    // Scanner immédiatement
+    scanAndAddTinaFields();
+    
+    // Scanner après un court délai pour les composants chargés dynamiquement
+    const timeout = setTimeout(scanAndAddTinaFields, 100);
+    
+    // Observer les changements du DOM
+    const observer = new MutationObserver(() => {
+      scanAndAddTinaFields();
+    });
+    
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-bind']
+    });
+    
+    return () => {
+      clearTimeout(timeout);
+      observer.disconnect();
+    };
+  }, []);
+
   // Mise à jour quand result.data change
   useEffect(() => {
     console.log('[LiveBridge] data a changé !', result.data);
@@ -228,22 +271,27 @@ export default function LiveBridge(props: { home: Q }) {
     // Extraire les données, quelle que soit la collection
     const collectionData = result.data?.home || result.data?.about_fr || result.data?.about_en || result.data?.construction_fr || result.data?.construction_en || result.data?.homeEn;
     const H = collectionData;
-    if (!H || !H.sections) return;
     
-    // Créer une signature de l'ordre actuel
-    const currentOrder = H.sections
-      .map((s: any, i: number) => `${i}-${s?.__typename}`)
-      .join('|');
-    
-    // Si l'ordre a changé, réorganiser le DOM
-    if (previousOrderRef.current && previousOrderRef.current !== currentOrder) {
-      console.log('[LiveBridge] 🔄 Ordre changé ! Réorganisation...');
-      reorderSections(H.sections);
+    if (H && H.sections) {
+      // Créer une signature de l'ordre actuel
+      const currentOrder = H.sections
+        .map((s: any, i: number) => `${i}-${s?.__typename}`)
+        .join('|');
+      
+      // Si l'ordre a changé, réorganiser le DOM
+      if (previousOrderRef.current && previousOrderRef.current !== currentOrder) {
+        console.log('[LiveBridge] 🔄 Ordre changé ! Réorganisation...');
+        reorderSections(H.sections);
+      }
+      previousOrderRef.current = currentOrder;
+      
+      // Mettre à jour le contenu
+      updateDOM(result.data);
+    } else {
+      // Même sans données, scanner les data-bind pour ajouter data-tina-field
+      console.log('[LiveBridge] Pas de données GraphQL, scan des data-bind...');
+      scanAndAddTinaFields();
     }
-    previousOrderRef.current = currentOrder;
-    
-    // Mettre à jour le contenu
-    updateDOM(result.data);
   }, [result.data]);
 
   return null;
