@@ -38,18 +38,18 @@
       "description": "Domaines d'expertise clés.",
       "competences": [
         {
-          "icon": "/uploads/comp%C3%A9tance/elec.webp",
+          "icon": "/uploads/compétance/elec.webp",
           "alt": "Compétencesqdfqsdfqsdfsdqf",
           "title": "Ossature bois",
           "description": "Structures et enveloppes performantes."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/personne.webp",
+          "icon": "/uploads/compétance/personne.webp",
           "title": "sfsdfsdfqsdfqs",
           "description": "fqsdfqsdfqsdfqsdfsqdfsdqfsdqfqsdfqdsfqsdf"
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/personne.webp",
+          "icon": "/uploads/compétance/personne.webp",
           "title": "fsqdfsdqfqsd",
           "description": "fqsdfaerzaterezrtertezrughfjghkhlkho,"
         }
@@ -98,17 +98,17 @@
     {
       "cards": [
         {
-          "icon": "/uploads/comp%C3%A9tance/clim.webp",
+          "icon": "/uploads/compétance/clim.webp",
           "title": "Énergies renouvelables",
           "description": "Pompes à chaleur, chaudières, panneaux solaires…\nDes systèmes performants, bien dimensionnés, pour plus d'autonomie."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/elec.webp",
+          "icon": "/uploads/compétance/elec.webp",
           "title": "Énergies",
           "description": "Pompes à chaleur, chaudières, panneaux solaires… Des systèmes performants, bien dimensionnés, pour plus d'autonomie."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/eolienne.webp",
+          "icon": "/uploads/compétance/eolienne.webp",
           "title": "Énergies renouvelables",
           "description": "ompes à chaleur, chaudières, panneaux solaires… Des systèmes performants, bien dimensionnés, pour plus d'autonomie."
         }
@@ -179,7 +179,7 @@
       "description": "Services et solutions professionnelles.",
       "cards": [
         {
-          "icon": "/uploads/comp%C3%A9tance/elec.webp",
+          "icon": "/uploads/compétance/elec.webp",
           "alt": "Expertise technique",
           "title": "Expertise technique",
           "description": "Solutions techniques professionnelles et expertise."
