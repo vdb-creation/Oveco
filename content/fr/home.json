@@ -38,13 +38,13 @@
       "description": "Domaines d'expertise clés.",
       "competences": [
         {
-          "icon": "/uploads/comp%C3%A9tance/crayon.webp",
+          "icon": "/uploads/comp%C3%A9tance/elec.webp",
           "alt": "Compétencesqdfqsdfqsdfsdqf",
           "title": "Ossature bois",
           "description": "Structures et enveloppes performantes."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/eolienne.webp",
+          "icon": "/uploads/comp%C3%A9tance/personne.webp",
           "title": "sfsdfsdfqsdfqs",
           "description": "fqsdfqsdfqsdfqsdfsqdfsdqfsdqfqsdfqdsfqsdf"
         },
@@ -78,14 +78,17 @@
       "_template": "stats"
     },
     {
+      "subtitle": "consectetur minim anim",
+      "title": "consectetur minim anim",
+      "description": "consectetur minim anim consectetur minim animconsectetur minim animconsectetur minim anim",
       "services": [
         {
-          "image": "/uploads/imgs/architrech.webp",
+          "image": "/uploads/imgs/maison-toit-2.webp",
           "title": "Lorem?",
           "description": "Quis qui occaecat qui incididunt velit qui culpa ad exercitation laborum ipsum aliquip. Dolor elit amet nulla mollit ex consequat fugiat elit consectetur cillum dolor. "
         },
         {
-          "image": "/uploads/imgs/cie.webp",
+          "image": "/uploads/imgs/plan.webp",
           "title": "Lorim ?",
           "description": "Quis qui occaecat qui incididunt velit qui culpa ad exercitation laborum ipsum aliquip. Dolor elit amet nulla mollit ex consequat fugiat elit consectetur cillum dolor. "
         }
