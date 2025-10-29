@@ -204,16 +204,31 @@ if (normalizedSrcString && isStringLocalUpload(normalizedSrcString)) {
   
   // AVIF dans optimized/ (caché de TinaCMS)
   const avifPath = `/optimized/${relNoExt}.opt.avif`;
-  // WebP dans uploads/ (version que voit l'utilisateur)
+  // WebP dans uploads/ (version que voit l'utilisateur) - IMPORTANT: garder le chemin uploads/ même si .webp
   const webpPath = `/${relNoExt}.webp`;
   
-  if (await exists(avifPath)) srcAvif = avifPath;
-  if (await exists(webpPath)) srcWebp = webpPath;
+  // En production, on fait confiance aux chemins (les fichiers sont dans dist/uploads/ après le build)
+  // On vérifie l'existence seulement si on est en dev (pour éviter les erreurs inutiles)
+  if (import.meta.env.DEV) {
+    // En dev, vérifier l'existence avant d'utiliser
+    if (await exists(avifPath)) srcAvif = avifPath;
+    if (await exists(webpPath)) srcWebp = webpPath;
+  } else {
+    // En production, utiliser directement les chemins (fichiers copiés dans dist/)
+    // Assumer que si le fichier source existe, les versions optimisées aussi
+    // Utiliser le chemin WebP comme base (déjà normalisé)
+    srcWebp = webpPath;
+    // Tenter AVIF mais fallback sur WebP si pas dispo
+    srcAvif = avifPath;
+  }
 }
 
-// Version the local URLs to bust caches when file mtime changes
-srcAvif = await versioned(srcAvif);
-srcWebp = await versioned(srcWebp);
+// En production, ne pas versionner les URLs (évite les erreurs si fichiers pas trouvés)
+// En dev, versionner pour le cache busting
+if (import.meta.env.DEV) {
+  srcAvif = await versioned(srcAvif);
+  srcWebp = await versioned(srcWebp);
+}
 
 // <source> operations: si on pointe déjà sur .avif/.webp, pas besoin de re-encoder (juste resize)
 const opsForAvif =
@@ -239,7 +254,10 @@ if (fallbackFormat === "avif") {
   else { imgSrc = srcWebp ?? normalizedSrcString; imgOps = { astro: { ...astroOps, format: "webp" } }; }
 }
 
-imgSrc = await versioned(imgSrc);
+// En dev seulement, versionner pour le cache busting
+if (import.meta.env.DEV) {
+  imgSrc = await versioned(imgSrc);
+}
 
 const effectiveLoading = priority ? "eager" : loading;
 const altText = alt ?? "";

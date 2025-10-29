@@ -75,7 +75,7 @@ const pageTitle = title || pageContent.title || "Oveco - Auto-construction et R�
 const pageDescription = description || pageContent.description || "Oveco accompagne vos projets d'auto-construction et de rénovation écologique. Expertise en maisons passives et énergies renouvelables.";
 
 // Configuration TinaCMS (pour toutes les pages)
-// En production, activer avec ?live=1 dans l'URL
+// En production, activer avec ?live=1 dans l'URL ou via l'admin
 const forceLive = (
   import.meta.env.DEV || 
   Astro.url.searchParams.get('live') === '1' || 
@@ -84,6 +84,8 @@ const forceLive = (
 );
 let tinaData: any = null;
 
+// Toujours essayer de charger les données TinaCMS si configuré
+let queryName = 'home';
 if (forceLive) {
   try {
     const file = `${currentJson}.json`;
@@ -95,7 +97,7 @@ if (forceLive) {
       'construction': { fr: 'construction_fr', en: 'construction_en' },
     };
     
-    const queryName = (queryMap[currentJson] && queryMap[currentJson][lang]) || (lang === 'en' ? 'homeEn' : 'home');
+    queryName = (queryMap[currentJson] && queryMap[currentJson][lang]) || (lang === 'en' ? 'homeEn' : 'home');
     
     // Utiliser la query appropriée
     if (queryName === 'homeEn') {
@@ -113,13 +115,31 @@ if (forceLive) {
     }
   } catch (e) {
     console.log('TinaCMS data not available, using static data:', e);
+    // Même si la requête échoue, créer un objet de fallback avec les données statiques
+    // pour que le LiveBridge puisse au moins détecter les éléments avec data-bind
+    if (forceLive && import.meta.env.PUBLIC_TINA_CLIENT_ID) {
+      // Créer un fallback avec les données statiques pour permettre le mode Live
+      tinaData = {
+        data: {
+          [queryName]: {
+            sections: sections.map((s: any) => ({
+              ...s,
+              __typename: `HomeSections${(s._template || '').charAt(0).toUpperCase() + (s._template || '').slice(1)}`
+            }))
+          }
+        },
+        query: '',
+        variables: {}
+      };
+    }
   }
 }
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  {tinaData && (
-    <LiveBridge client:load home={tinaData} />
+  {/* Charger LiveBridge si TinaCMS est configuré (même si les données GraphQL ont échoué) */}
+  {forceLive && (
+    <LiveBridge client:load home={tinaData || { data: {}, query: '', variables: {} }} />
   )}
 
   {sections.map((section: any, index: number) => {
