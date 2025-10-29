@@ -1,0 +1,20 @@
+[phases.build]
+cmds = ["npx tinacms build && pnpm run build"]
+
+[start]
+cmd = "pnpm run preview"
+
+[static]
+publish = "dist"
+
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+  force = true
+
+
+[phases.setup]
+# Forcer la version de Node supportée par Astro
+nixPkgs = ["nodejs_20", "pnpm-9_x"]
