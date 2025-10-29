@@ -17,33 +17,33 @@
   "thumbnail": "/uploads/imgs/Charpantier.webp",
   "gallery": [
     {
-      "image": "/uploads/imgs/Charpantier.opt.webp"
+      "image": "/uploads/imgs/Charpantier.webp"
     },
     {
-      "image": "/uploads/imgs/maison-build.opt.webp"
+      "image": "/uploads/imgs/maison-build.webp"
     },
     {
-      "image": "/uploads/imgs/plan.opt.webp"
+      "image": "/uploads/imgs/plan.webp"
     },
     {
-      "image": "/uploads/imgs/cie.opt.webp"
+      "image": "/uploads/imgs/cie.webp"
     }
   ],
   "competences": [
     {
       "title": "excepteur et irure",
       "description": "velit esse irure magna ut ipsum non ea do voluptate Lorem adipisicing cillum",
-      "icon": "/uploads/comp%C3%A9tance/personne.webp"
+      "icon": "/uploads/compétance/personne.webp"
     },
     {
       "title": "officia veniam reprehenderit",
       "description": "ex exercitation id eu culpa occaecat nulla esse esse nisi ipsum voluptate",
-      "icon": "/uploads/comp%C3%A9tance/eolienne.opt.webp"
+      "icon": "/uploads/compétance/eolienne.webp"
     },
     {
       "title": "ea et",
       "description": "in cupidatat commodo id incididunt nostrud ex esse ipsum cupidatat incididunt et et nisi id sunt",
-      "icon": "/uploads/comp%C3%A9tance/personne.opt.webp"
+      "icon": "/uploads/compétance/personne.webp"
     }
   ],
   "stats": [
@@ -67,7 +67,7 @@
     "subtitle": "in cupidatat commodo",
     "title": "in cupidatat commodo id incididunt nostrud",
     "description": "ea qui labore veniam reprehenderit et quis dolore cupidatat quis tempor qui ex anim consectetur laborum quis magna",
-    "image": "/uploads/imgs/maison-build.opt.webp"
+    "image": "/uploads/imgs/maison-build.webp"
   },
   "metaTitle": "Statistiques du projet",
   "metaDescription": "velit nostrud ex reprehenderit laborum ipsum mollit labore ipsum fugiat proident eiusmod laborum culpa do",

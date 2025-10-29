@@ -5,25 +5,25 @@
   "description": "Discover our technical skills and expertise in sustainable construction and renewable energies.",
   "competences": [
     {
-      "icon": "/uploads/compétance/clim.opt.webp",
+      "icon": "/uploads/compétance/clim.webp",
       "alt": "Air conditioning and heating",
       "title": "Air Conditioning & Heating",
       "description": "Installation and maintenance of high-performance, energy-efficient air conditioning and heating systems."
     },
     {
-      "icon": "/uploads/compétance/eolienne.opt.webp",
+      "icon": "/uploads/compétance/eolienne.webp",
       "alt": "Renewable energies",
       "title": "Renewable Energies",
       "description": "Solar panels, wind turbines, heat pumps and other green energy solutions for your energy independence."
     },
     {
-      "icon": "/uploads/compétance/elec.opt.webp", 
+      "icon": "/uploads/compétance/elec.webp", 
       "alt": "Electrical installations",
       "title": "Electrical Installations",
       "description": "Design and installation of modern, secure and optimized electrical infrastructures for your needs."
     },
     {
-      "icon": "/uploads/compétance/personne.opt.webp",
+      "icon": "/uploads/compétance/personne.webp",
       "alt": "Personalized support",
       "title": "Personalized Support",
       "description": "Personalized advice and follow-up for your sustainable construction and energy renovation projects."

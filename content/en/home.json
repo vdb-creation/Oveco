@@ -28,19 +28,19 @@
       "description": "Key areas of expertise.",
       "cards": [
         {
-          "icon": "/uploads/comp%C3%A9tance/clim.opt.webp",
+          "icon": "/uploads/compétance/clim.webp",
           "alt": "Skills example",
           "title": "Timber frame",
           "description": "High-performance structures and envelopes."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/elec.opt.webp",
+          "icon": "/uploads/compétance/elec.webp",
           "alt": "Example title",
           "title": "Example title",
           "description": "Example placeholder text."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/eolienne.opt.webp",
+          "icon": "/uploads/compétance/eolienne.webp",
           "alt": "Example skill",
           "title": "Example skill",
           "description": "Example placeholder description."
@@ -72,12 +72,12 @@
     {
       "services": [
         {
-          "image": "/uploads/imgs/Charpantier.opt.webp",
+          "image": "/uploads/imgs/Charpantier.webp",
           "title": "Lorem?",
           "description": "Whoever exerts or incurs guilt in training or work. Pain and excellence in nothing, but in the consequence of elite pain, cillum dolor."
         },
         {
-          "image": "/uploads/imgs/plan.opt.webp",
+          "image": "/uploads/imgs/plan.webp",
           "title": "Lorim?",
           "description": "Whoever exerts or incurs guilt in training or work. Pain and excellence in nothing, but in the consequence of elite pain, cillum dolor."
         }
@@ -87,17 +87,17 @@
     {
       "cards": [
         {
-          "icon": "/uploads/comp%C3%A9tance/clim.webp",
+          "icon": "/uploads/compétance/clim.webp",
           "title": "Renewable energy",
           "description": "Heat pumps, boilers, solar panels…\nEfficient, well-sized systems for greater autonomy."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/elec.webp",
+          "icon": "/uploads/compétance/elec.webp",
           "title": "Energy",
           "description": "Heat pumps, boilers, solar panels… Efficient, well-sized systems for greater autonomy."
         },
         {
-          "icon": "/uploads/comp%C3%A9tance/eolienne.webp",
+          "icon": "/uploads/compétance/eolienne.webp",
           "title": "Renewable energy",
           "description": "Heat pumps, boilers, solar panels… Efficient, well-sized systems for greater autonomy."
         }
@@ -174,7 +174,7 @@
       "description": "Professional services and solutions.",
       "cards": [
         {
-          "icon": "/uploads/comp%C3%A9tance/clim.opt.webp",
+          "icon": "/uploads/compétance/clim.webp",
           "alt": "Technical expertise",
           "title": "Technical expertise",
           "description": "Professional technical solutions and expertise."

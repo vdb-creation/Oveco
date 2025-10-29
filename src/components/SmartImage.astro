@@ -230,28 +230,46 @@ if (import.meta.env.DEV) {
   srcWebp = await versioned(srcWebp);
 }
 
-// <source> operations: si on pointe déjà sur .avif/.webp, pas besoin de re-encoder (juste resize)
-const opsForAvif =
-  srcAvif?.endsWith(".avif")
-    ? (Object.keys(astroOps).length ? { astro: astroOps } : undefined)
-    : { astro: { ...astroOps, format: "avif" } };
+// Pour les images locales, ne pas utiliser les opérations Unpic en production
+// (évite les URLs `/_image` qui ne fonctionnent pas)
+const isLocalImage = normalizedSrcString && isStringLocalUpload(normalizedSrcString);
 
-const opsForWebp =
-  srcWebp?.endsWith(".webp")
+// <source> operations: désactiver pour les images locales en production
+const opsForAvif = (isLocalImage && !import.meta.env.DEV) 
+  ? undefined  // Pas d'opération pour les images locales en prod
+  : (srcAvif?.endsWith(".avif")
     ? (Object.keys(astroOps).length ? { astro: astroOps } : undefined)
-    : { astro: { ...astroOps, format: "webp" } };
+    : { astro: { ...astroOps, format: "avif" } });
 
-// STRICT: choisir la source du <img> (jamais l’original)
+const opsForWebp = (isLocalImage && !import.meta.env.DEV)
+  ? undefined  // Pas d'opération pour les images locales en prod
+  : (srcWebp?.endsWith(".webp")
+    ? (Object.keys(astroOps).length ? { astro: astroOps } : undefined)
+    : { astro: { ...astroOps, format: "webp" } });
+
+// STRICT: choisir la source du <img> (jamais l'original)
 // - priorité AVIF si fallbackFormat === "avif" et dispo, sinon WebP, sinon conversion à la volée
 let imgSrc: string | undefined;
 let imgOps: any;
 
 if (fallbackFormat === "avif") {
-  if (srcAvif && srcAvif.endsWith(".avif")) { imgSrc = srcAvif; imgOps = Object.keys(astroOps).length ? { astro: astroOps } : undefined; }
-  else { imgSrc = srcAvif ?? normalizedSrcString; imgOps = { astro: { ...astroOps, format: "avif" } }; }
+  if (srcAvif && srcAvif.endsWith(".avif")) { 
+    imgSrc = srcAvif; 
+    imgOps = (isLocalImage && !import.meta.env.DEV) ? undefined : (Object.keys(astroOps).length ? { astro: astroOps } : undefined); 
+  }
+  else { 
+    imgSrc = srcAvif ?? normalizedSrcString; 
+    imgOps = (isLocalImage && !import.meta.env.DEV) ? undefined : { astro: { ...astroOps, format: "avif" } }; 
+  }
 } else {
-  if (srcWebp && srcWebp.endsWith(".webp")) { imgSrc = srcWebp; imgOps = Object.keys(astroOps).length ? { astro: astroOps } : undefined; }
-  else { imgSrc = srcWebp ?? normalizedSrcString; imgOps = { astro: { ...astroOps, format: "webp" } }; }
+  if (srcWebp && srcWebp.endsWith(".webp")) { 
+    imgSrc = srcWebp; 
+    imgOps = (isLocalImage && !import.meta.env.DEV) ? undefined : (Object.keys(astroOps).length ? { astro: astroOps } : undefined); 
+  }
+  else { 
+    imgSrc = srcWebp ?? normalizedSrcString; 
+    imgOps = (isLocalImage && !import.meta.env.DEV) ? undefined : { astro: { ...astroOps, format: "webp" } }; 
+  }
 }
 
 // En dev seulement, versionner pour le cache busting
