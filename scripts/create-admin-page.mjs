@@ -4,8 +4,9 @@
  * en attendant la configuration complète de TinaCMS
  */
 
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir, access } from 'fs/promises';
 import { join } from 'path';
+import { constants } from 'fs';
 
 const adminHTML = `<!DOCTYPE html>
 <html lang="fr">
@@ -158,15 +159,56 @@ const adminHTML = `<!DOCTYPE html>
 </body>
 </html>`;
 
+async function fileExists(path) {
+  try {
+    await access(path, constants.F_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function createAdminPage() {
   try {
-    const adminDir = join(process.cwd(), 'dist', 'admin');
-    await mkdir(adminDir, { recursive: true });
+    const distAdminDir = join(process.cwd(), 'dist', 'admin');
+    const publicAdminDir = join(process.cwd(), 'public', 'admin');
+    const distAdminFilePath = join(distAdminDir, 'index.html');
+    const publicAdminFilePath = join(publicAdminDir, 'index.html');
     
-    const adminFilePath = join(adminDir, 'index.html');
-    await writeFile(adminFilePath, adminHTML, 'utf-8');
+    // Vérifier si les variables d'environnement TinaCMS sont configurées
+    const hasTinaClientId = process.env.NEXT_PUBLIC_TINA_CLIENT_ID && 
+                           process.env.NEXT_PUBLIC_TINA_CLIENT_ID !== 'local';
+    const hasTinaToken = process.env.TINA_TOKEN && 
+                        process.env.TINA_TOKEN !== 'local';
     
-    console.log('✅ Page admin créée dans dist/admin/index.html');
+    // Vérifier si un fichier admin existe déjà (généré par tinacms build)
+    // Peut être dans dist/ (après astro build) ou public/ (avant astro build)
+    const distAdminExists = await fileExists(distAdminFilePath);
+    const publicAdminExists = await fileExists(publicAdminFilePath);
+    const adminExists = distAdminExists || publicAdminExists;
+    
+    // Si TinaCMS est configuré et que le fichier admin existe, ne rien faire
+    if (hasTinaClientId && hasTinaToken && adminExists) {
+      console.log('✅ TinaCMS est configuré et le fichier admin existe déjà. Aucune action nécessaire.');
+      return;
+    }
+    
+    // Si TinaCMS est configuré mais le fichier n'existe pas, ne pas créer de page de maintenance
+    // (probablement une erreur de build, mais laissons tinacms build gérer ça)
+    if (hasTinaClientId && hasTinaToken) {
+      console.log('⚠️  TinaCMS est configuré mais aucun fichier admin trouvé.');
+      console.log('⚠️  Vérifiez que tinacms build s\'est exécuté avec succès avant astro build.');
+      return;
+    }
+    
+    // Créer la page de maintenance seulement si TinaCMS n'est pas configuré
+    await mkdir(distAdminDir, { recursive: true });
+    await writeFile(distAdminFilePath, adminHTML, 'utf-8');
+    
+    console.log('✅ Page admin de maintenance créée dans dist/admin/index.html');
+    console.log('ℹ️  Pour activer TinaCMS en production:');
+    console.log('   1. Créez un compte sur https://app.tina.io/');
+    console.log('   2. Ajoutez NEXT_PUBLIC_TINA_CLIENT_ID et TINA_TOKEN dans les variables d\'environnement Netlify');
   } catch (error) {
     console.error('❌ Erreur lors de la création de la page admin:', error);
     process.exit(1);
