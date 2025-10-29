@@ -203,25 +203,45 @@ let srcAvif: string | undefined = normalizedSrcString;
 let srcWebp: string | undefined = normalizedSrcString;
 
 if (normalizedSrcString && isStringLocalUpload(normalizedSrcString)) {
-  const rel = normalizedSrcString.replace(/^\//, "");
+  // Extraire le chemin relatif (sans le / initial)
+  let rel = normalizedSrcString.replace(/^\//, "");
+  
+  // Retirer l'extension si présente
   const i = rel.lastIndexOf(".");
   const relNoExt = i > -1 ? rel.slice(0, i) : rel;
   
-  // AVIF dans optimized/ (caché de TinaCMS)
-  const avifPath = `/optimized/${relNoExt}.opt.avif`;
-  // WebP dans uploads/ (version que voit l'utilisateur) - IMPORTANT: garder le chemin uploads/ même si .webp
-  const webpPath = `/${relNoExt}.webp`;
+  // Retirer le préfixe "uploads/" pour construire le chemin optimized
+  // Car les fichiers AVIF sont dans optimized/compétance/... pas optimized/uploads/compétance/...
+  const relNoUploads = relNoExt.startsWith("uploads/") 
+    ? relNoExt.replace(/^uploads\//, "") 
+    : relNoExt.startsWith("upload/")
+    ? relNoExt.replace(/^upload\//, "")
+    : relNoExt;
   
-  // En production, on fait confiance aux chemins (les fichiers sont dans dist/uploads/ après le build)
-  // On vérifie l'existence seulement si on est en dev (pour éviter les erreurs inutiles)
+  // AVIF dans optimized/ (sans le préfixe uploads/)
+  // Les fichiers sont dans public/optimized/compétance/... pas public/optimized/uploads/compétance/...
+  const avifPath = `/optimized/${relNoUploads}.opt.avif`;
+  
+  // WebP dans uploads/ (garder le chemin complet uploads/...)
+  // Si le chemin original avait déjà uploads/, reconstruire avec le relNoUploads
+  // Sinon utiliser le chemin original
+  const webpPath = normalizedSrcString.startsWith("/uploads/") || normalizedSrcString.startsWith("/upload/")
+    ? `/uploads/${relNoUploads}.webp`
+    : normalizedSrcString;
+  
+  // En production, on fait confiance aux chemins (les fichiers sont dans dist/ après le build)
+  // En dev, vérifier l'existence avant d'utiliser
   if (import.meta.env.DEV) {
     // En dev, vérifier l'existence avant d'utiliser
     if (await exists(avifPath)) srcAvif = avifPath;
     if (await exists(webpPath)) srcWebp = webpPath;
+    // Fallback sur le chemin original si les fichiers optimisés n'existent pas
+    if (!srcWebp && !srcAvif) {
+      srcWebp = normalizedSrcString;
+    }
   } else {
     // En production, utiliser directement les chemins (fichiers copiés dans dist/)
-    // Assumer que si le fichier source existe, les versions optimisées aussi
-    // Utiliser le chemin WebP comme base (déjà normalisé)
+    // Utiliser le WebP comme fallback principal
     srcWebp = webpPath;
     // Tenter AVIF mais fallback sur WebP si pas dispo
     srcAvif = avifPath;
@@ -306,7 +326,7 @@ const wrapperStyle = [
         {srcAvif && srcAvif.endsWith('.avif') && (
           <source 
             type="image/avif" 
-            srcset={srcAvif} 
+            srcset={encodeURI(srcAvif)} 
             sizes={sizes ?? autoSizes}
           />
         )}
@@ -314,13 +334,13 @@ const wrapperStyle = [
         {srcWebp && srcWebp.endsWith('.webp') && (
           <source 
             type="image/webp" 
-            srcset={srcWebp} 
+            srcset={encodeURI(srcWebp)} 
             sizes={sizes ?? autoSizes}
           />
         )}
         {/* Image de fallback */}
         <img
-          src={imgSrc || srcWebp || normalizedSrcString}
+          src={encodeURI(imgSrc || srcWebp || normalizedSrcString)}
           alt={altText}
           width={targetWidth}
           height={targetHeight}
@@ -328,15 +348,16 @@ const wrapperStyle = [
           decoding={decoding ?? "async"}
           loading={effectiveLoading}
           style={`${fit ? `object-fit: ${fit};` : ''} background: transparent !important; background-image: none !important;`}
+          onerror="console.warn('Image failed to load:', this.src); this.style.display='none';"
         />
       </picture>
     ) : (
       /* Pour les autres cas (dev ou images distantes), utiliser Unpic */
       <picture>
-        {formats?.includes("avif") && (
+        {formats?.includes("avif") && srcAvif && (
           <UnpicSource
             type="image/avif"
-            src={srcAvif as any}
+            src={typeof srcAvif === 'string' ? encodeURI(srcAvif) : (srcAvif as any)}
             layout={layout}
             width={targetWidth}
             height={targetHeight}
@@ -345,10 +366,10 @@ const wrapperStyle = [
             operations={opsForAvif}
           />
         )}
-        {formats?.includes("webp") && (
+        {formats?.includes("webp") && srcWebp && (
           <UnpicSource
             type="image/webp"
-            src={srcWebp as any}
+            src={typeof srcWebp === 'string' ? encodeURI(srcWebp) : (srcWebp as any)}
             layout={layout}
             width={targetWidth}
             height={targetHeight}
@@ -360,7 +381,7 @@ const wrapperStyle = [
 
         {/* Fallback <img> — en AVIF/WEBP (STRICT) */}
         <UnpicImage
-          src={imgSrc as any}
+          src={typeof imgSrc === 'string' ? encodeURI(imgSrc) : (imgSrc as any)}
           alt={altText}
           width={targetWidth}
           height={targetHeight}
