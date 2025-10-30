@@ -69,13 +69,13 @@ const titleId = `${sectionId}-title`;
     <div class="testimonials__container">
       <header class="testimonials__header">
         <div class="testimonials__header-content">
-          <p class="testimonials__subtitle" data-bind={`sections.${sectionIndex}.testimonials.subtitle`}>{subtitle}</p>
-          <h2 class="testimonials__title" id={titleId} data-bind={`sections.${sectionIndex}.testimonials.title`}>{title}</h2>
+          <p class="testimonials__subtitle" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</p>
+          <h2 class="testimonials__title" id={titleId} data-bind={`sections.${sectionIndex}.title`}>{title}</h2>
           {description && (
-            <p class="testimonials__description" data-bind={`sections.${sectionIndex}.testimonials.description`}>{description}</p>
+            <p class="testimonials__description" data-bind={`sections.${sectionIndex}.description`}>{description}</p>
           )}
-          <a href={linkUrl} class="testimonials__link" aria-label="Voir tous les témoignages" data-bind={`sections.${sectionIndex}.testimonials.linkUrl`}>
-            <span data-bind={`sections.${sectionIndex}.testimonials.linkText`}>{linkText}</span>
+          <a href={linkUrl} class="testimonials__link" aria-label="Voir tous les témoignages" data-bind={`sections.${sectionIndex}.linkUrl`}>
+            <span data-bind={`sections.${sectionIndex}.linkText`}>{linkText}</span>
             <svg 
               class="testimonials__link-arrow" 
               width="10" 

@@ -78,9 +78,9 @@ function getImageData(competence: Competence) {
 <section class="competences" aria-labelledby="competences-title">
   <div class="container competences__container">
     <header class="competences__header">
-      <p class="competences__subtitle" data-bind={`sections.${sectionIndex}.competences.subtitle`}>{subtitle}</p>
-      <h2 class="competences__title" id="competences-title" data-bind={`sections.${sectionIndex}.competences.title`}>{title}</h2>
-      {description && <p class="competences__description" data-bind={`sections.${sectionIndex}.competences.description`}>{description}</p>}
+      <p class="competences__subtitle" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</p>
+      <h2 class="competences__title" id="competences-title" data-bind={`sections.${sectionIndex}.title`}>{title}</h2>
+      {description && <p class="competences__description" data-bind={`sections.${sectionIndex}.description`}>{description}</p>}
     </header>
 
     <ul class="competences__grid" role="list">
@@ -107,7 +107,7 @@ function getImageData(competence: Competence) {
               ) : (
                 <a 
                   class="competences__link" 
-                  href={c.url || '#'}
+                  href={c.url || '#'} 
                   data-bind={`sections.${sectionIndex}.competences.${index}.url`} 
                   aria-label={`En savoir plus sur ${c.title}`}
                 >

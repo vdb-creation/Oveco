@@ -83,7 +83,14 @@ export default function LiveBridge(props: { home: Q }) {
         }
       }
       
-      // Cas "template" : vérifier AVANT de naviguer, si cursor._template ou __typename correspond à seg → on saute ce seg.
+      // 1) Si on est sur un tableau et qu'on a un index numérique (déjà géré plus haut)
+      // 2) Si la clé existe dans l'objet, naviguer en priorité
+      if (cursor && typeof cursor === 'object' && seg in cursor) {
+        cursor = cursor[seg];
+        continue;
+      }
+
+      // 3) Sinon, Cas "template" : si cursor._template ou __typename correspond à seg → on saute ce seg.
       if (cursor && typeof cursor === 'object' && !Array.isArray(cursor)) {
         // Récupérer le nom du template depuis _template ou __typename
         const templateName = cursor._template || '';
@@ -97,15 +104,9 @@ export default function LiveBridge(props: { home: Q }) {
         
         // Si le segment correspond au template (case-insensitive, sans espaces), on le saute
         if (templateLower === segLower || typenameLower === segLower || templateName === seg || typenameTemplate === seg) {
-          // on ignore ce segment et continue (c'est un template redondant dans le bind)
+          // on ignore ce segment et continue (c'est un segment de template non-clé)
           continue;
         }
-      }
-      
-      // Si la clé existe dans l'objet, naviguer
-      if (cursor && typeof cursor === 'object' && seg in cursor) {
-        cursor = cursor[seg];
-        continue;
       }
       
       // Rien ne matche → chemin invalide
@@ -1768,20 +1769,20 @@ export default function LiveBridge(props: { home: Q }) {
     const H = collectionData;
     
     if (H && H.sections) {
-      // Créer une signature de l'ordre actuel
-      const currentOrder = H.sections
-        .map((s: any, i: number) => `${i}-${s?.__typename}`)
-        .join('|');
-      
-      // Si l'ordre a changé, réorganiser le DOM
-      if (previousOrderRef.current && previousOrderRef.current !== currentOrder) {
-        console.log('[LiveBridge] 🔄 Ordre changé ! Réorganisation...');
-        reorderSections(H.sections);
-      }
-      previousOrderRef.current = currentOrder;
-      
-      // Mettre à jour le contenu
-      updateDOM(result.data);
+    // Créer une signature de l'ordre actuel
+    const currentOrder = H.sections
+      .map((s: any, i: number) => `${i}-${s?.__typename}`)
+      .join('|');
+    
+    // Si l'ordre a changé, réorganiser le DOM
+    if (previousOrderRef.current && previousOrderRef.current !== currentOrder) {
+      console.log('[LiveBridge] 🔄 Ordre changé ! Réorganisation...');
+      reorderSections(H.sections);
+    }
+    previousOrderRef.current = currentOrder;
+    
+    // Mettre à jour le contenu
+    updateDOM(result.data);
       // Scanner après updateDOM pour capturer tous les éléments
       setTimeout(scanAndAddTinaFields, 100);
     } else {

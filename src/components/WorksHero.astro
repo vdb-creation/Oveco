@@ -67,12 +67,12 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
 
     <div class="works-hero__content">
       <header class="works-hero__header">
-        <p class="works-hero__subtitle" data-bind={`sections.${sectionIndex}.worksHero.subtitle`}>{subtitle}</p>
-        <h1 class="works-hero__title" id={id} data-bind={`sections.${sectionIndex}.worksHero.title`}>{title}</h1>
+        <p class="works-hero__subtitle" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</p>
+        <h1 class="works-hero__title" id={id} data-bind={`sections.${sectionIndex}.title`}>{title}</h1>
       </header>
-      <p class="works-hero__desc" data-bind={`sections.${sectionIndex}.worksHero.description`}>{description}</p>
-      <a href={ctaHref} class="works-hero__cta" data-bind={`sections.${sectionIndex}.worksHero.ctaHref`}>
-        <span data-bind={`sections.${sectionIndex}.worksHero.ctaLabel`}>{ctaLabel}</span>
+      <p class="works-hero__desc" data-bind={`sections.${sectionIndex}.description`}>{description}</p>
+      <a href={ctaHref} class="works-hero__cta" data-bind={`sections.${sectionIndex}.ctaHref`}>
+        <span data-bind={`sections.${sectionIndex}.ctaLabel`}>{ctaLabel}</span>
       </a>
     </div>
 

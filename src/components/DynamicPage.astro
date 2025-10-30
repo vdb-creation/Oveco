@@ -92,11 +92,20 @@ if (forceLive) {
     
     // Mapper les fichiers JSON vers les queries TinaCMS
     const queryMap: Record<string, Record<string, string>> = {
-      'home': { fr: 'home', en: 'homeEn' },
-      'about': { fr: 'about_fr', en: 'about_en' },
-      'construction': { fr: 'construction_fr', en: 'construction_en' },
+      home: { fr: 'home', en: 'homeEn' },
+      about: { fr: 'about_fr', en: 'about_en' },
+      construction: { fr: 'construction_fr', en: 'construction_en' },
+      works: { fr: 'works_fr', en: 'works_en' },
+      competences: { fr: 'competences_fr', en: 'competences_en' },
     };
     
+    const isSupported = !!queryMap[currentJson];
+    if (!isSupported) {
+      // Page non supportée par Tina (ex: works, competences en tant que pages) → on reste en statique
+      tinaData = null;
+      throw new Error(`Tina query not supported for jsonFile: ${currentJson}`);
+    }
+
     queryName = (queryMap[currentJson] && queryMap[currentJson][lang]) || (lang === 'en' ? 'homeEn' : 'home');
     
     // Utiliser la query appropriée
@@ -110,6 +119,14 @@ if (forceLive) {
       tinaData = await client.queries.construction_fr({ relativePath: file });
     } else if (queryName === 'construction_en') {
       tinaData = await client.queries.construction_en({ relativePath: file });
+    } else if (queryName === 'works_fr') {
+      tinaData = await client.queries.works_fr({ relativePath: file });
+    } else if (queryName === 'works_en') {
+      tinaData = await client.queries.works_en({ relativePath: file });
+    } else if (queryName === 'competences_fr') {
+      tinaData = await client.queries.competences_fr({ relativePath: file });
+    } else if (queryName === 'competences_en') {
+      tinaData = await client.queries.competences_en({ relativePath: file });
     } else {
       tinaData = await client.queries.home({ relativePath: file });
     }
@@ -117,7 +134,7 @@ if (forceLive) {
     console.log('TinaCMS data not available, using static data:', e);
     // Même si la requête échoue, créer un objet de fallback avec les données statiques
     // pour que le LiveBridge puisse au moins détecter les éléments avec data-bind
-    if (forceLive && import.meta.env.PUBLIC_TINA_CLIENT_ID) {
+    if (forceLive && import.meta.env.PUBLIC_TINA_CLIENT_ID && queryName) {
       // Créer un fallback avec les données statiques pour permettre le mode Live
       tinaData = {
         data: {

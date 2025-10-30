@@ -58,9 +58,9 @@ const {
   <div class="autoconstruction">
     <div class="autoconstruction__container">
       <header class="autoconstruction__header">
-        <p class="autoconstruction__subtitle" data-bind={`sections.${sectionIndex}.autoconstruction.subtitle`}>{subtitle}</p>
-        <h2 class="autoconstruction__title" itemprop="name" data-bind={`sections.${sectionIndex}.autoconstruction.title`} set:html={title} />
-        <p class="autoconstruction__description" itemprop="description" data-bind={`sections.${sectionIndex}.autoconstruction.description`} set:html={description} />
+        <p class="autoconstruction__subtitle" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</p>
+        <h2 class="autoconstruction__title" itemprop="name" data-bind={`sections.${sectionIndex}.title`} set:html={title} />
+        <p class="autoconstruction__description" itemprop="description" data-bind={`sections.${sectionIndex}.description`} set:html={description} />
       </header>
 
       <div class="autoconstruction__content">
@@ -86,8 +86,8 @@ const {
           ))}
         </div>
 
-        <a href={ctaHref} class="autoconstruction__cta" aria-label={`${ctaLabel} sur l'auto-construction`} data-bind={`sections.${sectionIndex}.autoconstruction.ctaHref`}>
-          <span data-bind={`sections.${sectionIndex}.autoconstruction.ctaLabel`}>{ctaLabel}</span>
+        <a href={ctaHref} class="autoconstruction__cta" aria-label={`${ctaLabel} sur l'auto-construction`} data-bind={`sections.${sectionIndex}.ctaHref`}>
+          <span data-bind={`sections.${sectionIndex}.ctaLabel`}>{ctaLabel}</span>
         </a>
       </div>
     </div>

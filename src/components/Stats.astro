@@ -42,7 +42,7 @@ const {
 
 <section class="stats" aria-labelledby="stats-title">
   <div class="container stats__container">
-    {title && <h2 id="stats-title" class="stats__title" data-bind={`sections.${sectionIndex}.stats.title`}>{title}</h2>}
+    {title && <h2 id="stats-title" class="stats__title" data-bind={`sections.${sectionIndex}.title`}>{title}</h2>}
 
     <ul class="stats__grid" role="list">
       {stats.map((stat, index) => (

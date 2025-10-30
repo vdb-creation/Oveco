@@ -50,15 +50,15 @@ if (image.rotate180) imageClasses.push('rotate-180');
 
   <div class="simple-competence__content">
     <header class="simple-competence__header">
-      <p class="simple-competence__kicker" data-bind={`sections.${sectionIndex}.simplecompetence.number`}>{number}</p>
-      <h3 class="simple-competence__title" data-bind={`sections.${sectionIndex}.simplecompetence.title`}>{title}</h3>
+      <p class="simple-competence__kicker" data-bind={`sections.${sectionIndex}.number`}>{number}</p>
+      <h3 class="simple-competence__title" data-bind={`sections.${sectionIndex}.title`}>{title}</h3>
     </header>
     
-    <p class="simple-competence__description" data-bind={`sections.${sectionIndex}.simplecompetence.description`}>{description}</p>
+    <p class="simple-competence__description" data-bind={`sections.${sectionIndex}.description`}>{description}</p>
     
     <div class="simple-competence__cta">
-      <a href={cta.url} class="simple-competence__link" data-bind={`sections.${sectionIndex}.simplecompetence.cta.url`}>
-        <span data-bind={`sections.${sectionIndex}.simplecompetence.cta.label`}>{cta.label}</span>
+      <a href={cta.url} class="simple-competence__link" data-bind={`sections.${sectionIndex}.cta.url`}>
+        <span data-bind={`sections.${sectionIndex}.cta.label`}>{cta.label}</span>
       </a>
     </div>
   </div>

@@ -93,6 +93,7 @@
           "description": "Quis qui occaecat qui incididunt velit qui culpa ad exercitation laborum ipsum aliquip. Dolor elit amet nulla mollit ex consequat fugiat elit consectetur cillum dolor. "
         }
       ],
+      "ctaLabel": "z",
       "_template": "autoconstruction"
     },
     {
@@ -117,6 +118,10 @@
         }
       ],
       "_template": "expertise"
+    },
+    {
+      "title": "Nos partenaires",
+      "_template": "partners"
     },
     {
       "subtitle": "Galerie",
@@ -151,10 +156,10 @@
         "alt": "Image"
       },
       "icon1": {
-        "src": "/uploads/icons/crayon.opt.avif"
+        "src": "/uploads/icons/crayon.webp"
       },
       "icon2": {
-        "src": "/uploads/icons/maison.opt.webp"
+        "src": "/uploads/icons/maison.webp"
       },
       "reverse": false,
       "_template": "textimage"
@@ -232,7 +237,7 @@
       "_template": "testimonials"
     },
     {
-      "subtitle": "zzzz",
+      "subtitle": "zzzzpp",
       "title": "zzzzz",
       "description": "zzzzz",
       "_template": "contact"

@@ -109,12 +109,12 @@ function mapImageClassAndId(image: { class?: string }, index: number) {
         
         <div class="hero__content">
           <header class="hero__header">
-            <p class="hero__subtitle" data-bind={`sections.${sectionIndex}.hero.subtitle`} aria-label="Sous-titre">{subtitle}</p>
-            <h1 class="hero__title" id="hero-title" data-bind={`sections.${sectionIndex}.hero.title`}>{title}</h1>
+            <p class="hero__subtitle" data-bind={`sections.${sectionIndex}.subtitle`} aria-label="Sous-titre">{subtitle}</p>
+            <h1 class="hero__title" id="hero-title" data-bind={`sections.${sectionIndex}.title`}>{title}</h1>
           </header>
-          <p class="hero__description" data-bind={`sections.${sectionIndex}.hero.description`}>{description}</p>
-          <a href={ctaUrl} class="hero__cta" role="button" data-bind={`sections.${sectionIndex}.hero.ctaUrl`} aria-label={`${ctaText} - ${title}`}>
-            <span data-bind={`sections.${sectionIndex}.hero.ctaText`}>{ctaText}</span>
+          <p class="hero__description" data-bind={`sections.${sectionIndex}.description`}>{description}</p>
+          <a href={ctaUrl} class="hero__cta" role="button" data-bind={`sections.${sectionIndex}.ctaUrl`} aria-label={`${ctaText} - ${title}`}>
+            <span data-bind={`sections.${sectionIndex}.ctaText`}>{ctaText}</span>
           </a>
         </div>
       </div>

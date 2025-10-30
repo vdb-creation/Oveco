@@ -155,9 +155,9 @@ if (import.meta.env.DEV) {
     {showSectionHeader && (sectionSubtitle || sectionTitle || sectionDescription) && (
       <div class="oveco__section-header">
         <div class="oveco__section-content">
-          {sectionSubtitle && <h3 class="oveco__section-subtitle" data-bind={`sections.${sectionIndex}.textimage.sectionSubtitle`}>{sectionSubtitle}</h3>}
-          {sectionTitle && <h2 class="oveco__section-title" data-bind={`sections.${sectionIndex}.textimage.sectionTitle`} set:html={sectionTitle} />}
-          {sectionDescription && <p class="oveco__section-description" data-bind={`sections.${sectionIndex}.textimage.sectionDescription`} set:html={sectionDescription} />}
+          {sectionSubtitle && <h3 class="oveco__section-subtitle" data-bind={`sections.${sectionIndex}.sectionSubtitle`}>{sectionSubtitle}</h3>}
+          {sectionTitle && <h2 class="oveco__section-title" data-bind={`sections.${sectionIndex}.sectionTitle`} set:html={sectionTitle} />}
+          {sectionDescription && <p class="oveco__section-description" data-bind={`sections.${sectionIndex}.sectionDescription`} set:html={sectionDescription} />}
         </div>
       </div>
     )}
@@ -168,15 +168,15 @@ if (import.meta.env.DEV) {
       <div class="oveco__content">
         {(subtitle || title || description) && (
           <header class="oveco__header">
-            {subtitle && <h3 class="oveco__subtitle" itemprop="name" data-bind={`sections.${sectionIndex}.textimage.subtitle`}>{subtitle}</h3>}
-            {title && <h2 class="oveco__title" data-bind={`sections.${sectionIndex}.textimage.title`} set:html={title} />}
-            {description && <p class="oveco__description" itemprop="description" data-bind={`sections.${sectionIndex}.textimage.description`} set:html={description} />}
+            {subtitle && <h3 class="oveco__subtitle" itemprop="name" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</h3>}
+            {title && <h2 class="oveco__title" data-bind={`sections.${sectionIndex}.title`} set:html={title} />}
+            {description && <p class="oveco__description" itemprop="description" data-bind={`sections.${sectionIndex}.description`} set:html={description} />}
           </header>
         )}
         
         {link && link.label && link.url && (
-          <a href={link.url} class="oveco__link" aria-label={`En savoir plus sur ${subtitle || 'nos services'}`} data-bind={`sections.${sectionIndex}.textimage.link.url`}>
-            <span data-bind={`sections.${sectionIndex}.textimage.link.label`}>{link.label}</span>
+          <a href={link.url} class="oveco__link" aria-label={`En savoir plus sur ${subtitle || 'nos services'}`} data-bind={`sections.${sectionIndex}.link.url`}>
+            <span data-bind={`sections.${sectionIndex}.link.label`}>{link.label}</span>
             <img src="/uploads/icons/Arrow.svg" alt="" class="oveco__arrow" aria-hidden="true" />
           </a>
         )}
@@ -227,15 +227,15 @@ if (import.meta.env.DEV) {
         <div class="oveco__content">
           {(subtitle2 || title2 || description2) && (
             <header class="oveco__header">
-              {subtitle2 && <h3 class="oveco__subtitle" itemprop="name" data-bind={`sections.${sectionIndex}.textimage.subtitle2`}>{subtitle2}</h3>}
-              {title2 && <h2 class="oveco__title" data-bind={`sections.${sectionIndex}.textimage.title2`} set:html={title2} />}
-              {description2 && <p class="oveco__description" itemprop="description" data-bind={`sections.${sectionIndex}.textimage.description2`} set:html={description2} />}
+              {subtitle2 && <h3 class="oveco__subtitle" itemprop="name" data-bind={`sections.${sectionIndex}.subtitle2`}>{subtitle2}</h3>}
+              {title2 && <h2 class="oveco__title" data-bind={`sections.${sectionIndex}.title2`} set:html={title2} />}
+              {description2 && <p class="oveco__description" itemprop="description" data-bind={`sections.${sectionIndex}.description2`} set:html={description2} />}
             </header>
           )}
           
           {link2 && link2.label && link2.url && (
-            <a href={link2.url} class="oveco__link" aria-label={`En savoir plus sur ${subtitle2 || 'nos services'}`} data-bind={`sections.${sectionIndex}.textimage.link2.url`}>
-              <span data-bind={`sections.${sectionIndex}.textimage.link2.label`}>{link2.label}</span>
+            <a href={link2.url} class="oveco__link" aria-label={`En savoir plus sur ${subtitle2 || 'nos services'}`} data-bind={`sections.${sectionIndex}.link2.url`}>
+              <span data-bind={`sections.${sectionIndex}.link2.label`}>{link2.label}</span>
               <img src="/uploads/icons/Arrow.svg" alt="" class="oveco__arrow" aria-hidden="true" />
             </a>
           )}
