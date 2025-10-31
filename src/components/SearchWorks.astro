@@ -1,0 +1,594 @@
+---
+/**
+ * SearchWorks Component - Oveco
+ * Barre de recherche et tags pour filtrer les projets sur la page works
+ * 
+ * @component
+ */
+
+import { getAllProjects } from '../lib/projects';
+
+// Charger tous les projets pour extraire les compétences uniques
+const allProjects = await getAllProjects();
+
+// Extraire toutes les compétences uniques depuis les projets
+const allCompetences = new Set<string>();
+allProjects.forEach(project => {
+  if (project.competences && Array.isArray(project.competences)) {
+    project.competences.forEach((comp: any) => {
+      if (comp.title) {
+        allCompetences.add(comp.title);
+      }
+    });
+  }
+});
+
+const competences = Array.from(allCompetences).sort();
+---
+
+<section class="search-works-section" id="search-works">
+  <div class="search-works__container">
+    <div class="search-works__wrapper">
+      <!-- Barre de recherche -->
+      <div class="search-works__search-box">
+        <div class="search-works__input-label-wrapper">
+          <label for="search-works-input" class="search-works__input-label">Chercher un projet</label>
+        </div>
+        <input
+          type="text"
+          id="search-works-input"
+          class="search-works__input-real"
+          placeholder="Chercher un projet"
+          aria-label="Rechercher un projet"
+        />
+        <div class="search-works__icon-wrapper" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7" cy="7" r="5" stroke="#5C6D6F" stroke-width="1.5" fill="none"/>
+            <path d="M11 11L14 14" stroke="#5C6D6F" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Tags des compétences -->
+      <div class="search-works__tags">
+        {competences.length > 0 ? (
+          competences.map((competence, index) => (
+            <button
+              type="button"
+              class="search-works__tag"
+              data-tag={competence}
+              aria-label={`Filtrer par ${competence}`}
+            >
+              <div class="search-works__tag-content">
+                <div class="search-works__tag-text">{competence}</div>
+              </div>
+            </button>
+          ))
+        ) : (
+          <span class="search-works__no-tags">Aucune compétence disponible</span>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Système de filtrage par recherche et tags
+  function initSearchWorks() {
+    const searchInput = document.getElementById('search-works-input') as HTMLInputElement;
+    const tags = document.querySelectorAll('.search-works__tag') as NodeListOf<HTMLButtonElement>;
+    const projectsGrid = document.querySelector('[data-works-grid]') as HTMLElement;
+    
+    if (!searchInput || !projectsGrid) {
+      console.warn('[SearchWorks] Éléments non trouvés');
+      return;
+    }
+
+    let selectedTags: string[] = [];
+    let searchQuery: string = '';
+
+    // Fonction de filtrage
+    function filterProjects() {
+      const cards = projectsGrid.querySelectorAll('.projects__card') as NodeListOf<HTMLElement>;
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const cardElement = card as HTMLElement;
+        
+        // Récupérer les données depuis les attributs data-project-* sur la carte
+        const cardProjectTitle = card.getAttribute('data-project-title') || '';
+        const cardProjectType = card.getAttribute('data-project-type') || '';
+        const cardProjectDescription = card.getAttribute('data-project-description') || '';
+        const cardProjectClient = card.getAttribute('data-project-client') || '';
+        const cardCompetences = card.getAttribute('data-competences') || '';
+        
+        // Récupérer depuis le DOM si les attributs ne sont pas disponibles (fallback)
+        const cardTitle = cardProjectTitle || card.querySelector('.projects__card-title')?.textContent?.toLowerCase() || '';
+        const cardDescription = cardProjectDescription || card.querySelector('.projects__card-description')?.textContent?.toLowerCase() || '';
+        const cardType = cardProjectType || card.querySelector('.projects__card-type')?.textContent?.toLowerCase() || '';
+        const cardClient = cardProjectClient || card.querySelector('.projects__card-client')?.textContent?.toLowerCase() || '';
+        
+        // Vérifier la recherche textuelle
+        const searchLower = searchQuery.toLowerCase();
+        const matchesSearch = !searchQuery || 
+          cardTitle.includes(searchLower) ||
+          cardDescription.includes(searchLower) ||
+          cardType.includes(searchLower) ||
+          cardClient.includes(searchLower) ||
+          cardCompetences.includes(searchLower);
+
+        // Vérifier les tags (compétences)
+        let matchesTags = true;
+        if (selectedTags.length > 0) {
+          // Vérifier si au moins un tag sélectionné correspond
+          matchesTags = selectedTags.some(tag => {
+            const tagLower = tag.toLowerCase();
+            return cardCompetences.includes(tagLower) ||
+                   cardType.includes(tagLower) ||
+                   cardTitle.includes(tagLower) ||
+                   cardDescription.includes(tagLower);
+          });
+        }
+
+        // Afficher ou masquer la carte
+        if (matchesSearch && matchesTags) {
+          cardElement.style.display = '';
+          visibleCount++;
+        } else {
+          cardElement.style.display = 'none';
+        }
+      });
+
+      // Afficher un message si aucun résultat
+      let noResultsMsg = projectsGrid.querySelector('.search-works__no-results');
+      if (visibleCount === 0) {
+        if (!noResultsMsg) {
+          noResultsMsg = document.createElement('p');
+          noResultsMsg.className = 'search-works__no-results';
+          noResultsMsg.textContent = 'Aucun projet ne correspond à votre recherche.';
+          projectsGrid.appendChild(noResultsMsg);
+        }
+      } else {
+        noResultsMsg?.remove();
+      }
+    }
+
+    // Écouter les changements de recherche
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = (e.target as HTMLInputElement).value;
+      filterProjects();
+    });
+
+    // Gérer les tags
+    tags.forEach((tag) => {
+      tag.addEventListener('click', () => {
+        const tagValue = tag.getAttribute('data-tag') || '';
+        
+        // Toggle du tag
+        if (selectedTags.includes(tagValue)) {
+          selectedTags = selectedTags.filter(t => t !== tagValue);
+          tag.classList.remove('search-works__tag--active');
+        } else {
+          selectedTags.push(tagValue);
+          tag.classList.add('search-works__tag--active');
+        }
+        
+        filterProjects();
+      });
+    });
+  }
+
+  // Initialiser
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSearchWorks);
+  } else {
+    setTimeout(initSearchWorks, 100);
+  }
+</script>
+
+<style>
+.search-works-section {
+  width: 100%;
+  background: #FFFEF8;
+  padding: 50px 0;
+}
+
+@media (max-width: 1200px) {
+  .search-works-section {
+    padding: 45px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-works-section {
+    padding: 40px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-works-section {
+    padding: 35px 0;
+  }
+}
+
+.search-works__container {
+  width: 100%;
+  max-width: 1589px;
+  margin: 0 auto;
+  padding: 0 109px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1400px) {
+  .search-works__container {
+    padding: 0 80px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .search-works__container {
+    padding: 0 60px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .search-works__container {
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-works__container {
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-works__container {
+    padding: 0 1rem;
+  }
+}
+
+.search-works__wrapper {
+  width: 100%;
+  max-width: 1199px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1200px) {
+  .search-works__wrapper {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .search-works__wrapper {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-works__wrapper {
+    flex-direction: column;
+    gap: 24px;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-works__wrapper {
+    gap: 20px;
+  }
+}
+
+/* Barre de recherche - Style amélioré et responsive */
+.search-works__search-box {
+  padding: 14px 20px 14px 20px;
+  background: #FFFEF8;
+  border: 1.5px solid #5C6D6F;
+  border-radius: 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  min-height: 48px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-works__search-box:focus-within {
+  border-color: #048B9A;
+  box-shadow: 0 0 0 3px rgba(4, 139, 154, 0.1);
+}
+
+@media (max-width: 1200px) {
+  .search-works__search-box {
+    max-width: 100%;
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-works__search-box {
+    max-width: 100%;
+    min-width: auto;
+    padding: 12px 18px;
+    gap: 10px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-works__search-box {
+    padding: 10px 16px;
+    gap: 8px;
+    min-height: 42px;
+  }
+}
+
+.search-works__input-label-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 0;
+}
+
+.search-works__input-label {
+  color: #5C6D6F;
+  font-size: 16px;
+  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+@media (max-width: 480px) {
+  .search-works__input-label {
+    font-size: 14px;
+  }
+}
+
+.search-works__input-real {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  width: calc(100% - 72px);
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #334749;
+  font-size: 16px;
+  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.2;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.search-works__input-real::placeholder {
+  color: #9CA3AF;
+  opacity: 0.7;
+}
+
+.search-works__input-real:focus,
+.search-works__input-real:not(:placeholder-shown) {
+  padding-left: 0;
+  left: 20px;
+}
+
+.search-works__input-real:focus ~ .search-works__input-label-wrapper,
+.search-works__input-real:not(:placeholder-shown) ~ .search-works__input-label-wrapper {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .search-works__input-real {
+    left: 18px;
+    width: calc(100% - 66px);
+    font-size: 15px;
+  }
+  
+  .search-works__input-real:focus,
+  .search-works__input-real:not(:placeholder-shown) {
+    left: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-works__input-real {
+    left: 16px;
+    width: calc(100% - 58px);
+    font-size: 14px;
+  }
+  
+  .search-works__input-real:focus,
+  .search-works__input-real:not(:placeholder-shown) {
+    left: 16px;
+  }
+}
+
+.search-works__icon-wrapper {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  position: relative;
+  z-index: 0;
+}
+
+.search-works__icon-wrapper svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .search-works__icon-wrapper {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-works__icon-wrapper {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Tags - Style amélioré et responsive */
+.search-works__tags {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 600px;
+}
+
+@media (max-width: 1200px) {
+  .search-works__tags {
+    max-width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-works__tags {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-works__tags {
+    gap: 6px;
+  }
+}
+
+.search-works__tag {
+  padding: 8px 16px;
+  background: #FFFEF8;
+  border: 1px solid #5C6D6F;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.search-works__tag:hover {
+  background: #f9f9f4;
+  border-color: #048B9A;
+  transform: translateY(-1px);
+}
+
+.search-works__tag:focus {
+  outline: 2px solid #048B9A;
+  outline-offset: 2px;
+}
+
+.search-works__tag:active {
+  transform: translateY(0);
+}
+
+.search-works__tag-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.search-works__tag-text {
+  color: #5C6D6F;
+  font-size: 14px;
+  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+@media (max-width: 480px) {
+  .search-works__tag {
+    padding: 6px 12px;
+    border-radius: 16px;
+  }
+  
+  .search-works__tag-text {
+    font-size: 13px;
+  }
+}
+
+.search-works__tag--active {
+  background: #334749;
+  border-color: #334749;
+}
+
+.search-works__tag--active .search-works__tag-text {
+  color: #FFFEF8;
+}
+
+.search-works__tag--active:hover {
+  background: #2a3a3c;
+  border-color: #2a3a3c;
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-works__tag,
+  .search-works__search-box {
+    transition: none;
+  }
+  
+  .search-works__tag:hover {
+    transform: none;
+  }
+  
+  .search-works__tag--active:hover {
+    transform: none;
+  }
+}
+
+.search-works__no-tags {
+  color: #9CA3AF;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.search-works__no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  color: #5C6D6F;
+  font-size: 16px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+}
+</style>
+

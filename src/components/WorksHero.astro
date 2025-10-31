@@ -61,6 +61,7 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
           context="galerie"
           loading="lazy"
           class="works-hero__image"
+          data-bind={`sections.${sectionIndex}.mediaLeft.src`}
         />
       </figure>
     </div>
@@ -86,6 +87,7 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
           context="galerie"
           loading="lazy"
           class="works-hero__image"
+          data-bind={`sections.${sectionIndex}.mediaRight.src`}
         />
       </figure>
     </div>

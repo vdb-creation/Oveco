@@ -224,6 +224,15 @@
       "_template": "testimonials"
     },
     {
+      "subtitle": "Contact us",
+      "title": "Have an idea, a project, or simply questions?",
+      "description": "Write to us or call us, we'll be happy to discuss.",
+      "contactInfo": {
+        "email": "",
+        "phone": "",
+        "location": ""
+      },
+      "formAction": "#contact",
       "_template": "contact"
     },
     {

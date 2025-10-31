@@ -1,133 +1,231 @@
 {
   "title": "À propos - Oveco",
-  "description": "Découvrez Oveco, des ingénieurs-installateurs qui conçoivent.",
+  "description": "Découvrez Oveco, des ingénieurs-installateurs qui conçoivent des solutions énergétiques durables pour votre autonomie.",
   "sections": [
     {
       "subtitle": "À propos",
-      "title": "Des ingénieurs au service",
-      "description": "Chez Oveco, nous allions savoir-faire technique et engagement humain pour inspirer des installations sur mesure, performantes, et responsables.",
+      "title": "Des ingénieurs au service de votre autonomie énergétique",
+      "description": "Chez Oveco, nous allions savoir-faire technique et engagement humain pour inspirer des installations sur mesure, performantes, et responsables. Depuis plus de 15 ans, nous accompagnons les particuliers dans leurs projets d'auto-construction et de rénovation écologique en Belgique.",
       "ctaLabel": "Nous contacter",
       "ctaHref": "#contact",
       "mediaLeft": {
         "src": "/uploads/hero/maison-build.webp",
-        "alt": "Équipe Oveco"
+        "alt": "Équipe Oveco sur un chantier d'auto-construction"
       },
       "mediaRight": {
-        "src": "/uploads/hero/maison-build.webp",
-        "alt": "Projet Oveco",
+        "src": "/uploads/imgs/plan.webp",
+        "alt": "Conception et planification de projet énergétique",
         "overlay": true
       },
       "_template": "worksHero"
     },
     {
-      "subtitle": "Notre approche",
-      "title": "Une vision globale de l'énergie",
-      "description": "Nous pensons que chaque projet mérite une réflexion sur mesure. Notre équipe d'ingénieurs analyse vos besoins, conçoit des solutions adaptées et les met en œuvre avec rigueur.",
+      "subtitle": "Nos domaines d'expertise",
+      "title": "Des compétences techniques reconnues",
+      "description": "Notre expertise couvre l'ensemble des domaines nécessaires à votre autonomie énergétique, avec des solutions performantes et durables.",
+      "cards": [
+        {
+          "icon": "/uploads/compétance/elec.webp",
+          "alt": "Installations électriques et photovoltaïques",
+          "title": "Installations électriques et photovoltaïques",
+          "description": "Expertise complète en installations électriques et systèmes photovoltaïques. De la conception à la mise en service, nous garantissons des installations conformes, performantes et sécurisées."
+        },
+        {
+          "icon": "/uploads/compétance/clim.webp",
+          "alt": "Chauffage et climatisation écologiques",
+          "title": "Chauffage et climatisation",
+          "description": "Solutions de chauffage et climatisation avec pompes à chaleur haute performance. Confort optimal toute l'année avec une consommation énergétique réduite et des émissions minimales."
+        },
+        {
+          "icon": "/uploads/compétance/eolienne.webp",
+          "alt": "Énergies renouvelables intégrées",
+          "title": "Intégration d'énergies renouvelables",
+          "description": "Intégration complète d'énergies renouvelables : solaire, éolien, géothermie. Systèmes optimisés pour maximiser votre autonomie énergétique et réduire votre impact environnemental."
+        }
+      ],
       "_template": "expertise"
     },
     {
-      "title": "Nos valeurs",
-      "competences": [
+      "image": {
+        "src": "/uploads/imgs/maison-toit.webp",
+        "alt": "Équipe Oveco au travail sur un projet de rénovation"
+      },
+      "icon1": {
+        "src": "/uploads/icons/maison.webp",
+        "alt": "Icône habitat durable"
+      },
+      "icon2": {
+        "src": "/uploads/icons/crayon.webp",
+        "alt": "Icône conception"
+      },
+      "subtitle": "Notre histoire",
+      "title": "Une aventure qui a commencé il y a plus de 15 ans",
+      "description": "Oveco est née de la passion d'ingénieurs et d'installateurs pour les énergies renouvelables et l'autonomie énergétique. Convaincus que chacun peut devenir acteur de sa transition énergétique, nous avons développé une méthode d'accompagnement unique qui combine formation, conseil et réalisation technique.",
+      "reverse": false,
+      "_template": "textimage"
+    },
+    {
+      "image": {
+        "src": "/uploads/imgs/maison-toit-2.webp",
+        "alt": "Projet d'autonomie énergétique réussie avec Oveco"
+      },
+      "icon1": {
+        "src": "/uploads/icons/crayon.webp",
+        "alt": "Icône innovation"
+      },
+      "icon2": {
+        "src": "/uploads/icons/maison.webp",
+        "alt": "Icône habitat"
+      },
+      "subtitle": "Notre mission",
+      "title": "Rendre l'autonomie énergétique accessible à tous",
+      "description": "Notre mission est de rendre l'autonomie énergétique accessible au plus grand nombre. Nous croyons que chaque projet mérite une approche sur mesure qui respecte vos compétences, vos objectifs et votre budget. Que vous souhaitiez construire une maison passive, rénover votre habitat ou installer un système d'énergies renouvelables, nous vous accompagnons avec expertise et bienveillance.",
+      "reverse": true,
+      "_template": "textimage"
+    },
+    {
+      "image": {
+        "src": "/uploads/imgs/plan.webp",
+        "alt": "Planification et conception de projet énergétique"
+      },
+      "icon1": {
+        "src": "/uploads/icons/maison.webp",
+        "alt": "Icône projet"
+      },
+      "icon2": {
+        "src": "/uploads/icons/crayon.webp",
+        "alt": "Icône méthode"
+      },
+      "subtitle": "Notre approche",
+      "title": "Une méthode d'accompagnement unique",
+      "description": "Chez Oveco, nous avons développé une méthode d'accompagnement qui s'articule autour de trois axes fondamentaux : la formation pour vous donner les compétences nécessaires, le conseil pour optimiser vos choix techniques, et l'accompagnement technique pour garantir la réussite de votre projet. Cette approche personnalisée vous permet de devenir acteur de votre transition énergétique tout en bénéficiant de notre expertise.",
+      "link": {
+        "label": "Découvrir notre méthode",
+        "url": "/fr/construction"
+      },
+      "reverse": false,
+      "_template": "textimage"
+    },
+    {
+      "title": "Nos partenaires",
+      "description": "Des collaborations de confiance avec les meilleurs acteurs du secteur de l'énergie durable.",
+      "logos": [
         {
-          "icon": "/uploads/compétance/maison.webp",
-          "alt": "Expertise technique",
-          "title": "Expertise technique",
-          "description": "Des ingénieurs qualifiés pour concevoir et réaliser vos installations énergétiques."
-        },
+          "src": "/uploads/partenaire/Facebook.svg"
+        }
+      ],
+      "_template": "partners"
+    },
+    {
+      "subtitle": "Nos valeurs",
+      "title": "Ce qui guide notre action quotidienne",
+      "description": "Nos valeurs sont le socle de notre engagement. Elles guident chacune de nos actions et définissent notre relation avec nos clients et partenaires.",
+      "cards": [
         {
           "icon": "/uploads/compétance/personne.webp",
+          "alt": "Expertise technique",
+          "title": "Expertise technique",
+          "description": "Une équipe d'ingénieurs et d'installateurs qualifiés, constamment formés aux dernières technologies et aux normes en vigueur. Nous garantissons la qualité et la conformité de toutes nos installations."
+        },
+        {
+          "icon": "/uploads/compétance/maison.webp",
           "alt": "Accompagnement humain",
           "title": "Accompagnement humain",
-          "description": "Un suivi personnalisé de la conception à la mise en service de votre projet."
+          "description": "Un suivi personnalisé de la conception à la mise en service de votre projet. Nous sommes à vos côtés à chaque étape, pour répondre à vos questions et vous guider dans vos choix techniques."
         },
         {
           "icon": "/uploads/compétance/eolienne.webp",
           "alt": "Durabilité",
           "title": "Durabilité",
-          "description": "Des solutions pérennes qui respectent l'environnement et votre budget."
-        },
-        {
-          "icon": "/uploads/compétance/crayon.webp",
-          "alt": "Innovation",
-          "title": "Innovation",
-          "description": "Les dernières technologies au service de votre projet énergétique."
+          "description": "Des solutions pérennes qui respectent l'environnement et votre budget. Nous privilégions les technologies durables et optimisons chaque projet pour minimiser son impact environnemental tout en maximisant sa rentabilité."
         }
       ],
-      "_template": "competences"
+      "_template": "expertise"
     },
     {
-      "image": {
-        "src": "/uploads/hero/maison-build.webp",
-        "alt": "Équipe Oveco au travail"
-      },
-      "icon1": {
-        "src": "/uploads/icon/house.svg",
-        "alt": "Icône maison"
-      },
-      "icon2": {
-        "src": "/uploads/icon/pencil.svg",
-        "alt": "Icône crayon"
-      },
-      "subtitle": "Qui sommes-nous ?",
-      "title": "Une équipe passionnée",
-      "description": "Oveco rassemble des ingénieurs et des installateurs qui partagent la même vision : créer des projets énergétiques durables, performants et accessibles. Nous mettons notre expertise technique au service de votre autonomie énergétique.",
-      "ctaLabel": "Découvrir nos réalisations",
-      "ctaUrl": "/works",
-      "_template": "textImage"
+      "subtitle": "Nos réalisations",
+      "title": "Des projets qui témoignent de notre expertise",
+      "description": "Depuis notre création, nous avons accompagné plus de 150 projets d'auto-construction et de rénovation énergétique. Chaque projet est unique et témoigne de notre capacité à adapter nos solutions aux besoins spécifiques de nos clients.",
+      "linkText": "Voir tous nos projets",
+      "linkUrl": "/fr/works",
+      "cards": [
+        {
+          "image": "/uploads/imgs/maison-toit.webp",
+          "type": "Maison passive",
+          "client": "Famille Martin",
+          "title": "Maison passive à Beauvechain",
+          "url": "/works/maison-passive-beauvechain",
+          "description": "Construction complète d'une maison passive avec ossature bois, isolation renforcée, pompe à chaleur et installation photovoltaïque de 15kW. Projet d'auto-construction accompagné sur 18 mois."
+        },
+        {
+          "image": "/uploads/imgs/maison-toit-2.webp",
+          "type": "Rénovation énergétique",
+          "client": "M. et Mme Lefebvre",
+          "title": "Rénovation énergétique complète",
+          "url": "/works/renovation-lefebvre",
+          "description": "Rénovation d'une maison des années 70 avec isolation extérieure, remplacement de la chaudière par une pompe à chaleur air-eau, installation de panneaux photovoltaïques et système de ventilation double flux."
+        },
+        {
+          "image": "/uploads/imgs/architrech.webp",
+          "type": "Auto-construction",
+          "client": "Famille Dubois",
+          "title": "Maison écologique ossature bois",
+          "url": "/works/maison-ecologique-dubois",
+          "description": "Accompagnement complet d'un projet d'auto-construction avec système solaire, récupération d'eau de pluie, ventilation double flux et installation photovoltaïque. Formation et suivi technique tout au long du chantier."
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "subtitle": "Nos partenaires industriels",
+      "title": "Nos partenaires techniques",
+      "description": "Nous travaillons avec les meilleurs fabricants et fournisseurs du secteur pour garantir la qualité de nos installations.",
+      "logos": [
+        {
+          "src": "/uploads/partenaire/Webflow.svg"
+        },
+        {
+          "src": "/uploads/partenaire/Twitch.svg"
+        },
+        {
+          "src": "/uploads/partenaire/Google.svg"
+        }
+      ],
+      "_template": "partners"
     },
     {
       "title": "Nos certifications",
+      "description": "Labels et reconnaissances qui garantissent notre expertise et notre engagement dans la qualité de nos services.",
       "cards": [
         {
           "logo": "/uploads/partenaire/Google.svg",
-          "alt": "Certification 1",
-          "title": "Qualification RGE",
-          "text": "Reconnu Garant de l'Environnement"
+          "alt": "Certification QualiPV",
+          "title": "QualiPV",
+          "text": "Certification professionnelle pour l'installation de systèmes photovoltaïques. Cette certification garantit la qualité et la conformité des installations solaires que nous réalisons. Elle est également nécessaire pour l'accès aux primes et subventions publiques."
         },
         {
           "logo": "/uploads/partenaire/Facebook.svg",
-          "alt": "Certification 2",
-          "title": "Certifié Qualifelec",
-          "text": "Installations électriques conformes"
+          "alt": "Certification RGE",
+          "title": "Reconnu Garant de l'Environnement (RGE)",
+          "text": "Label de qualité pour les travaux de rénovation énergétique. Cette certification est essentielle pour permettre à nos clients d'accéder aux aides financières (primes, TVA réduite) pour leurs projets d'économie d'énergie. Elle garantit la qualité et la conformité de nos interventions."
         },
         {
           "logo": "/uploads/partenaire/Youtube.svg",
-          "alt": "Certification 3",
-          "title": "QualiPV",
-          "text": "Spécialiste photovoltaïque"
+          "alt": "Certification Qualifelec",
+          "title": "Qualifelec",
+          "text": "Certification pour les installations électriques. Cette certification assure que nos installations électriques respectent les normes les plus strictes en matière de sécurité et de performance. Elle est un gage de qualité et de conformité pour tous nos travaux électriques."
         }
       ],
       "_template": "certifications"
     },
     {
-      "title": "Nos chiffres",
-      "stats": [
-        {
-          "value": "150+",
-          "label": "Projets réalisés",
-          "description": "Installations réussies depuis notre création"
-        },
-        {
-          "value": "98%",
-          "label": "Clients satisfaits",
-          "description": "Un taux de satisfaction élevé"
-        },
-        {
-          "value": "10+",
-          "label": "Années d'expérience",
-          "description": "Une expertise reconnue"
-        }
-      ],
-      "_template": "stats"
-    },
-    {
       "subtitle": "Nous contacter",
-      "title": "Vous avez une idée, un projet, ou simplement des questions ?",
-      "description": "Écrivez-nous ou appelez-nous, on sera ravi d'en discuter.",
+      "title": "Vous avez un projet d'auto-construction ou de rénovation énergétique ?",
+      "description": "Écrivez-nous ou appelez-nous, nous serons ravis de discuter de votre projet et de vous proposer une solution adaptée à vos besoins. Notre équipe est disponible pour répondre à toutes vos questions.",
       "contactInfo": {
         "email": "contact@oveco.be",
         "phone": "+32 473 / 68.99.02",
-        "location": "Région de Beauvechain"
+        "location": "Région de Beauvechain, Belgique"
       },
       "formAction": "#contact",
       "_template": "contact"

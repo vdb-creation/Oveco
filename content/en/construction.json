@@ -84,10 +84,9 @@
       },
       "image": {
         "src": "/uploads/hero/maison-build.webp",
-        "alt": "Technical training",
-        "isPng": true
+        "alt": "Technical training"
       },
-      "_template": "simpleCompetence"
+      "_template": "simplecompetence"
     },
     {
       "number": "02",
@@ -99,10 +98,9 @@
       },
       "image": {
         "src": "/uploads/hero/maison-build.webp",
-        "alt": "Site support",
-        "isPng": true
+        "alt": "Site support"
       },
-      "_template": "simpleCompetence"
+      "_template": "simplecompetence"
     },
     {
       "number": "03",
@@ -114,43 +112,61 @@
       },
       "image": {
         "src": "/uploads/hero/maison-build.webp",
-        "alt": "Commissioning",
-        "isPng": true
+        "alt": "Commissioning"
       },
-      "_template": "simpleCompetence"
+      "_template": "simplecompetence"
     },
     {
       "subtitle": "Testimonials",
       "title": "They built with us",
-      "ctaLabel": "See all testimonials",
-      "ctaHref": "/en/works",
+      "description": "Client feedback",
+      "linkText": "See all testimonials",
+      "linkUrl": "/en/works",
       "testimonials": [
         {
-          "clientName": "John Doe",
-          "position": "Owner",
-          "company": "Single-family home",
-          "quote": "Thanks to Oveco, I was able to install my solar panels myself. The support was perfect, I feel capable of managing my installation.",
-          "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.webp",
-          "priority": "high"
+          "client_name": "John Doe",
+          "client_position": "Owner",
+          "client_company": "Single-family home",
+          "content": "Thanks to Oveco, I was able to install my solar panels myself. The support was perfect, I feel capable of managing my installation.",
+          "card_content": "Thanks to Oveco, I was able to install my solar panels myself.",
+          "thumbnail": {
+            "src": "/uploads/hero/maison-build.webp",
+            "alt": "John Doe"
+          },
+          "linked_project": {
+            "title": "Solar installation",
+            "link": "/en/works/solar"
+          }
         },
         {
-          "clientName": "Jane Smith",
-          "position": "Self-builder",
-          "company": "Family project",
-          "quote": "The training is clear and practical. I learned a lot and saved on installation costs.",
-          "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.webp",
-          "priority": "high"
+          "client_name": "Jane Smith",
+          "client_position": "Self-builder",
+          "client_company": "Family project",
+          "content": "The training is clear and practical. I learned a lot and saved on installation costs.",
+          "card_content": "The training is clear and practical.",
+          "thumbnail": {
+            "src": "/uploads/hero/maison-build.webp",
+            "alt": "Jane Smith"
+          },
+          "linked_project": {
+            "title": "Self-build",
+            "link": "/en/works/selfbuild"
+          }
         },
         {
-          "clientName": "Bob Johnson",
-          "position": "DIY enthusiast",
-          "company": "Energy renovation",
-          "quote": "The Oveco team guided me every step of the way. I highly recommend for those who want to be involved in their project.",
-          "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.webp",
-          "priority": "medium"
+          "client_name": "Bob Johnson",
+          "client_position": "DIY enthusiast",
+          "client_company": "Energy renovation",
+          "content": "The Oveco team guided me every step of the way. I highly recommend for those who want to be involved in their project.",
+          "card_content": "The Oveco team guided me every step of the way.",
+          "thumbnail": {
+            "src": "/uploads/hero/maison-build.webp",
+            "alt": "Bob Johnson"
+          },
+          "linked_project": {
+            "title": "Renovation",
+            "link": "/en/works/renovation"
+          }
         }
       ],
       "_template": "testimonials"

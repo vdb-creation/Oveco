@@ -2,8 +2,11 @@
 import "../styles/global.scss";
 import { ViewTransitions } from 'astro:transitions';
 import Nabar from '../components/Nabar.astro';
+import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 import { getGlobalComponents } from '../lib/global-components.ts';
+import LiveBridge from '../../tina/LiveBridge.tsx';
+import { client } from '../../tina/__generated__/client';
 
 // Détecter la langue depuis l'URL
 function detectLanguage(url: URL): 'fr' | 'en' {
@@ -17,6 +20,94 @@ function detectLanguage(url: URL): 'fr' | 'en' {
 // Charger les composants globaux selon la langue détectée
 const currentLang = detectLanguage(Astro.url);
 const globalComponents = await getGlobalComponents(currentLang);
+
+// Configuration TinaCMS (pour toutes les pages, y compris statiques)
+const forceLive = (
+  import.meta.env.DEV || 
+  Astro.url.searchParams.get('live') === '1' || 
+  import.meta.env.PUBLIC_TINA_LIVE === '1' ||
+  import.meta.env.PUBLIC_TINA_CLIENT_ID !== undefined
+);
+
+// Détecter quelle collection/page utiliser selon l'URL pour LiveBridge
+let tinaDocKey: string | undefined = undefined;
+let tinaData: any = null;
+
+if (forceLive) {
+  try {
+    // Détecter la collection selon l'URL
+    const pathname = Astro.url.pathname;
+    if (pathname.includes('/competences')) {
+      tinaDocKey = currentLang === 'en' ? 'competences_en' : 'competences_fr';
+    } else if (pathname.includes('/works')) {
+      tinaDocKey = currentLang === 'en' ? 'works_en' : 'works_fr';
+    } else if (pathname.includes('/about')) {
+      tinaDocKey = currentLang === 'en' ? 'about_en' : 'about_fr';
+    } else if (pathname.includes('/construction')) {
+      tinaDocKey = currentLang === 'en' ? 'construction_en' : 'construction_fr';
+    } else if (pathname.includes('/en/') || pathname === '/en') {
+      tinaDocKey = 'homeEn';
+    } else {
+      tinaDocKey = 'home';
+    }
+    
+    // Essayer de charger les données TinaCMS si le client est disponible
+    if (client && client.queries && tinaDocKey && client.queries[tinaDocKey]) {
+      try {
+        // Détecter le fichier JSON selon la collection
+        const jsonFileMap: Record<string, string> = {
+          'home': 'home.json',
+          'homeEn': 'home.json',
+          'about_fr': 'about.json',
+          'about_en': 'about.json',
+          'construction_fr': 'construction.json',
+          'construction_en': 'construction.json',
+          'works_fr': 'works.json',
+          'works_en': 'works.json',
+          'competences_fr': 'competences.json',
+          'competences_en': 'competences.json',
+        };
+        
+        const file = jsonFileMap[tinaDocKey] || 'home.json';
+        const lang = currentLang;
+        const filePath = lang === 'en' ? `en/${file}` : `fr/${file}`;
+        
+        // Charger les données avec la query appropriée
+        if (tinaDocKey === 'homeEn') {
+          tinaData = await client.queries.homeEn({ relativePath: file });
+        } else if (tinaDocKey === 'about_fr') {
+          tinaData = await client.queries.about_fr({ relativePath: file });
+        } else if (tinaDocKey === 'about_en') {
+          tinaData = await client.queries.about_en({ relativePath: file });
+        } else if (tinaDocKey === 'construction_fr') {
+          tinaData = await client.queries.construction_fr({ relativePath: file });
+        } else if (tinaDocKey === 'construction_en') {
+          tinaData = await client.queries.construction_en({ relativePath: file });
+        } else if (tinaDocKey === 'works_fr') {
+          tinaData = await client.queries.works_fr({ relativePath: file });
+        } else if (tinaDocKey === 'works_en') {
+          tinaData = await client.queries.works_en({ relativePath: file });
+        } else if (tinaDocKey === 'competences_fr') {
+          tinaData = await client.queries.competences_fr({ relativePath: file });
+        } else if (tinaDocKey === 'competences_en') {
+          tinaData = await client.queries.competences_en({ relativePath: file });
+        } else {
+          tinaData = await client.queries.home({ relativePath: file });
+        }
+      } catch (e) {
+        console.warn('[Layout] Impossible de charger les données TinaCMS:', e);
+        // LiveBridge peut fonctionner même sans données, il scannera les data-bind
+        tinaData = { data: {}, query: '', variables: {} };
+      }
+    } else {
+      // Pas de données mais LiveBridge peut quand même scanner les data-bind
+      tinaData = { data: {}, query: '', variables: {} };
+    }
+  } catch (e) {
+    console.warn('[Layout] Erreur lors de l\'initialisation TinaCMS:', e);
+    tinaData = { data: {}, query: '', variables: {} };
+  }
+}
 
 export interface SEOProps {
   title?: string;
@@ -241,6 +332,11 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-
 		<ViewTransitions />
 	</head>
 	<body>
+		{/* Charger LiveBridge pour toutes les pages si TinaCMS est configuré */}
+		{forceLive && (
+			<LiveBridge client:load home={tinaData || { data: {}, query: '', variables: {} }} docKey={tinaDocKey} />
+		)}
+		
 		<Nabar 
 			siteName={globalComponents.navbar.siteName}
 			siteUrl={globalComponents.navbar.siteUrl}
@@ -252,6 +348,15 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-
 		<main id="main-content" role="main">
 			<slot />
 		</main>
+		
+		<Contact
+			subtitle={globalComponents.contact.subtitle}
+			title={globalComponents.contact.title}
+			description={globalComponents.contact.description}
+			contactInfo={globalComponents.contact.contactInfo}
+			formAction={globalComponents.contact.formAction}
+			sectionIndex={-1}
+		/>
 		
 		<Footer 
 			copyrightYear={globalComponents.footer.copyrightYear}

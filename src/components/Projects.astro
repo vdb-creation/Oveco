@@ -191,20 +191,23 @@ const titleId = `${sectionId}-title`;
       }
       
       // Fallback basé sur la taille d'écran
-      let cardWidth = 412;
+      let cardWidth = 388;
       let gap = 14;
       
       if (screenWidth <= 480) {
-        cardWidth = Math.min(300, screenWidth * 0.85);
-        gap = 8;
-      } else if (screenWidth <= 768) {
-        cardWidth = Math.min(350, screenWidth * 0.48);
+        cardWidth = Math.min(300, screenWidth * 0.82);
         gap = 10;
+      } else if (screenWidth <= 768) {
+        cardWidth = Math.min(340, screenWidth * 0.85);
+        gap = 12;
       } else if (screenWidth <= 1024) {
-        cardWidth = Math.min(380, screenWidth * 0.32);
+        cardWidth = Math.min(360, screenWidth * 0.42);
+        gap = 12;
+      } else if (screenWidth <= 1200) {
+        cardWidth = Math.min(380, screenWidth * 0.38);
         gap = 12;
       } else {
-        cardWidth = Math.min(412, screenWidth * 0.26);
+        cardWidth = Math.min(388, screenWidth * 0.26);
         gap = 14;
       }
       
@@ -293,12 +296,38 @@ const titleId = `${sectionId}-title`;
     grid.style.cursor = 'grab';
   }
 
-  // Initialiser au chargement
+  // Initialiser au chargement - avec plusieurs tentatives pour être sûr
+  function tryInit() {
+    const grid = document.querySelector('[data-projects-grid]') as HTMLElement;
+    const prevBtn = document.querySelector('.projects__nav-btn--prev') as HTMLButtonElement;
+    const nextBtn = document.querySelector('.projects__nav-btn--next') as HTMLButtonElement;
+    
+    if (grid && prevBtn && nextBtn) {
+      initProjectsNavigation();
+    } else {
+      // Réessayer après un court délai (max 5 secondes)
+      let attempts = 0;
+      const maxAttempts = 50;
+      const interval = setInterval(() => {
+        attempts++;
+        const checkGrid = document.querySelector('[data-projects-grid]') as HTMLElement;
+        const checkPrevBtn = document.querySelector('.projects__nav-btn--prev') as HTMLButtonElement;
+        const checkNextBtn = document.querySelector('.projects__nav-btn--next') as HTMLButtonElement;
+        
+        if ((checkGrid && checkPrevBtn && checkNextBtn) || attempts >= maxAttempts) {
+          clearInterval(interval);
+          if (checkGrid && checkPrevBtn && checkNextBtn) {
+            initProjectsNavigation();
+          }
+        }
+      }, 100);
+    }
+  }
+  
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initProjectsNavigation);
+    document.addEventListener('DOMContentLoaded', tryInit);
   } else {
-    // Attendre un peu pour être sûr que le DOM est prêt
-    setTimeout(initProjectsNavigation, 100);
+    tryInit();
   }
 </script>
 

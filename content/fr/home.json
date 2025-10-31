@@ -33,216 +33,228 @@
       "_template": "hero"
     },
     {
-      "subtitle": "Nos compétences",
-      "title": "Ce que nous maîtrisons",
-      "description": "Domaines d'expertise clés.",
-      "competences": [
-        {
-          "icon": "/uploads/compétance/elec.webp",
-          "alt": "Compétencesqdfqsdfqsdfsdqf",
-          "title": "Ossature bois",
-          "description": "Structures et enveloppes performantes."
-        },
-        {
-          "icon": "/uploads/compétance/personne.webp",
-          "title": "sfsdfsdfqsdfqs",
-          "description": "fqsdfqsdfqsdfqsdfsqdfsdqfsdqfqsdfqdsfqsdf"
-        },
-        {
-          "icon": "/uploads/compétance/personne.webp",
-          "title": "fsqdfsdqfqsd",
-          "description": "fqsdfaerzaterezrtertezrughfjghkhlkho,"
-        }
-      ],
-      "_template": "competences"
-    },
-    {
-      "title": "En chiffres",
-      "stats": [
-        {
-          "value": "+100",
-          "label": "Projets",
-          "description": "Réalisés"
-        },
-        {
-          "value": "15 ans",
-          "label": "D'expertise",
-          "description": "Construction durable"
-        },
-        {
-          "value": "+100",
-          "label": "Projets",
-          "description": "Construction durable"
-        }
-      ],
-      "_template": "stats"
-    },
-    {
-      "subtitle": "consectetur minim anim",
-      "title": "consectetur minim anim",
-      "description": "consectetur minim anim consectetur minim animconsectetur minim animconsectetur minim anim",
-      "services": [
-        {
-          "image": "/uploads/imgs/maison-toit-2.webp",
-          "title": "Lorem?",
-          "description": "Quis qui occaecat qui incididunt velit qui culpa ad exercitation laborum ipsum aliquip. Dolor elit amet nulla mollit ex consequat fugiat elit consectetur cillum dolor. "
-        },
-        {
-          "image": "/uploads/imgs/plan.webp",
-          "title": "Lorim ?",
-          "description": "Quis qui occaecat qui incididunt velit qui culpa ad exercitation laborum ipsum aliquip. Dolor elit amet nulla mollit ex consequat fugiat elit consectetur cillum dolor. "
-        }
-      ],
-      "ctaLabel": "z",
-      "_template": "autoconstruction"
-    },
-    {
-      "subtitle": "zzzz",
-      "title": "zzzzz",
-      "description": "zzzzzzzzz",
-      "cards": [
-        {
-          "icon": "/uploads/compétance/clim.webp",
-          "title": "Énergies renouvelables",
-          "description": "Pompes à chaleur, chaudières, panneaux solaires…\nDes systèmes performants, bien dimensionnés, pour plus d'autonomie."
-        },
-        {
-          "icon": "/uploads/compétance/elec.webp",
-          "title": "Énergies",
-          "description": "Pompes à chaleur, chaudières, panneaux solaires… Des systèmes performants, bien dimensionnés, pour plus d'autonomie."
-        },
-        {
-          "icon": "/uploads/compétance/eolienne.webp",
-          "title": "Énergies renouvelables",
-          "description": "ompes à chaleur, chaudières, panneaux solaires… Des systèmes performants, bien dimensionnés, pour plus d'autonomie."
-        }
-      ],
-      "_template": "expertise"
-    },
-    {
-      "title": "Nos partenaires",
-      "_template": "partners"
-    },
-    {
-      "subtitle": "Galerie",
-      "title": "En images",
-      "gallery": [
-        {
-          "src": "/uploads/imgs/maison-build.webp",
-          "alt": "Photo"
-        },
-        {
-          "src": "/uploads/imgs/architrech.webp"
-        },
-        {
-          "src": "/uploads/imgs/maison-toit-2.webp"
-        },
-        {
-          "src": "/uploads/imgs/maison-toit.webp"
-        }
-      ],
-      "_template": "gallerie"
-    },
-    {
-      "sectionSubtitle": "Section",
-      "sectionTitle": "Titre de section",
-      "sectionDescription": "Description de section",
-      "showSectionHeader": false,
-      "subtitle": "nostrud do occaecat",
-      "title": "Nulla cillum dolore aute",
-      "description": "Labore velit est duis exercitation ullamco incididunt officia cupidatat mollit laborum proident deserunt.",
+      "sectionSubtitle": "Notre approche",
+      "sectionTitle": "Des solutions sur mesure pour votre autonomie énergétique",
+      "sectionDescription": "Chez Oveco, nous allions expertise technique et accompagnement humain pour vous guider dans vos projets d'auto-construction et de rénovation écologique.",
+      "showSectionHeader": true,
+      "subtitle": "L'auto-construction",
+      "title": "Apprendre en faisant, construire en étant accompagné",
+      "description": "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat. En vous formant, en vous conseillant et en vous fournissant les bons outils, nous vous permettons de participer activement aux installations en toute sécurité. Chaque projet est unique et mérite une approche personnalisée qui respecte vos compétences, vos objectifs et votre budget.",
       "image": {
         "src": "/uploads/imgs/maison-toit.webp",
-        "alt": "Image"
+        "alt": "Équipe Oveco accompagnant un projet d'auto-construction"
       },
       "icon1": {
-        "src": "/uploads/icons/crayon.webp"
+        "src": "/uploads/icons/maison.webp",
+        "alt": "Icône maison"
       },
       "icon2": {
-        "src": "/uploads/icons/maison.webp"
+        "src": "/uploads/icons/crayon.webp",
+        "alt": "Icône conception"
       },
       "reverse": false,
       "_template": "textimage"
     },
     {
-      "title": "Nos certifications",
-      "description": "Labels et reconnaissances.",
-      "cards": [
-        {
-          "logo": "/uploads/partenaire/Google.svg",
-          "title": "Google",
-          "text": "Quis dolore pariatur nulla dolore pariatur ad ex qui quis. Excepteur consequat ex tempor proident aliqua aliqua enim cillum dolore exercitation dolor proident pariatur amet."
-        },
-        {
-          "logo": "/uploads/partenaire/Webflow.svg",
-          "title": "Webflow",
-          "text": "Quis dolore pariatur nulla dolore pariatur ad ex qui quis. Excepteur consequat ex tempor proident aliqua aliqua enim cillum dolore exercitation dolor proident pariatur amet."
-        }
-      ],
-      "_template": "certifications"
-    },
-    {
       "subtitle": "Nos expertises",
-      "title": "Excellence technique",
-      "description": "Services et solutions professionnelles.",
+      "title": "Des solutions énergétiques durables et performantes",
+      "description": "Notre expertise couvre l'ensemble des domaines nécessaires à votre autonomie énergétique, de la conception à la mise en service.",
       "cards": [
         {
           "icon": "/uploads/compétance/elec.webp",
-          "alt": "Expertise technique",
-          "title": "Expertise technique",
-          "description": "Solutions techniques professionnelles et expertise."
+          "alt": "Électricité et photovoltaïque",
+          "title": "Photovoltaïque et électricité",
+          "description": "Installation de panneaux solaires performants, systèmes de stockage et gestion intelligente de l'énergie. Des solutions sur mesure pour maximiser votre autonomie électrique et réduire vos factures."
+        },
+        {
+          "icon": "/uploads/compétance/clim.webp",
+          "alt": "Chauffage et climatisation",
+          "title": "Pompes à chaleur et chauffage",
+          "description": "Systèmes de chauffage et de climatisation écologiques avec pompes à chaleur haute performance. Confort optimal toute l'année avec une consommation énergétique réduite et des émissions minimales."
+        },
+        {
+          "icon": "/uploads/compétance/eolienne.webp",
+          "alt": "Énergies renouvelables",
+          "title": "Énergies renouvelables",
+          "description": "Intégration complète d'énergies renouvelables pour votre habitat : solaire, éolien, géothermie. Des systèmes performants, bien dimensionnés et optimisés pour votre autonomie énergétique."
         }
       ],
       "_template": "expertise"
     },
     {
+      "subtitle": "Nos partenaires industriels",
+      "title": "Nos partenaires",
+      "description": "Nous travaillons avec des fabricants reconnus pour la fiabilité, la durabilité et la performance de leurs équipements. Ces partenariats nous permettent de garantir un excellent suivi technique, des prix justes, et des installations pérennes.",
+      "logos": [
+        {
+          "src": "/uploads/partenaire/Youtube.svg"
+        },
+        {
+          "src": "/uploads/partenaire/Pinterest.svg"
+        },
+        {
+          "src": "/uploads/partenaire/Facebook.svg"
+        }
+      ],
+      "_template": "partners"
+    },
+    {
+      "subtitle": "L'auto-construction",
+      "title": "Trois étapes pour votre projet réussi",
+      "description": "Notre méthode d'accompagnement s'articule autour de trois phases essentielles qui garantissent la réussite de votre projet d'auto-construction énergétique.",
+      "services": [
+        {
+          "image": "/uploads/imgs/maison-toit-2.webp",
+          "alt": "Formation initiale",
+          "title": "Formation initiale",
+          "description": "Avant de commencer, nous vous formons aux bases de l'installation énergétique : sécurité, outils, techniques. Vous apprenez les gestes essentiels dans un environnement contrôlé, avec des experts à vos côtés pour répondre à toutes vos questions."
+        },
+        {
+          "image": "/uploads/imgs/plan.webp",
+          "alt": "Accompagnement sur chantier",
+          "title": "Accompagnement sur chantier",
+          "description": "Un ingénieur Oveco est présent aux étapes clés de votre projet. Il vous guide, valide vos installations et s'assure que tout est conforme aux normes en vigueur. Un suivi régulier qui vous donne confiance et garantit la qualité de votre réalisation."
+        },
+        {
+          "image": "/uploads/imgs/maison-build.webp",
+          "alt": "Mise en service",
+          "title": "Mise en service et suivi",
+          "description": "Une fois les travaux terminés, nous procédons à la mise en service complète de votre installation. Vous repartez avec toutes les connaissances pour gérer votre système en autonomie, avec un support technique disponible si besoin."
+        }
+      ],
+      "ctaLabel": "En savoir plus sur l'auto-construction",
+      "ctaHref": "/fr/construction",
+      "_template": "autoconstruction"
+    },
+    {
       "subtitle": "Nos réalisations",
       "title": "Projets récents",
-      "description": "Une sélection de projets accompagnés.",
+      "description": "Une sélection de projets accompagnés avec succès par notre équipe.",
       "linkText": "Voir tous les projets",
-      "linkUrl": "/works",
+      "linkUrl": "/fr/works",
       "cards": [
         {
           "image": "/uploads/imgs/maison-toit.webp",
-          "type": "Rénovation",
+          "type": "Rénovation énergétique",
           "client": "Famille Martin",
-          "title": "Maison passive",
-          "url": "/work/maison-passive-beauvechain",
-          "description": "Isolation passive et PV."
+          "title": "Maison passive à Beauvechain",
+          "url": "/works/maison-passive-beauvechain",
+          "description": "Transformation complète en maison passive avec isolation renforcée, pompe à chaleur et installation photovoltaïque de 15kW."
+        },
+        {
+          "image": "/uploads/imgs/maison-toit-2.webp",
+          "type": "Auto-construction",
+          "client": "Famille Dubois",
+          "title": "Maison écologique ossature bois",
+          "url": "/works/maison-ecologique-dubois",
+          "description": "Accompagnement complet d'un projet d'auto-construction avec système solaire, récupération d'eau de pluie et ventilation double flux."
+        },
+        {
+          "image": "/uploads/imgs/architrech.webp",
+          "type": "Rénovation",
+          "client": "M. et Mme Lefebvre",
+          "title": "Rénovation énergétique complète",
+          "url": "/works/renovation-lefebvre",
+          "description": "Rénovation d'une maison des années 70 avec isolation extérieure, pompe à chaleur air-eau et panneaux photovoltaïques."
         }
       ],
       "_template": "projects"
     },
     {
-      "subtitle": "Avis",
-      "title": "Ce qu'ils disent",
-      "description": "Retours de nos clients",
+      "subtitle": "Témoignages",
+      "title": "Ce qu'ils disent de nous",
+      "description": "Retours authentiques de clients qui ont fait le choix de l'autonomie énergétique avec Oveco.",
+      "linkText": "Voir tous les témoignages",
+      "linkUrl": "/fr/works",
       "testimonials": [
         {
           "thumbnail": {
             "src": "/uploads/team/pic.webp",
-            "alt": "Client"
+            "alt": "Famille Martin"
           },
-          "client_name": "Client",
-          "client_position": "",
-          "client_company": "",
-          "content": "Super accompagnement.",
-          "card_content": "Accompagnement au top.",
+          "client_name": "Famille Martin",
+          "client_position": "Propriétaires",
+          "client_company": "Maison passive Beauvechain",
+          "content": "L'accompagnement d'Oveco a été exceptionnel. Grâce à leur expertise et leur patience, nous avons pu réaliser notre projet de maison passive en grande partie nous-mêmes. Les économies réalisées sont impressionnantes et nous sommes maintenant autonomes en énergie.",
+          "card_content": "L'accompagnement d'Oveco a été exceptionnel. Grâce à leur expertise et leur patience, nous avons pu réaliser notre projet de maison passive en grande partie nous-mêmes.",
           "linked_project": {
-            "title": "Projet",
-            "link": "/works"
+            "title": "Voir le projet",
+            "link": "/works/maison-passive-beauvechain"
+          }
+        },
+        {
+          "thumbnail": {
+            "src": "/uploads/team/pic.webp",
+            "alt": "M. Dubois"
+          },
+          "client_name": "Michel Dubois",
+          "client_position": "Auto-constructeur",
+          "client_company": "Projet ossature bois",
+          "content": "Les formations d'Oveco sont claires et pratiques. J'ai appris énormément sur l'installation photovoltaïque et j'ai économisé sur les coûts d'installation tout en ayant la garantie que tout était bien fait. L'équipe est toujours disponible pour répondre aux questions.",
+          "card_content": "Les formations d'Oveco sont claires et pratiques. J'ai appris énormément sur l'installation photovoltaïque et j'ai économisé sur les coûts d'installation.",
+          "linked_project": {
+            "title": "Voir le projet",
+            "link": "/works/maison-ecologique-dubois"
           }
         }
       ],
       "_template": "testimonials"
     },
     {
-      "subtitle": "zzzzpp",
-      "title": "zzzzz",
-      "description": "zzzzz",
-      "_template": "contact"
+      "title": "Nos certifications",
+      "description": "Labels et reconnaissances qui garantissent notre expertise et notre engagement.",
+      "cards": [
+        {
+          "logo": "/uploads/partenaire/Google.svg",
+          "title": "QualiPV",
+          "text": "Certification professionnelle pour l'installation de systèmes photovoltaïques. Garantit la qualité et la conformité des installations solaires que nous réalisons."
+        },
+        {
+          "logo": "/uploads/partenaire/Facebook.svg",
+          "title": "Reconnu Garant de l'Environnement (RGE)",
+          "text": "Label de qualité pour les travaux de rénovation énergétique. Ce label vous permet d'accéder aux aides financières pour vos projets d'économie d'énergie."
+        },
+        {
+          "logo": "/uploads/partenaire/Youtube.svg",
+          "title": "Qualifelec",
+          "text": "Certification pour les installations électriques. Assure que nos installations électriques respectent les normes les plus strictes en matière de sécurité et de performance."
+        }
+      ],
+      "_template": "certifications"
     },
     {
+      "sectionSubtitle": "Notre engagement",
+      "sectionTitle": "Une équipe passionnée à votre service",
+      "sectionDescription": "Oveco rassemble des ingénieurs et des installateurs qui partagent la même vision : créer des projets énergétiques durables, performants et accessibles.",
+      "showSectionHeader": true,
+      "subtitle": "Qui sommes-nous ?",
+      "title": "Des experts engagés pour votre autonomie énergétique",
+      "description": "Depuis plus de 15 ans, Oveco accompagne les particuliers dans leurs projets d'auto-construction et de rénovation écologique. Notre équipe d'ingénieurs et d'installateurs qualifiés met son expertise au service de votre autonomie énergétique. Nous croyons que chaque projet mérite une approche sur mesure, respectueuse de l'environnement et accessible financièrement.",
+      "image": {
+        "src": "/uploads/imgs/maison-build.webp",
+        "alt": "Équipe Oveco au travail sur un chantier"
+      },
+      "icon1": {
+        "src": "/uploads/icons/maison.webp",
+        "alt": "Icône habitat"
+      },
+      "icon2": {
+        "src": "/uploads/icons/crayon.webp",
+        "alt": "Icône innovation"
+      },
+      "reverse": true,
+      "_template": "textimage"
+    },
+    {
+      "subtitle": "Nous contacter",
+      "title": "Vous avez un projet d'auto-construction ou de rénovation énergétique ?",
+      "description": "Écrivez-nous ou appelez-nous, nous serons ravis de discuter de votre projet et de vous proposer une solution adaptée à vos besoins.",
+      "contactInfo": {
+        "email": "contact@oveco.be",
+        "phone": "+32 473 / 68.99.02",
+        "location": "Région de Beauvechain, Belgique"
+      },
+      "formAction": "#contact",
       "_template": "contact"
     }
   ]

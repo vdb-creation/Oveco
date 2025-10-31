@@ -66,16 +66,33 @@ const defaultStats = [
   }
 ];
 
-const defaultProjects = [
-  {
-    image: "/uploads/hero/maison-build.png",
-    type: "Construction",
-    client: "Client Exemple",
-    title: "Projet Similaire",
-    url: "/work/projet-similaire",
-    description: "Découvrez d'autres projets similaires réalisés par notre équipe."
-  }
-];
+// Charger les projets similaires depuis le projet ou obtenir d'autres projets automatiquement
+let similarProjects = project.similarProjects || [];
+if (similarProjects.length === 0) {
+  // Si pas de projets similaires définis, charger automatiquement d'autres projets de la même catégorie
+  const allProjects = await getAllProjects();
+  const otherProjects = allProjects
+    .filter(p => p.slug !== project.slug && (p.category === project.category || !project.category))
+    .slice(0, 3)
+    .map(p => ({
+      image: p.thumbnail || p.heroImage || "/uploads/imgs/maison-toit.webp",
+      type: p.category || "Projet",
+      client: p.client,
+      title: p.title,
+      url: `/work/${p.slug}`,
+      description: p.excerpt || p.description
+    }));
+  similarProjects = otherProjects.length > 0 ? otherProjects : [
+    {
+      image: "/uploads/imgs/maison-toit.webp",
+      type: "Projet",
+      client: "Oveco",
+      title: "Découvrez nos autres projets",
+      url: "/fr/works",
+      description: "Explorez d'autres réalisations de notre équipe."
+    }
+  ];
+}
 
 // Titre et description SEO
 const pageTitle = project.metaTitle || `${project.title} - Projet Oveco`;
@@ -93,44 +110,49 @@ const pageDescription = project.metaDescription || project.excerpt || `Découvre
     description={project.excerpt || project.description || ''}
     ctaLabel="Nous contacter"
     ctaHref="#contact"
-    mediaLeft={project.heroImage ? { src: project.heroImage, alt: project.title } : { src: "/uploads/hero/maison-build.png", alt: "Image projet" }}
-    mediaRight={project.thumbnail ? { src: project.thumbnail, alt: project.title } : { src: "/uploads/hero/maison-build.png", alt: "Image projet" }}
+    mediaLeft={project.heroImage ? { src: project.heroImage, alt: project.title } : { src: "/uploads/imgs/maison-toit.webp", alt: "Image projet" }}
+    mediaRight={project.thumbnail ? { src: project.thumbnail, alt: project.title } : { src: "/uploads/imgs/maison-build.webp", alt: "Image projet" }}
+    sectionIndex={0}
   />
 
   <!-- Compétences utilisées -->
   <Competences 
+    subtitle="Compétences techniques"
     title="Compétences Utilisées"
+    description="Les compétences techniques mises en œuvre pour ce projet."
     competences={project.competences || defaultCompetences}
+    sectionIndex={1}
   />
 
   <!-- Section Texte + Image -->
-  {project.textImage && (
-    <TextImage 
-      subtitle={project.textImage.subtitle || "À propos"}
-      title={project.textImage.title || project.title}
-      description={project.textImage.description || project.description || ''}
-      image={project.textImage.image ? { src: project.textImage.image, alt: project.title } : { src: "/uploads/hero/maison-build.png", alt: "Image projet" }}
-      reverse={project.textImage.reverse || false}
-    />
-  )}
+  <TextImage 
+    sectionIndex={2}
+    subtitle={project.textImage?.subtitle || "À propos"}
+    title={project.textImage?.title || project.title}
+    description={project.textImage?.description || project.description || ''}
+    image={project.textImage?.image ? { src: project.textImage.image, alt: project.title } : { src: "/uploads/imgs/maison-toit.webp", alt: "Image projet" }}
+    reverse={project.textImage?.reverse || false}
+  />
 
   <!-- Statistiques du projet -->
   <Stats 
-    title="Chiffres Clés"
+    title="Chiffres Clés du Projet"
     stats={project.stats || defaultStats}
+    sectionIndex={3}
   />
 
   <!-- Galerie d'images -->
-  {project.gallery && project.gallery.length > 0 && (
-    <Gallerie 
-      title="Galerie Photos"
-      gallery={project.gallery.map((item: any, index: number) => ({
-        src: item.image,
-        alt: item.alt || `Image ${index + 1} du projet ${project.title}`,
-        mod: ['a', 'b', 'c', 'd'][index % 4] as 'a' | 'b' | 'c' | 'd'
-      }))}
-    />
-  )}
+  <Gallerie 
+    subtitle="Galerie"
+    title="En images"
+    gallery={(project.gallery && project.gallery.length > 0) ? project.gallery.map((item: any, index: number) => ({
+      src: item.image,
+      alt: item.alt || `Image ${index + 1} du projet ${project.title}`
+    })) : [
+      { src: "/uploads/imgs/maison-toit.webp", alt: "Image du projet" }
+    ]}
+    sectionIndex={4}
+  />
 
   <!-- Projets similaires -->
   <Projects 
@@ -138,12 +160,24 @@ const pageDescription = project.metaDescription || project.excerpt || `Découvre
     title="Autres Projets"
     description="Explorez d'autres réalisations de notre équipe."
     linkText="Voir tous les projets"
-    linkUrl="/works"
-    cards={defaultProjects}
+    linkUrl="/fr/works"
+    cards={similarProjects}
+    sectionIndex={5}
   />
 
   <!-- Contact -->
-  <Contact />
+  <Contact 
+    subtitle="Nous contacter"
+    title="Vous avez un projet similaire ?"
+    description="Contactez-nous pour discuter de votre projet d'auto-construction ou de rénovation écologique."
+    contactInfo={{
+      email: "contact@oveco.be",
+      phone: "+32 473 / 68.99.02",
+      location: "Région de Beauvechain, Belgique"
+    }}
+    formAction="#contact"
+    sectionIndex={6}
+  />
 
   <!-- Footer -->
   <Footer 

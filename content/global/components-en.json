@@ -14,6 +14,17 @@
       "url": "/#contact"
     }
   },
+  "contact": {
+    "subtitle": "Contact us",
+    "title": "Do you have a self-construction or energy renovation project?",
+    "description": "Contact us to discuss your project. Our team is available to answer all your questions and propose a solution adapted to your needs.",
+    "contactInfo": {
+      "email": "contact@oveco.be",
+      "phone": "+32 473 / 68.99.02",
+      "location": "Beauvechain region, Belgium"
+    },
+    "formAction": "#contact"
+  },
   "footer": {
     "copyrightYear": 2024,
     "companyName": "Oveco",

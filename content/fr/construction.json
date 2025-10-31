@@ -1,141 +1,198 @@
 {
-  "title": "Auto-construction - Oveco",
-  "description": "Apprendre en faisant, construire en étant accompagné. Oveco vous forme et vous guide dans vos projets d'auto-construction énergétique.",
+  "title": "Habitat - Auto-construction énergétique | Oveco",
+  "description": "Apprendre en faisant, construire en étant accompagné. Oveco vous forme et vous guide dans vos projets d'auto-construction énergétique pour créer un habitat durable et autonome.",
   "sections": [
     {
-      "subtitle": "Auto-construction",
+      "subtitle": "Habitat durable",
       "title": "Construisez votre autonomie énergétique",
-      "description": "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat. En vous formant, en vous conseillant et en vous fournissant les bons outils, nous vous permettons de participer activement aux installations en toute sécurité.",
-      "ctaLabel": "Démarrer un projet",
+      "description": "L'auto-construction énergétique vous permet de créer un habitat durable, performant et autonome. Avec Oveco, vous apprenez les techniques essentielles, bénéficiez d'un accompagnement personnalisé et réalisez votre projet en toute sécurité. Devenez acteur de votre transition énergétique tout en économisant sur les coûts d'installation.",
+      "ctaLabel": "Démarrer votre projet",
       "ctaHref": "#contact",
       "mediaLeft": {
         "src": "/uploads/hero/maison-build.webp",
-        "alt": "Chantier auto-construction"
+        "alt": "Chantier d'auto-construction énergétique avec panneaux solaires"
       },
       "mediaRight": {
-        "src": "/uploads/hero/maison-build.webp",
-        "alt": "Formation sur site",
+        "src": "/uploads/imgs/plan.webp",
+        "alt": "Formation et accompagnement technique sur site",
         "overlay": true
       },
       "_template": "worksHero"
     },
     {
-      "subtitle": "l'auto-construction",
-      "title": "Apprendre en faisant, construire en étant accompagné",
-      "description": "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat. En vous formant, en vous conseillant et en vous fournissant les bons outils, nous vous permettons de participer activement aux installations en toute sécurité.",
+      "subtitle": "Notre méthode",
+      "title": "Trois étapes pour un habitat autonome et performant",
+      "description": "Notre méthode d'accompagnement s'articule autour de trois phases essentielles qui garantissent la réussite de votre projet d'auto-construction énergétique. Chaque étape est conçue pour vous donner les compétences et la confiance nécessaires à la réalisation de votre habitat durable.",
       "services": [
         {
-          "image": "/uploads/hero/maison-build.webp",
-          "alt": "Accompagnement personnalisé pour l'auto-construction",
-          "title": "Accompagnement sur mesure",
-          "description": "Chaque projet est unique : nous adaptons nos conseils, nos formations et nos outils à vos compétences et vos objectifs."
+          "image": "/uploads/imgs/maison-toit-2.webp",
+          "alt": "Formation initiale en auto-construction",
+          "title": "Formation initiale",
+          "description": "Avant de commencer votre projet, nous vous formons aux bases essentielles de l'installation énergétique : sécurité, outils, techniques et normes. Vous apprenez les gestes essentiels dans un environnement contrôlé, avec des experts à vos côtés pour répondre à toutes vos questions. Cette formation vous donne les bases solides pour réussir votre projet en toute sécurité."
         },
         {
-          "image": "/uploads/hero/maison-build.webp",
-          "alt": "Formation et transmission de savoir-faire",
-          "title": "Formation et transmission",
-          "description": "Des sessions de formation sont prévues avant les étapes clés du chantier. Vous devenez autonome tout en étant épaulé."
+          "image": "/uploads/imgs/plan.webp",
+          "alt": "Accompagnement technique sur chantier",
+          "title": "Accompagnement sur chantier",
+          "description": "Un ingénieur Oveco est présent aux étapes clés de votre projet. Il vous guide, valide vos installations et s'assure que tout est conforme aux normes en vigueur. Un suivi régulier qui vous donne confiance et garantit la qualité de votre réalisation. Vous bénéficiez d'un support technique disponible tout au long du chantier."
         },
         {
-          "image": "/uploads/hero/maison-build.webp",
-          "alt": "Matériel professionnel pour l'auto-construction",
-          "title": "Matériel professionnel accessible",
-          "description": "Nous vous proposons les équipements professionnels à prix préférentiels, avec livraison et support technique."
+          "image": "/uploads/imgs/maison-build.webp",
+          "alt": "Mise en service et suivi d'installation",
+          "title": "Mise en service et suivi",
+          "description": "Une fois les travaux terminés, nous procédons à la mise en service complète de votre installation énergétique. Vous repartez avec toutes les connaissances nécessaires pour gérer votre système en autonomie. Un suivi post-installation est assuré pour vous accompagner dans l'optimisation et la maintenance de votre équipement."
         }
       ],
-      "ctaLabel": "En savoir plus",
+      "ctaLabel": "Découvrir notre méthode",
       "ctaHref": "#contact",
       "_template": "autoconstruction"
     },
     {
-      "number": "01",
-      "title": "Formation initiale",
-      "description": "Avant de commencer, nous vous formons aux bases de l'installation énergétique : sécurité, outils, techniques. Vous apprenez les gestes essentiels dans un environnement contrôlé.",
-      "cta": {
-        "label": "Découvrir nos formations",
-        "url": "#contact"
-      },
-      "image": {
-        "src": "/uploads/hero/maison-build.webp",
-        "alt": "Formation technique",
-        "isPng": true
-      },
-      "_template": "simpleCompetence"
+      "subtitle": "Nos compétences",
+      "title": "Des expertises techniques pour tous vos besoins énergétiques",
+      "description": "Notre expertise couvre l'ensemble des domaines nécessaires à la création d'un habitat durable et autonome. Nous maîtrisons les techniques les plus avancées pour vous offrir des solutions performantes et durables.",
+      "cards": [
+        {
+          "icon": "/uploads/compétance/elec.webp",
+          "alt": "Installations photovoltaïques et électriques",
+          "title": "Installations photovoltaïques",
+          "description": "Installation de panneaux solaires performants, systèmes de stockage d'énergie et gestion intelligente de l'électricité. Des solutions sur mesure pour maximiser votre autonomie électrique et réduire vos factures. Nous vous formons aux techniques d'installation et de maintenance pour que vous deveniez autonome."
+        },
+        {
+          "icon": "/uploads/compétance/clim.webp",
+          "alt": "Chauffage et climatisation écologiques",
+          "title": "Chauffage et climatisation",
+          "description": "Systèmes de chauffage et climatisation avec pompes à chaleur haute performance. Confort optimal toute l'année avec une consommation énergétique réduite. Nous vous accompagnons dans le choix, l'installation et la maintenance de votre système de chauffage écologique."
+        },
+        {
+          "icon": "/uploads/compétance/eolienne.webp",
+          "alt": "Intégration d'énergies renouvelables",
+          "title": "Intégration énergétique",
+          "description": "Intégration complète d'énergies renouvelables pour votre habitat : solaire, éolien, géothermie. Systèmes optimisés pour maximiser votre autonomie énergétique. Nous vous aidons à concevoir et réaliser un système énergétique complet et performant."
+        }
+      ],
+      "_template": "expertise"
     },
     {
-      "number": "02",
-      "title": "Accompagnement sur chantier",
-      "description": "Un ingénieur Oveco est présent aux étapes clés de votre projet. Il vous guide, valide vos installations et s'assure que tout est conforme aux normes.",
-      "cta": {
-        "label": "Voir nos projets",
-        "url": "/works"
-      },
+      "subtitle": "L'habitat durable",
+      "title": "Créer un habitat autonome et respectueux de l'environnement",
+      "description": "L'auto-construction énergétique vous permet de créer un habitat qui répond à vos besoins tout en respectant l'environnement. Grâce à notre accompagnement, vous pouvez réaliser vous-même les installations énergétiques de votre habitat, en économisant sur les coûts tout en acquérant des compétences durables. Un habitat autonome est un investissement pour l'avenir, qui réduit vos factures énergétiques et votre empreinte écologique.",
       "image": {
-        "src": "/uploads/hero/maison-build.webp",
-        "alt": "Accompagnement chantier",
-        "isPng": true
+        "src": "/uploads/imgs/maison-toit.webp",
+        "alt": "Habitat durable avec installations énergétiques autonomes"
       },
-      "_template": "simpleCompetence"
-    },
-    {
-      "number": "03",
-      "title": "Mise en service",
-      "description": "Une fois les travaux terminés, nous procédons à la mise en service complète de votre installation. Vous repartez avec toutes les connaissances pour gérer votre système en autonomie.",
-      "cta": {
-        "label": "Planifier une visite",
-        "url": "#contact"
+      "icon1": {
+        "src": "/uploads/icons/maison.webp",
+        "alt": "Icône habitat durable"
       },
-      "image": {
-        "src": "/uploads/hero/maison-build.webp",
-        "alt": "Mise en service",
-        "isPng": true
+      "icon2": {
+        "src": "/uploads/icons/crayon.webp",
+        "alt": "Icône conception"
       },
-      "_template": "simpleCompetence"
+      "link": {
+        "label": "Découvrir nos projets",
+        "url": "/fr/works"
+      },
+      "reverse": false,
+      "_template": "textimage"
     },
     {
       "subtitle": "Témoignages",
-      "title": "Ils ont construit avec nous",
-      "ctaLabel": "Voir tous les témoignages",
-      "ctaHref": "/works",
+      "title": "Ils ont construit leur habitat avec nous",
+      "description": "Retours authentiques de clients qui ont choisi l'auto-construction énergétique avec Oveco pour créer leur habitat durable et autonome.",
+      "linkText": "Voir tous les témoignages",
+      "linkUrl": "/fr/works",
       "testimonials": [
         {
-          "clientName": "Jean Dupont",
-          "position": "Propriétaire",
-          "company": "Maison individuelle",
-          "quote": "Grâce à Oveco, j'ai pu installer moi-même mes panneaux solaires. L'accompagnement était parfait, je me sens capable de gérer mon installation.",
-          "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.webp",
-          "priority": "high"
+          "client_name": "Famille Martin",
+          "client_position": "Propriétaires",
+          "client_company": "Maison passive Beauvechain",
+          "content": "Grâce à Oveco, nous avons pu réaliser une grande partie de l'installation photovoltaïque de notre maison passive nous-mêmes. L'accompagnement était parfait, les formations très claires, et nous avons économisé considérablement sur les coûts. Aujourd'hui, notre maison est autonome en énergie et nous maîtrisons notre installation.",
+          "card_content": "Grâce à Oveco, nous avons pu réaliser une grande partie de l'installation photovoltaïque de notre maison passive nous-mêmes. L'accompagnement était parfait.",
+          "thumbnail": {
+            "src": "/uploads/team/pic.webp",
+            "alt": "Famille Martin"
+          },
+          "linked_project": {
+            "title": "Voir le projet",
+            "link": "/works/maison-passive-beauvechain"
+          }
         },
         {
-          "clientName": "Marie Martin",
-          "position": "Auto-constructrice",
-          "company": "Projet familial",
-          "quote": "Les formations sont claires et pratiques. J'ai appris énormément et j'ai économisé sur les coûts d'installation.",
-          "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.webp",
-          "priority": "high"
+          "client_name": "Marie Dubois",
+          "client_position": "Auto-constructrice",
+          "client_company": "Maison écologique ossature bois",
+          "content": "Les formations d'Oveco sont exceptionnelles. J'ai appris énormément sur l'installation de pompe à chaleur et sur la gestion de l'énergie. L'équipe est toujours disponible pour répondre aux questions, même après la mise en service. Aujourd'hui, je gère mon installation en toute autonomie et je me sens capable de faire de la maintenance.",
+          "card_content": "Les formations d'Oveco sont exceptionnelles. J'ai appris énormément sur l'installation de pompe à chaleur et sur la gestion de l'énergie.",
+          "thumbnail": {
+            "src": "/uploads/team/pic.webp",
+            "alt": "Marie Dubois"
+          },
+          "linked_project": {
+            "title": "Voir le projet",
+            "link": "/works/maison-ecologique-dubois"
+          }
         },
         {
-          "clientName": "Pierre Leroy",
-          "position": "Bricoleur",
-          "company": "Rénovation énergétique",
-          "quote": "L'équipe Oveco m'a guidé à chaque étape. Je recommande vivement pour ceux qui veulent s'impliquer dans leur projet.",
-          "rating": 5,
-          "backgroundImage": "/uploads/hero/maison-build.webp",
-          "priority": "medium"
+          "client_name": "Pierre Leroy",
+          "client_position": "Auto-constructeur",
+          "client_company": "Rénovation énergétique",
+          "content": "L'équipe Oveco m'a guidé à chaque étape de mon projet de rénovation énergétique. L'accompagnement technique sur chantier était rassurant et m'a permis d'avoir confiance dans mes réalisations. Grâce à leur méthode, j'ai pu installer moi-même ma pompe à chaleur et mes panneaux solaires. Je recommande vivement leur accompagnement.",
+          "card_content": "L'équipe Oveco m'a guidé à chaque étape de mon projet de rénovation énergétique. L'accompagnement technique sur chantier était rassurant.",
+          "thumbnail": {
+            "src": "/uploads/team/pic.webp",
+            "alt": "Pierre Leroy"
+          },
+          "linked_project": {
+            "title": "Voir le projet",
+            "link": "/works/renovation-lefebvre"
+          }
         }
       ],
       "_template": "testimonials"
     },
     {
+      "subtitle": "Nos réalisations",
+      "title": "Des habitats autonomes réussis",
+      "description": "Découvrez des exemples de projets d'auto-construction énergétique que nous avons accompagnés. Chaque projet est unique et témoigne de notre capacité à adapter notre méthode à vos besoins spécifiques.",
+      "linkText": "Voir tous nos projets",
+      "linkUrl": "/fr/works",
+      "cards": [
+        {
+          "image": "/uploads/imgs/maison-toit.webp",
+          "type": "Maison passive",
+          "client": "Famille Martin",
+          "title": "Maison passive à Beauvechain",
+          "url": "/works/maison-passive-beauvechain",
+          "description": "Construction complète d'une maison passive avec ossature bois, isolation renforcée, pompe à chaleur et installation photovoltaïque de 15kW. Projet d'auto-construction accompagné sur 18 mois avec formation et suivi technique."
+        },
+        {
+          "image": "/uploads/imgs/maison-toit-2.webp",
+          "type": "Auto-construction",
+          "client": "Famille Dubois",
+          "title": "Maison écologique ossature bois",
+          "url": "/works/maison-ecologique-dubois",
+          "description": "Accompagnement complet d'un projet d'auto-construction avec système solaire, récupération d'eau de pluie, ventilation double flux et installation photovoltaïque. Formation et suivi technique tout au long du chantier."
+        },
+        {
+          "image": "/uploads/imgs/architrech.webp",
+          "type": "Rénovation énergétique",
+          "client": "M. et Mme Lefebvre",
+          "title": "Rénovation énergétique complète",
+          "url": "/works/renovation-lefebvre",
+          "description": "Rénovation d'une maison des années 70 avec isolation extérieure, remplacement de la chaudière par une pompe à chaleur air-eau, installation de panneaux photovoltaïques et système de ventilation double flux."
+        }
+      ],
+      "_template": "projects"
+    },
+    {
       "subtitle": "Nous contacter",
-      "title": "Prêt à vous lancer dans l'auto-construction ?",
-      "description": "Contactez-nous pour discuter de votre projet et découvrir comment nous pouvons vous accompagner.",
+      "title": "Prêt à créer votre habitat durable et autonome ?",
+      "description": "Contactez-nous pour discuter de votre projet d'auto-construction énergétique. Nous serons ravis de vous présenter notre méthode d'accompagnement et de vous aider à définir les étapes de votre projet.",
       "contactInfo": {
         "email": "contact@oveco.be",
         "phone": "+32 473 / 68.99.02",
-        "location": "Région de Beauvechain"
+        "location": "Région de Beauvechain, Belgique"
       },
       "formAction": "#contact",
       "_template": "contact"

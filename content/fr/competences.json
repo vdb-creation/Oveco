@@ -1,32 +1,307 @@
 {
-  "_template": "competences",
-  "subtitle": "Nos compétences",
-  "title": "Domaines d'expertise",
-  "description": "Découvrez nos compétences techniques et notre savoir-faire dans la construction durable et les énergies renouvelables.",
-  "competences": [
+  "title": "Compétences - Oveco",
+  "description": "Découvrez nos compétences techniques et notre savoir-faire dans la construction durable et les énergies renouvelables. Expertise en auto-construction, maisons passives et installations énergétiques.",
+  "sections": [
     {
-      "icon": "/uploads/compétance/clim.webp",
-      "alt": "Climatisation et chauffage",
-      "title": "Climatisation & Chauffage",
-      "description": "Installation et maintenance de systèmes de climatisation et chauffage performants et économes en énergie."
+      "subtitle": "Nos compétences",
+      "title": "Des experts à votre service",
+      "description": "Oveco maîtrise l'ensemble des compétences nécessaires à la création d'un habitat durable et autonome. Découvrez nos domaines d'expertise et nos réalisations concrètes.",
+      "ctaLabel": "Nous contacter",
+      "ctaHref": "#contact",
+      "mediaLeft": {
+        "src": "/uploads/compétance/elec.webp",
+        "alt": "Installations électriques et photovoltaïques"
+      },
+      "mediaRight": {
+        "src": "/uploads/compétance/clim.webp",
+        "alt": "Chauffage et climatisation écologiques",
+        "overlay": true
+      },
+      "_template": "worksHero"
     },
     {
-      "icon": "/uploads/compétance/eolienne.webp",
-      "alt": "Énergies renouvelables", 
-      "title": "Énergies Renouvelables",
-      "description": "Panneaux solaires, éoliennes, pompes à chaleur et autres solutions d'énergie verte pour votre autonomie énergétique."
+      "subtitle": "Domaines d'expertise",
+      "title": "Nos compétences techniques",
+      "description": "Découvrez nos compétences dans la construction durable et les énergies renouvelables. Chaque domaine est couvert par des experts formés aux dernières technologies et normes en vigueur.",
+      "competences": [
+        {
+          "icon": "/uploads/compétance/elec.webp",
+          "alt": "Installations électriques",
+          "title": "Installations Électriques",
+          "description": "Conception et installation d'infrastructures électriques modernes, sécurisées et optimisées pour vos besoins énergétiques."
+        },
+        {
+          "icon": "/uploads/compétance/clim.webp",
+          "alt": "Climatisation et chauffage",
+          "title": "Climatisation & Chauffage",
+          "description": "Installation et maintenance de systèmes de climatisation et chauffage performants et économes en énergie."
+        },
+        {
+          "icon": "/uploads/compétance/eolienne.webp",
+          "alt": "Énergies renouvelables",
+          "title": "Énergies Renouvelables",
+          "description": "Panneaux solaires, éoliennes, pompes à chaleur et autres solutions d'énergie verte pour votre autonomie énergétique."
+        },
+        {
+          "icon": "/uploads/compétance/personne.webp",
+          "alt": "Accompagnement personnalisé",
+          "title": "Accompagnement Personnalisé",
+          "description": "Conseil et suivi personnalisé pour vos projets de construction durable et de rénovation énergétique."
+        }
+      ],
+      "_template": "competences"
     },
     {
-      "icon": "/uploads/compétance/elec.webp",
-      "alt": "Installations électriques",
-      "title": "Installations Électriques", 
-      "description": "Conception et installation d'infrastructures électriques modernes, sécurisées et optimisées pour vos besoins."
+      "number": "01",
+      "title": "Installations photovoltaïques",
+      "description": "Installation de panneaux solaires performants et systèmes de stockage d'énergie. Nous vous formons aux techniques d'installation et de maintenance pour que vous puissiez devenir autonome dans la gestion de votre système photovoltaïque.",
+      "cta": {
+        "label": "Voir nos projets photovoltaïques",
+        "url": "/fr/works?type=photovoltaique"
+      },
+      "image": {
+        "src": "/uploads/imgs/maison-toit.webp",
+        "alt": "Installation photovoltaïque sur toiture"
+      },
+      "_template": "simplecompetence"
     },
     {
-      "icon": "/uploads/compétance/personne.webp",
-      "alt": "Accompagnement personnalisé",
-      "title": "Accompagnement Personnalisé",
-      "description": "Conseil et suivi personnalisé pour vos projets de construction durable et de rénovation énergétique."
+      "subtitle": "Nos réalisations",
+      "title": "Projets photovoltaïques",
+      "description": "Découvrez nos installations photovoltaïques réalisées en auto-construction.",
+      "linkText": "Voir tous les projets photovoltaïques",
+      "linkUrl": "/fr/works?type=photovoltaique",
+      "cards": [
+        {
+          "image": "/uploads/imgs/maison-toit.webp",
+          "type": "Installation photovoltaïque",
+          "client": "Famille Martin",
+          "title": "Installation 15kW à Beauvechain",
+          "url": "/works/photovoltaique-beauvechain",
+          "description": "Installation photovoltaïque de 15kW avec système de stockage. Formation et accompagnement pour permettre l'auto-installation."
+        },
+        {
+          "image": "/uploads/imgs/maison-toit-2.webp",
+          "type": "Installation photovoltaïque",
+          "client": "M. Dubois",
+          "title": "Installation 10kW avec stockage",
+          "url": "/works/photovoltaique-dubois",
+          "description": "Installation photovoltaïque de 10kW avec batteries de stockage. Accompagnement technique tout au long du projet."
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "number": "02",
+      "title": "Pompes à chaleur",
+      "description": "Installation de pompes à chaleur haute performance pour le chauffage et la climatisation. Nous vous formons aux techniques d'installation et de maintenance pour optimiser les performances de votre système.",
+      "cta": {
+        "label": "Voir nos projets pompes à chaleur",
+        "url": "/fr/works?type=pompe-chaleur"
+      },
+      "image": {
+        "src": "/uploads/imgs/plan.webp",
+        "alt": "Installation pompe à chaleur"
+      },
+      "_template": "simplecompetence"
+    },
+    {
+      "subtitle": "Nos réalisations",
+      "title": "Projets pompes à chaleur",
+      "description": "Découvrez nos installations de pompes à chaleur réalisées en auto-construction.",
+      "linkText": "Voir tous les projets pompes à chaleur",
+      "linkUrl": "/fr/works?type=pompe-chaleur",
+      "cards": [
+        {
+          "image": "/uploads/imgs/maison-toit-2.webp",
+          "type": "Pompe à chaleur",
+          "client": "Famille Lefebvre",
+          "title": "Pompe à chaleur air-eau",
+          "url": "/works/pompe-chaleur-lefebvre",
+          "description": "Remplacement de chaudière par pompe à chaleur air-eau. Formation et accompagnement pour l'auto-installation."
+        },
+        {
+          "image": "/uploads/imgs/architrech.webp",
+          "type": "Pompe à chaleur",
+          "client": "M. et Mme Dubois",
+          "title": "Pompe à chaleur géothermique",
+          "url": "/works/pompe-chaleur-geothermie",
+          "description": "Installation de pompe à chaleur géothermique. Accompagnement technique sur chantier avec formation."
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "number": "03",
+      "title": "Isolation thermique",
+      "description": "Isolation thermique performante pour réduire les déperditions énergétiques. Nous vous formons aux techniques d'isolation et vous accompagnons dans le choix des matériaux et la mise en œuvre pour optimiser les performances énergétiques de votre habitat.",
+      "cta": {
+        "label": "Voir nos projets d'isolation",
+        "url": "/fr/works?type=isolation"
+      },
+      "image": {
+        "src": "/uploads/imgs/maison-build.webp",
+        "alt": "Isolation thermique extérieure"
+      },
+      "_template": "simplecompetence"
+    },
+    {
+      "subtitle": "Nos réalisations",
+      "title": "Projets d'isolation thermique",
+      "description": "Découvrez nos projets d'isolation thermique réalisés en auto-construction.",
+      "linkText": "Voir tous les projets d'isolation",
+      "linkUrl": "/fr/works?type=isolation",
+      "cards": [
+        {
+          "image": "/uploads/imgs/maison-toit.webp",
+          "type": "Isolation thermique",
+          "client": "Famille Martin",
+          "title": "Isolation extérieure complète",
+          "url": "/works/isolation-martin",
+          "description": "Isolation extérieure complète d'une maison avec isolation des murs, toiture et planchers. Formation et accompagnement technique."
+        },
+        {
+          "image": "/uploads/imgs/maison-toit-2.webp",
+          "type": "Isolation thermique",
+          "client": "M. Leroy",
+          "title": "Isolation toiture et combles",
+          "url": "/works/isolation-leroy",
+          "description": "Isolation de la toiture et des combles perdus. Accompagnement pour l'auto-installation avec formation préalable."
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "number": "04",
+      "title": "Ventilation double flux",
+      "description": "Installation de systèmes de ventilation double flux pour optimiser la qualité de l'air intérieur tout en réduisant les déperditions énergétiques. Nous vous formons aux techniques d'installation et de maintenance pour garantir les performances de votre système.",
+      "cta": {
+        "label": "Voir nos projets ventilation",
+        "url": "/fr/works?type=ventilation"
+      },
+      "image": {
+        "src": "/uploads/imgs/plan.webp",
+        "alt": "Installation ventilation double flux"
+      },
+      "_template": "simplecompetence"
+    },
+    {
+      "subtitle": "Nos réalisations",
+      "title": "Projets ventilation double flux",
+      "description": "Découvrez nos installations de ventilation double flux réalisées en auto-construction.",
+      "linkText": "Voir tous les projets ventilation",
+      "linkUrl": "/fr/works?type=ventilation",
+      "cards": [
+        {
+          "image": "/uploads/imgs/architrech.webp",
+          "type": "Ventilation",
+          "client": "Famille Dubois",
+          "title": "Ventilation double flux complète",
+          "url": "/works/ventilation-dubois",
+          "description": "Installation de système de ventilation double flux dans une maison écologique. Formation et accompagnement technique."
+        },
+        {
+          "image": "/uploads/imgs/maison-build.webp",
+          "type": "Ventilation",
+          "client": "M. et Mme Lefebvre",
+          "title": "Rénovation ventilation",
+          "url": "/works/ventilation-renovation",
+          "description": "Remplacement d'un système de ventilation par ventilation double flux. Accompagnement pour l'auto-installation."
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "number": "05",
+      "title": "Ossature bois",
+      "description": "Conception et réalisation d'ossatures bois performantes pour construire durablement. Nous vous formons aux techniques de construction en ossature bois et vous accompagnons dans la réalisation de votre projet pour garantir la qualité et la durabilité de votre construction.",
+      "cta": {
+        "label": "Voir nos projets ossature bois",
+        "url": "/fr/works?type=ossature-bois"
+      },
+      "image": {
+        "src": "/uploads/imgs/maison-toit.webp",
+        "alt": "Construction ossature bois"
+      },
+      "_template": "simplecompetence"
+    },
+    {
+      "subtitle": "Nos réalisations",
+      "title": "Projets ossature bois",
+      "description": "Découvrez nos constructions en ossature bois réalisées en auto-construction.",
+      "linkText": "Voir tous les projets ossature bois",
+      "linkUrl": "/fr/works?type=ossature-bois",
+      "cards": [
+        {
+          "image": "/uploads/imgs/maison-toit-2.webp",
+          "type": "Ossature bois",
+          "client": "Famille Martin",
+          "title": "Maison ossature bois passive",
+          "url": "/works/ossature-martin",
+          "description": "Construction complète d'une maison en ossature bois avec performance passive. Accompagnement sur 18 mois avec formation."
+        },
+        {
+          "image": "/uploads/imgs/architrech.webp",
+          "type": "Ossature bois",
+          "client": "Famille Dubois",
+          "title": "Extension ossature bois",
+          "url": "/works/extension-ossature",
+          "description": "Extension d'une maison existante en ossature bois. Formation et accompagnement technique pour l'auto-construction."
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "number": "06",
+      "title": "Récupération d'eau de pluie",
+      "description": "Installation de systèmes de récupération et de traitement d'eau de pluie pour réduire votre consommation d'eau potable. Nous vous formons aux techniques d'installation et de maintenance pour optimiser la gestion de vos ressources en eau.",
+      "cta": {
+        "label": "Voir nos projets récupération eau",
+        "url": "/fr/works?type=eau-pluie"
+      },
+      "image": {
+        "src": "/uploads/imgs/plan.webp",
+        "alt": "Système récupération eau de pluie"
+      },
+      "_template": "simplecompetence"
+    },
+    {
+      "subtitle": "Nos réalisations",
+      "title": "Projets récupération d'eau de pluie",
+      "description": "Découvrez nos installations de récupération d'eau de pluie réalisées en auto-construction.",
+      "linkText": "Voir tous les projets récupération eau",
+      "linkUrl": "/fr/works?type=eau-pluie",
+      "cards": [
+        {
+          "image": "/uploads/imgs/maison-build.webp",
+          "type": "Récupération eau",
+          "client": "M. Leroy",
+          "title": "Système récupération 5000L",
+          "url": "/works/recuperation-eau",
+          "description": "Installation de système de récupération d'eau de pluie de 5000L avec filtration. Formation et accompagnement technique."
+        },
+        {
+          "image": "/uploads/imgs/maison-toit.webp",
+          "type": "Récupération eau",
+          "client": "Famille Lefebvre",
+          "title": "Récupération eau complète",
+          "url": "/works/recuperation-complete",
+          "description": "Système complet de récupération et traitement d'eau de pluie. Accompagnement pour l'auto-installation."
+        }
+      ],
+      "_template": "projects"
+    },
+    {
+      "subtitle": "Nous contacter",
+      "title": "Vous avez un projet nécessitant nos compétences ?",
+      "description": "Contactez-nous pour discuter de votre projet et découvrir comment nous pouvons vous accompagner dans le développement de vos compétences techniques.",
+      "contactInfo": {
+        "email": "contact@oveco.be",
+        "phone": "+32 473 / 68.99.02",
+        "location": "Région de Beauvechain, Belgique"
+      },
+      "formAction": "#contact",
+      "_template": "contact"
     }
   ]
 }

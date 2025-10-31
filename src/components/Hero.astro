@@ -103,6 +103,7 @@ function mapImageClassAndId(image: { class?: string }, index: number) {
                 ${image.src.replace(/\.(jpg|jpeg|png)$/, '.opt.webp')} 400w,
                 ${image.src.replace(/\.(jpg|jpeg|png)$/, '.opt.avif')} 400w
               `}
+              data-bind={`sections.${sectionIndex}.images.${index}.src`}
             />
           );
         })}

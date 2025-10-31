@@ -41,6 +41,14 @@ export interface Project {
     image: string;
     reverse?: boolean;
   };
+  similarProjects?: Array<{
+    image: string;
+    type?: string;
+    client?: string;
+    title: string;
+    url: string;
+    description?: string;
+  }>;
   metaTitle?: string;
   metaDescription?: string;
   createdAt?: string;

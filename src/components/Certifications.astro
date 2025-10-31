@@ -64,7 +64,8 @@ function normalizePath(input?: string): string {
                     alt={imageAlt} 
                     loading="lazy"
                     decoding="async"
-                    class="certifications__icon-img" 
+                    class="certifications__icon-img"
+                    data-bind={`sections.${sectionIndex}.cards.${index}.logo`}
                   />
                 ) : (
                   <span class="certifications__icon" aria-hidden="true"></span>

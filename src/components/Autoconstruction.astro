@@ -75,6 +75,7 @@ const {
                 context="about"
                 loading="lazy"
                 class="autoconstruction__service-image"
+                data-bind={`sections.${sectionIndex}.services.${index}.image`}
               />
               <div class="autoconstruction__service-content">
                 <h3 class="autoconstruction__service-title" itemprop="name" data-bind={`sections.${sectionIndex}.services.${index}.title`}>{service.title}</h3>

@@ -33,17 +33,36 @@ const setAttr = (bind: string, attr: string, val?: string) =>
     }
   });
 
-export default function LiveBridge(props: { home: Q }) {
-  const result = useTina(props.home);
+export default function LiveBridge(props: { home: Q; docKey?: string }) {
+  const { docKey } = props;
+  const result = useTina({
+    ...props.home,
+    experimental___selectFormByFormId: (forms?: any[]) => {
+      // Retourne l'ID du form du document de page
+      if (!forms || !Array.isArray(forms) || forms.length === 0) {
+        return undefined;
+      }
+      
+      if (docKey) {
+        const pageForm = forms.find((f: any) => 
+          f?.id?.includes(`/content/fr/${docKey === 'home' ? 'home' : docKey.replace('_fr', '').replace('_en', '')}.json`) ||
+          f?.id?.includes(docKey)
+        );
+        if (pageForm?.id) return pageForm.id;
+      }
+      
+      return forms[0]?.id;
+    }
+  });
   
-  // Fonction pour trouver le document racine (selon tuto.md)
-  // Au lieu de deviner avec Object.keys(root)[0], on trouve l'objet qui a un tableau "sections"
-  function pickDocRoot(data: any) {
+  // Fonction pour trouver le document racine (selon fix.md)
+  // Utilise docKey explicite si fourni, sinon cherche le premier objet avec sections
+  function pickDocRoot(data: any, docKey?: string) {
     if (!data || typeof data !== 'object') return null;
     
-    // 1) Si on connaît la clé: return data.home;
-    if (data.home && typeof data.home === 'object' && Array.isArray(data.home.sections)) {
-      return data.home;
+    // 1) Si docKey est fourni, l'utiliser explicitement
+    if (docKey && data[docKey] && typeof data[docKey] === 'object' && Array.isArray((data[docKey] as any).sections)) {
+      return data[docKey];
     }
     
     // 2) Sinon: choisis le premier objet qui a un tableau "sections"
@@ -56,105 +75,78 @@ export default function LiveBridge(props: { home: Q }) {
     return null;
   }
   
-  // Fonction pour résoudre l'objet et la propriété depuis docRoot (selon tuto.md)
+  // Fonction pour résoudre l'objet et la propriété depuis docRoot (selon fix.md - version 2 passes)
   // UNIFORMITÉ : Cette fonction fonctionne de la même manière pour toutes les sections et toutes les pages
-  // Ne "devine" pas, traverse simplement en sautant uniquement les segments qui matchent _template
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  
+  function tmplName(o: any): string | null {
+    if (!o) return null;
+    if (typeof o._template === 'string') return norm(o._template);
+    if (typeof o.__typename === 'string') {
+      const m = /Sections(.+)$/.exec(o.__typename);
+      return m ? norm(m[1]) : norm(o.__typename);
+    }
+    return null;
+  }
+
+  function tryTraverse(obj: any, parts: (string|number)[]): any {
+    let c = obj;
+    for (const seg of parts) {
+      const idx = typeof seg === 'string' && /^\d+$/.test(seg) ? Number(seg) : seg;
+      if (Array.isArray(c) && typeof idx === 'number') {
+        if (!c[idx]) return null;
+        c = c[idx];
+        continue;
+      }
+      if (c && typeof c === 'object' && seg in c) {
+        c = c[seg as any];
+        continue;
+      }
+      return null;
+    }
+    return c;
+  }
+
   function resolveObjAndProp(docRoot: any, bind: string) {
     if (!docRoot || !bind) return null;
     
-    const parts = bind.split('.'); // ex: sections.2.title ou sections.2.hero.subtitle ou sections.2.stats.0.value
-    if (parts.length < 2) return null;
+    const raw = bind.split('.');
+    if (raw[0] !== 'sections' || raw.length < 2) return null;
     
-    // Le premier segment doit être "sections" pour garantir l'uniformité
-    if (parts[0] !== 'sections') {
-      console.warn(`[resolveObjAndProp] Bind doit commencer par "sections", reçu: ${bind}`);
-      return null;
+    const prop = raw[raw.length - 1]!;
+    
+    // Pass 1: AS-IS - traverse chaque segment directement
+    let obj = tryTraverse(docRoot, raw.slice(0, -1));
+    if (obj && prop in obj) {
+      return { obj, prop };
     }
     
+    // Pass 2: skip template segments
     let cursor: any = docRoot;
-    
-    // On va jusqu'à l'avant-dernier segment (le dernier = prop finale)
-    for (let i = 0; i < parts.length - 1; i++) {
-      const seg = parts[i];
-      const isIndex = /^\d+$/.test(seg);
+    const path: (string|number)[] = [];
+    for (let i = 0; i < raw.length - 1; i++) {
+      const seg = raw[i];
+      const idx = /^\d+$/.test(seg || '') ? Number(seg) : seg;
+      const t = tmplName(cursor);
       
-      // Si on est sur un tableau et qu'on a un index numérique
-      if (Array.isArray(cursor) && isIndex) {
-        const idx = Number(seg);
-        if (idx >= 0 && idx < cursor.length) {
-          cursor = cursor[idx];
-          continue;
-        } else {
-          console.warn(`[resolveObjAndProp] Index ${idx} out of bounds for array of length ${cursor.length}`, bind);
-          return null;
-        }
-      }
-      
-      // 1) Si on est sur un tableau et qu'on a un index numérique (déjà géré plus haut)
-      // 2) Si la clé existe dans l'objet, naviguer en priorité
-      if (cursor && typeof cursor === 'object' && seg in cursor) {
-        cursor = cursor[seg];
+      if (Array.isArray(cursor) && typeof idx === 'number') {
+        cursor = cursor[idx];
+        path.push(idx);
         continue;
       }
-
-      // 3) Sinon, Cas "template" : si cursor._template ou __typename correspond à seg → on saute ce seg.
-      if (cursor && typeof cursor === 'object' && !Array.isArray(cursor)) {
-        // Récupérer le nom du template depuis _template ou __typename
-        const templateName = cursor._template || '';
-        const typename = cursor.__typename || '';
-        // Extraire le template depuis __typename (ex: "HomeSectionsHero" → "Hero")
-        const typenameTemplate = typename.replace(/^HomeSections/, '').replace(/^[A-Z]+Sections/, '');
-        
-        // Normaliser pour comparaison (lowercase, sans espaces, sans caractères spéciaux)
-        const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
-        const templateLower = normalize(templateName.toString());
-        const typenameLower = normalize(typenameTemplate);
-        const segLower = normalize(seg);
-        
-        // Si le segment correspond au template (case-insensitive, sans espaces), on le saute
-        // Cela permet de gérer des data-bind comme sections.2.hero.title même si "hero" n'est pas une clé
-        if (templateLower === segLower || typenameLower === segLower || 
-            templateName === seg || typenameTemplate === seg ||
-            (templateLower && segLower.startsWith(templateLower)) ||
-            (typenameLower && segLower.startsWith(typenameLower))) {
-          // on ignore ce segment et continue (c'est un segment de template non-clé)
-          continue;
-        }
+      if (cursor && typeof cursor === 'object' && seg && seg in cursor) {
+        cursor = cursor[seg];
+        path.push(seg);
+        continue;
       }
-      
-      // Rien ne matche → chemin invalide
-      console.warn(`[resolveObjAndProp] Cannot navigate to "${seg}" in`, { 
-        bind, 
-        'seg': seg,
-        'cursor type': typeof cursor,
-        'cursor keys': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? Object.keys(cursor).slice(0, 10) : 'N/A',
-        'cursor._template': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? cursor._template : 'N/A'
-      });
+      if (t && seg && norm(seg) === t) {
+        // ignore segment = template
+        continue;
+      }
       return null;
     }
-    
-    const prop = parts[parts.length - 1];
-    
-    // Validation finale : vérifier que cursor est un objet et que prop existe
-    // UNIFORMITÉ : Cette validation garantit que tous les champs sont traités de la même manière
-    if (!cursor || typeof cursor !== 'object' || Array.isArray(cursor)) {
-      console.warn(`[resolveObjAndProp] ${bind} -> cursor n'est pas un objet:`, {
-        'cursor type': typeof cursor,
-        'is array': Array.isArray(cursor)
-      });
-      return null;
-    }
-    
-    if (!(prop in cursor)) {
-      console.warn(`[resolveObjAndProp] ${bind} -> prop "${prop}" n'existe pas dans cursor:`, {
-        'prop': prop,
-        'available keys': Object.keys(cursor).slice(0, 15),
-        'obj._template': cursor._template
-      });
-      return null;
-    }
-    
-    return { obj: cursor, prop };
+    obj = cursor;
+    return obj && prop in obj ? { obj, prop } : null;
   }
   
   // Fonction pour obtenir le CMS de manière sûre depuis le contexte global
@@ -703,10 +695,10 @@ export default function LiveBridge(props: { home: Q }) {
       return;
     }
     
-    // Trouver le document racine (selon tuto.md)
-    const docRoot = pickDocRoot(result.data);
+    // Trouver le document racine avec docKey explicite
+    const docRoot = pickDocRoot(result.data, docKey);
     if (!docRoot) {
-      console.warn('[LiveBridge] ⚠️ docRoot introuvable dans result.data');
+      console.warn('[LiveBridge] ⚠️ docRoot introuvable dans result.data', { docKey, 'data keys': Object.keys(result.data || {}) });
       return;
     }
     
@@ -765,21 +757,106 @@ export default function LiveBridge(props: { home: Q }) {
           return;
         }
         
-        // Note: _content_source peut être absent pour les items de tableaux
-        // mais devrait être présent sur les sections et champs principaux
-        // On continue quand même même si _content_source est absent
-        const hasContentSource = '_content_source' in obj;
-        if (!hasContentSource) {
+        // Vérifier _content_source (garde-fou selon fix.md)
+        if (!('_content_source' in obj)) {
           console.warn(`[LiveBridge] ⚠️ obj sans _content_source pour ${bind}`, { 
             'obj keys': obj && typeof obj === 'object' && !Array.isArray(obj) ? Object.keys(obj).slice(0, 15) : 'N/A',
           });
-          // On continue quand même et on essaie quand même tinaField()
+          // On continue quand même pour les items de tableaux qui peuvent ne pas avoir _content_source
         }
         
-        // TOUJOURS utiliser tinaField() - pas de fallback manuel selon tuto.md
+        // TOUJOURS utiliser tinaField() - pas de fallback manuel selon fix.md
         // Cela garantit l'uniformité peu importe la page ou la section
         try {
-          const attr = tinaField(obj, prop as any);
+          // CORRECTION : Pour les images, détecter les champs image et utiliser l'objet parent approprié
+          // Cas 1: chemins avec .src (ex: sections.0.image.src, sections.0.mediaLeft.src)
+          // Cas 2: champs image directs (ex: sections.0.cards.0.icon, sections.0.services.0.image)
+          const isImageSrcField = bind.endsWith('.src') && (bind.includes('.image') || bind.includes('mediaLeft') || bind.includes('mediaRight') || bind.includes('thumbnail'));
+          const isDirectImageField = /\.(icon|image|logo)$/i.test(bind) && !bind.includes('.src');
+          
+          let attr: string;
+          
+          if (isImageSrcField) {
+            // Pour les chemins image.src, utiliser l'objet parent et le nom du champ image
+            const bindParts = bind.split('.');
+            const srcIndex = bindParts.lastIndexOf('src');
+            if (srcIndex > 0) {
+              // Obtenir le nom du champ image (par exemple 'image', 'mediaLeft', 'mediaRight')
+              const imageFieldName = bindParts[srcIndex - 1];
+              // Trouver l'objet parent qui contient le champ image
+              const parentPath = bindParts.slice(0, srcIndex - 1);
+              const parentObj = tryTraverse(docRoot, parentPath);
+              
+              if (parentObj && imageFieldName in parentObj) {
+                // Utiliser l'objet parent et le nom du champ image
+                attr = tinaField(parentObj, imageFieldName as any);
+                console.log(`[LiveBridge] 🖼️ Image .src détectée: ${bind} -> utilisant objet parent avec champ '${imageFieldName}'`);
+              } else {
+                // Fallback: utiliser l'objet résolu normalement
+                attr = tinaField(obj, prop as any);
+              }
+            } else {
+              // Fallback: utiliser l'objet résolu normalement
+              attr = tinaField(obj, prop as any);
+            }
+          } else if (isDirectImageField) {
+            // Pour les champs image directs dans les listes (icon, logo), corriger la résolution
+            // Exemple: sections.0.cards.0.icon -> obj = cards[0], prop = 'icon'
+            // Pour Expertise et Certifications: sections.0.cards.0.icon ou sections.0.cards.0.logo
+            // CORRECTION EXPLICITE: Pour les items de liste, reconstruire le chemin vers le tableau parent
+            
+            // Vérifier si on est dans une liste (le bind contient des indices numériques)
+            const bindParts = bind.split('.');
+            // Trouver le dernier index numérique (celui juste avant le champ final)
+            // Exemple: sections.0.cards.0.icon -> le dernier index est à la position de '0' avant 'icon'
+            let lastListIndex = -1;
+            let listFieldName = '';
+            
+            // Chercher le dernier index numérique avant le champ final
+            for (let i = bindParts.length - 2; i >= 1; i--) {
+              if (/^\d+$/.test(bindParts[i])) {
+                lastListIndex = i;
+                listFieldName = bindParts[i - 1];
+                break;
+              }
+            }
+            
+            if (lastListIndex > 0 && listFieldName && obj) {
+              // On est dans une liste (Expertise, Certifications, Partners, Competences)
+              // Reconstruire le chemin vers le tableau parent et accéder à l'item spécifique
+              // Exemple: sections.0.cards.0.icon -> sections.0.cards (tableau) puis [0]
+              const parentPath = bindParts.slice(0, lastListIndex);
+              const itemIndex = Number(bindParts[lastListIndex]);
+              
+              // Traverser jusqu'au parent qui contient le tableau
+              const parentObj = tryTraverse(docRoot, parentPath);
+              
+              if (parentObj && listFieldName in parentObj) {
+                const arrayField = parentObj[listFieldName];
+                if (Array.isArray(arrayField) && arrayField[itemIndex] !== undefined) {
+                  // Utiliser l'item du tableau avec le champ image
+                  // Cela garantit que l'item a les bonnes métadonnées TinaCMS
+                  attr = tinaField(arrayField[itemIndex], prop as any);
+                  console.log(`[LiveBridge] 🖼️ Champ image dans liste: ${bind} -> ${listFieldName}[${itemIndex}].${prop}`);
+                } else {
+                  // Fallback: utiliser l'objet résolu normalement
+                  attr = tinaField(obj, prop as any);
+                  console.warn(`[LiveBridge] ⚠️ Item ${itemIndex} non trouvé dans ${listFieldName}, fallback`);
+                }
+              } else {
+                // Fallback: utiliser l'objet résolu normalement
+                attr = tinaField(obj, prop as any);
+                console.warn(`[LiveBridge] ⚠️ Tableau ${listFieldName} non trouvé, fallback`);
+              }
+            } else {
+              // Pour les champs image directs hors listes, utiliser la résolution normale
+              attr = tinaField(obj, prop as any);
+              console.log(`[LiveBridge] 🖼️ Champ image direct: ${bind} -> utilisant '${prop}'`);
+            }
+          } else {
+            // Pour les autres champs, utiliser la résolution normale
+            attr = tinaField(obj, prop as any);
+          }
           
           // UNIFORMITÉ : Tous les éléments reçoivent data-tina-field de la même manière
           el.setAttribute('data-tina-field', attr);

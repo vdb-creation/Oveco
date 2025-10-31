@@ -152,12 +152,12 @@ if (import.meta.env.DEV) {
   <div class="container">
     
     {/* HEADER DE SECTION (centré) */}
-    {showSectionHeader && (sectionSubtitle || sectionTitle || sectionDescription) && (
+    {showSectionHeader && (
       <div class="oveco__section-header">
         <div class="oveco__section-content">
-          {sectionSubtitle && <h3 class="oveco__section-subtitle" data-bind={`sections.${sectionIndex}.sectionSubtitle`}>{sectionSubtitle}</h3>}
-          {sectionTitle && <h2 class="oveco__section-title" data-bind={`sections.${sectionIndex}.sectionTitle`} set:html={sectionTitle} />}
-          {sectionDescription && <p class="oveco__section-description" data-bind={`sections.${sectionIndex}.sectionDescription`} set:html={sectionDescription} />}
+          <h3 class="oveco__section-subtitle" data-bind={`sections.${sectionIndex}.sectionSubtitle`}>{sectionSubtitle || ""}</h3>
+          <h2 class="oveco__section-title" data-bind={`sections.${sectionIndex}.sectionTitle`} set:html={sectionTitle || ""} />
+          <p class="oveco__section-description" data-bind={`sections.${sectionIndex}.sectionDescription`} set:html={sectionDescription || ""} />
         </div>
       </div>
     )}
@@ -166,13 +166,11 @@ if (import.meta.env.DEV) {
     <div class={`oveco__container ${reverse ? 'is-reverse' : ''}`}>
       {/* Contenu textuel */}
       <div class="oveco__content">
-        {(subtitle || title || description) && (
-          <header class="oveco__header">
-            {subtitle && <h3 class="oveco__subtitle" itemprop="name" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</h3>}
-            {title && <h2 class="oveco__title" data-bind={`sections.${sectionIndex}.title`} set:html={title} />}
-            {description && <p class="oveco__description" itemprop="description" data-bind={`sections.${sectionIndex}.description`} set:html={description} />}
-          </header>
-        )}
+        <header class="oveco__header">
+          <h3 class="oveco__subtitle" itemprop="name" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle || ""}</h3>
+          <h2 class="oveco__title" data-bind={`sections.${sectionIndex}.title`} set:html={title || ""} />
+          <p class="oveco__description" itemprop="description" data-bind={`sections.${sectionIndex}.description`} set:html={description || ""} />
+        </header>
         
         {link && link.label && link.url && (
           <a href={link.url} class="oveco__link" aria-label={`En savoir plus sur ${subtitle || 'nos services'}`} data-bind={`sections.${sectionIndex}.link.url`}>
@@ -192,6 +190,7 @@ if (import.meta.env.DEV) {
           context="about"
           loading={safeImage.loading || 'lazy'}
           class="oveco__main-image"
+          data-bind={`sections.${sectionIndex}.image.src`}
         />
         {icon1Src && (
           <SmartImage
@@ -203,6 +202,7 @@ if (import.meta.env.DEV) {
             loading="lazy"
             class="oveco__icon oveco__icon--house"
             aria-hidden="true"
+            data-bind={`sections.${sectionIndex}.icon1.src`}
           />
         )}
         {icon2Src && (
@@ -215,6 +215,7 @@ if (import.meta.env.DEV) {
             loading="lazy"
             class="oveco__icon oveco__icon--pencil"
             aria-hidden="true"
+            data-bind={`sections.${sectionIndex}.icon2.src`}
           />
         )}
       </div>
@@ -225,13 +226,11 @@ if (import.meta.env.DEV) {
       <div class={`oveco__container ${!reverse ? 'is-reverse' : ''}`}>
         {/* Contenu textuel du 2e bloc */}
         <div class="oveco__content">
-          {(subtitle2 || title2 || description2) && (
-            <header class="oveco__header">
-              {subtitle2 && <h3 class="oveco__subtitle" itemprop="name" data-bind={`sections.${sectionIndex}.subtitle2`}>{subtitle2}</h3>}
-              {title2 && <h2 class="oveco__title" data-bind={`sections.${sectionIndex}.title2`} set:html={title2} />}
-              {description2 && <p class="oveco__description" itemprop="description" data-bind={`sections.${sectionIndex}.description2`} set:html={description2} />}
-            </header>
-          )}
+          <header class="oveco__header">
+            <h3 class="oveco__subtitle" itemprop="name" data-bind={`sections.${sectionIndex}.subtitle2`}>{subtitle2 || ""}</h3>
+            <h2 class="oveco__title" data-bind={`sections.${sectionIndex}.title2`} set:html={title2 || ""} />
+            <p class="oveco__description" itemprop="description" data-bind={`sections.${sectionIndex}.description2`} set:html={description2 || ""} />
+          </header>
           
           {link2 && link2.label && link2.url && (
             <a href={link2.url} class="oveco__link" aria-label={`En savoir plus sur ${subtitle2 || 'nos services'}`} data-bind={`sections.${sectionIndex}.link2.url`}>
@@ -251,6 +250,7 @@ if (import.meta.env.DEV) {
             context="about"
             loading={safeImage2.loading || 'lazy'}
             class="oveco__main-image"
+            data-bind={`sections.${sectionIndex}.image2.src`}
           />
           {icon1Src && (
             <SmartImage
@@ -262,6 +262,7 @@ if (import.meta.env.DEV) {
               loading="lazy"
               class="oveco__icon oveco__icon--house"
               aria-hidden="true"
+              data-bind={`sections.${sectionIndex}.icon1.src`}
             />
           )}
           {icon2Src && (
@@ -274,6 +275,7 @@ if (import.meta.env.DEV) {
               loading="lazy"
               class="oveco__icon oveco__icon--pencil"
               aria-hidden="true"
+              data-bind={`sections.${sectionIndex}.icon2.src`}
             />
           )}
         </div>

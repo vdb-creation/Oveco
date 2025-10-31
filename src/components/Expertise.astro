@@ -65,23 +65,30 @@ const {
       
       <div class="expertise__content">
         <div class="expertise__grid" role="list" aria-label="Liste de nos expertises">
-          {cards.map((card, index) => (
-            <article class="expertise__card" role="listitem" itemscope itemtype="https://schema.org/Service">
-              <SmartImage
-                cmsSrc={card.icon}
-                alt={card.alt}
-                width={168}
-                height={168}
-                context="default"
-                loading="lazy"
-                class="expertise__icon"
-              />
-              <div class="expertise__card-content">
-                <h4 class="expertise__card-title" itemprop="name" data-bind={`sections.${sectionIndex}.cards.${index}.title`} set:html={card.title} />
-                <p class="expertise__card-description" itemprop="description" data-bind={`sections.${sectionIndex}.cards.${index}.description`} set:html={card.description} />
-              </div>
-            </article>
-          ))}
+          {(cards?.length ?? 0) === 0 ? (
+            <div class="expertise__empty" data-bind={`sections.${sectionIndex}.cards`}>
+              <p class="expertise__empty-text">Ajouter une carte d'expertise dans TinaCMS</p>
+            </div>
+          ) : (
+            cards.map((card, index) => (
+              <article class="expertise__card" role="listitem" itemscope itemtype="https://schema.org/Service">
+                <SmartImage
+                  cmsSrc={card.icon}
+                  alt={card.alt}
+                  width={168}
+                  height={168}
+                  context="default"
+                  loading="lazy"
+                  class="expertise__icon"
+                  data-bind={`sections.${sectionIndex}.cards.${index}.icon`}
+                />
+                <div class="expertise__card-content">
+                  <h4 class="expertise__card-title" itemprop="name" data-bind={`sections.${sectionIndex}.cards.${index}.title`} set:html={card.title} />
+                  <p class="expertise__card-description" itemprop="description" data-bind={`sections.${sectionIndex}.cards.${index}.description`} set:html={card.description} />
+                </div>
+              </article>
+            ))
+          )}
         </div>
         
         <a href={ctaHref} class="expertise__cta" aria-label={`${ctaLabel}`}>
@@ -142,4 +149,6 @@ const {
 .expertise__cta .wp-block-button__link:focus { outline: 2px solid #048B9A; outline-offset: 2px; }
 @media (max-width: 768px) { .expertise__cta .wp-block-button__link { padding: 16px 28px; font-size: 17px; line-height: 20px; } }
 @media (max-width: 480px) { .expertise__cta .wp-block-button__link { padding: 14px 24px; font-size: 16px; line-height: 19px; width: 100%; max-width: 280px; } }
+.expertise__empty { width: 100%; padding: 40px; text-align: center; border: 2px dashed #ccc; border-radius: 8px; background: #f9f9f9; }
+.expertise__empty-text { color: #5C6D6F; font-size: 16px; font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif; margin: 0; }
 </style>
