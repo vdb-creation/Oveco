@@ -46,3 +46,6 @@ public/uploads/**/*.PNG
 # Et les AVIF dans optimized (cachés de TinaCMS)
 !public/optimized/**/*.opt.avif
 !public/optimized/.gitkeep
+
+# Dossier test des Romain
+test/

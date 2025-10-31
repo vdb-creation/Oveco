@@ -21,6 +21,7 @@ export interface Props {
   title?: string;
   description?: string;
   competences?: Competence[];
+  sectionIndex?: number;
 }
 
 const {
@@ -48,7 +49,8 @@ const {
       title: "Compétence 4",
       url: "/expertise#accompagnement"
     }
-  ]
+  ],
+  sectionIndex = 0
 } = Astro.props;
 
 // Normaliser les chemins d'images TinaCMS
@@ -76,13 +78,13 @@ function getImageData(competence: Competence) {
 <section class="competences" aria-labelledby="competences-title">
   <div class="container competences__container">
     <header class="competences__header">
-      <p class="competences__subtitle">{subtitle}</p>
-      <h2 class="competences__title" id="competences-title">{title}</h2>
-      {description && <p class="competences__description">{description}</p>}
+      <p class="competences__subtitle" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</p>
+      <h2 class="competences__title" id="competences-title" data-bind={`sections.${sectionIndex}.title`}>{title}</h2>
+      {description && <p class="competences__description" data-bind={`sections.${sectionIndex}.description`}>{description}</p>}
     </header>
 
     <ul class="competences__grid" role="list">
-      {competences.map((c) => {
+      {competences.map((c, index) => {
         const { src, alt } = getImageData(c);
         return (
           <li class="competences__item" role="listitem">
@@ -99,13 +101,14 @@ function getImageData(competence: Competence) {
               <figcaption class="visually-hidden">{c.title}</figcaption>
             </figure>
             <div class="competences__body">
-              <h3 class="competences__name">{c.title}</h3>
+              <h3 class="competences__name" data-bind={`sections.${sectionIndex}.competences.${index}.title`}>{c.title}</h3>
               {c.description ? (
-                <p class="competences__description-item">{c.description}</p>
+                <p class="competences__description-item" data-bind={`sections.${sectionIndex}.competences.${index}.description`}>{c.description}</p>
               ) : (
                 <a 
                   class="competences__link" 
                   href={c.url || '#'} 
+                  data-bind={`sections.${sectionIndex}.competences.${index}.url`} 
                   aria-label={`En savoir plus sur ${c.title}`}
                 >
                   <span>En savoir plus</span>

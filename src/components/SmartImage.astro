@@ -80,7 +80,14 @@ const {
   class: imgClass, style, decoding, loading,
   formats = ["avif", "webp"],
   fallbackFormat = "webp", // => fallback <img> en WebP par défaut
-} = Astro.props as Props;
+  ...rest
+} = Astro.props as Props & { 'data-tina-field'?: string; 'data-bind'?: string };
+
+// Extraire data-tina-field et data-bind pour les propager vers les balises HTML finales
+const dataTinaField = rest['data-tina-field'];
+const dataBind = rest['data-bind'];
+delete rest['data-tina-field'];
+delete rest['data-bind'];
 
 // Helpers
 const normalizeCmsSrc = (src?: string) => {
@@ -170,11 +177,11 @@ const remotePH = usePlaceholder && isRemoteUrl(normalizedSrcString as any) ? pla
 // Ne charger les manifests que si on va utiliser les placeholders
 const localKey = typeof normalizedSrcString === "string" ? normalizedSrcString : undefined;
 const localLQIP = usePlaceholder && localKey && isStringLocalUpload(localKey)
-  ? (lqipManifest as Record<string, string>)[localKey]
-  : undefined;
+    ? (lqipManifest as Record<string, string>)[localKey]
+    : undefined;
 const localBlur = usePlaceholder && localKey && isStringLocalUpload(localKey)
-  ? (blurManifest as Record<string, string>)[localKey]
-  : undefined;
+    ? (blurManifest as Record<string, string>)[localKey]
+    : undefined;
 
 // En production, IGNORER complètement tous les placeholders
 const localBackground = usePlaceholder ? (localLQIP ?? localBlur ?? background) : undefined;
@@ -233,8 +240,8 @@ if (normalizedSrcString && isStringLocalUpload(normalizedSrcString)) {
   // En dev, vérifier l'existence avant d'utiliser
   if (import.meta.env.DEV) {
     // En dev, vérifier l'existence avant d'utiliser
-    if (await exists(avifPath)) srcAvif = avifPath;
-    if (await exists(webpPath)) srcWebp = webpPath;
+  if (await exists(avifPath)) srcAvif = avifPath;
+  if (await exists(webpPath)) srcWebp = webpPath;
     // Fallback sur le chemin original si les fichiers optimisés n'existent pas
     if (!srcWebp && !srcAvif) {
       srcWebp = normalizedSrcString;
@@ -251,8 +258,8 @@ if (normalizedSrcString && isStringLocalUpload(normalizedSrcString)) {
 // En production, ne pas versionner les URLs (évite les erreurs si fichiers pas trouvés)
 // En dev, versionner pour le cache busting
 if (import.meta.env.DEV) {
-  srcAvif = await versioned(srcAvif);
-  srcWebp = await versioned(srcWebp);
+srcAvif = await versioned(srcAvif);
+srcWebp = await versioned(srcWebp);
 }
 
 // Pour les images locales, ne pas utiliser les opérations Unpic en production
@@ -298,7 +305,7 @@ if (fallbackFormat === "avif") {
 
 // En dev seulement, versionner pour le cache busting
 if (import.meta.env.DEV) {
-  imgSrc = await versioned(imgSrc);
+imgSrc = await versioned(imgSrc);
 }
 
 const effectiveLoading = priority ? "eager" : loading;
@@ -318,14 +325,16 @@ const wrapperStyle = [
   <span 
     class={`si-wrap ${wrapClass}${!usePlaceholder ? ' no-placeholder' : ''}`} 
     style={wrapperStyle}
+    data-tina-field={dataTinaField}
+    data-bind={dataBind}
   >
     {/* En production, utiliser des balises <img> simples (pas d'Unpic) */}
     {!import.meta.env.DEV ? (
-      <picture>
+    <picture>
         {/* AVIF si disponible */}
         {srcAvif && srcAvif.endsWith('.avif') && (
           <source 
-            type="image/avif" 
+          type="image/avif"
             srcset={encodeURI(srcAvif)} 
             sizes={sizes ?? autoSizes}
           />
@@ -349,6 +358,8 @@ const wrapperStyle = [
           loading={effectiveLoading}
           style={`${fit ? `object-fit: ${fit};` : ''} background: transparent !important; background-image: none !important;`}
           onerror="console.warn('Image failed to load:', this.src); this.style.display='none';"
+          data-tina-field={dataTinaField}
+          data-bind={dataBind}
         />
       </picture>
     ) : (
@@ -359,45 +370,47 @@ const wrapperStyle = [
             type="image/avif"
             src={typeof srcAvif === 'string' ? encodeURI(srcAvif) : (srcAvif as any)}
             layout={layout}
-            width={targetWidth}
-            height={targetHeight}
-            breakpoints={filteredBp}
-            sizes={sizes ?? autoSizes}
-            operations={opsForAvif}
-          />
-        )}
-        {formats?.includes("webp") && srcWebp && (
-          <UnpicSource
-            type="image/webp"
-            src={typeof srcWebp === 'string' ? encodeURI(srcWebp) : (srcWebp as any)}
-            layout={layout}
-            width={targetWidth}
-            height={targetHeight}
-            breakpoints={filteredBp}
-            sizes={sizes ?? autoSizes}
-            operations={opsForWebp}
-          />
-        )}
-
-        {/* Fallback <img> — en AVIF/WEBP (STRICT) */}
-        <UnpicImage
-          src={typeof imgSrc === 'string' ? encodeURI(imgSrc) : (imgSrc as any)}
-          alt={altText}
           width={targetWidth}
           height={targetHeight}
-          layout={layout}
           breakpoints={filteredBp}
           sizes={sizes ?? autoSizes}
-          priority={priority}
+          operations={opsForAvif}
+        />
+      )}
+        {formats?.includes("webp") && srcWebp && (
+        <UnpicSource
+          type="image/webp"
+            src={typeof srcWebp === 'string' ? encodeURI(srcWebp) : (srcWebp as any)}
+          layout={layout}
+          width={targetWidth}
+          height={targetHeight}
+          breakpoints={filteredBp}
+          sizes={sizes ?? autoSizes}
+          operations={opsForWebp}
+        />
+      )}
+
+      {/* Fallback <img> — en AVIF/WEBP (STRICT) */}
+      <UnpicImage
+          src={typeof imgSrc === 'string' ? encodeURI(imgSrc) : (imgSrc as any)}
+        alt={altText}
+        width={targetWidth}
+        height={targetHeight}
+        layout={layout}
+        breakpoints={filteredBp}
+        sizes={sizes ?? autoSizes}
+        priority={priority}
           placeholder={usePlaceholder ? remotePH : undefined}
           background={usePlaceholder ? localBackground : undefined}
-          operations={imgOps}
-          class={imgClass ? `si-img ${imgClass}` : "si-img"}
-          decoding={decoding}
-          loading={effectiveLoading}
+        operations={imgOps}
+        class={imgClass ? `si-img ${imgClass}` : "si-img"}
+        decoding={decoding}
+        loading={effectiveLoading}
           onload={usePlaceholder ? "const wrap = this.closest('.si-wrap'); if(wrap) { wrap.classList.add('is-loaded'); }" : undefined}
-        />
-      </picture>
+          data-tina-field={dataTinaField}
+          data-bind={dataBind}
+      />
+    </picture>
     )}
   </span>
 ) : <></>}
