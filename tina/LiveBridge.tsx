@@ -57,12 +57,19 @@ export default function LiveBridge(props: { home: Q }) {
   }
   
   // Fonction pour résoudre l'objet et la propriété depuis docRoot (selon tuto.md)
+  // UNIFORMITÉ : Cette fonction fonctionne de la même manière pour toutes les sections et toutes les pages
   // Ne "devine" pas, traverse simplement en sautant uniquement les segments qui matchent _template
   function resolveObjAndProp(docRoot: any, bind: string) {
     if (!docRoot || !bind) return null;
     
-    const parts = bind.split('.'); // ex: sections.2.hero.subtitle
+    const parts = bind.split('.'); // ex: sections.2.title ou sections.2.hero.subtitle ou sections.2.stats.0.value
     if (parts.length < 2) return null;
+    
+    // Le premier segment doit être "sections" pour garantir l'uniformité
+    if (parts[0] !== 'sections') {
+      console.warn(`[resolveObjAndProp] Bind doit commencer par "sections", reçu: ${bind}`);
+      return null;
+    }
     
     let cursor: any = docRoot;
     
@@ -98,12 +105,18 @@ export default function LiveBridge(props: { home: Q }) {
         // Extraire le template depuis __typename (ex: "HomeSectionsHero" → "Hero")
         const typenameTemplate = typename.replace(/^HomeSections/, '').replace(/^[A-Z]+Sections/, '');
         
-        const templateLower = templateName.toString().toLowerCase().replace(/\s+/g, '');
-        const typenameLower = typenameTemplate.toLowerCase().replace(/\s+/g, '');
-        const segLower = seg.toLowerCase().replace(/\s+/g, '');
+        // Normaliser pour comparaison (lowercase, sans espaces, sans caractères spéciaux)
+        const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const templateLower = normalize(templateName.toString());
+        const typenameLower = normalize(typenameTemplate);
+        const segLower = normalize(seg);
         
         // Si le segment correspond au template (case-insensitive, sans espaces), on le saute
-        if (templateLower === segLower || typenameLower === segLower || templateName === seg || typenameTemplate === seg) {
+        // Cela permet de gérer des data-bind comme sections.2.hero.title même si "hero" n'est pas une clé
+        if (templateLower === segLower || typenameLower === segLower || 
+            templateName === seg || typenameTemplate === seg ||
+            (templateLower && segLower.startsWith(templateLower)) ||
+            (typenameLower && segLower.startsWith(typenameLower))) {
           // on ignore ce segment et continue (c'est un segment de template non-clé)
           continue;
         }
@@ -122,21 +135,23 @@ export default function LiveBridge(props: { home: Q }) {
     
     const prop = parts[parts.length - 1];
     
-    // Debug final pour voir ce qu'on a résolu (uniquement si nécessaire)
-    if (!cursor || typeof cursor !== 'object' || Array.isArray(cursor) || !(prop in cursor)) {
-      console.warn(`[resolveObjAndProp] ${bind} -> RÉSULTAT INVALIDE:`, {
-        'obj type': typeof cursor,
-        'obj keys': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? Object.keys(cursor).slice(0, 15) : 'N/A',
-        'prop': prop,
-        'prop in obj': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? (prop in cursor) : false,
-        'obj._template': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? cursor._template : 'N/A',
-        'obj preview': cursor && typeof cursor === 'object' && !Array.isArray(cursor) ? JSON.stringify(Object.keys(cursor).reduce((acc, k) => {
-          if (['_template', '__typename', prop].includes(k) || k.startsWith('_')) {
-            acc[k] = cursor[k];
-          }
-          return acc;
-        }, {} as any)).substring(0, 150) : 'N/A'
+    // Validation finale : vérifier que cursor est un objet et que prop existe
+    // UNIFORMITÉ : Cette validation garantit que tous les champs sont traités de la même manière
+    if (!cursor || typeof cursor !== 'object' || Array.isArray(cursor)) {
+      console.warn(`[resolveObjAndProp] ${bind} -> cursor n'est pas un objet:`, {
+        'cursor type': typeof cursor,
+        'is array': Array.isArray(cursor)
       });
+      return null;
+    }
+    
+    if (!(prop in cursor)) {
+      console.warn(`[resolveObjAndProp] ${bind} -> prop "${prop}" n'existe pas dans cursor:`, {
+        'prop': prop,
+        'available keys': Object.keys(cursor).slice(0, 15),
+        'obj._template': cursor._template
+      });
+      return null;
     }
     
     return { obj: cursor, prop };
@@ -544,6 +559,7 @@ export default function LiveBridge(props: { home: Q }) {
   };
 
   // Fonction pour ajouter data-tina-field aux images liées à un data-bind d'image
+  // UNIFORMITÉ : Cette fonction garantit que toutes les images reçoivent data-tina-field de la même manière
   const addTinaFieldToImages = (el: HTMLElement, tinaFieldPath: string, bind: string) => {
     // 1. Chercher le wrapper .si-wrap (SmartImage) parent ou enfant
     const siWrap = el.closest('.si-wrap') || el.querySelector('.si-wrap');
@@ -680,6 +696,7 @@ export default function LiveBridge(props: { home: Q }) {
 
   // Fonction pour scanner tous les data-bind et ajouter data-tina-field
   // Selon tuto.md : utiliser TOUJOURS tinaField(), partir de docRoot (pas result.data), vérifier _content_source
+  // UNIFORMITÉ : Cette fonction garantit que tous les éléments avec data-bind reçoivent data-tina-field de la même manière
   const scanAndAddTinaFields = () => {
     if (!result.data) {
       console.warn('[LiveBridge] ⚠️ result.data est vide, impossible de scanner');
@@ -693,18 +710,38 @@ export default function LiveBridge(props: { home: Q }) {
       return;
     }
     
-    // Scanner tous les éléments avec data-bind
+    // Scanner tous les éléments avec data-bind (peu importe la page ou la section)
     const elementsWithBind = $$<HTMLElement>('[data-bind]');
+    
+    if (elementsWithBind.length === 0) {
+      console.log('[LiveBridge] ℹ️ Aucun élément avec data-bind trouvé');
+      return;
+    }
+    
+    let successCount = 0;
+    let skipCount = 0;
+    let errorCount = 0;
     
     elementsWithBind.forEach((el) => {
       const bind = el.getAttribute('data-bind');
-      if (!bind || el.hasAttribute('data-tina-field')) return;
+      if (!bind) {
+        skipCount++;
+        return;
+      }
+      
+      // Vérifier si l'élément a déjà un data-tina-field (éviter de le réécraser)
+      if (el.hasAttribute('data-tina-field')) {
+        skipCount++;
+        return;
+      }
       
       try {
         // Résoudre l'objet et la propriété depuis docRoot (pas result.data)
+        // Cette fonction fonctionne de manière uniforme pour toutes les sections
         const resolved = resolveObjAndProp(docRoot, bind);
         if (!resolved) {
           console.warn(`[LiveBridge] ⚠️ resolveObjAndProp failed for ${bind}`);
+          errorCount++;
           return;
         }
         
@@ -713,6 +750,7 @@ export default function LiveBridge(props: { home: Q }) {
         // GARDE-FOU: vérifie la présence de la prop sur l'objet
         if (!obj) {
           console.warn(`[LiveBridge] ⚠️ obj est null/undefined pour ${bind}`);
+          errorCount++;
           return;
         }
         
@@ -723,43 +761,72 @@ export default function LiveBridge(props: { home: Q }) {
             'prop': prop,
             'prop exists': prop in (obj || {})
           });
+          errorCount++;
           return;
         }
         
         // Note: _content_source peut être absent pour les items de tableaux
         // mais devrait être présent sur les sections et champs principaux
-        if (!('_content_source' in obj)) {
+        // On continue quand même même si _content_source est absent
+        const hasContentSource = '_content_source' in obj;
+        if (!hasContentSource) {
           console.warn(`[LiveBridge] ⚠️ obj sans _content_source pour ${bind}`, { 
             'obj keys': obj && typeof obj === 'object' && !Array.isArray(obj) ? Object.keys(obj).slice(0, 15) : 'N/A',
-            'has _content_source': '_content_source' in (obj || {}),
-            'obj preview': obj && typeof obj === 'object' ? JSON.stringify(obj).substring(0, 200) : 'N/A'
           });
           // On continue quand même et on essaie quand même tinaField()
         }
         
         // TOUJOURS utiliser tinaField() - pas de fallback manuel selon tuto.md
+        // Cela garantit l'uniformité peu importe la page ou la section
         try {
           const attr = tinaField(obj, prop as any);
+          
+          // UNIFORMITÉ : Tous les éléments reçoivent data-tina-field de la même manière
           el.setAttribute('data-tina-field', attr);
+          successCount++;
           
-          console.log(`[LiveBridge] ✅ ${bind} -> tinaField() = "${attr}"`, {
-            'has _content_source': '_content_source' in (obj || {}),
-            'prop': prop
-          });
+          // Propagation automatique vers les images et wrappers
+          // Détecter si c'est un champ d'image (src, image, url, link, cta, icon)
+          const isImageField = /\.(src|image|url|link|cta|icon|href)$/i.test(bind) || 
+                              bind.includes('.src') || 
+                              bind.includes('.image') ||
+                              bind.includes('.icon');
           
-          // Si image, propager vers les images
-          if (bind.includes('.src') || bind.includes('.image')) {
+          if (isImageField) {
             addTinaFieldToImages(el, attr, bind);
           }
+          
+          // Propagation vers les éléments enfants si nécessaire (SmartImage, etc.)
+          // Chercher les éléments .si-wrap, img, picture dans les enfants
+          const childImages = el.querySelectorAll('.si-wrap, img, picture');
+          if (childImages.length > 0) {
+            childImages.forEach((child) => {
+              const childEl = child as HTMLElement;
+              if (!childEl.hasAttribute('data-tina-field')) {
+                childEl.setAttribute('data-tina-field', attr);
+                // Si c'est un img, aussi propager vers le parent picture/source si présent
+                if (childEl.tagName === 'IMG') {
+                  const picture = childEl.closest('picture');
+                  if (picture && !picture.hasAttribute('data-tina-field')) {
+                    (picture as HTMLElement).setAttribute('data-tina-field', attr);
+                  }
+                }
+              }
+            });
+          }
+          
         } catch (tinaFieldErr) {
           console.error(`[LiveBridge] ❌ tinaField() error for ${bind}:`, tinaFieldErr, { obj, prop });
+          errorCount++;
         }
       } catch (err) {
         console.error(`[LiveBridge] ❌ Error resolving ${bind}:`, err);
+        errorCount++;
       }
     });
     
-    console.log(`[LiveBridge] ✅ ${elementsWithBind.length} éléments avec data-bind scannés`);
+    // Log uniforme pour toutes les pages
+    console.log(`[LiveBridge] ✅ Scan terminé : ${successCount} succès, ${skipCount} ignorés, ${errorCount} erreurs (total: ${elementsWithBind.length})`);
   };
 
   // Pas de styles CSS personnalisés - TinaCMS utilise ses propres styles par défaut

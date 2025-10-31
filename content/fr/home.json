@@ -241,6 +241,9 @@
       "title": "zzzzz",
       "description": "zzzzz",
       "_template": "contact"
+    },
+    {
+      "_template": "contact"
     }
   ]
 }

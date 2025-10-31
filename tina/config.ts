@@ -145,6 +145,7 @@ export default defineConfig({
             label: "Sections",
             list: true,
             ui: {
+              visualSelector: true,
               itemProps: (item: any) => {
                 const template = item?._template || 'section';
                 const title = item?.title || item?.subtitle || item?.companyName || '';
@@ -156,6 +157,9 @@ export default defineConfig({
               {
                 name: "contact",
                 label: "Contact",
+                ui: {
+                  previewSrc: "/tina-previews/contact.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -178,6 +182,9 @@ export default defineConfig({
               {
                 name: "autoconstruction",
                 label: "Auto-construction",
+                ui: {
+                  previewSrc: "/tina-previews/autoconstruction.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -204,6 +211,7 @@ export default defineConfig({
                 name: "hero",
                 label: "Hero",
                 ui: {
+                  previewSrc: "/tina-previews/hero.png",
                   defaultItem: {
                     subtitle: "oveco",
                     title: "Construisons l'avenir",
@@ -243,6 +251,7 @@ export default defineConfig({
                 name: "worksHero",
                 label: "Hero Work",
                 ui: {
+                  previewSrc: "/tina-previews/worksHero.png",
                   defaultItem: {
                     subtitle: "Nos réalisations",
                     title: "Des projets qui ont du sens",
@@ -293,6 +302,7 @@ export default defineConfig({
                 name: "expertise",
                 label: "Expertises",
                 ui: {
+                  previewSrc: "/tina-previews/expertise.png",
                   defaultItem: {
                     subtitle: "Nos expertises",
                     title: "Mettre la technique au service de projets durables",
@@ -330,6 +340,7 @@ export default defineConfig({
                 name: "competences",
                 label: "Compétences",
                 ui: {
+                  previewSrc: "/tina-previews/competences.png",
                   defaultItem: {
                     subtitle: "Nos compétences",
                     title: "Ce que nous maîtrisons",
@@ -362,7 +373,10 @@ export default defineConfig({
               {
                 name: "certifications",
                 label: "Certifications",
-                ui: { defaultItem: { title: "Nos certifications", description: "Labels et reconnaissances." } },
+                ui: { 
+                  previewSrc: "/tina-previews/certifications.png",
+                  defaultItem: { title: "Nos certifications", description: "Labels et reconnaissances." } 
+                },
                 fields: [
                   { type: "string", name: "title", label: "Titre" },
                   { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
@@ -384,7 +398,10 @@ export default defineConfig({
               {
                 name: "gallerie",
                 label: "Galerie",
-                ui: { defaultItem: { subtitle: "Galerie", title: "En images" } },
+                ui: { 
+                  previewSrc: "/tina-previews/gallerie.png",
+                  defaultItem: { subtitle: "Galerie", title: "En images" } 
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -406,6 +423,7 @@ export default defineConfig({
                 name: "textimage",
                 label: "Texte + Image",
                 ui: {
+                  previewSrc: "/tina-previews/textimage.png",
                   defaultItem: {
                     sectionSubtitle: "Section",
                     sectionTitle: "Titre de section",
@@ -451,7 +469,10 @@ export default defineConfig({
               {
                 name: "partners",
                 label: "Partenaires",
-                ui: { defaultItem: { title: "Nos partenaires" } },
+                ui: { 
+                  previewSrc: "/tina-previews/partners.png",
+                  defaultItem: { title: "Nos partenaires" } 
+                },
                 fields: [
                   { type: "string", name: "title", label: "Titre" },
                   {
@@ -468,7 +489,10 @@ export default defineConfig({
               {
                 name: "navbar",
                 label: "Navbar",
-                ui: { defaultItem: { siteName: "Oveco", siteUrl: "/" } },
+                ui: { 
+                  previewSrc: "/tina-previews/navbar.png",
+                  defaultItem: { siteName: "Oveco", siteUrl: "/" } 
+                },
                 fields: [
                   { type: "string", name: "logoUrl", label: "Logo (URL)" },
                   { type: "string", name: "siteName", label: "Nom du site" },
@@ -482,7 +506,10 @@ export default defineConfig({
               {
                 name: "simplecompetence",
                 label: "Compétence simple",
-                ui: { defaultItem: { number: "01", title: "Titre", description: "Description" } },
+                ui: { 
+                  previewSrc: "/tina-previews/simplecompetence.png",
+                  defaultItem: { number: "01", title: "Titre", description: "Description" } 
+                },
                 fields: [
                   { type: "string", name: "number", label: "Numéro" },
                   { type: "string", name: "title", label: "Titre" },
@@ -502,6 +529,7 @@ export default defineConfig({
                 name: "stats",
                 label: "Statistiques",
                 ui: {
+                  previewSrc: "/tina-previews/stats.png",
                   defaultItem: {
                     title: "En chiffres",
                     stats: [
@@ -531,6 +559,7 @@ export default defineConfig({
                 name: "projects",
                 label: "Projets",
                 ui: {
+                  previewSrc: "/tina-previews/projects.png",
                   defaultItem: {
                     subtitle: "Nos réalisations",
                     title: "Projets récents",
@@ -572,6 +601,7 @@ export default defineConfig({
                 name: "testimonials",
                 label: "Témoignages",
                 ui: {
+                  previewSrc: "/tina-previews/testimonials.png",
                   defaultItem: {
                     subtitle: "Avis",
                     title: "Ce qu'ils disent",
@@ -622,7 +652,10 @@ export default defineConfig({
               {
                 name: "footer",
                 label: "Pied de page",
-                ui: { defaultItem: { copyrightYear: 2024, companyName: "Oveco", legalText: "All Rights Reserved" } },
+                ui: { 
+                  previewSrc: "/tina-previews/footer.png",
+                  defaultItem: { copyrightYear: 2024, companyName: "Oveco", legalText: "All Rights Reserved" } 
+                },
                 fields: [
                   { type: "number", name: "copyrightYear", label: "Année" },
                   { type: "string", name: "companyName", label: "Nom d'entreprise" },
@@ -651,6 +684,7 @@ export default defineConfig({
             label: "Sections",
             list: true,
             ui: {
+              visualSelector: true,
               itemProps: (item: any) => {
                 const template = item?._template || 'section';
                 const title = item?.title || item?.subtitle || '';
@@ -662,6 +696,9 @@ export default defineConfig({
               {
                 name: "expertise",
                 label: "Expertises",
+                ui: {
+                  previewSrc: "/tina-previews/expertise.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -680,6 +717,9 @@ export default defineConfig({
               {
                 name: "stats",
                 label: "Stats",
+                ui: {
+                  previewSrc: "/tina-previews/stats.png",
+                },
                 fields: [
                   { type: "string", name: "title", label: "Titre" },
                   { type: "object", name: "stats", label: "Stats", list: true, fields: [
@@ -693,6 +733,9 @@ export default defineConfig({
               {
                 name: "competences",
                 label: "Compétences (liste)",
+                ui: {
+                  previewSrc: "/tina-previews/competences.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -709,6 +752,9 @@ export default defineConfig({
               {
                 name: "contact",
                 label: "Contact",
+                ui: {
+                  previewSrc: "/tina-previews/contact.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -725,6 +771,9 @@ export default defineConfig({
               {
                 name: "autoconstruction",
                 label: "Auto-construction",
+                ui: {
+                  previewSrc: "/tina-previews/autoconstruction.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -743,6 +792,9 @@ export default defineConfig({
               {
                 name: "hero",
                 label: "Hero",
+                ui: {
+                  previewSrc: "/tina-previews/hero.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -760,6 +812,9 @@ export default defineConfig({
               {
                 name: "textimage",
                 label: "Texte + Image",
+                ui: {
+                  previewSrc: "/tina-previews/textimage.png",
+                },
                 fields: [
                   { type: "boolean", name: "showSectionHeader", label: "Afficher l'en-tête de section" },
                   { type: "string", name: "sectionSubtitle", label: "Sous-titre de section" },
@@ -795,6 +850,9 @@ export default defineConfig({
               {
                 name: "certifications",
                 label: "Certifications",
+                ui: {
+                  previewSrc: "/tina-previews/certifications.png",
+                },
                 fields: [
                   { type: "string", name: "title", label: "Titre" },
                   { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
@@ -809,6 +867,9 @@ export default defineConfig({
               {
                 name: "simplecompetence",
                 label: "Compétence simple",
+                ui: {
+                  previewSrc: "/tina-previews/simplecompetence.png",
+                },
                 fields: [
                   { type: "string", name: "number", label: "Nombre / Kicker" },
                   { type: "string", name: "title", label: "Titre" },
@@ -826,7 +887,7 @@ export default defineConfig({
                 ],
               },
               // PROJECTS
-              { name: "projects", label: "Projects", fields: [
+              { name: "projects", label: "Projects", ui: { previewSrc: "/tina-previews/projects.png" }, fields: [
                 { type: "string", name: "subtitle", label: "Sous-titre" },
                 { type: "string", name: "title", label: "Titre" },
                 { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
@@ -834,7 +895,7 @@ export default defineConfig({
                 { type: "string", name: "linkUrl", label: "URL du lien" },
               ]},
               // TESTIMONIALS
-              { name: "testimonials", label: "Témoignages", fields: [
+              { name: "testimonials", label: "Témoignages", ui: { previewSrc: "/tina-previews/testimonials.png" }, fields: [
                 { type: "string", name: "subtitle", label: "Sous-titre" },
                 { type: "string", name: "title", label: "Titre" },
                 { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
@@ -845,7 +906,7 @@ export default defineConfig({
                 ]}
               ]},
               // GALLERIE
-              { name: "gallerie", label: "Galerie", fields: [
+              { name: "gallerie", label: "Galerie", ui: { previewSrc: "/tina-previews/gallerie.png" }, fields: [
                 { type: "string", name: "subtitle", label: "Sous-titre" },
                 { type: "string", name: "title", label: "Titre" },
                 { type: "object", name: "gallery", label: "Galerie", list: true, fields: [
@@ -853,7 +914,7 @@ export default defineConfig({
                 ]}
               ]},
               // WORKSHERO (si besoin sur la page)
-              { name: "worksHero", label: "Hero Work", fields: [
+              { name: "worksHero", label: "Hero Work", ui: { previewSrc: "/tina-previews/worksHero.png" }, fields: [
                 { type: "string", name: "subtitle", label: "Sous-titre" },
                 { type: "string", name: "title", label: "Titre" },
                 { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
@@ -867,7 +928,7 @@ export default defineConfig({
                 ]},
               ]},
               // FOOTER (optionnel)
-              { name: "footer", label: "Footer", fields: [
+              { name: "footer", label: "Footer", ui: { previewSrc: "/tina-previews/footer.png" }, fields: [
                 { type: "number", name: "copyrightYear", label: "Année" },
                 { type: "string", name: "companyName", label: "Entreprise" },
                 { type: "string", name: "legalText", label: "Mentions" },
@@ -894,6 +955,7 @@ export default defineConfig({
             label: "Sections",
             list: true,
             ui: {
+              visualSelector: true,
               itemProps: (item: any) => {
                 const template = item?._template || 'section';
                 const title = item?.title || item?.subtitle || '';
@@ -904,6 +966,9 @@ export default defineConfig({
               {
                 name: "expertise",
                 label: "Expertise",
+                ui: {
+                  previewSrc: "/tina-previews/expertise.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Subtitle" },
                   { type: "string", name: "title", label: "Title" },
@@ -921,6 +986,9 @@ export default defineConfig({
               {
                 name: "stats",
                 label: "Stats",
+                ui: {
+                  previewSrc: "/tina-previews/stats.png",
+                },
                 fields: [
                   { type: "string", name: "title", label: "Title" },
                   { type: "object", name: "stats", label: "Stats", list: true, fields: [
@@ -933,6 +1001,9 @@ export default defineConfig({
               {
                 name: "competences",
                 label: "Competences (list)",
+                ui: {
+                  previewSrc: "/tina-previews/competences.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Subtitle" },
                   { type: "string", name: "title", label: "Title" },
@@ -967,6 +1038,7 @@ export default defineConfig({
             label: "Sections",
             list: true,
             ui: {
+              visualSelector: true,
               itemProps: (item: any) => {
                 const template = item?._template || 'section';
                 const title = item?.title || item?.subtitle || '';
@@ -978,6 +1050,9 @@ export default defineConfig({
               {
                 name: "worksHero",
                 label: "Hero Work",
+                ui: {
+                  previewSrc: "/tina-previews/worksHero.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -996,6 +1071,9 @@ export default defineConfig({
               {
                 name: "projects",
                 label: "Projects",
+                ui: {
+                  previewSrc: "/tina-previews/projects.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -1008,6 +1086,9 @@ export default defineConfig({
               {
                 name: "testimonials",
                 label: "Témoignages",
+                ui: {
+                  previewSrc: "/tina-previews/testimonials.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -1023,6 +1104,9 @@ export default defineConfig({
               {
                 name: "gallerie",
                 label: "Galerie",
+                ui: {
+                  previewSrc: "/tina-previews/gallerie.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -1053,6 +1137,7 @@ export default defineConfig({
             label: "Sections",
             list: true,
             ui: {
+              visualSelector: true,
               itemProps: (item: any) => {
                 const template = item?._template || 'section';
                 const title = item?.title || item?.subtitle || '';
@@ -1060,7 +1145,7 @@ export default defineConfig({
               },
             },
             templates: [
-              { name: "worksHero", label: "Works Hero", fields: [
+              { name: "worksHero", label: "Works Hero", ui: { previewSrc: "/tina-previews/worksHero.png" }, fields: [
                 { type: "string", name: "subtitle", label: "Subtitle" },
                 { type: "string", name: "title", label: "Title" },
                 { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
@@ -1073,14 +1158,14 @@ export default defineConfig({
                   imageField("src", "Image", "imgs"), { type: "string", name: "alt", label: "Alt" }, { type: "boolean", name: "overlay", label: "Overlay" }
                 ]},
               ]},
-              { name: "projects", label: "Projects", fields: [
+              { name: "projects", label: "Projects", ui: { previewSrc: "/tina-previews/projects.png" }, fields: [
                 { type: "string", name: "subtitle", label: "Subtitle" },
                 { type: "string", name: "title", label: "Title" },
                 { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
                 { type: "string", name: "linkText", label: "Link text" },
                 { type: "string", name: "linkUrl", label: "Link URL" },
               ]},
-              { name: "testimonials", label: "Testimonials", fields: [
+              { name: "testimonials", label: "Testimonials", ui: { previewSrc: "/tina-previews/testimonials.png" }, fields: [
                 { type: "string", name: "subtitle", label: "Subtitle" },
                 { type: "string", name: "title", label: "Title" },
                 { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
@@ -1090,7 +1175,7 @@ export default defineConfig({
                   { type: "string", name: "card_content", label: "Content" },
                 ]}
               ]},
-              { name: "gallerie", label: "Gallery", fields: [
+              { name: "gallerie", label: "Gallery", ui: { previewSrc: "/tina-previews/gallerie.png" }, fields: [
                 { type: "string", name: "subtitle", label: "Subtitle" },
                 { type: "string", name: "title", label: "Title" },
                 { type: "object", name: "gallery", label: "Gallery", list: true, fields: [
@@ -1123,6 +1208,7 @@ export default defineConfig({
             label: "Sections",
             list: true,
             ui: {
+              visualSelector: true,
               itemProps: (item: any) => {
                 const template = item?._template || 'section';
                 const title = item?.title || item?.subtitle || item?.companyName || '';
@@ -1134,6 +1220,9 @@ export default defineConfig({
               {
                 name: "contact",
                 label: "Contact",
+                ui: {
+                  previewSrc: "/tina-previews/contact.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Subtitle" },
                   { type: "string", name: "title", label: "Title" },
@@ -1156,6 +1245,9 @@ export default defineConfig({
               {
                 name: "autoconstruction",
                 label: "Self-construction",
+                ui: {
+                  previewSrc: "/tina-previews/autoconstruction.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Subtitle" },
                   { type: "string", name: "title", label: "Title" },
@@ -1182,6 +1274,7 @@ export default defineConfig({
                 name: "worksHero",
                 label: "Hero Work",
                 ui: {
+                  previewSrc: "/tina-previews/worksHero.png",
                   defaultItem: {
                     subtitle: "Our works",
                     title: "Projects that matter",
@@ -1225,6 +1318,7 @@ export default defineConfig({
                 name: "expertise",
                 label: "Expertise",
                 ui: {
+                  previewSrc: "/tina-previews/expertise.png",
                   defaultItem: {
                     subtitle: "Our expertise",
                     title: "Technical excellence",
@@ -1259,7 +1353,10 @@ export default defineConfig({
               {
                 name: "stats",
                 label: "Stats",
-                ui: { defaultItem: { title: "Key figures" } },
+                ui: { 
+                  previewSrc: "/tina-previews/stats.png",
+                  defaultItem: { title: "Key figures" } 
+                },
                 fields: [
                   { type: "string", name: "title", label: "Title" },
                   {
@@ -1281,6 +1378,7 @@ export default defineConfig({
                 name: "projects",
                 label: "Projects",
                 ui: {
+                  previewSrc: "/tina-previews/projects.png",
                   defaultItem: {
                     subtitle: "Our projects",
                     title: "Recent projects",
@@ -1317,7 +1415,10 @@ export default defineConfig({
               {
                 name: "testimonials",
                 label: "Testimonials",
-                ui: { defaultItem: { subtitle: "Testimonials", title: "What they say", description: "" } },
+                ui: { 
+                  previewSrc: "/tina-previews/testimonials.png",
+                  defaultItem: { subtitle: "Testimonials", title: "What they say", description: "" } 
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Subtitle" },
                   { type: "string", name: "title", label: "Title" },
@@ -1362,7 +1463,10 @@ export default defineConfig({
               {
                 name: "footer",
                 label: "Footer",
-                ui: { defaultItem: { copyrightYear: 2024, companyName: "Oveco", legalText: "All Rights Reserved" } },
+                ui: { 
+                  previewSrc: "/tina-previews/footer.png",
+                  defaultItem: { copyrightYear: 2024, companyName: "Oveco", legalText: "All Rights Reserved" } 
+                },
                 fields: [
                   { type: "number", name: "copyrightYear", label: "Year" },
                   { type: "string", name: "companyName", label: "Company name" },
@@ -1395,6 +1499,7 @@ export default defineConfig({
             label: "Sections",
             list: true,
             ui: {
+              visualSelector: true,
               itemProps: (item: any) => {
                 const template = item?._template || 'section';
                 const title = item?.title || item?.subtitle || item?.companyName || '';
@@ -1406,6 +1511,9 @@ export default defineConfig({
               {
                 name: "navbar",
                 label: "Navigation",
+                ui: {
+                  previewSrc: "/tina-previews/navbar.png",
+                },
                 fields: [
                   { type: "string", name: "siteName", label: "Nom du site" },
                   { type: "string", name: "siteUrl", label: "URL du site" },
@@ -1433,6 +1541,9 @@ export default defineConfig({
               {
                 name: "worksHero",
                 label: "Hero Works",
+                ui: {
+                  previewSrc: "/tina-previews/worksHero.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -1463,6 +1574,9 @@ export default defineConfig({
               {
                 name: "expertise",
                 label: "Expertise",
+                ui: {
+                  previewSrc: "/tina-previews/expertise.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
@@ -1472,6 +1586,9 @@ export default defineConfig({
               {
                 name: "competences",
                 label: "Compétences",
+                ui: {
+                  previewSrc: "/tina-previews/competences.png",
+                },
                 fields: [
                   { type: "string", name: "title", label: "Titre" },
                   {
@@ -1491,6 +1608,9 @@ export default defineConfig({
               {
                 name: "textImage",
                 label: "Texte + Image (Oveco)",
+                ui: {
+                  previewSrc: "/tina-previews/textimage.png",
+                },
                 fields: [
                   {
                     type: "object",
@@ -1529,6 +1649,9 @@ export default defineConfig({
               {
                 name: "certifications",
                 label: "Certifications",
+                ui: {
+                  previewSrc: "/tina-previews/certifications.png",
+                },
                 fields: [
                   { type: "string", name: "title", label: "Titre" },
                   {
@@ -1548,6 +1671,9 @@ export default defineConfig({
               {
                 name: "stats",
                 label: "Statistiques",
+                ui: {
+                  previewSrc: "/tina-previews/stats.png",
+                },
                 fields: [
                   { type: "string", name: "title", label: "Titre" },
                   {
@@ -1566,6 +1692,9 @@ export default defineConfig({
               {
                 name: "contact",
                 label: "Contact",
+                ui: {
+                  previewSrc: "/tina-previews/contact.png",
+                },
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
