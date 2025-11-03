@@ -13,6 +13,7 @@ export { default as Competences } from './Competences.astro';
 export { default as Certifications } from './Certifications.astro';
 export { default as Gallerie } from './Gallerie.astro';
 export { default as TextImage } from './TextImage.astro';
+export { default as Partners } from './Partners.astro';
 
 // Composants migrés - Phase 2 ✅
 export { default as Card } from './Card.astro';

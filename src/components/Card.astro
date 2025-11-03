@@ -15,9 +15,10 @@ export interface Props {
   title: string;
   url: string;
   description?: string;
+  competences?: string; // Compétences séparées par virgule pour le filtrage
 }
 
-const { image, type, client, title, url, description } = Astro.props;
+const { image, type, client, title, url, description, competences = '' } = Astro.props;
 
 // Image de fond avec fallback
 const bgImage = image || '/uploads/default-placeholder.png';
@@ -27,6 +28,11 @@ const bgImage = image || '/uploads/default-placeholder.png';
   class="projects__card"
   role="listitem"
   style={`background-image: url('${bgImage}');`}
+  data-project-title={title.toLowerCase()}
+  data-project-type={(type || '').toLowerCase()}
+  data-project-client={(client || '').toLowerCase()}
+  data-project-description={(description || '').toLowerCase()}
+  data-competences={competences.toLowerCase()}
 >
   <div class="projects__card-overlay" aria-hidden="true"></div>
 
@@ -44,7 +50,7 @@ const bgImage = image || '/uploads/default-placeholder.png';
         <p class="projects__card-client">{client}</p>
       )}
       
-      <h3 class="projects__card-title">{title}</h3>
+      <h2 class="projects__card-title">{title}</h2>
       
       {description && (
         <p class="projects__card-description">{description}</p>

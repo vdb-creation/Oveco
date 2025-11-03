@@ -25,7 +25,9 @@
     "images:watch": "node scripts/watch-webp.mjs",
     "perf:analyze": "astro build && node scripts/analyze-bundle.mjs",
     "perf:test": "node scripts/test-performance.mjs",
-    "cache:clear": "rm -rf .astro dist node_modules/.vite node_modules/.cache"
+    "cache:clear": "rm -rf .astro dist node_modules/.vite node_modules/.cache",
+    "check:headings": "node scripts/check-headings.mjs",
+    "lighthouse:prepare": "echo '🚀 Build de production pour Lighthouse...' && pnpm build && echo '✅ Build terminé ! Lancez maintenant: pnpm preview' && echo '📊 Puis ouvrez Chrome DevTools > Lighthouse sur http://localhost:80'"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.5",

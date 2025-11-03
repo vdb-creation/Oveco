@@ -1,54 +1,49 @@
 {
-  "title": "Maison Passive Moderne",
-  "slug": "maison-passive-exemple",
-  "category": "Construction",
+  "title": "Maison Passive à Beauvechain",
+  "slug": "maison-passive-beauvechain",
+  "category": "Maison passive",
   "client": "Famille Martin",
-  "excerpt": "Construction d'une maison passive moderne avec panneaux solaires et système de récupération d'eau de pluie.",
-  "description": "Ce projet ambitieux consistait à construire une maison passive moderne de 150m² pour une famille de 4 personnes. La maison intègre des panneaux solaires, un système de récupération d'eau de pluie, et une isolation thermique optimale pour atteindre les standards passifs.",
-  "location": "Bruxelles, Belgique",
+  "excerpt": "Construction complète d'une maison passive avec ossature bois, isolation renforcée, pompe à chaleur et installation photovoltaïque de 15kW. Projet d'auto-construction accompagné sur 18 mois.",
+  "description": "Ce projet ambitieux consistait à construire une maison passive moderne de 150m² pour une famille de 4 personnes. La maison intègre une ossature bois performante, une isolation thermique renforcée, des panneaux solaires photovoltaïques de 15kW, une pompe à chaleur air-eau pour le chauffage et la production d'eau chaude sanitaire, ainsi qu'un système de ventilation double flux. Grâce à l'accompagnement d'Oveco, la famille Martin a pu réaliser une grande partie des installations elle-même, tout en bénéficiant de notre expertise technique.",
+  "location": "Beauvechain, Belgique",
   "year": "2023",
-  "duration": "8 mois",
-  "budget": "350 000€",
+  "duration": "18 mois",
+  "budget": "280 000€",
   "status": "completed",
   
-  "heroImage": "/uploads/hero/wallpapper-op.webp",
-  "thumbnail": "/uploads/hero/wallpapper-op.webp",
-  
-  "gallery": [
-    {
-      "image": "/uploads/projects/maison-passive-1.webp",
-      "alt": "Façade principale de la maison passive",
-      "caption": "Façade principale avec grandes baies vitrées orientées sud"
-    },
-    {
-      "image": "/uploads/projects/maison-passive-2.webp",
-      "alt": "Panneaux solaires sur le toit",
-      "caption": "Installation des panneaux solaires photovoltaïques"
-    },
-    {
-      "image": "/uploads/projects/maison-passive-3.webp",
-      "alt": "Intérieur de la maison",
-      "caption": "Séjour ouvert avec vue sur le jardin"
-    }
-  ],
+  "heroImage": "/uploads/imgs/maison-toit.webp",
+  "thumbnail": "/uploads/imgs/maison-toit.webp",
   
   "competences": [
     {
-      "title": "Isolation Thermique",
-      "description": "Mise en place d'une isolation thermique optimale avec des matériaux écologiques",
-      "icon": "/uploads/icons/icon-isolation.svg"
+      "title": "Ossature bois",
+      "description": "Conception et réalisation d'une ossature bois performante avec isolation renforcée pour atteindre les standards passifs. Accompagnement technique tout au long de la construction.",
+      "icon": "/uploads/compétance/maison.webp"
     },
     {
-      "title": "Énergies Renouvelables",
-      "description": "Installation de panneaux solaires et système de récupération d'eau",
-      "icon": "/uploads/icons/icon-solar.svg"
+      "title": "Installations photovoltaïques",
+      "description": "Installation de panneaux solaires photovoltaïques de 15kW avec système de stockage d'énergie. Formation aux techniques d'installation et de maintenance pour permettre l'autonomie énergétique.",
+      "icon": "/uploads/compétance/elec.webp"
     },
     {
-      "title": "Ventilation Mécanique",
-      "description": "Système de ventilation double flux pour une qualité d'air optimale",
-      "icon": "/uploads/icons/icon-ventilation.svg"
+      "title": "Pompe à chaleur",
+      "description": "Installation d'une pompe à chaleur air-eau haute performance pour le chauffage et la production d'eau chaude sanitaire. Système optimisé pour minimiser la consommation énergétique.",
+      "icon": "/uploads/compétance/clim.webp"
+    },
+    {
+      "title": "Ventilation double flux",
+      "description": "Installation d'un système de ventilation double flux avec récupérateur de chaleur pour optimiser la qualité de l'air intérieur tout en réduisant les déperditions énergétiques.",
+      "icon": "/uploads/compétance/eolienne.webp"
     }
   ],
+  
+  "textImage": {
+    "subtitle": "Le projet",
+    "title": "Un habitat durable et autonome en énergie",
+    "description": "Cette maison passive représente un exemple parfait de ce qu'il est possible de réaliser avec l'auto-construction accompagnée. La famille Martin a pu construire un habitat durable et autonome en énergie, en réalisant elle-même une grande partie des installations grâce à notre accompagnement technique. Le projet a permis de créer un habitat performant, respectueux de l'environnement et adapté à leurs besoins, tout en maîtrisant les coûts et en acquérant des compétences durables.",
+    "image": "/uploads/imgs/maison-build.webp",
+    "reverse": false
+  },
   
   "stats": [
     {
@@ -59,25 +54,86 @@
     {
       "value": "15",
       "label": "Consommation énergétique",
-      "unit": "kWh/m²/an"
+      "unit": "kWh/m²/an",
+      "description": "Standard passif atteint avec succès"
+    },
+    {
+      "value": "15",
+      "label": "Puissance photovoltaïque",
+      "unit": "kW",
+      "description": "Installation solaire complète"
     },
     {
       "value": "85",
       "label": "Économies d'énergie",
-      "unit": "%"
+      "unit": "%",
+      "description": "Par rapport à une maison classique"
+    },
+    {
+      "value": "18",
+      "label": "Durée du projet",
+      "unit": "mois",
+      "description": "Avec accompagnement Oveco"
     }
   ],
   
-  "textImage": {
-    "subtitle": "Innovation",
-    "title": "Technologies Écologiques",
-    "description": "Cette maison passive utilise les dernières technologies écologiques pour minimiser son impact environnemental tout en maximisant le confort de ses occupants.",
-    "image": "/uploads/projects/maison-passive-tech.webp",
-    "reverse": false
-  },
+  "gallery": [
+    {
+      "image": "/uploads/imgs/maison-toit.webp",
+      "alt": "Façade principale de la maison passive",
+      "caption": "Façade principale avec grandes baies vitrées orientées sud pour optimiser les apports solaires"
+    },
+    {
+      "image": "/uploads/imgs/maison-toit-2.webp",
+      "alt": "Panneaux solaires sur le toit",
+      "caption": "Installation des panneaux solaires photovoltaïques de 15kW avec système de suivi"
+    },
+    {
+      "image": "/uploads/imgs/maison-build.webp",
+      "alt": "Intérieur de la maison",
+      "caption": "Séjour ouvert avec vue sur le jardin, optimisé pour la luminosité naturelle"
+    },
+    {
+      "image": "/uploads/imgs/plan.webp",
+      "alt": "Installation pompe à chaleur",
+      "caption": "Installation de la pompe à chaleur air-eau avec formation à la maintenance"
+    },
+    {
+      "image": "/uploads/imgs/architrech.webp",
+      "alt": "Ossature bois en construction",
+      "caption": "Ossature bois avec isolation renforcée lors de la phase de construction"
+    }
+  ],
   
-  "metaTitle": "Maison Passive Moderne - Projet Oveco",
-  "metaDescription": "Découvrez la construction de cette maison passive moderne avec panneaux solaires et système de récupération d'eau de pluie.",
+  "similarProjects": [
+    {
+      "image": "/uploads/imgs/maison-toit-2.webp",
+      "type": "Rénovation énergétique",
+      "client": "Famille Lefebvre",
+      "title": "Rénovation énergétique complète",
+      "url": "/works/renovation-lefebvre",
+      "description": "Rénovation d'une maison des années 70 avec isolation extérieure, pompe à chaleur et panneaux photovoltaïques."
+    },
+    {
+      "image": "/uploads/imgs/architrech.webp",
+      "type": "Auto-construction",
+      "client": "Famille Dubois",
+      "title": "Maison écologique ossature bois",
+      "url": "/works/maison-ecologique-dubois",
+      "description": "Accompagnement complet d'un projet d'auto-construction avec système solaire et ventilation double flux."
+    },
+    {
+      "image": "/uploads/imgs/plan.webp",
+      "type": "Maison passive",
+      "client": "Famille Rousseau",
+      "title": "Maison passive en paille",
+      "url": "/works/maison-paille-autoconstruction",
+      "description": "Construction d'une maison passive en paille avec accompagnement Oveco sur 12 mois."
+    }
+  ],
+  
+  "metaTitle": "Maison Passive à Beauvechain - Projet Oveco",
+  "metaDescription": "Découvrez la construction de cette maison passive avec ossature bois, panneaux solaires de 15kW et pompe à chaleur. Projet d'auto-construction accompagné sur 18 mois.",
   
   "createdAt": "2023-01-15T00:00:00.000Z",
   "updatedAt": "2023-12-01T00:00:00.000Z"

@@ -16,6 +16,7 @@ export interface Props {
   title?: string;
   description?: string;
   partners?: Partner[];
+  sectionIndex?: number;
 }
 
 const {
@@ -29,19 +30,20 @@ const {
     { logo: "/uploads/partenaire/Pinterest.svg", alt: "Pinterest - Partenaire créatif", name: "Pinterest" },
     { logo: "/uploads/partenaire/Twitch.svg", alt: "Twitch - Partenaire streaming", name: "Twitch" },
     { logo: "/uploads/partenaire/Webflow.svg", alt: "Webflow - Partenaire design", name: "Webflow" }
-  ]
+  ],
+  sectionIndex = 0
 } = Astro.props;
 ---
 
 <section class="partners-section" id="partenaires" aria-labelledby="partners-title">
   <div class="partners__container">
     <header class="partners__header">
-      <h3 class="partners__subtitle" aria-label="Section nos partenaires industriels">{subtitle}</h3>
-      <h2 class="partners__title" id="partners-title" set:html={title} />
-      <p class="partners__description" set:html={description} />
+      <p class="partners__subtitle" aria-label="Section nos partenaires industriels" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</p>
+      <h2 class="partners__title" id="partners-title" data-bind={`sections.${sectionIndex}.title`} set:html={title} />
+      <p class="partners__description" data-bind={`sections.${sectionIndex}.description`} set:html={description} />
     </header>
     <div class="partners__logos" role="list" aria-label="Liste de nos partenaires industriels">
-      {partners.map((partner) => (
+      {partners.map((partner, index) => (
         <figure class="partners__logo" role="listitem">
           <img 
             src={partner.logo} 
@@ -50,6 +52,7 @@ const {
             decoding="async"
             width="140"
             height="60"
+            data-bind={`sections.${sectionIndex}.logos.${index}.src`}
           />
         </figure>
       ))}

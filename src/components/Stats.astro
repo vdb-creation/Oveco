@@ -42,15 +42,15 @@ const {
 
 <section class="stats" aria-labelledby="stats-title">
   <div class="container stats__container">
-    {title && <h2 id="stats-title" class="stats__title" data-bind={`sections.${sectionIndex}.title`}>{title}</h2>}
+    <h2 id="stats-title" class="stats__title" data-bind={`sections.${sectionIndex}.title`}>{title || ""}</h2>
 
     <ul class="stats__grid" role="list">
       {stats.map((stat, index) => (
         <li class="stats__item" role="listitem">
           <div class="stats__content">
-            <h1 class="stats__value" data-bind={`sections.${sectionIndex}.stats.${index}.value`}>{stat.value}</h1>
-            <h3 class="stats__label" data-bind={`sections.${sectionIndex}.stats.${index}.label`}>{stat.label}</h3>
-            {stat.description && <p class="stats__desc" data-bind={`sections.${sectionIndex}.stats.${index}.description`}>{stat.description}</p>}
+            <h3 class="stats__value" data-bind={`sections.${sectionIndex}.stats.${index}.value`}>{stat.value}</h3>
+            <p class="stats__label" data-bind={`sections.${sectionIndex}.stats.${index}.label`}>{stat.label}</p>
+            <p class="stats__desc" data-bind={`sections.${sectionIndex}.stats.${index}.description`}>{stat.description || ""}</p>
           </div>
         </li>
       ))}

@@ -11,6 +11,17 @@ export interface GlobalComponents {
     links: Array<{ label: string; url: string }>;
     ctaButton: { label: string; url: string };
   };
+  contact: {
+    subtitle?: string;
+    title?: string;
+    description?: string;
+    contactInfo?: {
+      email?: string;
+      phone?: string;
+      location?: string;
+    };
+    formAction?: string;
+  };
   footer: {
     copyrightYear: number;
     companyName: string;
@@ -46,6 +57,17 @@ export async function getGlobalComponents(lang: 'fr' | 'en'): Promise<GlobalComp
             url: "/#contact"
           }
         },
+        contact: {
+          subtitle: lang === 'fr' ? "Nous contacter" : "Contact us",
+          title: lang === 'fr' ? "Vous avez un projet d'auto-construction ou de rénovation énergétique ?" : "Do you have a self-construction or energy renovation project?",
+          description: lang === 'fr' ? "Contactez-nous pour discuter de votre projet. Notre équipe est disponible pour répondre à toutes vos questions." : "Contact us to discuss your project. Our team is available to answer all your questions.",
+          contactInfo: {
+            email: "contact@oveco.be",
+            phone: "+32 473 / 68.99.02",
+            location: lang === 'fr' ? "Région de Beauvechain, Belgique" : "Beauvechain region, Belgium"
+          },
+          formAction: "#contact"
+        },
         footer: {
           copyrightYear: 2024,
           companyName: "Oveco",
@@ -66,6 +88,17 @@ export async function getGlobalComponents(lang: 'fr' | 'en'): Promise<GlobalComp
           label: lang === 'fr' ? "Nous contacter" : "Contact us",
           url: "/#contact"
         }
+      },
+      contact: {
+        subtitle: lang === 'fr' ? "Nous contacter" : "Contact us",
+        title: lang === 'fr' ? "Vous avez un projet ?" : "Do you have a project?",
+        description: lang === 'fr' ? "Contactez-nous pour discuter de votre projet." : "Contact us to discuss your project.",
+        contactInfo: {
+          email: "contact@oveco.be",
+          phone: "+32 473 / 68.99.02",
+          location: lang === 'fr' ? "Région de Beauvechain, Belgique" : "Beauvechain region, Belgium"
+        },
+        formAction: "#contact"
       },
       footer: {
         copyrightYear: 2024,

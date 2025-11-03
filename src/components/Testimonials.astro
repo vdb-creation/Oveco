@@ -183,6 +183,7 @@ const titleId = `${sectionId}-title`;
 
     // Fonction pour calculer la largeur de scroll
     const getScrollAmount = () => {
+      const screenWidth = window.innerWidth;
       const firstCard = grid.querySelector('.projects__card') as HTMLElement;
       
       if (firstCard) {
@@ -193,19 +194,21 @@ const titleId = `${sectionId}-title`;
       }
       
       // Fallback basé sur la taille d'écran
-      const screenWidth = window.innerWidth;
       let cardWidth = 388;
       let gap = 24;
       
       if (screenWidth <= 480) {
-        cardWidth = Math.min(300, screenWidth * 0.85);
-        gap = 16;
+        cardWidth = Math.min(300, screenWidth * 0.82);
+        gap = 10;
       } else if (screenWidth <= 768) {
-        cardWidth = Math.min(350, screenWidth * 0.48);
-        gap = 20;
+        cardWidth = Math.min(340, screenWidth * 0.85);
+        gap = 12;
       } else if (screenWidth <= 1024) {
-        cardWidth = Math.min(380, screenWidth * 0.32);
-        gap = 22;
+        cardWidth = Math.min(360, screenWidth * 0.42);
+        gap = 18;
+      } else if (screenWidth <= 1200) {
+        cardWidth = Math.min(380, screenWidth * 0.38);
+        gap = 20;
       } else {
         cardWidth = Math.min(388, screenWidth * 0.26);
         gap = 24;
@@ -296,11 +299,24 @@ const titleId = `${sectionId}-title`;
     grid.style.cursor = 'grab';
   }
 
-  // Initialiser au chargement
+  // Initialiser au chargement - avec plusieurs tentatives pour être sûr
+  function tryInit() {
+    const grid = document.querySelector('[data-testimonials-grid]') as HTMLElement;
+    const prevBtn = document.querySelector('.testimonials__nav-btn--prev') as HTMLButtonElement;
+    const nextBtn = document.querySelector('.testimonials__nav-btn--next') as HTMLButtonElement;
+    
+    if (grid && prevBtn && nextBtn) {
+      initTestimonialsNavigation();
+    } else {
+      // Réessayer après un court délai
+      setTimeout(tryInit, 100);
+    }
+  }
+  
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTestimonialsNavigation);
+    document.addEventListener('DOMContentLoaded', tryInit);
   } else {
-    setTimeout(initTestimonialsNavigation, 100);
+    tryInit();
   }
 </script>
 
@@ -398,6 +414,21 @@ const titleId = `${sectionId}-title`;
   margin: 0;
 }
 
+@media (max-width: 768px) {
+  .testimonials__subtitle {
+    font-size: 17px;
+    letter-spacing: 1.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonials__subtitle {
+    font-size: 15px;
+    line-height: 18px;
+    letter-spacing: 1.2px;
+  }
+}
+
 .testimonials__title {
   color: #334749;
   font-size: 39.81px;
@@ -407,6 +438,20 @@ const titleId = `${sectionId}-title`;
   margin: 0;
 }
 
+@media (max-width: 768px) {
+  .testimonials__title {
+    font-size: 32px;
+    line-height: 38px;
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonials__title {
+    font-size: 26px;
+    line-height: 30px;
+  }
+}
+
 .testimonials__description {
   color: #5C6D6F;
   font-size: 16px;
@@ -414,6 +459,20 @@ const titleId = `${sectionId}-title`;
   font-weight: 400;
   line-height: 28.8px;
   margin: 0;
+}
+
+@media (max-width: 768px) {
+  .testimonials__description {
+    font-size: 15px;
+    line-height: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonials__description {
+    font-size: 14px;
+    line-height: 24px;
+  }
 }
 
 .testimonials__link {

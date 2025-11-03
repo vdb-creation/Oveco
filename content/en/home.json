@@ -10,7 +10,7 @@
       "title": "Building the future",
       "description": "Engineers-installers by your side.",
       "ctaLabel": "Contact us",
-      "ctaHref": "/contact",
+      "ctaHref": "/#contact",
       "mediaLeft": {
         "src": "/uploads/hero/maison-build.webp",
         "alt": "Building the future"
@@ -224,6 +224,15 @@
       "_template": "testimonials"
     },
     {
+      "subtitle": "Contact us",
+      "title": "Have an idea, a project, or simply questions?",
+      "description": "Write to us or call us, we'll be happy to discuss.",
+      "contactInfo": {
+        "email": "",
+        "phone": "",
+        "location": ""
+      },
+      "formAction": "#contact",
       "_template": "contact"
     },
     {

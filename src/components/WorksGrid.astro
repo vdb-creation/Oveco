@@ -1,0 +1,135 @@
+---
+/**
+ * WorksGrid Component - Oveco
+ * Grille de projets avec largeur 545px, maximum 2 par ligne
+ * Filtrable par recherche et tags
+ * 
+ * @component
+ */
+
+import Card from './Card.astro';
+import { getAllProjects, projectToCard } from '../lib/projects';
+
+// Charger tous les projets et les convertir en cartes
+const allProjects = await getAllProjects();
+const dynamicCards = allProjects.map(projectToCard);
+---
+
+<section class="works-grid-section" id="works-grid">
+  <div class="works-grid__container">
+    <div 
+      class="works-grid" 
+      role="list"
+      aria-label="Liste des projets"
+      data-works-grid
+    >
+      {dynamicCards.length > 0 ? (
+        dynamicCards.map((card, idx) => {
+          const project = allProjects[idx];
+          const competencesData = project?.competences 
+            ? project.competences.map((c: any) => c.title || '').filter(Boolean).join(', ')
+            : '';
+          return (
+            <Card {...card} competences={competencesData} />
+          );
+        })
+      ) : (
+        <p class="works-grid__empty">Aucun projet disponible</p>
+      )}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+.works-grid-section {
+  width: 100%;
+  background: #FFFEF8;
+  padding: 0 0 80px 0;
+}
+
+.works-grid__container {
+  width: 100%;
+  max-width: 1589px;
+  margin: 0 auto;
+  padding: 0 109px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1400px) {
+  .works-grid__container {
+    padding: 0 80px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .works-grid__container {
+    padding: 0 60px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .works-grid__container {
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .works-grid__container {
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .works-grid__container {
+    padding: 0 1rem;
+  }
+}
+
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 545px);
+  gap: 40px;
+  justify-content: center;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .works-grid {
+    grid-template-columns: repeat(2, minmax(280px, 545px));
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .works-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+/* Cartes avec largeur fixe de 545px */
+.works-grid > .projects__card {
+  width: 545px;
+  max-width: 100%;
+  height: auto;
+  min-height: 548px;
+}
+
+@media (max-width: 768px) {
+  .works-grid > .projects__card {
+    width: 100%;
+    max-width: 545px;
+    margin: 0 auto;
+  }
+}
+
+.works-grid__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #5C6D6F;
+  font-size: 18px;
+  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+}
+</style>
+

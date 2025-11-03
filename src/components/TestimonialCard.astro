@@ -69,11 +69,11 @@ const linkedUrl = testimonial.linked_project?.link || testimonial.link || '#';
       )}
       
       {(testimonial.client_position || testimonial.client_company) && (
-        <h3 class="projects__card-title">
+        <h2 class="projects__card-title">
           {testimonial.client_position && <>{testimonial.client_position}</>}
           {testimonial.client_position && testimonial.client_company && <> chez </>}
           {testimonial.client_company && <>{testimonial.client_company}</>}
-        </h3>
+        </h2>
       )}
       
       {truncatedText && (

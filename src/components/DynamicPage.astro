@@ -18,8 +18,12 @@ import {
   Projects,
   Testimonials,
   SimpleCompetence,
+  Partners,
   Footer,
 } from '../components';
+
+import SearchWorks from '../components/SearchWorks.astro';
+import WorksGrid from '../components/WorksGrid.astro';
 
 import { client } from '../../tina/__generated__/client';
 import LiveBridge from '../../tina/LiveBridge.tsx';
@@ -88,6 +92,11 @@ let tinaData: any = null;
 let queryName = 'home';
 if (forceLive) {
   try {
+    // Vérifier que le client est correctement initialisé
+    if (!client || !client.queries) {
+      throw new Error('TinaCMS client not initialized');
+    }
+
     const file = `${currentJson}.json`;
     
     // Mapper les fichiers JSON vers les queries TinaCMS
@@ -107,6 +116,11 @@ if (forceLive) {
     }
 
     queryName = (queryMap[currentJson] && queryMap[currentJson][lang]) || (lang === 'en' ? 'homeEn' : 'home');
+    
+    // Vérifier que la query existe dans le client
+    if (!client.queries[queryName]) {
+      throw new Error(`TinaCMS query "${queryName}" not found in client.queries`);
+    }
     
     // Utiliser la query appropriée
     if (queryName === 'homeEn') {
@@ -131,38 +145,57 @@ if (forceLive) {
       tinaData = await client.queries.home({ relativePath: file });
     }
   } catch (e) {
-    console.log('TinaCMS data not available, using static data:', e);
+    console.error('TinaCMS query error:', e);
+    console.log('Query name:', queryName, 'File:', file);
     // Même si la requête échoue, créer un objet de fallback avec les données statiques
     // pour que le LiveBridge puisse au moins détecter les éléments avec data-bind
     if (forceLive && import.meta.env.PUBLIC_TINA_CLIENT_ID && queryName) {
       // Créer un fallback avec les données statiques pour permettre le mode Live
+      // Générer les __typename corrects selon la collection
+      const getTypename = (template: string, queryName: string) => {
+        const templateCapitalized = (template || '').charAt(0).toUpperCase() + (template || '').slice(1);
+        const collectionPrefix = queryName
+          .split('_')
+          .map((part, i) => i === 0 ? part.charAt(0).toUpperCase() + part.slice(1) : part)
+          .join('_')
+          .replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+        return `${collectionPrefix}Sections${templateCapitalized}`;
+      };
+      
       tinaData = {
         data: {
           [queryName]: {
+            ...pageContent,
             sections: sections.map((s: any) => ({
               ...s,
-              __typename: `HomeSections${(s._template || '').charAt(0).toUpperCase() + (s._template || '').slice(1)}`
+              __typename: getTypename(s._template || '', queryName)
             }))
           }
         },
         query: '',
         variables: {}
       };
+    } else {
+      // En mode non-live ou sans client ID, ne pas charger LiveBridge
+      tinaData = null;
     }
   }
 }
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  {/* Charger LiveBridge si TinaCMS est configuré (même si les données GraphQL ont échoué) */}
-  {forceLive && (
-    <LiveBridge client:load home={tinaData || { data: {}, query: '', variables: {} }} />
-  )}
-
+  {/* LiveBridge est maintenant chargé dans Layout pour toutes les pages */}
+  {/* Donc on ne le charge plus ici pour éviter les doublons */}
+  
   {sections.map((section: any, index: number) => {
     const typename = section?.__typename || '';
     const rawTemplate = section?._template || typename.replace('HomeSections', '');
     const template = (rawTemplate || '').toString().trim().replace(/\s+/g, '').toLowerCase();
+    
+    // Debug pour la page works
+    if (currentJson === 'works' && index === 0) {
+      console.log('[DynamicPage] Template:', template, 'Raw:', rawTemplate, 'Section:', section._template);
+    }
 
     // ========== Composants Oveco avec rendu optimisé ==========
     
@@ -180,18 +213,40 @@ if (forceLive) {
       );
     }
     
-    if (template === 'workshero') {
+    if (template === 'workshero' || template === 'works-hero') {
+      // Si c'est la page works, toujours ajouter SearchWorks et WorksGrid après le premier worksHero
+      const isWorksPage = currentJson === 'works';
+      // Trouver l'index du premier worksHero
+      let firstWorksHeroIndex = -1;
+      for (let i = 0; i < sections.length; i++) {
+        const s = sections[i];
+        const sTemplate = (s._template || '').toString().trim().replace(/\s+/g, '').toLowerCase();
+        if (sTemplate === 'workshero' || sTemplate === 'works-hero') {
+          firstWorksHeroIndex = i;
+          break;
+        }
+      }
+      const isFirstWorksHero = isWorksPage && firstWorksHeroIndex === index;
+      
       return (
-        <WorksHero
-          subtitle={section.subtitle}
-          title={section.title}
-          description={section.description}
-          ctaLabel={section.ctaLabel}
-          ctaHref={section.ctaHref}
-          sectionIndex={index}
-          mediaLeft={section.mediaLeft}
-          mediaRight={section.mediaRight}
-        />
+        <>
+          <WorksHero
+            subtitle={section.subtitle}
+            title={section.title}
+            description={section.description}
+            ctaLabel={section.ctaLabel}
+            ctaHref={section.ctaHref}
+            sectionIndex={index}
+            mediaLeft={section.mediaLeft}
+            mediaRight={section.mediaRight}
+          />
+          {isFirstWorksHero && (
+            <>
+              <SearchWorks />
+              <WorksGrid />
+            </>
+          )}
+        </>
       );
     }
 
@@ -209,18 +264,6 @@ if (forceLive) {
       );
     }
     
-    if (template === 'contact') {
-      return (
-        <Contact
-          subtitle={section.subtitle}
-          title={section.title}
-          description={section.description}
-          contactInfo={section.contactInfo}
-          formAction={section.formAction}
-          sectionIndex={index}
-        />
-      );
-    }
     
     if (template === 'expertise') {
       return (
@@ -305,6 +348,12 @@ if (forceLive) {
     }
     
     if (template === 'projects') {
+      // Sur la page works, ne pas afficher la section Projects classique
+      // Elle est remplacée par SearchWorks + WorksGrid
+      if (currentJson === 'works') {
+        return null;
+      }
+      
       // Utiliser les projets dynamiques pour la page home, sinon utiliser les cartes définies
       const cardsToUse = (currentJson === 'home' && dynamicProjects.length > 0) 
         ? dynamicProjects 
@@ -345,6 +394,26 @@ if (forceLive) {
           description={section.description}
           cta={section.cta}
           image={section.image}
+          sectionIndex={index}
+        />
+      );
+    }
+    
+    if (template === 'partners') {
+      // Transformer les logos (avec .src) en format partners (avec .logo)
+      const logosData = section.logos || section.partners || [];
+      const partnersData = logosData.map((item: any) => ({
+        logo: item.src || item.logo || '',
+        alt: item.alt || '',
+        name: item.name || ''
+      }));
+      
+      return (
+        <Partners
+          subtitle={section.subtitle}
+          title={section.title}
+          description={section.description}
+          partners={partnersData}
           sectionIndex={index}
         />
       );

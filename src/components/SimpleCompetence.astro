@@ -45,13 +45,14 @@ if (image.rotate180) imageClasses.push('rotate-180');
       context="default"
       loading="lazy"
       class:list={['simple-competence__image', ...imageClasses]}
+      data-bind={`sections.${sectionIndex}.image.src`}
     />
   </div>
 
   <div class="simple-competence__content">
     <header class="simple-competence__header">
       <p class="simple-competence__kicker" data-bind={`sections.${sectionIndex}.number`}>{number}</p>
-      <h3 class="simple-competence__title" data-bind={`sections.${sectionIndex}.title`}>{title}</h3>
+      <h2 class="simple-competence__title" data-bind={`sections.${sectionIndex}.title`}>{title}</h2>
     </header>
     
     <p class="simple-competence__description" data-bind={`sections.${sectionIndex}.description`}>{description}</p>

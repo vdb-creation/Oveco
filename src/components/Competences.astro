@@ -80,7 +80,7 @@ function getImageData(competence: Competence) {
     <header class="competences__header">
       <p class="competences__subtitle" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</p>
       <h2 class="competences__title" id="competences-title" data-bind={`sections.${sectionIndex}.title`}>{title}</h2>
-      {description && <p class="competences__description" data-bind={`sections.${sectionIndex}.description`}>{description}</p>}
+      <p class="competences__description" data-bind={`sections.${sectionIndex}.description`}>{description || ""}</p>
     </header>
 
     <ul class="competences__grid" role="list">
@@ -97,6 +97,7 @@ function getImageData(competence: Competence) {
                 context="default"
                 loading="lazy"
                 class="competences__image"
+                data-bind={`sections.${sectionIndex}.competences.${index}.icon`}
               />
               <figcaption class="visually-hidden">{c.title}</figcaption>
             </figure>
