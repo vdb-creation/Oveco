@@ -210,7 +210,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     // Réinsérer après le dernier script/style mais avant la fin du body
     body.appendChild(fragment);
     
-    console.log('[LiveBridge] Sections réorganisées !', sectionsInDom.map(el => el.className));
   };
 
   // Fonction pour mettre à jour le DOM avec système de sections indexées
@@ -230,7 +229,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       const prefix = `sections.${index}.${template}`;
       
-      console.log(`[LiveBridge] Section ${index}: template="${template}", prefix="${prefix}"`);
 
       // NAVBAR
       if (template === "navbar") {
@@ -559,14 +557,12 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     // 2. Si on trouve un wrapper, lui ajouter data-tina-field
     if (siWrap && !siWrap.hasAttribute('data-tina-field')) {
       (siWrap as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
-      console.log(`[LiveBridge] 🖼️ Wrapper .si-wrap lié: ${bind} -> ${tinaFieldPath}`);
       
       // Chercher les images dans le wrapper
       const imagesInWrap = siWrap.querySelectorAll('img, picture img');
       imagesInWrap.forEach((img) => {
         if (!img.hasAttribute('data-tina-field')) {
           (img as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
-          console.log(`[LiveBridge] 🖼️ Image dans wrapper: ${bind} -> ${tinaFieldPath}`);
         }
       });
     }
@@ -577,7 +573,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       imagesInElement.forEach((img) => {
         if (!img.hasAttribute('data-tina-field')) {
           (img as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
-          console.log(`[LiveBridge] 🖼️ Image dans élément si-wrap: ${bind} -> ${tinaFieldPath}`);
         }
       });
     }
@@ -589,13 +584,11 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       if (parent.classList.contains('si-wrap')) {
         if (!parent.hasAttribute('data-tina-field')) {
           (parent as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
-          console.log(`[LiveBridge] 🖼️ Wrapper trouvé dans parent (depth ${depth}): ${bind} -> ${tinaFieldPath}`);
         }
         const imagesInParentWrap = parent.querySelectorAll('img, picture img');
         imagesInParentWrap.forEach((img) => {
           if (!img.hasAttribute('data-tina-field')) {
             (img as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
-            console.log(`[LiveBridge] 🖼️ Image dans wrapper parent: ${bind} -> ${tinaFieldPath}`);
           }
         });
         break;
@@ -606,12 +599,10 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       wrapsInParent.forEach((wrap) => {
         if (!wrap.hasAttribute('data-tina-field') && wrap.closest('[data-bind]') === el) {
           (wrap as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
-          console.log(`[LiveBridge] 🖼️ Wrapper enfant trouvé: ${bind} -> ${tinaFieldPath}`);
           const imagesInWrap = wrap.querySelectorAll('img, picture img');
           imagesInWrap.forEach((img) => {
             if (!img.hasAttribute('data-tina-field')) {
               (img as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
-              console.log(`[LiveBridge] 🖼️ Image dans wrapper enfant: ${bind} -> ${tinaFieldPath}`);
             }
           });
         }
@@ -638,7 +629,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
           }
           if (foundRelated) {
             (img as HTMLElement).setAttribute('data-tina-field', tinaFieldPath);
-            console.log(`[LiveBridge] 🖼️ Image liée (proximité DOM): ${bind} -> ${tinaFieldPath}`);
           }
         }
       });
@@ -691,14 +681,12 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
   // UNIFORMITÉ : Cette fonction garantit que tous les éléments avec data-bind reçoivent data-tina-field de la même manière
   const scanAndAddTinaFields = () => {
     if (!result.data) {
-      console.warn('[LiveBridge] ⚠️ result.data est vide, impossible de scanner');
       return;
     }
     
     // Trouver le document racine avec docKey explicite
     const docRoot = pickDocRoot(result.data, docKey);
     if (!docRoot) {
-      console.warn('[LiveBridge] ⚠️ docRoot introuvable dans result.data', { docKey, 'data keys': Object.keys(result.data || {}) });
       return;
     }
     
@@ -706,7 +694,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     const elementsWithBind = $$<HTMLElement>('[data-bind]');
     
     if (elementsWithBind.length === 0) {
-      console.log('[LiveBridge] ℹ️ Aucun élément avec data-bind trouvé');
       return;
     }
     
@@ -732,7 +719,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         // Cette fonction fonctionne de manière uniforme pour toutes les sections
         const resolved = resolveObjAndProp(docRoot, bind);
         if (!resolved) {
-          console.warn(`[LiveBridge] ⚠️ resolveObjAndProp failed for ${bind}`);
           errorCount++;
           return;
         }
@@ -741,27 +727,17 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         
         // GARDE-FOU: vérifie la présence de la prop sur l'objet
         if (!obj) {
-          console.warn(`[LiveBridge] ⚠️ obj est null/undefined pour ${bind}`);
           errorCount++;
           return;
         }
         
         if (!(prop in obj)) {
-          console.warn(`[LiveBridge] ⚠️ prop "${prop}" pas dans obj pour ${bind}`, { 
-            'obj type': typeof obj,
-            'obj keys': obj && typeof obj === 'object' && !Array.isArray(obj) ? Object.keys(obj).slice(0, 15) : 'not object',
-            'prop': prop,
-            'prop exists': prop in (obj || {})
-          });
           errorCount++;
           return;
         }
         
         // Vérifier _content_source (garde-fou selon fix.md)
         if (!('_content_source' in obj)) {
-          console.warn(`[LiveBridge] ⚠️ obj sans _content_source pour ${bind}`, { 
-            'obj keys': obj && typeof obj === 'object' && !Array.isArray(obj) ? Object.keys(obj).slice(0, 15) : 'N/A',
-          });
           // On continue quand même pour les items de tableaux qui peuvent ne pas avoir _content_source
         }
         
@@ -790,7 +766,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
               if (parentObj && imageFieldName in parentObj) {
                 // Utiliser l'objet parent et le nom du champ image
                 attr = tinaField(parentObj, imageFieldName as any);
-                console.log(`[LiveBridge] 🖼️ Image .src détectée: ${bind} -> utilisant objet parent avec champ '${imageFieldName}'`);
               } else {
                 // Fallback: utiliser l'objet résolu normalement
                 attr = tinaField(obj, prop as any);
@@ -837,21 +812,17 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                   // Utiliser l'item du tableau avec le champ image
                   // Cela garantit que l'item a les bonnes métadonnées TinaCMS
                   attr = tinaField(arrayField[itemIndex], prop as any);
-                  console.log(`[LiveBridge] 🖼️ Champ image dans liste: ${bind} -> ${listFieldName}[${itemIndex}].${prop}`);
                 } else {
                   // Fallback: utiliser l'objet résolu normalement
                   attr = tinaField(obj, prop as any);
-                  console.warn(`[LiveBridge] ⚠️ Item ${itemIndex} non trouvé dans ${listFieldName}, fallback`);
                 }
               } else {
                 // Fallback: utiliser l'objet résolu normalement
                 attr = tinaField(obj, prop as any);
-                console.warn(`[LiveBridge] ⚠️ Tableau ${listFieldName} non trouvé, fallback`);
               }
             } else {
               // Pour les champs image directs hors listes, utiliser la résolution normale
               attr = tinaField(obj, prop as any);
-              console.log(`[LiveBridge] 🖼️ Champ image direct: ${bind} -> utilisant '${prop}'`);
             }
           } else {
             // Pour les autres champs, utiliser la résolution normale
@@ -893,17 +864,14 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
           }
           
         } catch (tinaFieldErr) {
-          console.error(`[LiveBridge] ❌ tinaField() error for ${bind}:`, tinaFieldErr, { obj, prop });
           errorCount++;
         }
       } catch (err) {
-        console.error(`[LiveBridge] ❌ Error resolving ${bind}:`, err);
         errorCount++;
       }
     });
     
     // Log uniforme pour toutes les pages
-    console.log(`[LiveBridge] ✅ Scan terminé : ${successCount} succès, ${skipCount} ignorés, ${errorCount} erreurs (total: ${elementsWithBind.length})`);
   };
 
   // Pas de styles CSS personnalisés - TinaCMS utilise ses propres styles par défaut
@@ -912,25 +880,14 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
   // Recherche dans plusieurs emplacements possibles de l'API TinaCMS
   const focusFieldInSidebar = (fieldPath: string) => {
     try {
-      console.log('[LiveBridge] 🎯 focusFieldInSidebar called with:', fieldPath);
       
       // MÉTHODE 1 (PRIORITAIRE): Utiliser l'API globale TinaCMS (window.tinacms)
       // ATTENTION: TinaCMS peut ne pas être chargé immédiatement, donc on essaie plusieurs fois
       if (typeof window !== 'undefined') {
         const cms = (window as any).tinacms || (window as any).__tinacms;
         
-        console.log('[LiveBridge] 🔍 Checking for TinaCMS API...');
-        console.log('[LiveBridge]   window.tinacms:', typeof (window as any).tinacms);
-        console.log('[LiveBridge]   window.__tinacms:', typeof (window as any).__tinacms);
-        console.log('[LiveBridge]   cms found:', !!cms);
         
         if (cms) {
-          console.log('[LiveBridge] 🎯 TinaCMS API found!');
-          console.log('[LiveBridge]   cms.forms:', !!cms.forms);
-          console.log('[LiveBridge]   cms.sidebar:', !!cms.sidebar);
-          console.log('[LiveBridge]   cms.setActiveField:', typeof cms.setActiveField);
-          console.log('[LiveBridge]   cms.events:', !!cms.events);
-          console.log('[LiveBridge] Trying to focus field:', fieldPath);
           
           // Essayer plusieurs formats de chemin
           const pathVariants = [
@@ -943,12 +900,11 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
           if (cms.forms && typeof cms.forms.getAll === 'function') {
             try {
               const forms = cms.forms.getAll();
-              console.log(`[LiveBridge] 📋 Found ${forms.length} forms`);
               
               // Trouver le formulaire correspondant
               let targetForm = null;
-              if (result.form) {
-                const resultFormId = (result.form as any).id || (result.form as any).name;
+              if ((result as any).form) {
+                const resultFormId = ((result as any).form as any).id || ((result as any).form as any).name;
                 targetForm = forms.find((f: any) => (f.id === resultFormId || f.name === resultFormId || f.id === resultFormId));
               }
               
@@ -959,28 +915,23 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
               
               if (targetForm) {
                 const formId = (targetForm as any).id || (targetForm as any).name;
-                console.log(`[LiveBridge] 🎯 Using form: ${formId}`);
                 
                 // Essayer avec chaque variant de chemin
                 for (const path of pathVariants) {
                   try {
                     if (typeof cms.forms.open === 'function') {
                       cms.forms.open(formId, { field: path });
-                      console.log('[LiveBridge] ✅ cms.forms.open() called with:', path);
                       return true;
                     } else if (typeof (targetForm as any).open === 'function') {
                       (targetForm as any).open({ field: path });
-                      console.log('[LiveBridge] ✅ form.open() called with:', path);
                       return true;
                     }
                   } catch (err) {
-                    console.log('[LiveBridge] ⚠️ Error with forms.open() for path:', path, err);
                     continue;
                   }
                 }
               }
             } catch (err) {
-              console.log('[LiveBridge] ⚠️ Error accessing forms API:', err);
             }
           }
           
@@ -989,7 +940,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
             for (const path of pathVariants) {
               try {
                 cms.setActiveField(path);
-                console.log('[LiveBridge] ✅ setActiveField() called with:', path);
                 return true;
               } catch (err) {
                 continue;
@@ -1006,7 +956,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                   fieldName: path,
                   fieldPath: path
                 });
-                console.log('[LiveBridge] ✅ Event dispatched for:', path);
                 return true;
               } catch (err) {
                 continue;
@@ -1019,13 +968,11 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
             try {
               if (typeof cms.sidebar.open === 'function') {
                 cms.sidebar.open();
-                console.log('[LiveBridge] ✅ Sidebar opened');
               }
               if (typeof cms.sidebar.setActiveField === 'function') {
                 for (const path of pathVariants) {
                   try {
                     cms.sidebar.setActiveField(path);
-                    console.log('[LiveBridge] ✅ Sidebar.setActiveField() called with:', path);
                     return true;
                   } catch (err) {
                     continue;
@@ -1033,27 +980,24 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                 }
               }
             } catch (err) {
-              console.log('[LiveBridge] ⚠️ Error with sidebar API:', err);
             }
           }
           
           // Méthode 5: Utiliser result.form si disponible
-          if (result.form) {
+          if ((result as any).form) {
             try {
               for (const path of pathVariants) {
                 try {
-                  const field = (result.form as any).getField?.(path) || 
-                               (result.form as any).fields?.find?.((f: any) => f.name === path || f.name?.endsWith(path));
+                  const field = ((result as any).form as any).getField?.(path) || 
+                               ((result as any).form as any).fields?.find?.((f: any) => f.name === path || f.name?.endsWith(path));
                   
                   if (field) {
                     if (typeof field.focus === 'function') {
                       field.focus();
-                      console.log('[LiveBridge] ✅ Field focused via form.getField():', path);
                       return true;
                     }
                     if (typeof field.scrollIntoView === 'function') {
                       field.scrollIntoView();
-                      console.log('[LiveBridge] ✅ Field scrolled via form.getField():', path);
                       return true;
                     }
                   }
@@ -1062,11 +1006,9 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                 }
               }
             } catch (err) {
-              console.log('[LiveBridge] ⚠️ Error using result.form:', err);
             }
           }
         } else {
-          console.log('[LiveBridge] ⚠️ TinaCMS API not found on window. Maybe not loaded yet?');
         }
       }
       
@@ -1079,7 +1021,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
           // Essayer setActiveField (méthode préférée)
           if (typeof cms.setActiveField === 'function') {
             cms.setActiveField(fieldPath);
-            console.log('[LiveBridge] ✅ Field focused via setActiveField:', fieldPath);
             return true;
           }
           
@@ -1090,7 +1031,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
               fieldName: fieldPath,
               fieldPath: fieldPath
             });
-            console.log('[LiveBridge] ✅ Field focused via events API:', fieldPath);
             return true;
           }
           
@@ -1101,7 +1041,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
             }
             if (typeof cms.sidebar.setActiveField === 'function') {
               cms.sidebar.setActiveField(fieldPath);
-              console.log('[LiveBridge] ✅ Field focused via sidebar API:', fieldPath);
               return true;
             }
           }
@@ -1148,17 +1087,14 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                     const iframeSidebar = iframeDoc.querySelector('aside, [class*="sidebar"], [id*="sidebar"]') as HTMLElement;
                     if (iframeSidebar) {
                       sidebar = iframeSidebar;
-                      console.log('[LiveBridge] 📍 Sidebar found in iframe via selector:', selector);
                       break;
                     }
                   }
                 } catch (err) {
                   // Cross-origin iframe, on ne peut pas y accéder
-                  console.log('[LiveBridge] ⚠️ Cannot access iframe content (cross-origin):', err);
                 }
               } else {
                 sidebar = element;
-                console.log('[LiveBridge] 📍 Sidebar found via selector:', selector);
                 break;
               }
             }
@@ -1169,21 +1105,17 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         
         // Si pas de sidebar trouvée, chercher toutes les structures possibles pour debug
         if (!sidebar) {
-          console.log('[LiveBridge] 🔍 Debugging: searching for any sidebar-like elements...');
           
           // Chercher tous les aside
           const allAsides = document.querySelectorAll('aside');
-          console.log(`[LiveBridge]   Found ${allAsides.length} <aside> elements`);
           allAsides.forEach((aside, i) => {
             const classes = Array.from(aside.classList).join(', ');
             const id = aside.id || 'no-id';
             const styles = window.getComputedStyle(aside);
-            console.log(`[LiveBridge]     Aside ${i}: classes="${classes}", id="${id}", display="${styles.display}", position="${styles.position}"`);
           });
           
           // Chercher tous les éléments avec "sidebar" dans la classe ou l'id
           const sidebarLike = document.querySelectorAll('[class*="sidebar" i], [id*="sidebar" i], [class*="tina" i]');
-          console.log(`[LiveBridge]   Found ${sidebarLike.length} sidebar-like elements`);
           
           // Afficher les premiers pour debug avec plus de détails
           Array.from(sidebarLike).slice(0, 10).forEach((el, i) => {
@@ -1192,44 +1124,35 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
             const tagName = el.tagName;
             const styles = window.getComputedStyle(el);
             const isVisible = styles.display !== 'none' && styles.visibility !== 'hidden';
-            console.log(`[LiveBridge]     Element ${i}: tag="${tagName}", classes="${classes}", id="${id}", visible=${isVisible}`);
           });
           
           // Chercher les iframes (TinaCMS pourrait charger la sidebar dans un iframe)
           const iframes = document.querySelectorAll('iframe');
-          console.log(`[LiveBridge]   Found ${iframes.length} iframes`);
           iframes.forEach((iframe, i) => {
-            console.log(`[LiveBridge]     Iframe ${i}: src="${(iframe as HTMLIFrameElement).src}", title="${(iframe as HTMLIFrameElement).title}"`);
           });
           
           // Chercher les portals React (TinaCMS utilise souvent React Portals)
           const portals = document.querySelectorAll('[data-portal], [class*="Portal"], [id*="portal"]');
-          console.log(`[LiveBridge]   Found ${portals.length} portal-like elements`);
           
           // Chercher tous les forms
           const allForms = document.querySelectorAll('form');
-          console.log(`[LiveBridge]   Found ${allForms.length} forms`);
           Array.from(allForms).slice(0, 5).forEach((form, i) => {
             const formId = form.id || 'no-id';
             const formClasses = Array.from(form.classList).join(', ');
             const inputs = form.querySelectorAll('input, textarea').length;
-            console.log(`[LiveBridge]     Form ${i}: id="${formId}", classes="${formClasses}", inputs=${inputs}`);
           });
           
           // Si aucune sidebar trouvée, ne PAS chercher dans tout le document
           // car ça risquerait de trouver des éléments de la page au lieu des champs de formulaire
-          console.log('[LiveBridge] ⚠️ Sidebar not found, cannot search for field in form');
           
           // Tentative alternative : chercher directement le formulaire TinaCMS
           const forms = document.querySelectorAll('form[class*="tina" i], form[id*="tina" i]');
           if (forms.length > 0) {
-            console.log(`[LiveBridge] 📋 Found ${forms.length} TinaCMS forms, trying to use first form`);
             sidebar = forms[0] as HTMLElement;
           } else {
             // Essayer d'utiliser le premier form qui a des inputs (probablement le formulaire TinaCMS)
             const formWithInputs = Array.from(allForms).find(f => f.querySelectorAll('input, textarea').length > 0);
             if (formWithInputs) {
-              console.log(`[LiveBridge] 📋 Using form with inputs as sidebar`);
               sidebar = formWithInputs as HTMLElement;
             } else {
               return false;
@@ -1313,18 +1236,14 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
           `input[id*="${fieldName}"], textarea[id*="${fieldName}"]`
         );
         
-        console.log('[LiveBridge] 🔍 Searching for field:', fieldPath, 'with', selectors.length, 'selectors');
-        console.log('[LiveBridge] 📋 Field variants:', fieldVariants);
         
         // D'abord, essayer de trouver tous les inputs/textarea dans la sidebar pour debug
         if (sidebar) {
           const allInputs = Array.from(sidebar.querySelectorAll('input, textarea'));
-          console.log('[LiveBridge] 📊 Total inputs/textarea in sidebar:', allInputs.length);
           if (allInputs.length > 0 && allInputs.length < 20) {
             // Logger les premiers pour voir la structure
             allInputs.slice(0, 10).forEach((input, i) => {
               const name = (input as HTMLInputElement).name || (input as HTMLInputElement).id || 'no-name';
-              console.log(`[LiveBridge]   Input ${i}: name="${name}"`);
             });
           }
         }
@@ -1333,7 +1252,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         const currentTime = Date.now();
         if (lastFocusedFieldRef.current === fieldPath && 
             currentTime - lastFocusedTimeRef.current < FOCUS_COOLDOWN) {
-          console.log('[LiveBridge] ⏸️ Field focus skipped (cooldown):', fieldPath);
           return false;
         }
         
@@ -1345,11 +1263,9 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
               // Vérifier que c'est bien un élément de formulaire (pas un élément de la page)
               if (!fieldInput.hasAttribute('name') && !fieldInput.closest('form')) {
                 // Si pas d'attribut name et pas dans un form, c'est probablement pas un champ de formulaire
-                console.log('[LiveBridge] ⚠️ Skipping element (not a form field):', selector);
                 continue;
               }
               
-              console.log('[LiveBridge] ✅ Field found via selector:', selector);
               
               // Mettre à jour les refs pour éviter les boucles
               lastFocusedFieldRef.current = fieldPath;
@@ -1363,13 +1279,10 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                 try {
                   fieldInput.focus();
                   fieldInput.select?.();
-                  console.log('[LiveBridge] ✅ Input/textarea focused:', selector);
                 } catch (err) {
-                  console.log('[LiveBridge] ⚠️ Error focusing field:', err);
                 }
               }, 200);
               
-              console.log('[LiveBridge] ✅ Field scrolled to:', fieldPath);
               return true;
             }
           } catch (err) {
@@ -1418,7 +1331,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                 // Vérifier que le nom correspond approximativement au fieldPath
                 const inputName = input.name.toLowerCase();
                 if (inputName.includes(fieldNameLower) || inputName.includes(fieldPath.toLowerCase().replace(/sections\.\d+\./, ''))) {
-                  console.log('[LiveBridge] ✅ Field found via label text matching:', fieldName);
                   
                   // Protection contre les boucles
                   if (lastFocusedFieldRef.current === fieldPath && 
@@ -1441,7 +1353,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
           }
         }
         
-        console.log('[LiveBridge] ⚠️ Field not found in DOM:', fieldPath);
       }
       
       // Méthode 3: Utiliser l'API native de TinaCMS pour l'édition visuelle
@@ -1458,7 +1369,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
             // Essayer d'utiliser l'API pour ouvrir/focuser le champ
             if (tinacmsAPI.setActiveField) {
               tinacmsAPI.setActiveField(fieldPath);
-              console.log('[LiveBridge] ✅ Field activated via TinaCMS API:', fieldPath);
               return true;
             }
             
@@ -1479,7 +1389,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                     // Focuser le champ
                     if (field.focus) {
                       field.focus();
-                      console.log('[LiveBridge] ✅ Field focused via form API:', fieldPath);
                       return true;
                     }
                   }
@@ -1514,16 +1423,12 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
             document.dispatchEvent(event);
           });
           
-          console.log('[LiveBridge] 📢 Events dispatched to window and document:', fieldPath);
         }
       } catch (err) {
-        console.log('[LiveBridge] ⚠️ Error in Method 3:', err);
       }
       
-      console.log('[LiveBridge] ⚠️ Could not focus field:', fieldPath);
       return false;
     } catch (err) {
-      console.log('[LiveBridge] ❌ Error focusing field:', err);
       return false;
     }
   };
@@ -1582,7 +1487,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
             const path = editableElement?.getAttribute('data-tina-field');
             if (!path) return;
             
-            console.log('[LiveBridge] 🖱️ Single click detected on:', path);
             
             // Essayer d'ouvrir la sidebar et focuser le champ
             const openAndFocus = () => {
@@ -1595,11 +1499,9 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                     if (cms.sidebar) {
                       if (typeof cms.sidebar.isOpen === 'function' && !cms.sidebar.isOpen()) {
                         cms.sidebar.open();
-                        console.log('[LiveBridge] ✅ Sidebar opened');
                       } else if (typeof cms.sidebar.open === 'function') {
                         // Ouvrir même si on ne sait pas si elle est ouverte
                         cms.sidebar.open();
-                        console.log('[LiveBridge] ✅ Sidebar open() called');
                       }
                     }
                     
@@ -1610,10 +1512,8 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                       if (formId && typeof cms.forms.open === 'function') {
                         try {
                           cms.forms.open(formId, { field: path });
-                          console.log('[LiveBridge] ✅ Form opened with field:', path);
                           return;
                         } catch (err) {
-                          console.log('[LiveBridge] ⚠️ Error with forms.open:', err);
                         }
                       }
                     }
@@ -1622,10 +1522,8 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                     if (typeof cms.setActiveField === 'function') {
                       try {
                         cms.setActiveField(path);
-                        console.log('[LiveBridge] ✅ Field set active:', path);
                         return;
                       } catch (err) {
-                        console.log('[LiveBridge] ⚠️ Error with setActiveField:', err);
                       }
                     }
                     
@@ -1637,10 +1535,8 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                           fieldName: path,
                           fieldPath: path
                         });
-                        console.log('[LiveBridge] ✅ Event dispatched:', path);
                         return;
                       } catch (err) {
-                        console.log('[LiveBridge] ⚠️ Error with events.dispatch:', err);
                       }
                     }
                   }
@@ -1649,7 +1545,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                 // Fallback: Essayer de focuser dans le DOM
                 focusFieldInSidebar(path);
               } catch (err) {
-                console.log('[LiveBridge] ⚠️ Error in openAndFocus:', err);
               }
             };
             
@@ -1664,19 +1559,16 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     };
     
     const handleDoubleClick = (e: MouseEvent) => {
-      console.log('[LiveBridge] 🖱️ handleDoubleClick FIRED!', e.target);
       
       const target = e.target as HTMLElement;
       
       // Trouver l'élément avec data-tina-field le plus proche
       let editableElement: HTMLElement | null = target.closest('[data-tina-field]');
       
-      console.log('[LiveBridge] 🔍 editableElement found:', !!editableElement);
       
       if (editableElement && editableElement.hasAttribute('data-tina-field')) {
         const fieldPath = editableElement.getAttribute('data-tina-field');
         
-        console.log('[LiveBridge] 📍 fieldPath:', fieldPath);
         
         if (fieldPath) {
           // Annuler le timeout du clic simple s'il existe
@@ -1689,110 +1581,80 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
           // e.preventDefault();
           // e.stopPropagation();
           
-          console.log('[LiveBridge] 🎯 Double-click detected on:', fieldPath);
           
           // Pour le double-clic, essayer plusieurs méthodes pour ouvrir et focuser
           const openAndFocus = () => {
-            console.log('[LiveBridge] 🎯 openAndFocus() called for:', fieldPath);
             try {
               if (typeof window !== 'undefined') {
                 const cms = (window as any).tinacms || (window as any).__tinacms;
                 
-                console.log('[LiveBridge] 🔍 Checking TinaCMS in openAndFocus...');
-                console.log('[LiveBridge]   cms exists:', !!cms);
-                console.log('[LiveBridge]   result.form exists:', !!result.form);
                 
                 if (cms) {
-                  console.log('[LiveBridge] ✅ TinaCMS API available in openAndFocus');
                   
                   // Méthode 1: Ouvrir la sidebar
                   if (cms.sidebar && typeof cms.sidebar.open === 'function') {
                     try {
                       cms.sidebar.open();
-                      console.log('[LiveBridge] ✅ Sidebar.open() called');
                     } catch (err) {
-                      console.log('[LiveBridge] ⚠️ Error opening sidebar:', err);
                     }
                   } else {
-                    console.log('[LiveBridge] ⚠️ cms.sidebar.open not available');
                   }
                   
                   // Méthode 2: Utiliser cms.forms.open() avec le formulaire actif
                   if (cms.forms && typeof cms.forms.getAll === 'function') {
                     try {
                       const forms = cms.forms.getAll();
-                      console.log(`[LiveBridge] 📋 Found ${forms.length} forms`);
                       
                       let formId: string | undefined;
                       if (result.form) {
                         formId = (result.form as any).id || (result.form as any).name;
-                        console.log('[LiveBridge] 📋 result.form.id:', formId);
                       }
                       
                       if (!formId && forms.length > 0) {
                         formId = (forms[0] as any)?.id || (forms[0] as any)?.name;
-                        console.log('[LiveBridge] 📋 Using first form id:', formId);
                       }
                       
                       if (formId && typeof cms.forms.open === 'function') {
                         try {
-                          console.log('[LiveBridge] 🚀 Calling cms.forms.open() with formId:', formId, 'field:', fieldPath);
                           cms.forms.open(formId, { field: fieldPath });
-                          console.log('[LiveBridge] ✅ cms.forms.open() called successfully');
                           return;
                         } catch (err) {
-                          console.log('[LiveBridge] ⚠️ Error with forms.open:', err);
                         }
                       } else {
-                        console.log('[LiveBridge] ⚠️ formId or cms.forms.open not available');
-                        console.log('[LiveBridge]   formId:', formId);
-                        console.log('[LiveBridge]   cms.forms.open type:', typeof cms.forms.open);
                       }
                     } catch (err) {
-                      console.log('[LiveBridge] ⚠️ Error accessing forms:', err);
                     }
                   } else {
-                    console.log('[LiveBridge] ⚠️ cms.forms.getAll not available');
                   }
                   
                   // Méthode 3: setActiveField
                   if (typeof cms.setActiveField === 'function') {
                     try {
-                      console.log('[LiveBridge] 🚀 Calling cms.setActiveField() with:', fieldPath);
                       cms.setActiveField(fieldPath);
-                      console.log('[LiveBridge] ✅ setActiveField() called successfully');
                       return;
                     } catch (err) {
-                      console.log('[LiveBridge] ⚠️ Error with setActiveField:', err);
                     }
                   } else {
-                    console.log('[LiveBridge] ⚠️ cms.setActiveField not available');
                   }
                   
                   // Méthode 4: Events API
                   if (cms.events && typeof cms.events.dispatch === 'function') {
                     try {
-                      console.log('[LiveBridge] 🚀 Dispatching event for:', fieldPath);
                       cms.events.dispatch({
                         type: 'forms:fields:focus',
                         fieldName: fieldPath,
                         fieldPath: fieldPath
                       });
-                      console.log('[LiveBridge] ✅ Event dispatched successfully');
                       return;
                     } catch (err) {
-                      console.log('[LiveBridge] ⚠️ Error with events.dispatch:', err);
                     }
                   } else {
-                    console.log('[LiveBridge] ⚠️ cms.events.dispatch not available');
                   }
                 } else {
-                  console.log('[LiveBridge] ⚠️ TinaCMS API not found on window');
                 }
               }
               
               // Méthode 5: Essayer de focuser dans le DOM (fallback)
-              console.log('[LiveBridge] 🔍 Falling back to DOM search for:', fieldPath);
               
               // Essayer plusieurs variantes du chemin de champ
               const pathVariants = [
@@ -1806,16 +1668,13 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
               for (const variant of pathVariants) {
                 focused = focusFieldInSidebar(variant);
                 if (focused) {
-                  console.log('[LiveBridge] ✅ DOM focus succeeded with variant:', variant);
                   break;
                 }
               }
               
               if (!focused) {
-                console.log('[LiveBridge] ⚠️ DOM focus failed for all variants');
               }
             } catch (err) {
-              console.log('[LiveBridge] ❌ Error in openAndFocus:', err);
             }
           };
           
@@ -1842,7 +1701,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       const customEvent = e as CustomEvent;
       const fieldPath = customEvent.detail?.fieldPath || customEvent.detail?.fieldName;
       if (fieldPath) {
-        console.log('[LiveBridge] 📢 TinaCMS field click event detected:', fieldPath);
         // Aider à focuser après que TinaCMS ait fait son travail
         setTimeout(() => {
           focusFieldInSidebar(fieldPath);
@@ -1906,7 +1764,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
   // Mise à jour quand result.data change
   useEffect(() => {
-    console.log('[LiveBridge] data a changé !', result.data);
     
     // Extraire les données, quelle que soit la collection
     const collectionData = result.data?.home || result.data?.about_fr || result.data?.about_en || result.data?.construction_fr || result.data?.construction_en || result.data?.homeEn;
@@ -1920,7 +1777,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     
     // Si l'ordre a changé, réorganiser le DOM
     if (previousOrderRef.current && previousOrderRef.current !== currentOrder) {
-      console.log('[LiveBridge] 🔄 Ordre changé ! Réorganisation...');
       reorderSections(H.sections);
     }
     previousOrderRef.current = currentOrder;
@@ -1931,7 +1787,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       setTimeout(scanAndAddTinaFields, 100);
     } else {
       // Même sans données, scanner les data-bind pour ajouter data-tina-field
-      console.log('[LiveBridge] Pas de données GraphQL, scan des data-bind...');
       scanAndAddTinaFields();
       // Retry multiple fois pour être sûr de capturer tous les éléments
       setTimeout(scanAndAddTinaFields, 200);

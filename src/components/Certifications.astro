@@ -160,13 +160,23 @@ function normalizePath(input?: string): string {
   grid-template-columns: repeat(auto-fit, minmax(240px, 287px));
   gap: clamp(12px, 2.5vw, 21px);
   justify-content: center;
+  align-items: center;
   width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .certifications__row {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 287px));
+    justify-items: center;
+  }
 }
 
 @media (max-width: 480px) {
   .certifications__row {
     display: flex;
     align-items: stretch;
+    justify-content: flex-start;
     overflow-x: auto;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;

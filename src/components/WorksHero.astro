@@ -136,11 +136,21 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   z-index: 1;
 }
 
-@media (max-width: 1024px) {
+/* Tablette: ajuster layout avant de passer en colonne */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .works-hero__inner {
+    gap: clamp(20px, 3vw, 40px);
+  }
+}
+
+/* Tablette et mobile: passage en colonne */
+@media (max-width: 768px) {
   .works-hero__inner {
     flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
-    gap: clamp(16px, 4vw, 32px);
+    align-items: center;
+    gap: clamp(24px, 5vw, 40px);
     text-align: center;
   }
 }
@@ -161,7 +171,22 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   order: 3;
 }
 
-@media (max-width: 1024px) {
+/* Desktop: afficher les images */
+@media (min-width: 1025px) {
+  .works-hero__side {
+    display: flex;
+  }
+}
+
+/* Tablette: cacher les images */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .works-hero__side {
+    display: none;
+  }
+}
+
+/* Mobile: cacher les images */
+@media (max-width: 768px) {
   .works-hero__side {
     display: none;
   }
@@ -216,7 +241,24 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   gap: clamp(12px, 3vw, 18px);
   padding-inline: clamp(16px, 4vw, 32px);
   flex-shrink: 1;
+  flex-grow: 1;
   order: 2;
+}
+
+/* Desktop: largeur optimale avec images */
+@media (min-width: 1025px) {
+  .works-hero__content {
+    max-width: 656px;
+  }
+}
+
+/* Tablette et Mobile: prendre toute la largeur */
+@media (max-width: 1024px) {
+  .works-hero__content {
+    width: 100%;
+    max-width: 100%;
+    padding-inline: clamp(16px, 4vw, 48px);
+  }
 }
 
 .works-hero__header {
