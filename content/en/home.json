@@ -10,7 +10,7 @@
       "title": "Building the future",
       "description": "Engineers-installers by your side.",
       "ctaLabel": "Contact us",
-      "ctaHref": "/contact",
+      "ctaHref": "/#contact",
       "mediaLeft": {
         "src": "/uploads/hero/maison-build.webp",
         "alt": "Building the future"

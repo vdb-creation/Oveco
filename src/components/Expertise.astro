@@ -58,7 +58,7 @@ const {
   <div class="container">
     <div class="expertise__container">
       <header class="expertise__header">
-        <h3 class="expertise__subtitle" aria-label="Section nos expertises" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</h3>
+        <p class="expertise__subtitle" aria-label="Section nos expertises" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</p>
         <h2 class="expertise__title" id="expertise-title" data-bind={`sections.${sectionIndex}.title`}>{title}</h2>
         <p class="expertise__description" set:html={description} data-bind={`sections.${sectionIndex}.description`} />
       </header>
@@ -83,7 +83,7 @@ const {
                   data-bind={`sections.${sectionIndex}.cards.${index}.icon`}
                 />
                 <div class="expertise__card-content">
-                  <h4 class="expertise__card-title" itemprop="name" data-bind={`sections.${sectionIndex}.cards.${index}.title`} set:html={card.title} />
+                  <h3 class="expertise__card-title" itemprop="name" data-bind={`sections.${sectionIndex}.cards.${index}.title`} set:html={card.title} />
                   <p class="expertise__card-description" itemprop="description" data-bind={`sections.${sectionIndex}.cards.${index}.description`} set:html={card.description} />
                 </div>
               </article>

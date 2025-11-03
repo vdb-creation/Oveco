@@ -7,7 +7,7 @@
       "title": "Construisons l'avenir",
       "description": "Des ingénieurs-installateurs à vos côtés.",
       "ctaText": "Nous contacter",
-      "ctaUrl": "/contact",
+      "ctaUrl": "/#contact",
       "images": [
         {
           "src": "/uploads/hero/maison-build.webp",

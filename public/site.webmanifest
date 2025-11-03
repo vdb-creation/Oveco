@@ -9,12 +9,7 @@
   "icons": [
     {
       "src": "/uploads/icons/logo.webp",
-      "sizes": "512x512",
-      "type": "image/webp"
-    },
-    {
-      "src": "/uploads/icons/logo.webp",
-      "sizes": "180x180",
+      "sizes": "177x73",
       "type": "image/webp"
     }
   ]

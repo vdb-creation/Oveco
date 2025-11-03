@@ -155,7 +155,7 @@ if (import.meta.env.DEV) {
     {showSectionHeader && (
       <div class="oveco__section-header">
         <div class="oveco__section-content">
-          <h3 class="oveco__section-subtitle" data-bind={`sections.${sectionIndex}.sectionSubtitle`}>{sectionSubtitle || ""}</h3>
+          <p class="oveco__section-subtitle" data-bind={`sections.${sectionIndex}.sectionSubtitle`}>{sectionSubtitle || ""}</p>
           <h2 class="oveco__section-title" data-bind={`sections.${sectionIndex}.sectionTitle`} set:html={sectionTitle || ""} />
           <p class="oveco__section-description" data-bind={`sections.${sectionIndex}.sectionDescription`} set:html={sectionDescription || ""} />
         </div>

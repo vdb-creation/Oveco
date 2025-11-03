@@ -132,7 +132,7 @@ const {
     "ossature bois", "panneaux solaires", "pompe à chaleur", "rénovation énergétique"
   ],
   structuredData,
-  noindex = true,
+  noindex = false,
   ogType = "website",
   author = "Oveco",
 } = Astro.props as SEOProps;
@@ -332,8 +332,8 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-
 		<ViewTransitions />
 	</head>
 	<body>
-		{/* Charger LiveBridge pour toutes les pages si TinaCMS est configuré */}
-		{forceLive && (
+		{/* Charger LiveBridge UNIQUEMENT en développement */}
+		{forceLive && import.meta.env.DEV && (
 			<LiveBridge client:load home={tinaData || { data: {}, query: '', variables: {} }} docKey={tinaDocKey} />
 		)}
 		
