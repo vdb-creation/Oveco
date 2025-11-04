@@ -706,21 +706,28 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     console.log(`[LiveBridge] ${elementsWithBind.length} éléments avec data-bind trouvés`);
     
     // Vérifier si le formulaire existe
-    if (!result.form) {
-      console.warn('[LiveBridge] Aucun formulaire TinaCMS trouvé. Les attributs data-tina-field seront ajoutés sans validation.');
-      // Même sans formulaire, on peut ajouter les attributs data-tina-field basés sur data-bind
-      // Cela permettra à TinaCMS de détecter les éléments même si le formulaire n'est pas encore chargé
+    // Si pas de formulaire ET pas de données, utiliser le mode fallback minimal
+    // Sinon, continuer avec le traitement normal qui utilisera tinaField() quand le formulaire sera disponible
+    if (!result.form && !result.data) {
+      console.warn('[LiveBridge] Aucun formulaire ni données TinaCMS trouvés. Mode fallback minimal activé.');
+      // Mode fallback minimal: utiliser le data-bind tel quel temporairement
+      // Les attributs seront corrigés quand le formulaire sera disponible via le re-scan
+      let fallbackCount = 0;
       elementsWithBind.forEach((el) => {
         const bind = el.getAttribute('data-bind');
         if (bind && !el.hasAttribute('data-tina-field')) {
-          // Ajouter directement l'attribut data-tina-field basé sur data-bind
-          // TinaCMS pourra ensuite le valider quand le formulaire sera chargé
+          // Utiliser le bind tel quel temporairement
+          // Le re-scan quand le formulaire sera disponible corrigera avec le bon format
           el.setAttribute('data-tina-field', bind);
+          fallbackCount++;
         }
       });
-      console.log(`[LiveBridge] ${elementsWithBind.length} éléments annotés avec data-tina-field (mode fallback)`);
+      console.log(`[LiveBridge] ${fallbackCount} éléments annotés temporairement avec data-tina-field (mode fallback minimal)`);
       return;
     }
+    
+    // Si on a un formulaire OU des données, continuer avec le traitement normal
+    // Même sans formulaire, si on a des données, on peut préparer pour quand le formulaire sera disponible
     
     if (!result.data) {
       console.warn('[LiveBridge] result.data est vide, impossible de résoudre les chemins TinaCMS');
@@ -747,11 +754,16 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         return;
       }
       
-      // Vérifier si l'élément a déjà un data-tina-field (éviter de le réécraser)
-      if (el.hasAttribute('data-tina-field')) {
+      // Vérifier si l'élément a déjà un data-tina-field
+      // Si le formulaire est disponible, on peut réécrire pour corriger le format
+      // Sinon, on skip pour éviter de réécraser avec un format incorrect
+      const hasExistingField = el.hasAttribute('data-tina-field');
+      if (hasExistingField && !result.form) {
         skipCount++;
         return;
       }
+      // Si le formulaire est disponible, on peut réécrire même si l'attribut existe déjà
+      // Cela permet de corriger les attributs ajoutés par le mode fallback
       
       try {
         // Résoudre l'objet et la propriété depuis docRoot (pas result.data)
@@ -871,6 +883,11 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
           // UNIFORMITÉ : Tous les éléments reçoivent data-tina-field de la même manière
           el.setAttribute('data-tina-field', attr);
           successCount++;
+          
+          // Log pour debug: vérifier le format généré
+          if (successCount <= 5) { // Log seulement les 5 premiers pour ne pas polluer
+            console.log(`[LiveBridge] Attribut ajouté: data-bind="${bind}" -> data-tina-field="${attr}"`);
+          }
           
           // Propagation automatique vers les images et wrappers
           // Détecter si c'est un champ d'image (src, image, url, link, cta, icon)
@@ -1774,16 +1791,25 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
   // Scanner une fois au montage et quand le DOM change
   useEffect(() => {
     // Fonction de scan avec retry multiple pour capturer tous les composants
+    // IMPORTANT: Le scan doit se déclencher immédiatement même sans formulaire
+    // pour que le mode fallback fonctionne en production
     const scanWithRetry = () => {
       scanAndAddTinaFields();
       // Retry après plusieurs délais pour capturer les composants chargés progressivement
       setTimeout(scanAndAddTinaFields, 100);
+      setTimeout(scanAndAddTinaFields, 300);
       setTimeout(scanAndAddTinaFields, 500);
       setTimeout(scanAndAddTinaFields, 1000);
+      setTimeout(scanAndAddTinaFields, 2000);
     };
     
-    // Scanner immédiatement avec retry
-    scanWithRetry();
+    // Attendre que le DOM soit prêt
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', scanWithRetry);
+    } else {
+      // DOM déjà prêt, scanner immédiatement
+      scanWithRetry();
+    }
     
     // Observer les changements du DOM
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -1803,6 +1829,7 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     return () => {
       clearTimeout(timeoutId);
       observer.disconnect();
+      document.removeEventListener('DOMContentLoaded', scanWithRetry);
     };
   }, []);
 
@@ -1842,6 +1869,20 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
   useEffect(() => {
     if (result.form) {
       console.log('[LiveBridge] Formulaire détecté, re-scan des éléments');
+      
+      // Debug: Afficher les champs disponibles dans le formulaire
+      try {
+        const form = result.form as any;
+        const formFields = form.fields || form.getAllFields?.() || [];
+        if (formFields.length > 0) {
+          console.log('[LiveBridge] Champs disponibles dans le formulaire (premiers 10):', 
+            formFields.slice(0, 10).map((f: any) => f.name || f.path || f.key).filter(Boolean)
+          );
+        }
+      } catch (e) {
+        // Ignorer les erreurs de debug
+      }
+      
       // Scanner avec retry quand le formulaire est disponible
       setTimeout(scanAndAddTinaFields, 100);
       setTimeout(scanAndAddTinaFields, 500);
