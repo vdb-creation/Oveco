@@ -706,30 +706,60 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     console.log(`[LiveBridge] ${elementsWithBind.length} éléments avec data-bind trouvés`);
     
     // Vérifier si le formulaire existe
-    // Si pas de formulaire ET pas de données, utiliser le mode fallback minimal
-    // Sinon, continuer avec le traitement normal qui utilisera tinaField() quand le formulaire sera disponible
-    if (!result.form && !result.data) {
-      console.warn('[LiveBridge] Aucun formulaire ni données TinaCMS trouvés. Mode fallback minimal activé.');
-      // Mode fallback minimal: utiliser le data-bind tel quel temporairement
-      // Les attributs seront corrigés quand le formulaire sera disponible via le re-scan
+    // Si pas de formulaire, utiliser le mode fallback pour permettre à TinaCMS de détecter les éléments
+    // Le mode fallback est crucial en production où les requêtes GraphQL peuvent échouer
+    if (!result.form) {
+      console.warn('[LiveBridge] Aucun formulaire TinaCMS trouvé. Mode fallback activé.');
+      
+      // Vérifier si on a des données valides pour essayer de convertir les chemins
+      const hasValidData = result.data && Object.keys(result.data).length > 0;
+      const docRoot = hasValidData ? pickDocRoot(result.data, docKey) : null;
+      
       let fallbackCount = 0;
       elementsWithBind.forEach((el) => {
         const bind = el.getAttribute('data-bind');
         if (bind && !el.hasAttribute('data-tina-field')) {
-          // Utiliser le bind tel quel temporairement
-          // Le re-scan quand le formulaire sera disponible corrigera avec le bon format
-          el.setAttribute('data-tina-field', bind);
+          let tinaFieldPath = bind;
+          
+          // Si on a un docRoot valide, essayer de convertir le chemin correctement
+          if (docRoot) {
+            const resolved = resolveObjAndProp(docRoot, bind);
+            if (resolved) {
+              // Convertir sections.0.hero.subtitle -> sections.0.subtitle
+              const bindParts = bind.split('.');
+              if (bindParts[0] === 'sections' && bindParts.length >= 3) {
+                const sectionIndex = bindParts[1];
+                const fieldName = bindParts[bindParts.length - 1];
+                // Construire le chemin sans le template du milieu
+                tinaFieldPath = `sections.${sectionIndex}.${fieldName}`;
+              }
+            }
+          }
+          
+          // Utiliser le chemin converti ou le bind original
+          el.setAttribute('data-tina-field', tinaFieldPath);
           fallbackCount++;
         }
       });
-      console.log(`[LiveBridge] ${fallbackCount} éléments annotés temporairement avec data-tina-field (mode fallback minimal)`);
-      return;
+      console.log(`[LiveBridge] ${fallbackCount} éléments annotés avec data-tina-field (mode fallback)`);
+      
+      // En production, même sans données, on doit quand même ajouter les attributs
+      // pour que TinaCMS puisse détecter les éléments éditables
+      // Le mode fallback a déjà ajouté les attributs, donc on peut retourner
+      // Si on a des données valides, on continue pour essayer d'améliorer avec tinaField()
+      if (!hasValidData || !docRoot) {
+        // Pas de données, mais on a déjà ajouté les attributs en mode fallback
+        // C'est suffisant pour que TinaCMS détecte les éléments
+        return;
+      }
+      // Si on a des données, continuer pour essayer d'utiliser tinaField() si possible
+      // mais les attributs sont déjà ajoutés en mode fallback, donc ça fonctionnera même si ça échoue
     }
     
     // Si on a un formulaire OU des données, continuer avec le traitement normal
     // Même sans formulaire, si on a des données, on peut préparer pour quand le formulaire sera disponible
     
-    if (!result.data) {
+    if (!result.data || Object.keys(result.data).length === 0) {
       console.warn('[LiveBridge] result.data est vide, impossible de résoudre les chemins TinaCMS');
       return;
     }
@@ -1794,22 +1824,30 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     // IMPORTANT: Le scan doit se déclencher immédiatement même sans formulaire
     // pour que le mode fallback fonctionne en production
     const scanWithRetry = () => {
+      // Scanner immédiatement
       scanAndAddTinaFields();
       // Retry après plusieurs délais pour capturer les composants chargés progressivement
+      // En production, les retries sont cruciaux car le DOM peut se charger lentement
       setTimeout(scanAndAddTinaFields, 100);
       setTimeout(scanAndAddTinaFields, 300);
       setTimeout(scanAndAddTinaFields, 500);
       setTimeout(scanAndAddTinaFields, 1000);
       setTimeout(scanAndAddTinaFields, 2000);
+      setTimeout(scanAndAddTinaFields, 3000); // Retry supplémentaire pour production
     };
     
-    // Attendre que le DOM soit prêt
+    // Scanner immédiatement même si le DOM n'est pas complètement chargé
+    // Le mode fallback fonctionnera même sans données complètes
+    scanWithRetry();
+    
+    // Attendre aussi que le DOM soit complètement prêt
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', scanWithRetry);
-    } else {
-      // DOM déjà prêt, scanner immédiatement
-      scanWithRetry();
+    } else if (document.readyState === 'interactive') {
+      // DOM presque prêt, scanner dans un court délai
+      setTimeout(scanWithRetry, 100);
     }
+    // Si document.readyState === 'complete', scanWithRetry() a déjà été appelé
     
     // Observer les changements du DOM
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -1826,10 +1864,27 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       attributeFilter: ['data-bind', 'data-tina-field']
     });
     
+    // Scanner immédiatement même si le DOM n'est pas complètement chargé
+    // Le mode fallback fonctionnera même sans données complètes
+    scanWithRetry();
+    
+    // Attendre aussi que le DOM soit complètement prêt
+    let domLoadedHandler: (() => void) | null = null;
+    if (document.readyState === 'loading') {
+      domLoadedHandler = scanWithRetry;
+      document.addEventListener('DOMContentLoaded', domLoadedHandler);
+    } else if (document.readyState === 'interactive') {
+      // DOM presque prêt, scanner dans un court délai
+      setTimeout(scanWithRetry, 100);
+    }
+    // Si document.readyState === 'complete', scanWithRetry() a déjà été appelé
+    
     return () => {
       clearTimeout(timeoutId);
       observer.disconnect();
-      document.removeEventListener('DOMContentLoaded', scanWithRetry);
+      if (domLoadedHandler) {
+        document.removeEventListener('DOMContentLoaded', domLoadedHandler);
+      }
     };
   }, []);
 
