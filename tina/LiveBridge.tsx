@@ -710,16 +710,41 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       console.warn('[LiveBridge] Aucun formulaire TinaCMS trouvé. Les attributs data-tina-field seront ajoutés sans validation.');
       // Même sans formulaire, on peut ajouter les attributs data-tina-field basés sur data-bind
       // Cela permettra à TinaCMS de détecter les éléments même si le formulaire n'est pas encore chargé
+      let fallbackCount = 0;
       elementsWithBind.forEach((el) => {
         const bind = el.getAttribute('data-bind');
         if (bind && !el.hasAttribute('data-tina-field')) {
+          // Convertir le format data-bind en format data-tina-field
+          // Exemples: sections.0.title -> sections.0.title
+          //          sections.0.hero.subtitle -> sections.0.subtitle (retirer le template)
+          let tinaFieldPath = bind;
+          
+          // Retirer le nom du template si présent (ex: sections.0.hero.subtitle -> sections.0.subtitle)
+          const templateMatch = bind.match(/^sections\.(\d+)\.(\w+)\.(.+)$/);
+          if (templateMatch) {
+            const [, index, template, field] = templateMatch;
+            // Si le field ne contient pas de point, c'est un champ direct (retirer le template)
+            if (!field.includes('.')) {
+              tinaFieldPath = `sections.${index}.${field}`;
+            } else {
+              // Sinon, garder tel quel mais retirer le template du début
+              tinaFieldPath = `sections.${index}.${field}`;
+            }
+          }
+          
           // Ajouter directement l'attribut data-tina-field basé sur data-bind
           // TinaCMS pourra ensuite le valider quand le formulaire sera chargé
-          el.setAttribute('data-tina-field', bind);
+          el.setAttribute('data-tina-field', tinaFieldPath);
+          fallbackCount++;
         }
       });
-      console.log(`[LiveBridge] ${elementsWithBind.length} éléments annotés avec data-tina-field (mode fallback)`);
-      return;
+      console.log(`[LiveBridge] ${fallbackCount} éléments annotés avec data-tina-field (mode fallback sur ${elementsWithBind.length} éléments avec data-bind)`);
+      
+      // Ne pas retourner immédiatement, continuer pour essayer d'utiliser les données si disponibles
+      // Mais si on n'a pas de données non plus, on retourne car on ne peut pas faire mieux
+      if (!result.data) {
+        return;
+      }
     }
     
     if (!result.data) {
@@ -1774,16 +1799,25 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
   // Scanner une fois au montage et quand le DOM change
   useEffect(() => {
     // Fonction de scan avec retry multiple pour capturer tous les composants
+    // IMPORTANT: Le scan doit se déclencher immédiatement même sans formulaire
+    // pour que le mode fallback fonctionne en production
     const scanWithRetry = () => {
       scanAndAddTinaFields();
       // Retry après plusieurs délais pour capturer les composants chargés progressivement
       setTimeout(scanAndAddTinaFields, 100);
+      setTimeout(scanAndAddTinaFields, 300);
       setTimeout(scanAndAddTinaFields, 500);
       setTimeout(scanAndAddTinaFields, 1000);
+      setTimeout(scanAndAddTinaFields, 2000);
     };
     
-    // Scanner immédiatement avec retry
-    scanWithRetry();
+    // Attendre que le DOM soit prêt
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', scanWithRetry);
+    } else {
+      // DOM déjà prêt, scanner immédiatement
+      scanWithRetry();
+    }
     
     // Observer les changements du DOM
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -1803,6 +1837,7 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     return () => {
       clearTimeout(timeoutId);
       observer.disconnect();
+      document.removeEventListener('DOMContentLoaded', scanWithRetry);
     };
   }, []);
 
