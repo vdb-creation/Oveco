@@ -332,8 +332,8 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-
 		<ViewTransitions />
 	</head>
 	<body>
-		{/* Charger LiveBridge UNIQUEMENT en développement */}
-		{forceLive && import.meta.env.DEV && (
+		{/* Charger LiveBridge quand forceLive est activé (dev ou prod avec ?live=1 ou PUBLIC_TINA_LIVE=1) */}
+		{forceLive && (
 			<LiveBridge client:load home={tinaData || { data: {}, query: '', variables: {} }} docKey={tinaDocKey} />
 		)}
 		
