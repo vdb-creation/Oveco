@@ -884,6 +884,11 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
           el.setAttribute('data-tina-field', attr);
           successCount++;
           
+          // Log pour debug: vérifier le format généré
+          if (successCount <= 5) { // Log seulement les 5 premiers pour ne pas polluer
+            console.log(`[LiveBridge] Attribut ajouté: data-bind="${bind}" -> data-tina-field="${attr}"`);
+          }
+          
           // Propagation automatique vers les images et wrappers
           // Détecter si c'est un champ d'image (src, image, url, link, cta, icon)
           const isImageField = /\.(src|image|url|link|cta|icon|href)$/i.test(bind) || 
@@ -1864,6 +1869,20 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
   useEffect(() => {
     if (result.form) {
       console.log('[LiveBridge] Formulaire détecté, re-scan des éléments');
+      
+      // Debug: Afficher les champs disponibles dans le formulaire
+      try {
+        const form = result.form as any;
+        const formFields = form.fields || form.getAllFields?.() || [];
+        if (formFields.length > 0) {
+          console.log('[LiveBridge] Champs disponibles dans le formulaire (premiers 10):', 
+            formFields.slice(0, 10).map((f: any) => f.name || f.path || f.key).filter(Boolean)
+          );
+        }
+      } catch (e) {
+        // Ignorer les erreurs de debug
+      }
+      
       // Scanner avec retry quand le formulaire est disponible
       setTimeout(scanAndAddTinaFields, 100);
       setTimeout(scanAndAddTinaFields, 500);
