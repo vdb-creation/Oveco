@@ -705,6 +705,23 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     
     console.log(`[LiveBridge] ${elementsWithBind.length} éléments avec data-bind trouvés`);
     
+    // Vérifier si le formulaire existe
+    if (!result.form) {
+      console.warn('[LiveBridge] Aucun formulaire TinaCMS trouvé. Les attributs data-tina-field seront ajoutés sans validation.');
+      // Même sans formulaire, on peut ajouter les attributs data-tina-field basés sur data-bind
+      // Cela permettra à TinaCMS de détecter les éléments même si le formulaire n'est pas encore chargé
+      elementsWithBind.forEach((el) => {
+        const bind = el.getAttribute('data-bind');
+        if (bind && !el.hasAttribute('data-tina-field')) {
+          // Ajouter directement l'attribut data-tina-field basé sur data-bind
+          // TinaCMS pourra ensuite le valider quand le formulaire sera chargé
+          el.setAttribute('data-tina-field', bind);
+        }
+      });
+      console.log(`[LiveBridge] ${elementsWithBind.length} éléments annotés avec data-tina-field (mode fallback)`);
+      return;
+    }
+    
     if (!result.data) {
       console.warn('[LiveBridge] result.data est vide, impossible de résoudre les chemins TinaCMS');
       return;
@@ -1820,6 +1837,17 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       setTimeout(scanAndAddTinaFields, 500);
     }
   }, [result.data]);
+
+  // Re-scanner quand le formulaire devient disponible
+  useEffect(() => {
+    if (result.form) {
+      console.log('[LiveBridge] Formulaire détecté, re-scan des éléments');
+      // Scanner avec retry quand le formulaire est disponible
+      setTimeout(scanAndAddTinaFields, 100);
+      setTimeout(scanAndAddTinaFields, 500);
+      setTimeout(scanAndAddTinaFields, 1000);
+    }
+  }, [result.form]);
 
   return null;
 }
