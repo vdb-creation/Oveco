@@ -35,6 +35,14 @@ const setAttr = (bind: string, attr: string, val?: string) =>
 
 export default function LiveBridge(props: { home: Q; docKey?: string }) {
   const { docKey } = props;
+  
+  console.log('[LiveBridge] Initialisation - docKey:', docKey, 'home props:', {
+    hasData: !!props.home?.data,
+    dataKeys: props.home?.data ? Object.keys(props.home.data) : [],
+    hasQuery: !!props.home?.query,
+    hasVariables: !!props.home?.variables
+  });
+  
   const result = useTina({
     ...props.home,
     experimental___selectFormByFormId: (forms?: any[]) => {
@@ -53,6 +61,13 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       
       return forms[0]?.id;
     }
+  });
+  
+  console.log('[LiveBridge] useTina result:', {
+    hasData: !!result.data,
+    dataKeys: result.data ? Object.keys(result.data) : [],
+    hasForm: !!result.form,
+    formId: result.form ? (result.form as any).id : null
   });
   
   // Fonction pour trouver le document racine (selon fix.md)
@@ -680,22 +695,46 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
   // Selon tuto.md : utiliser TOUJOURS tinaField(), partir de docRoot (pas result.data), vérifier _content_source
   // UNIFORMITÉ : Cette fonction garantit que tous les éléments avec data-bind reçoivent data-tina-field de la même manière
   const scanAndAddTinaFields = () => {
+    // Scanner tous les éléments avec data-bind (peu importe la page ou la section)
+    const elementsWithBind = $$<HTMLElement>('[data-bind]');
+    
+    if (elementsWithBind.length === 0) {
+      console.warn('[LiveBridge] Aucun élément avec data-bind trouvé sur la page');
+      return;
+    }
+    
+    console.log(`[LiveBridge] ${elementsWithBind.length} éléments avec data-bind trouvés`);
+    
+    // Vérifier si le formulaire existe
+    if (!result.form) {
+      console.warn('[LiveBridge] Aucun formulaire TinaCMS trouvé. Les attributs data-tina-field seront ajoutés sans validation.');
+      // Même sans formulaire, on peut ajouter les attributs data-tina-field basés sur data-bind
+      // Cela permettra à TinaCMS de détecter les éléments même si le formulaire n'est pas encore chargé
+      elementsWithBind.forEach((el) => {
+        const bind = el.getAttribute('data-bind');
+        if (bind && !el.hasAttribute('data-tina-field')) {
+          // Ajouter directement l'attribut data-tina-field basé sur data-bind
+          // TinaCMS pourra ensuite le valider quand le formulaire sera chargé
+          el.setAttribute('data-tina-field', bind);
+        }
+      });
+      console.log(`[LiveBridge] ${elementsWithBind.length} éléments annotés avec data-tina-field (mode fallback)`);
+      return;
+    }
+    
     if (!result.data) {
+      console.warn('[LiveBridge] result.data est vide, impossible de résoudre les chemins TinaCMS');
       return;
     }
     
     // Trouver le document racine avec docKey explicite
     const docRoot = pickDocRoot(result.data, docKey);
     if (!docRoot) {
+      console.warn('[LiveBridge] docRoot non trouvé. result.data:', Object.keys(result.data || {}), 'docKey:', docKey);
       return;
     }
     
-    // Scanner tous les éléments avec data-bind (peu importe la page ou la section)
-    const elementsWithBind = $$<HTMLElement>('[data-bind]');
-    
-    if (elementsWithBind.length === 0) {
-      return;
-    }
+    console.log('[LiveBridge] docRoot trouvé avec', docRoot.sections?.length || 0, 'sections');
     
     let successCount = 0;
     let skipCount = 0;
@@ -868,10 +907,15 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         }
       } catch (err) {
         errorCount++;
+        console.debug('[LiveBridge] Erreur lors du traitement d\'un élément:', err);
       }
     });
     
     // Log uniforme pour toutes les pages
+    console.log(`[LiveBridge] Scan terminé: ${successCount} succès, ${skipCount} ignorés, ${errorCount} erreurs`);
+    if (errorCount > 0) {
+      console.warn('[LiveBridge] Certains éléments n\'ont pas pu être annotés avec data-tina-field');
+    }
   };
 
   // Pas de styles CSS personnalisés - TinaCMS utilise ses propres styles par défaut
@@ -1793,6 +1837,17 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       setTimeout(scanAndAddTinaFields, 500);
     }
   }, [result.data]);
+
+  // Re-scanner quand le formulaire devient disponible
+  useEffect(() => {
+    if (result.form) {
+      console.log('[LiveBridge] Formulaire détecté, re-scan des éléments');
+      // Scanner avec retry quand le formulaire est disponible
+      setTimeout(scanAndAddTinaFields, 100);
+      setTimeout(scanAndAddTinaFields, 500);
+      setTimeout(scanAndAddTinaFields, 1000);
+    }
+  }, [result.form]);
 
   return null;
 }
