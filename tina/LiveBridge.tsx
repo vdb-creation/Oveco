@@ -706,46 +706,28 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     console.log(`[LiveBridge] ${elementsWithBind.length} éléments avec data-bind trouvés`);
     
     // Vérifier si le formulaire existe
-    if (!result.form) {
-      console.warn('[LiveBridge] Aucun formulaire TinaCMS trouvé. Les attributs data-tina-field seront ajoutés sans validation.');
-      // Même sans formulaire, on peut ajouter les attributs data-tina-field basés sur data-bind
-      // Cela permettra à TinaCMS de détecter les éléments même si le formulaire n'est pas encore chargé
+    // Si pas de formulaire ET pas de données, utiliser le mode fallback minimal
+    // Sinon, continuer avec le traitement normal qui utilisera tinaField() quand le formulaire sera disponible
+    if (!result.form && !result.data) {
+      console.warn('[LiveBridge] Aucun formulaire ni données TinaCMS trouvés. Mode fallback minimal activé.');
+      // Mode fallback minimal: utiliser le data-bind tel quel temporairement
+      // Les attributs seront corrigés quand le formulaire sera disponible via le re-scan
       let fallbackCount = 0;
       elementsWithBind.forEach((el) => {
         const bind = el.getAttribute('data-bind');
         if (bind && !el.hasAttribute('data-tina-field')) {
-          // Convertir le format data-bind en format data-tina-field
-          // Exemples: sections.0.title -> sections.0.title
-          //          sections.0.hero.subtitle -> sections.0.subtitle (retirer le template)
-          let tinaFieldPath = bind;
-          
-          // Retirer le nom du template si présent (ex: sections.0.hero.subtitle -> sections.0.subtitle)
-          const templateMatch = bind.match(/^sections\.(\d+)\.(\w+)\.(.+)$/);
-          if (templateMatch) {
-            const [, index, template, field] = templateMatch;
-            // Si le field ne contient pas de point, c'est un champ direct (retirer le template)
-            if (!field.includes('.')) {
-              tinaFieldPath = `sections.${index}.${field}`;
-            } else {
-              // Sinon, garder tel quel mais retirer le template du début
-              tinaFieldPath = `sections.${index}.${field}`;
-            }
-          }
-          
-          // Ajouter directement l'attribut data-tina-field basé sur data-bind
-          // TinaCMS pourra ensuite le valider quand le formulaire sera chargé
-          el.setAttribute('data-tina-field', tinaFieldPath);
+          // Utiliser le bind tel quel temporairement
+          // Le re-scan quand le formulaire sera disponible corrigera avec le bon format
+          el.setAttribute('data-tina-field', bind);
           fallbackCount++;
         }
       });
-      console.log(`[LiveBridge] ${fallbackCount} éléments annotés avec data-tina-field (mode fallback sur ${elementsWithBind.length} éléments avec data-bind)`);
-      
-      // Ne pas retourner immédiatement, continuer pour essayer d'utiliser les données si disponibles
-      // Mais si on n'a pas de données non plus, on retourne car on ne peut pas faire mieux
-      if (!result.data) {
-        return;
-      }
+      console.log(`[LiveBridge] ${fallbackCount} éléments annotés temporairement avec data-tina-field (mode fallback minimal)`);
+      return;
     }
+    
+    // Si on a un formulaire OU des données, continuer avec le traitement normal
+    // Même sans formulaire, si on a des données, on peut préparer pour quand le formulaire sera disponible
     
     if (!result.data) {
       console.warn('[LiveBridge] result.data est vide, impossible de résoudre les chemins TinaCMS');
@@ -772,11 +754,16 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         return;
       }
       
-      // Vérifier si l'élément a déjà un data-tina-field (éviter de le réécraser)
-      if (el.hasAttribute('data-tina-field')) {
+      // Vérifier si l'élément a déjà un data-tina-field
+      // Si le formulaire est disponible, on peut réécrire pour corriger le format
+      // Sinon, on skip pour éviter de réécraser avec un format incorrect
+      const hasExistingField = el.hasAttribute('data-tina-field');
+      if (hasExistingField && !result.form) {
         skipCount++;
         return;
       }
+      // Si le formulaire est disponible, on peut réécrire même si l'attribut existe déjà
+      // Cela permet de corriger les attributs ajoutés par le mode fallback
       
       try {
         // Résoudre l'objet et la propriété depuis docRoot (pas result.data)
