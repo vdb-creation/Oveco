@@ -7,6 +7,59 @@ type Q = { query: string; variables: any; data: any };
 const $$ = <T extends Element = HTMLElement>(sel: string) =>
   Array.from(document.querySelectorAll<T>(sel));
 
+// Détection contexte admin (utilisé pour limiter certains patchs si besoin)
+const isAdmin = () => {
+  try {
+    return typeof window !== 'undefined' && (window.top?.location?.pathname?.startsWith('/admin') || window.location?.pathname?.startsWith('/admin'));
+  } catch {
+    return false;
+  }
+};
+
+// util: résolution d'un chemin style "sections.3.title" depuis un objet racine
+function getByBindPath(docRoot: any, bind: string) {
+  if (!docRoot || !bind) return undefined;
+  const parts = bind.split('.');
+  let cur: any = docRoot;
+  for (let i = 0; i < parts.length; i++) {
+    const seg = parts[i];
+    const idx = /^\d+$/.test(seg) ? Number(seg) : seg;
+    if (Array.isArray(cur) && typeof idx === 'number') {
+      cur = cur[idx];
+    } else if (cur && typeof cur === 'object' && seg in cur) {
+      cur = cur[seg as keyof typeof cur];
+    } else {
+      return undefined;
+    }
+  }
+  return cur;
+}
+
+// Applique une valeur sur un élément HTML selon le tag/attribut (data-bind-attr)
+function applyValue(el: HTMLElement, value: unknown) {
+  // Cas images et liens: raccourcis pratiques si pas d'attribut explicite
+  if (el instanceof HTMLImageElement) {
+    if (typeof value === 'string') el.src = value;
+    return;
+  }
+  if (el instanceof HTMLAnchorElement) {
+    if (typeof value === 'string') el.href = value;
+    return;
+  }
+
+  // Attribut ciblé via data-bind-attr (alt, title, src, href, aria-label, etc.)
+  const targetAttr = el.getAttribute('data-bind-attr');
+  if (targetAttr && typeof value === 'string') {
+    el.setAttribute(targetAttr, value);
+    return;
+  }
+
+  // Texte par défaut
+  if (value == null) return;
+  const text = typeof value === 'string' || typeof value === 'number' ? String(value) : '';
+  el.textContent = text;
+}
+
 // Fonction pour ajouter data-tina-field aux éléments avec data-bind
 const addTinaField = (bind: string, fieldPath: string) => {
   $$<HTMLElement>(`[data-bind="${bind}"]`).forEach((el) => {
@@ -492,6 +545,28 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         });
       }
     });
+  };
+
+  // Patcher générique des éléments [data-bind] (texte/attribut) avec les données live
+  const patchBindsFromDoc = (docRoot: any) => {
+    if (!docRoot) return;
+    // Optionnel: limiter au contexte admin. On n’en fait pas un hard-stop pour ne pas casser le dev live.
+    // const enabled = isAdmin();
+    // if (!enabled) return;
+
+    // Déférer au prochain frame pour limiter le jitter
+    const raf = requestAnimationFrame(() => {
+      const nodes = document.querySelectorAll<HTMLElement>('[data-bind]');
+      nodes.forEach((el) => {
+        const bind = el.getAttribute('data-bind');
+        if (!bind) return;
+        const val = getByBindPath(docRoot, bind);
+        if (val === undefined) return;
+        applyValue(el, val);
+      });
+    });
+    // cleanup pas strictement nécessaire ici, le frame est unique
+    return () => cancelAnimationFrame(raf);
   };
 
   // Référence pour détecter le changement d'ordre
@@ -1764,26 +1839,32 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
   // Mise à jour quand result.data change
   useEffect(() => {
-    
     // Extraire les données, quelle que soit la collection
     const collectionData = result.data?.home || result.data?.about_fr || result.data?.about_en || result.data?.construction_fr || result.data?.construction_en || result.data?.homeEn;
     const H = collectionData;
-    
+
     if (H && H.sections) {
-    // Créer une signature de l'ordre actuel
-    const currentOrder = H.sections
-      .map((s: any, i: number) => `${i}-${s?.__typename}`)
-      .join('|');
-    
-    // Si l'ordre a changé, réorganiser le DOM
-    if (previousOrderRef.current && previousOrderRef.current !== currentOrder) {
-      reorderSections(H.sections);
-    }
-    previousOrderRef.current = currentOrder;
-    
-    // Mettre à jour le contenu
-    updateDOM(result.data);
-      // Scanner après updateDOM pour capturer tous les éléments
+      // Créer une signature de l'ordre actuel
+      const currentOrder = H.sections
+        .map((s: any, i: number) => `${i}-${s?.__typename}`)
+        .join('|');
+
+      // Si l'ordre a changé, réorganiser le DOM
+      if (previousOrderRef.current && previousOrderRef.current !== currentOrder) {
+        reorderSections(H.sections);
+      }
+      previousOrderRef.current = currentOrder;
+
+      // Mettre à jour le contenu spécifique (mappings existants)
+      updateDOM(result.data);
+
+      // Patcher générique [data-bind] avec les données live (chemins libres)
+      const docRoot = pickDocRoot(result.data, docKey);
+      if (docRoot) {
+        patchBindsFromDoc(docRoot);
+      }
+
+      // Scanner après updateDOM pour capturer/compléter data-tina-field
       setTimeout(scanAndAddTinaFields, 100);
     } else {
       // Même sans données, scanner les data-bind pour ajouter data-tina-field
