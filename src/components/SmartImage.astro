@@ -325,8 +325,6 @@ const wrapperStyle = [
   <span 
     class={`si-wrap ${wrapClass}${!usePlaceholder ? ' no-placeholder' : ''}`} 
     style={wrapperStyle}
-    data-tina-field={dataTinaField}
-    data-bind={dataBind}
   >
     {/* En production, utiliser des balises <img> simples (pas d'Unpic) */}
     {!import.meta.env.DEV ? (
@@ -360,6 +358,7 @@ const wrapperStyle = [
           onerror="console.warn('Image failed to load:', this.src); this.style.display='none';"
           data-tina-field={dataTinaField}
           data-bind={dataBind}
+          data-bind-attr="src"
         />
       </picture>
     ) : (
@@ -409,6 +408,7 @@ const wrapperStyle = [
           onload={usePlaceholder ? "const wrap = this.closest('.si-wrap'); if(wrap) { wrap.classList.add('is-loaded'); }" : undefined}
           data-tina-field={dataTinaField}
           data-bind={dataBind}
+          data-bind-attr="src"
       />
     </picture>
     )}
