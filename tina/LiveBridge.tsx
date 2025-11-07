@@ -2026,6 +2026,77 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     }
   }, [result.form]);
 
+  // Rétablir un gestionnaire de clic léger pour forcer le focus du champ correct si Tina ne le fait pas
+  useEffect(() => {
+    const cms = (typeof window !== 'undefined') ? ((window as any).tinacms || (window as any).__tinacms) : null;
+
+    // Fonction de normalisation d'un chemin data-tina-field -> chemin de champ attendu par Tina
+    const normalizeFieldPath = (raw: string): string => {
+      if (!raw) return raw;
+      // Enlever éventuel préfixe fichier (ex: content/fr/home.json#sections.0.title)
+      const hashIndex = raw.indexOf('#');
+      if (hashIndex !== -1) raw = raw.slice(hashIndex + 1);
+      // Remplacer sections[0] par sections.0
+      raw = raw.replace(/sections\[(\d+)\]/g, 'sections.$1');
+      // Nettoyer doubles points
+      raw = raw.replace(/\.+/g, '.');
+      return raw;
+    };
+
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const editable = target.closest('[data-tina-field]') as HTMLElement | null;
+      if (!editable) return;
+      const attr = editable.getAttribute('data-tina-field');
+      if (!attr) return;
+      const fieldPath = normalizeFieldPath(attr);
+
+      // Si Tina gère déjà, ne pas dupliquer (heuristique: attribute "data-tina-managed")
+      if (editable.getAttribute('data-tina-managed') === '1') return;
+
+      let focused = false;
+      try {
+        if (cms) {
+          // Méthode directe setActiveField
+          if (typeof cms.setActiveField === 'function') {
+            cms.setActiveField(fieldPath);
+            focused = true;
+          } else if (cms.forms && typeof cms.forms.getAll === 'function') {
+            const forms = cms.forms.getAll();
+            const activeForm = (result as any).form ? (result as any).form : forms[0];
+            if (activeForm && typeof cms.forms.open === 'function') {
+              const formId = (activeForm as any).id || (activeForm as any).name;
+              try { cms.forms.open(formId, { field: fieldPath }); focused = true; } catch {}
+            }
+          }
+        }
+      } catch {}
+
+      if (!focused) {
+        // Fallback DOM: chercher un input correspondant dans la sidebar
+        const variants = [fieldPath, fieldPath.replace(/sections\.(\d+)\./, 'sections[$1].'), fieldPath.split('.').pop()!];
+        for (const v of variants) {
+          const sel = `input[name="${v}"], textarea[name="${v}"]`;
+          const candidate = document.querySelector(sel) as HTMLInputElement | HTMLTextAreaElement | null;
+          if (candidate) {
+            candidate.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => { try { candidate.focus(); candidate.select?.(); } catch {} }, 120);
+            focused = true;
+            break;
+          }
+        }
+      }
+
+      if (focused) {
+        editable.setAttribute('data-tina-managed', '1');
+      }
+    };
+
+    document.addEventListener('click', handleClick, false);
+    return () => document.removeEventListener('click', handleClick, false);
+  }, [result.form]);
+
   return null;
 }
 
