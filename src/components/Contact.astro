@@ -767,8 +767,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      const result = await response.json().catch(() => ({}));
-      console.log('[Contact] status:', response.status, 'result:', result);
+      // Tenter de parser JSON, sinon récupérer un extrait texte pour diagnostic
+      let result: any = {};
+      try {
+        result = await response.clone().json();
+      } catch {
+        try {
+          const rawText = await response.clone().text();
+          if (rawText) {
+            result = { raw: rawText.slice(0, 300) };
+          }
+        } catch {}
+      }
+
+      console.log('[Contact] status:', response.status, 'ok:', response.ok, 'result:', result);
 
       if (response.ok) {
         form.reset();
@@ -781,7 +793,8 @@ document.addEventListener('DOMContentLoaded', () => {
           showStatus('success', 'Message envoyé ✅');
         }
       } else {
-        const message = (result && (result.message || result.error)) || 'Une erreur est survenue. Veuillez réessayer plus tard.';
+        const raw = (result && (result.raw || result.detail || result.errors)) ? ` (détails: ${JSON.stringify(result).slice(0,180)}…)` : '';
+        const message = (result && (result.message || result.error)) || `Erreur (${response.status}). Veuillez réessayer plus tard.${raw}`;
         showStatus('error', message);
       }
     } catch (error) {
