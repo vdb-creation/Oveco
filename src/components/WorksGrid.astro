@@ -51,75 +51,105 @@ const dynamicCards = allProjects.map(projectToCard);
   width: 100%;
   max-width: 1589px;
   margin: 0 auto;
-  padding: 0 109px;
+  padding: 0 clamp(16px, 8vw, 109px);
   box-sizing: border-box;
 }
 
 @media (max-width: 1400px) {
   .works-grid__container {
-    padding: 0 80px;
-  }
-}
-
-@media (max-width: 1200px) {
-  .works-grid__container {
-    padding: 0 60px;
+    padding: 0 clamp(40px, 6vw, 80px);
   }
 }
 
 @media (max-width: 1024px) {
   .works-grid__container {
-    padding: 0 40px;
+    padding: 0 clamp(24px, 4vw, 40px);
   }
 }
 
 @media (max-width: 768px) {
   .works-grid__container {
-    padding: 0 2rem;
+    padding: 0 clamp(20px, 5vw, 32px);
   }
 }
 
 @media (max-width: 480px) {
   .works-grid__container {
-    padding: 0 1rem;
+    padding: 0 16px;
   }
 }
 
 .works-grid {
   display: grid;
-  grid-template-columns: repeat(2, 545px);
-  gap: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
+  gap: clamp(24px, 3vw, 40px);
   justify-content: center;
   align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-@media (max-width: 1200px) {
+/* Desktop: 2 colonnes maximum */
+@media (min-width: 1025px) {
   .works-grid {
-    grid-template-columns: repeat(2, minmax(280px, 545px));
+    grid-template-columns: repeat(2, minmax(450px, 545px));
+    gap: 40px;
+  }
+}
+
+/* Tablette: 2 colonnes adaptatives */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .works-grid {
+    grid-template-columns: repeat(2, minmax(320px, 1fr));
     gap: 30px;
   }
 }
 
+/* Tablette petite et mobile: 1 colonne */
 @media (max-width: 768px) {
   .works-grid {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 24px;
+    max-width: 545px;
   }
 }
 
-/* Cartes avec largeur fixe de 545px */
+/* Cartes avec largeur responsive */
 .works-grid > .projects__card {
-  width: 545px;
+  width: 100%;
   max-width: 100%;
   height: auto;
-  min-height: 548px;
+  min-height: clamp(450px, 55vw, 548px);
+  aspect-ratio: 545 / 548;
 }
 
+/* Desktop */
+@media (min-width: 1025px) {
+  .works-grid > .projects__card {
+    min-height: 548px;
+  }
+}
+
+/* Tablette */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .works-grid > .projects__card {
+    min-height: clamp(420px, 52vw, 520px);
+  }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
   .works-grid > .projects__card {
     width: 100%;
     max-width: 545px;
     margin: 0 auto;
+    min-height: clamp(400px, 80vw, 548px);
+  }
+}
+
+@media (max-width: 480px) {
+  .works-grid > .projects__card {
+    min-height: clamp(380px, 90vw, 480px);
   }
 }
 

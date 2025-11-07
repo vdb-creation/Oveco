@@ -328,6 +328,31 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-
 		
 		<!-- Performance hints: preload CSS retiré pendant le dev pour éviter les warnings inutiles -->
 		
+		<!-- Formbricks Integration (skip admin routes) -->
+		{!Astro.url.pathname.startsWith('/admin') && import.meta.env.PUBLIC_FORMBRICKS_APP_URL && import.meta.env.PUBLIC_FORMBRICKS_ENV_ID && (
+			<script is:inline define:vars={{ 
+				appUrl: import.meta.env.PUBLIC_FORMBRICKS_APP_URL,
+				envId: import.meta.env.PUBLIC_FORMBRICKS_ENV_ID 
+			}}>
+				!function(){
+					var s=document.createElement("script");
+					s.type="text/javascript"; 
+					s.async=true; 
+					s.src=appUrl+"/js/formbricks.umd.cjs";
+					var e=document.getElementsByTagName("script")[0]; 
+					e.parentNode.insertBefore(s,e);
+					setTimeout(function(){
+						if(window.formbricks) {
+							window.formbricks.setup({ 
+								environmentId: envId, 
+								appUrl: appUrl 
+							});
+						}
+					}, 500);
+				}();
+			</script>
+		)}
+		
 		<!-- View Transitions (Astro 2025) -->
 		<ViewTransitions />
 	</head>
