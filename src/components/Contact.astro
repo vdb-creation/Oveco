@@ -29,7 +29,8 @@ const {
     phone: "+32 473 / 68.99.02",
     location: "Région de Beauvechain"
   },
-  formAction = "#contact",
+  // Envoi par défaut via Web3Forms
+  formAction = "https://api.web3forms.com/submit",
   sectionIndex = 0
 } = Astro.props;
 
@@ -99,8 +100,12 @@ const getDataBind = (field: string) => {
       </aside>
 
       <div class="contact__panel" aria-label="Formulaire de contact">
-        <form class="contact__form" method="post" action={formAction} novalidate>
-          <input type="hidden" name="form-name" value="oveco-contact" />
+        <form class="contact__form" method="POST" action={formAction} novalidate>
+          <!-- Web3Forms Access Key (public) -->
+          <input type="hidden" name="access_key" value="2f49656a-b6d6-41f0-bc7f-5d7c68340a41" />
+          <!-- Métadonnées utiles -->
+          <input type="hidden" name="subject" value="Nouveau message depuis le site Oveco" />
+          <input type="hidden" name="from_name" value="Formulaire Oveco" />
           <div class="contact__groups">
             <div class="contact__col">
               <div class="contact__field">
@@ -605,10 +610,9 @@ const getDataBind = (field: string) => {
 
 <script>
 /**
- * Script de gestion du formulaire de contact avec intégration Formbricks
+ * Script de gestion du formulaire de contact
  * - Validation des champs
  * - Gestion de la soumission
- * - Trigger Formbricks après soumission
  */
 
 // Attendre que le DOM soit chargé
@@ -673,7 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Gestion de la soumission
+  // Gestion de la soumission (envoi à Web3Forms)
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -694,52 +698,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Récupérer les données du formulaire
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
 
-    // Ici vous pouvez envoyer les données à votre backend
-    // Pour l'exemple, on simule un succès
+    // UI: désactiver le bouton submit
+    const submitBtn = form.querySelector('.contact__submit') as HTMLButtonElement | null;
+    if (submitBtn) submitBtn.disabled = true;
+
     try {
-      // TODO: Remplacer par votre endpoint réel
-      // const response = await fetch(form.action, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data)
-      // });
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
 
-      // Simuler un délai
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const result = await response.json().catch(() => ({}));
 
-      // Succès - Réinitialiser le formulaire
-      form.reset();
-
-      // Afficher un message de succès (vous pouvez personnaliser)
-      alert('Merci ! Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.');
-
-      // Trigger Formbricks après soumission réussie
-      if (typeof window !== 'undefined' && window.formbricks) {
-        window.formbricks.track('contact_form_submitted', {
-          name: data.name as string,
-          email: data.email as string,
-          hasPhone: !!data.phone,
-          hasCompany: !!data.company,
-          messageLength: (data.message as string)?.length || 0
-        });
+      if (response.ok) {
+        form.reset();
+        alert('Merci ! Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.');
+      } else {
+        const message = (result && (result.message || result.error)) || 'Une erreur est survenue. Veuillez réessayer plus tard.';
+        alert(message);
       }
-
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire:', error);
-      alert('Une erreur est survenue. Veuillez réessayer plus tard.');
+      alert('Une erreur réseau est survenue. Veuillez réessayer plus tard.');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
     }
   });
 });
 
-// Déclaration TypeScript pour Formbricks
-declare global {
-  interface Window {
-    formbricks?: {
-      track: (eventName: string, properties?: Record<string, any>) => void;
-      setup: (config: { environmentId: string; appUrl: string }) => void;
-    };
-  }
-}
 </script>

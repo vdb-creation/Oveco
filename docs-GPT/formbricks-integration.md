@@ -1,34 +1,4 @@
-# Intégration Formbricks - Documentation
-
-## 📋 Vue d'ensemble
-
-Formbricks est intégré dans le projet Oveco pour collecter des feedbacks utilisateurs et analyser les soumissions du formulaire de contact. Cette documentation explique comment tout fonctionne ensemble.
-
-## 🏗️ Architecture
-
-### 1. Déploiement Backend (Coolify)
-
-Formbricks nécessite un déploiement serveur avec :
-- **PostgreSQL 16** : Base de données principale
-- **Redis 7** : Cache et gestion des files d'attente
-- **Formbricks** : Application principale (port 3000)
-
-#### Variables d'environnement requises :
-
-```yaml
-# Domaines
-WEBAPP_URL: https://admin.example.com          # Interface admin
-PUBLIC_URL: https://surveys.example.com        # SDK public (optionnel si split)
-
-# Base de données
-DATABASE_URL: postgresql://formbricks:PASSWORD@postgres:5432/formbricks?schema=public
-REDIS_URL: redis://:PASSWORD@redis:6379
-
-# Secrets (générer avec: openssl rand -hex 32)
-NEXTAUTH_SECRET: [32 bytes hex]
-ENCRYPTION_KEY: [32 bytes hex]
-CRON_SECRET: [32 bytes hex]
-
+Cette page a été retirée.
 # Options
 TELEMETRY_DISABLED: "1"
 ```

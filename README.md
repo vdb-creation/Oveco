@@ -11,7 +11,7 @@ Un template Astro moderne avec une collection complète de composants wireframe 
 - 🔧 **Facile à personnaliser** - Props et styles modulaires
 - 📝 **TinaCMS intégré** - CMS headless (optionnel)
 - 🚀 **GitHub Actions** - Déploiement automatique
-- � **Formbricks** - Feedback utilisateur et analytics
+ 
 
 ## 📦 Composants inclus
 
@@ -23,15 +23,12 @@ Un template Astro moderne avec une collection complète de composants wireframe 
 6. **WFStats** - Statistiques/chiffres clés
 7. **WFFAQ** - Questions fréquentes (accordéon)
 8. **WFCTA** - Appel à l'action
-9. **WFContact** - Formulaire de contact (avec Formbricks)
+9. **WFContact** - Formulaire de contact
 10. **WFFooter** - Pied de page complet
 
 ## 📚 Documentation
 
-### Formbricks (Feedback & Analytics)
-- 📖 [Guide de démarrage rapide](docs-GPT/formbricks-quick-start.md) - Configuration backend + frontend
-- 🔧 [Documentation technique complète](docs-GPT/formbricks-integration.md) - Architecture, debug, bonnes pratiques
-- 📊 [Exemples d'enquêtes](docs-GPT/formbricks-survey-examples.md) - 6 templates prêts à l'emploi
+ 
 
 ### Images & Optimisations
 - 🖼️ [Smart Image Component](docs-GPT/smart-image.md) - Component d'images optimisé

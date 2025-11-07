@@ -95,8 +95,8 @@ function mapImageClassAndId(image: { class?: string }, index: number) {
               decoding="async"
               class={mapped.className}
               id={mapped.id}
-              width={index < 2 ? 380 : 320}
-              height={index < 2 ? 450 : 280}
+              width={index < 2 ? 220 : 240}
+              height={index < 2 ? 300 : 200}
               fetchpriority={index === 0 ? "high" : "low"}
               sizes="(max-width: 768px) 0px, (max-width: 1024px) 30vw, (max-width: 1200px) 22vw, 380px"
               data-bind={`sections.${sectionIndex}.images.${index}.src`}
@@ -295,25 +295,25 @@ if (document.readyState === 'loading') {
 /* Positionnement des 4 images - optimisé pour toutes les tailles */
 .hero #img1 {
   left: clamp(40px, 6vw, 100px);
-  top: clamp(100px, 14vh, 200px);
+  top: clamp(20px, 7vh, 100px);
   z-index: 1;
 }
 
 .hero #img2 {
   right: clamp(40px, 6vw, 100px);
-  top: clamp(100px, 14vh, 200px);
+  top: clamp(20px, 7vh, 100px);
   z-index: 1;
 }
 
 .hero #img3 {
   left: clamp(60px, 9vw, 140px);
-  bottom: clamp(80px, 12vh, 180px);
+  bottom: clamp(4px, 1.5vh, 24px); /* encore plus bas */
   z-index: 1;
 }
 
 .hero #img4 {
   right: clamp(60px, 9vw, 140px);
-  bottom: clamp(80px, 12vh, 180px);
+  bottom: clamp(4px, 1.5vh, 24px);
   z-index: 1;
 }
 
@@ -327,33 +327,27 @@ if (document.readyState === 'loading') {
     right: clamp(24px, 5vw, 40px); 
     top: clamp(80px, 12vh, 120px);
   }
-  .hero #img3 { 
-    left: clamp(28px, 6vw, 45px); 
-    bottom: clamp(60px, 10vh, 100px);
-  }
-  .hero #img4 { 
-    right: clamp(28px, 6vw, 45px); 
-    bottom: clamp(60px, 10vh, 100px);
-  }
+  /* Sur mobile on masque les deux images secondaires pour éviter surcharge visuelle */
+  .hero #img3, .hero #img4 { display: none; }
 }
 
 /* Tablette : positions avec bon espacement */
 @media (min-width: 769px) and (max-width: 1024px) {
   .hero #img1 { 
     left: clamp(40px, 6vw, 70px); 
-    top: clamp(90px, 12vh, 130px); 
+    top: clamp(30px, 8vh, 80px); 
   }
   .hero #img2 { 
     right: clamp(40px, 6vw, 70px); 
-    top: clamp(90px, 12vh, 130px); 
+    top: clamp(30px, 8vh, 80px); 
   }
   .hero #img3 { 
     left: clamp(50px, 7vw, 90px); 
-    bottom: clamp(70px, 10vh, 110px); 
+    bottom: clamp(4px, 1.25vh, 20px); 
   }
   .hero #img4 { 
     right: clamp(50px, 7vw, 90px); 
-    bottom: clamp(70px, 10vh, 110px); 
+    bottom: clamp(4px, 1.25vh, 20px); 
   }
 }
 
@@ -361,19 +355,19 @@ if (document.readyState === 'loading') {
 @media (min-width: 1025px) and (max-width: 1399px) {
   .hero #img1 { 
     left: clamp(50px, 7vw, 85px); 
-    top: clamp(110px, 14vh, 170px); 
+    top: clamp(60px, 9vh, 100px); 
   }
   .hero #img2 { 
     right: clamp(50px, 7vw, 85px); 
-    top: clamp(110px, 14vh, 170px); 
+    top: clamp(60px, 9vh, 100px); 
   }
   .hero #img3 { 
     left: clamp(65px, 9vw, 120px); 
-    bottom: clamp(90px, 12vh, 150px); 
+    bottom: clamp(6px, 2vh, 24px); 
   }
   .hero #img4 { 
     right: clamp(65px, 9vw, 120px); 
-    bottom: clamp(90px, 12vh, 150px); 
+    bottom: clamp(6px, 2vh, 24px); 
   }
 }
 
@@ -381,22 +375,22 @@ if (document.readyState === 'loading') {
 @media (min-width: 1400px) {
   .hero #img1 {
     left: 100px;
-    top: 200px;
+    top: 120px;
   }
   
   .hero #img2 {
     right: 100px;
-    top: 200px;
+    top: 120px;
   }
   
   .hero #img3 {
     left: 130px;
-    bottom: 170px;
+    bottom: 24px;
   }
   
   .hero #img4 {
     right: 130px;
-    bottom: 170px;
+    bottom: 24px;
   }
 }
 
@@ -455,8 +449,8 @@ if (document.readyState === 'loading') {
 
 .hero__image--large-1,
 .hero__image--large-2 {
-  width: clamp(120px, 26vw, 380px);
-  height: clamp(150px, 32vw, 480px);
+  width: clamp(80px, 14vw, 230px);
+  height: clamp(105px, 20vw, 300px);
   will-change: transform;
   transform: translateZ(0);
   contain: layout style paint;
@@ -468,8 +462,8 @@ if (document.readyState === 'loading') {
 @media (min-width: 1400px) {
   .hero__image--large-1,
   .hero__image--large-2 {
-    width: 380px;
-    height: 480px;
+    width: 230px;
+    height: 300px;
   }
 }
 
@@ -477,8 +471,8 @@ if (document.readyState === 'loading') {
 @media (min-width: 1025px) and (max-width: 1399px) {
   .hero__image--large-1,
   .hero__image--large-2 {
-    width: clamp(280px, 26vw, 340px);
-    height: clamp(350px, 32vw, 425px);
+    width: clamp(190px, 18vw, 240px);
+    height: clamp(240px, 24vw, 300px);
   }
 }
 
@@ -486,8 +480,8 @@ if (document.readyState === 'loading') {
 @media (max-width: 1024px) and (min-width: 769px) {
   .hero__image--large-1,
   .hero__image--large-2 {
-    width: clamp(200px, 26vw, 280px);
-    height: clamp(250px, 32vw, 350px);
+    width: clamp(170px, 22vw, 220px);
+    height: clamp(210px, 28vw, 270px);
   }
 }
 
@@ -495,15 +489,15 @@ if (document.readyState === 'loading') {
 @media (max-width: 768px) {
   .hero__image--large-1,
   .hero__image--large-2 {
-    width: clamp(130px, 22vw, 180px);
-    height: clamp(165px, 28vw, 225px);
+    width: clamp(120px, 28vw, 170px);
+    height: clamp(150px, 30vw, 210px);
   }
 }
 
 .hero__image--medium-1,
 .hero__image--medium-2 {
-  width: clamp(110px, 22vw, 320px);
-  height: clamp(100px, 20vw, 280px);
+  width: clamp(100px, 18vw, 260px);
+  height: clamp(90px, 16vw, 220px);
   will-change: transform;
   transform: translateZ(0);
   contain: layout style paint;
@@ -515,8 +509,8 @@ if (document.readyState === 'loading') {
 @media (min-width: 1400px) {
   .hero__image--medium-1,
   .hero__image--medium-2 {
-    width: 320px;
-    height: 280px;
+    width: 260px;
+    height: 220px;
   }
 }
 
@@ -524,8 +518,8 @@ if (document.readyState === 'loading') {
 @media (min-width: 1025px) and (max-width: 1399px) {
   .hero__image--medium-1,
   .hero__image--medium-2 {
-    width: clamp(240px, 22vw, 290px);
-    height: clamp(210px, 19vw, 250px);
+    width: clamp(200px, 18vw, 240px);
+    height: clamp(170px, 16vw, 210px);
   }
 }
 
@@ -545,6 +539,48 @@ if (document.readyState === 'loading') {
     width: clamp(115px, 18vw, 155px);
     height: clamp(100px, 16vw, 135px);
   }
+}
+
+/* Réorganisation responsive forte pour < 768px : on empile le contenu et on repositionne les images statiquement */
+@media (max-width: 768px) {
+  .hero { 
+    min-height: auto; 
+    padding-top: clamp(2.5rem, 8vw, 4rem); 
+    padding-bottom: clamp(3rem, 10vw, 5rem);
+  }
+  .hero__container { 
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    align-items: start;
+    justify-items: center;
+    gap: clamp(1.25rem, 5vw, 2rem);
+  }
+  .hero__image { 
+    position: static !important; 
+    inset: auto !important; 
+    width: clamp(220px, 70vw, 360px); 
+    height: auto; 
+    aspect-ratio: 4/3; 
+    display: block;
+    margin: 0 auto; 
+    pointer-events: none; 
+    opacity: 0.95;
+    z-index: 1;
+  }
+  /* Garder uniquement les deux grandes pour impact visuel */
+  .hero__image--medium-1, .hero__image--medium-2 { display: none; }
+}
+
+@media (max-width: 480px) {
+  .hero__image { 
+    width: clamp(190px, 82vw, 320px); 
+  }
+}
+
+/* Sélecteur sécurité: enlever toute transformation résiduelle des images sur mobile */
+@media (max-width: 768px) {
+  .hero__image#img1, .hero__image#img2 { transform: none !important; }
 }
 
 .hero__content {
