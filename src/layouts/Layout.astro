@@ -327,15 +327,18 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-
 		<script type="application/ld+json" set:html={JSON.stringify(finalStructuredData)}></script>
 		
 		<!-- Performance hints: preload CSS retiré pendant le dev pour éviter les warnings inutiles -->
+
+
 		
 		<!-- View Transitions (Astro 2025) -->
 		<ViewTransitions />
 	</head>
 	<body>
 		{/* Charger LiveBridge quand forceLive est activé (dev ou prod avec ?live=1 ou PUBLIC_TINA_LIVE=1) */}
-		{forceLive && (
-			<LiveBridge client:load home={tinaData || { data: {}, query: '', variables: {} }} docKey={tinaDocKey} />
-		)}
+    {forceLive && (
+      // Utiliser client:only pour éviter le rendu SSR React qui provoque l'erreur de hooks (dispatcher null)
+      <LiveBridge client:only="react" home={tinaData || { data: {}, query: '', variables: {} }} docKey={tinaDocKey} />
+    )}
 		
 		<Nabar 
 			siteName={globalComponents.navbar.siteName}

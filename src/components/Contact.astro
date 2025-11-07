@@ -29,7 +29,8 @@ const {
     phone: "+32 473 / 68.99.02",
     location: "Région de Beauvechain"
   },
-  formAction = "#contact",
+  // Envoi par défaut via Web3Forms
+  formAction = "https://api.web3forms.com/submit",
   sectionIndex = 0
 } = Astro.props;
 
@@ -99,8 +100,12 @@ const getDataBind = (field: string) => {
       </aside>
 
       <div class="contact__panel" aria-label="Formulaire de contact">
-        <form class="contact__form" method="post" action={formAction} novalidate>
-          <input type="hidden" name="form-name" value="oveco-contact" />
+        <form class="contact__form" method="POST" action={formAction} novalidate>
+          <!-- Web3Forms Access Key (public) -->
+          <input type="hidden" name="access_key" value="2f49656a-b6d6-41f0-bc7f-5d7c68340a41" />
+          <!-- Métadonnées utiles -->
+          <input type="hidden" name="subject" value="Nouveau message depuis le site Oveco" />
+          <input type="hidden" name="from_name" value="Formulaire Oveco" />
           <div class="contact__groups">
             <div class="contact__col">
               <div class="contact__field">
@@ -207,13 +212,7 @@ const getDataBind = (field: string) => {
   background: #FFFEF8;
   display: flex;
   justify-content: center;
-  padding: 80px 24px;
-}
-
-@media (min-width: 1200px) {
-  .contact-section {
-    padding: 120px 24px;
-  }
+  padding: clamp(40px, 8vw, 120px) clamp(16px, 3vw, 24px);
 }
 
 .contact__container {
@@ -221,7 +220,7 @@ const getDataBind = (field: string) => {
   max-width: 1219px;
   display: grid;
   grid-template-columns: 1fr 616px;
-  gap: 40px;
+  gap: clamp(24px, 4vw, 40px);
   align-items: start;
 }
 
@@ -230,6 +229,7 @@ const getDataBind = (field: string) => {
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
+    gap: clamp(32px, 5vw, 48px);
   }
   
   .contact__info {
@@ -255,6 +255,22 @@ const getDataBind = (field: string) => {
   .contact__panel {
     width: 100%;
     max-width: 616px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: clamp(32px, 6vw, 60px) clamp(20px, 5vw, 32px);
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-section {
+    padding: 32px 16px;
+  }
+  
+  .contact__container {
+    gap: 28px;
   }
 }
 
@@ -518,6 +534,31 @@ const getDataBind = (field: string) => {
 .contact__error {
   color: #dc2626;
   font-size: 14px;
+  margin-top: 6px;
+  min-height: 20px;
+  display: block;
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.contact__input--error,
+.contact__textarea--error {
+  border-color: #dc2626 !important;
+  background-color: rgba(220, 38, 38, 0.05);
+}
+
+.contact__input--error:focus,
+.contact__textarea--error:focus {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.required {
+  color: #dc2626;
+  font-weight: 700;
+}
+  font-size: 14px;
   margin-top: 4px;
   min-height: 20px;
 }
@@ -567,3 +608,126 @@ const getDataBind = (field: string) => {
 }
 </style>
 
+<script>
+/**
+ * Script de gestion du formulaire de contact
+ * - Validation des champs
+ * - Gestion de la soumission
+ */
+
+// Attendre que le DOM soit chargé
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('.contact__form') as HTMLFormElement;
+  if (!form) return;
+
+  // Patterns de validation
+  const patterns = {
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    phone: /^[\d\s\-\+\(\)\.]+$/,
+    name: /^[a-zA-ZÀ-ÿ\s\-']{2,}$/
+  };
+
+  // Validation d'un champ
+  function validateField(field: HTMLInputElement | HTMLTextAreaElement): boolean {
+    const value = field.value.trim();
+    const errorDiv = document.getElementById(`${field.id}-error`);
+    
+    if (!errorDiv) return true;
+
+    let isValid = true;
+    let errorMessage = '';
+
+    // Vérifier si requis
+    if (field.hasAttribute('required') && !value) {
+      isValid = false;
+      errorMessage = 'Ce champ est requis';
+    }
+    // Validation email
+    else if (field.type === 'email' && value && !patterns.email.test(value)) {
+      isValid = false;
+      errorMessage = 'Veuillez entrer une adresse email valide';
+    }
+    // Validation téléphone
+    else if (field.type === 'tel' && value && !patterns.phone.test(value)) {
+      isValid = false;
+      errorMessage = 'Veuillez entrer un numéro de téléphone valide';
+    }
+    // Validation nom
+    else if (field.name === 'name' && value && !patterns.name.test(value)) {
+      isValid = false;
+      errorMessage = 'Veuillez entrer un nom valide';
+    }
+
+    // Afficher/masquer l'erreur
+    errorDiv.textContent = errorMessage;
+    field.classList.toggle('contact__input--error', !isValid);
+    field.setAttribute('aria-invalid', (!isValid).toString());
+
+    return isValid;
+  }
+
+  // Validation en temps réel
+  const fields = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea');
+  fields.forEach(field => {
+    field.addEventListener('blur', () => validateField(field));
+    field.addEventListener('input', () => {
+      if (field.classList.contains('contact__input--error')) {
+        validateField(field);
+      }
+    });
+  });
+
+  // Gestion de la soumission (envoi à Web3Forms)
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Valider tous les champs
+    let isFormValid = true;
+    fields.forEach(field => {
+      if (!validateField(field)) {
+        isFormValid = false;
+      }
+    });
+
+    if (!isFormValid) {
+      // Focus sur le premier champ en erreur
+      const firstError = form.querySelector('.contact__input--error') as HTMLElement;
+      firstError?.focus();
+      return;
+    }
+
+    // Récupérer les données du formulaire
+    const formData = new FormData(form);
+
+    // UI: désactiver le bouton submit
+    const submitBtn = form.querySelector('.contact__submit') as HTMLButtonElement | null;
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (response.ok) {
+        form.reset();
+        alert('Merci ! Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.');
+      } else {
+        const message = (result && (result.message || result.error)) || 'Une erreur est survenue. Veuillez réessayer plus tard.';
+        alert(message);
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du formulaire:', error);
+      alert('Une erreur réseau est survenue. Veuillez réessayer plus tard.');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+});
+
+</script>

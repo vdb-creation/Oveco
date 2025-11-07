@@ -1,52 +1,44 @@
-# 🎨 Astro Template - Wireframe Components# 🎨 Astro Template - Wireframe Components
+# 🎨 Astro Template - Wireframe Components
 
+Un template Astro moderne avec une collection complète de composants wireframe prêts à l'emploi.
 
+## ✨ Fonctionnalités
 
-Un template Astro moderne avec une collection complète de composants wireframe prêts à l'emploi.Un template Astro moderne avec une collection complète de composants wireframe prêts à l'emploi.
+- 🎯 **10 composants wireframe** prêts à l'emploi
+- 📱 **100% Responsive** - Mobile, tablette, desktop
+- 🎨 **Design minimaliste** - Style wireframe épuré
+- ⚡ **Performance optimale** - Astro SSG
+- 🔧 **Facile à personnaliser** - Props et styles modulaires
+- 📝 **TinaCMS intégré** - CMS headless (optionnel)
+- 🚀 **GitHub Actions** - Déploiement automatique
+ 
 
+## 📦 Composants inclus
 
+1. **WFNavbar** - Navigation responsive avec menu mobile
+2. **WFHero** - Section héro avec CTA
+3. **WFServices** - Grille de services
+4. **WFProjectShowcase** - Carrousel de projets interactif
+5. **WFTestimonials** - Témoignages clients
+6. **WFStats** - Statistiques/chiffres clés
+7. **WFFAQ** - Questions fréquentes (accordéon)
+8. **WFCTA** - Appel à l'action
+9. **WFContact** - Formulaire de contact
+10. **WFFooter** - Pied de page complet
 
-## ✨ Fonctionnalités## ✨ Fonctionnalités
+## 📚 Documentation
 
+ 
 
+### Images & Optimisations
+- 🖼️ [Smart Image Component](docs-GPT/smart-image.md) - Component d'images optimisé
+- ⚡ [Optimisations avancées](docs-GPT/image-optimizations-advanced.md)
+- 📝 [Scripts d'optimisation](SCRIPTS-OPTIMISATION-IMAGES.md)
 
-- 🎯 **10 composants wireframe** prêts à l'emploi- 🎯 **10 composants wireframe** prêts à l'emploi
-
-- 📱 **100% Responsive** - Mobile, tablette, desktop- 📱 **100% Responsive** - Mobile, tablette, desktop
-
-- 🎨 **Design minimaliste** - Style wireframe épuré- 🎨 **Design minimaliste** - Style wireframe épuré
-
-- ⚡ **Performance optimale** - Astro SSG- ⚡ **Performance optimale** - Astro SSG
-
-- 🔧 **Facile à personnaliser** - Props et styles modulaires- 🔧 **Facile à personnaliser** - Props et styles modulaires
-
-- 📝 **TinaCMS intégré** - CMS headless (optionnel)- 📝 **TinaCMS intégré** - CMS headless (optionnel)
-
-- 🚀 **GitHub Actions** - Déploiement automatique- 🚀 **GitHub Actions** - Déploiement automatique
-
-
-
-## 📦 Composants inclus## 📦 Composants inclus
-
-
-
-1. **WFNavbar** - Navigation responsive avec menu mobile1. **WFNavbar** - Navigation responsive avec menu mobile
-
-2. **WFHero** - Section héro avec CTA2. **WFHero** - Section héro avec CTA
-
-3. **WFServices** - Grille de services3. **WFServices** - Grille de services
-
-4. **WFProjectShowcase** - Carrousel de projets interactif4. **WFProjectShowcase** - Carrousel de projets interactif
-
-5. **WFTestimonials** - Témoignages clients5. **WFTestimonials** - Témoignages clients
-
-6. **WFStats** - Statistiques/chiffres clés6. **WFStats** - Statistiques/chiffres clés
-
-7. **WFFAQ** - Questions fréquentes (accordéon)7. **WFFAQ** - Questions fréquentes (accordéon)
-
-8. **WFCTA** - Appel à l'action8. **WFCTA** - Appel à l'action
-
-9. **WFContact** - Formulaire de contact9. **WFContact** - Formulaire de contact
+### CMS & Contenu
+- 🎨 [TinaCMS Guide](docs-GPT/tinacms.md)
+- 📋 [Template Guide](docs-GPT/template-guide.md)
+- ✨ [Animations Astro](docs-GPT/anim-astro.md)
 
 10. **WFFooter** - Pied de page complet10. **WFFooter** - Pied de page complet
 

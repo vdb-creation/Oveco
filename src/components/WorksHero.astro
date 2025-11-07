@@ -51,43 +51,50 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
 
 <section class="works-hero" aria-labelledby={id}>
   <div class="works-hero__inner">
-    <div class="works-hero__side works-hero__side--left" aria-hidden="true">
+    <div class="works-hero__side works-hero__side--left" aria-hidden="true" role="presentation">
       <figure class="works-hero__figure">
         <SmartImage
           cmsSrc={safeMediaLeft.src}
           alt={safeMediaLeft.alt}
-          width={266}
-          height={320}
+          width={320}
+          height={384}
           context="galerie"
           loading="lazy"
           class="works-hero__image"
           data-bind={`sections.${sectionIndex}.mediaLeft.src`}
+          data-bind-attr="src"
         />
       </figure>
     </div>
 
     <div class="works-hero__content">
       <header class="works-hero__header">
-        <p class="works-hero__subtitle" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</p>
+        <p class="works-hero__subtitle" data-bind={`sections.${sectionIndex}.subtitle`} aria-label="Sous-titre de la section réalisations">{subtitle}</p>
         <h1 class="works-hero__title" id={id} data-bind={`sections.${sectionIndex}.title`}>{title}</h1>
       </header>
       <p class="works-hero__desc" data-bind={`sections.${sectionIndex}.description`}>{description}</p>
-      <a href={ctaHref} class="works-hero__cta" data-bind={`sections.${sectionIndex}.ctaHref`}>
+      <a 
+        href={ctaHref} 
+        class="works-hero__cta" 
+        data-bind={`sections.${sectionIndex}.ctaHref`}
+        aria-label={`${ctaLabel} - Découvrez nos réalisations`}
+      >
         <span data-bind={`sections.${sectionIndex}.ctaLabel`}>{ctaLabel}</span>
       </a>
     </div>
 
-    <div class="works-hero__side works-hero__side--right" aria-hidden="true">
+    <div class="works-hero__side works-hero__side--right" aria-hidden="true" role="presentation">
       <figure class={`works-hero__figure ${safeMediaRight.overlay ? 'works-hero__figure--overlay' : ''}`}>
         <SmartImage
           cmsSrc={safeMediaRight.src}
           alt={safeMediaRight.alt}
-          width={266}
-          height={320}
+          width={320}
+          height={384}
           context="galerie"
           loading="lazy"
           class="works-hero__image"
           data-bind={`sections.${sectionIndex}.mediaRight.src`}
+          data-bind-attr="src"
         />
       </figure>
     </div>
@@ -159,6 +166,8 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  /* Amélioration accessibilité */
+  pointer-events: none;
 }
 
 .works-hero__side--left {
@@ -171,49 +180,77 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   order: 3;
 }
 
-/* Desktop: afficher les images */
-@media (min-width: 1025px) {
+/* Desktop large: afficher les images en taille optimale */
+@media (min-width: 1400px) {
   .works-hero__side {
     display: flex;
   }
 }
 
-/* Tablette: cacher les images */
-@media (max-width: 1024px) and (min-width: 769px) {
+/* Desktop: afficher les images */
+@media (min-width: 1025px) and (max-width: 1399px) {
   .works-hero__side {
-    display: none;
+    display: flex;
   }
 }
 
-/* Mobile: cacher les images */
-@media (max-width: 768px) {
+/* Tablette large: cacher progressivement */
+@media (max-width: 1024px) and (min-width: 769px) {
   .works-hero__side {
     display: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* Mobile: cacher complètement */
+@media (max-width: 768px) {
+  .works-hero__side {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
 }
 
 .works-hero__figure {
-  width: 266px;
-  height: 320px;
+  width: clamp(240px, 20vw, 320px);
+  height: clamp(290px, 24vw, 384px);
   position: relative;
   overflow: hidden;
-  border-radius: 30px;
+  border-radius: clamp(20px, 2.5vw, 30px);
   margin: 0;
   display: block;
   flex-shrink: 0;
+  /* Amélioration performance */
+  will-change: transform;
+  transform: translateZ(0);
+  contain: layout style paint;
 }
 
 @media (min-width: 1400px) {
   .works-hero__figure {
     width: 320px;
     height: 384px;
+    border-radius: 30px;
   }
 }
 
-/* Tablette: réduire légèrement pour éviter les chevauchements */
-@media (max-width: 1200px) and (min-width: 1025px) {
-  .works-hero__inner { gap: clamp(16px, 3vw, 40px); }
-  .works-hero__figure { width: 240px; height: 290px; }
+/* Desktop standard: ajuster la taille */
+@media (max-width: 1399px) and (min-width: 1200px) {
+  .works-hero__figure { 
+    width: clamp(260px, 18vw, 300px); 
+    height: clamp(310px, 22vw, 360px); 
+  }
+}
+
+/* Tablette: réduire pour éviter les chevauchements */
+@media (max-width: 1199px) and (min-width: 1025px) {
+  .works-hero__inner { gap: clamp(16px, 3vw, 32px); }
+  .works-hero__figure { 
+    width: clamp(220px, 17vw, 260px); 
+    height: clamp(265px, 20vw, 312px); 
+    border-radius: 24px;
+  }
 }
 
 .works-hero__figure--overlay::after {
@@ -230,6 +267,10 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   object-fit: cover;
   object-position: center;
   display: block;
+  /* Amélioration performance et qualité */
+  image-rendering: optimizeQuality;
+  image-rendering: -webkit-optimize-contrast;
+  will-change: auto;
 }
 
 .works-hero__content {
@@ -239,10 +280,13 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   justify-content: flex-start;
   align-items: center;
   gap: clamp(12px, 3vw, 18px);
-  padding-inline: clamp(16px, 4vw, 32px);
+  padding-inline: clamp(1rem, 4vw, 2rem);
   flex-shrink: 1;
   flex-grow: 1;
   order: 2;
+  /* Amélioration mobile */
+  min-height: 280px;
+  justify-content: center;
 }
 
 /* Desktop: largeur optimale avec images */
@@ -257,7 +301,16 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   .works-hero__content {
     width: 100%;
     max-width: 100%;
-    padding-inline: clamp(16px, 4vw, 48px);
+    padding-inline: clamp(1.25rem, 5vw, 3rem);
+    gap: clamp(16px, 4vw, 24px);
+  }
+}
+
+@media (max-width: 768px) {
+  .works-hero__content {
+    padding-inline: clamp(1.5rem, 6vw, 2rem);
+    padding-block: clamp(2rem, 6vw, 3rem);
+    min-height: auto;
   }
 }
 
@@ -266,19 +319,19 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(4px, 1vw, 6px);
+  gap: clamp(6px, 1.5vw, 10px);
 }
 
 .works-hero__subtitle {
   align-self: stretch;
   text-align: center;
   color: #5C6D6F;
-  font-size: clamp(16px, 3vw, 19.2px);
+  font-size: clamp(14px, 2.5vw, 19.2px);
   font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
   font-weight: 700;
   text-transform: uppercase;
-  line-height: clamp(18px, 3.5vw, 20px);
-  letter-spacing: clamp(1.2px, 0.3vw, 1.92px);
+  line-height: 1.4;
+  letter-spacing: clamp(1px, 0.25vw, 1.92px);
   margin: 0;
 }
 
@@ -286,22 +339,47 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   align-self: stretch;
   text-align: center;
   color: #334749;
-  font-size: clamp(28px, 6vw, 47.78px);
+  font-size: clamp(24px, 5vw, 47.78px);
   font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
   font-weight: 800;
-  line-height: clamp(34px, 7vw, 57.34px);
+  line-height: 1.2;
   margin: 0;
+  /* Amélioration lisibilité mobile */
+  hyphens: auto;
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .works-hero__title {
+    font-size: clamp(22px, 6vw, 36px);
+    line-height: 1.25;
+  }
+}
+
+@media (max-width: 480px) {
+  .works-hero__title {
+    font-size: clamp(20px, 7vw, 28px);
+    line-height: 1.3;
+  }
 }
 
 .works-hero__desc {
   align-self: stretch;
   text-align: center;
   color: #5C6D6F;
-  font-size: clamp(16px, 3vw, 19.2px);
+  font-size: clamp(15px, 2.5vw, 19.2px);
   font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
   font-weight: 400;
-  line-height: clamp(24px, 4vw, 28.8px);
+  line-height: 1.6;
   margin: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .works-hero__desc {
+    font-size: clamp(14px, 3vw, 17px);
+    line-height: 1.65;
+  }
 }
 
 .works-hero__cta {
@@ -309,30 +387,56 @@ const safeMediaRight = mediaRight || { src: "/uploads/hero/maison-build.png", al
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 18px 30px;
+  padding: clamp(14px, 2vw, 18px) clamp(24px, 3vw, 30px);
   background: #334749;
   border-radius: 30px;
   color: #FFFEF8;
-  font-size: 19.2px;
+  font-size: clamp(16px, 2vw, 19.2px);
   font-family: "Nunito Sans", sans-serif;
   font-weight: 700;
-  line-height: 23.04px;
+  line-height: 1.2;
   text-align: center;
   border: none;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
+  /* Amélioration accessibilité tactile */
+  min-height: 48px;
+  min-width: 140px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.works-hero__cta:hover {
+.works-hero__cta:hover,
+.works-hero__cta:focus {
   background: #048B9A;
   transform: translateY(-2px);
+}
+
+.works-hero__cta:focus-visible {
+  outline: 3px solid #048B9A;
+  outline-offset: 4px;
+}
+
+.works-hero__cta:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .works-hero__cta {
+    padding: 16px 28px;
+    min-height: 52px;
+    font-size: 17px;
+  }
 }
 
 @media (max-width: 480px) {
   .works-hero__cta {
     font-size: 16px;
-    padding: 16px 24px;
+    padding: 14px 24px;
+    min-height: 48px;
+    width: auto;
+    max-width: 100%;
   }
 }
 </style>

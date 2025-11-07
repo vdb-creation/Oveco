@@ -7,6 +7,59 @@ type Q = { query: string; variables: any; data: any };
 const $$ = <T extends Element = HTMLElement>(sel: string) =>
   Array.from(document.querySelectorAll<T>(sel));
 
+// Détection contexte admin (utilisé pour limiter certains patchs si besoin)
+const isAdmin = () => {
+  try {
+    return typeof window !== 'undefined' && (window.top?.location?.pathname?.startsWith('/admin') || window.location?.pathname?.startsWith('/admin'));
+  } catch {
+    return false;
+  }
+};
+
+// util: résolution d'un chemin style "sections.3.title" depuis un objet racine
+function getByBindPath(docRoot: any, bind: string) {
+  if (!docRoot || !bind) return undefined;
+  const parts = bind.split('.');
+  let cur: any = docRoot;
+  for (let i = 0; i < parts.length; i++) {
+    const seg = parts[i];
+    const idx = /^\d+$/.test(seg) ? Number(seg) : seg;
+    if (Array.isArray(cur) && typeof idx === 'number') {
+      cur = cur[idx];
+    } else if (cur && typeof cur === 'object' && seg in cur) {
+      cur = cur[seg as keyof typeof cur];
+    } else {
+      return undefined;
+    }
+  }
+  return cur;
+}
+
+// Applique une valeur sur un élément HTML selon le tag/attribut (data-bind-attr)
+function applyValue(el: HTMLElement, value: unknown) {
+  // Cas images et liens: raccourcis pratiques si pas d'attribut explicite
+  if (el instanceof HTMLImageElement) {
+    if (typeof value === 'string') el.src = value;
+    return;
+  }
+  if (el instanceof HTMLAnchorElement) {
+    if (typeof value === 'string') el.href = value;
+    return;
+  }
+
+  // Attribut ciblé via data-bind-attr (alt, title, src, href, aria-label, etc.)
+  const targetAttr = el.getAttribute('data-bind-attr');
+  if (targetAttr && typeof value === 'string') {
+    el.setAttribute(targetAttr, value);
+    return;
+  }
+
+  // Texte par défaut
+  if (value == null) return;
+  const text = typeof value === 'string' || typeof value === 'number' ? String(value) : '';
+  el.textContent = text;
+}
+
 // Fonction pour ajouter data-tina-field aux éléments avec data-bind
 const addTinaField = (bind: string, fieldPath: string) => {
   $$<HTMLElement>(`[data-bind="${bind}"]`).forEach((el) => {
@@ -507,6 +560,28 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         });
       }
     });
+  };
+
+  // Patcher générique des éléments [data-bind] (texte/attribut) avec les données live
+  const patchBindsFromDoc = (docRoot: any) => {
+    if (!docRoot) return;
+    // Optionnel: limiter au contexte admin. On n’en fait pas un hard-stop pour ne pas casser le dev live.
+    // const enabled = isAdmin();
+    // if (!enabled) return;
+
+    // Déférer au prochain frame pour limiter le jitter
+    const raf = requestAnimationFrame(() => {
+      const nodes = document.querySelectorAll<HTMLElement>('[data-bind]');
+      nodes.forEach((el) => {
+        const bind = el.getAttribute('data-bind');
+        if (!bind) return;
+        const val = getByBindPath(docRoot, bind);
+        if (val === undefined) return;
+        applyValue(el, val);
+      });
+    });
+    // cleanup pas strictement nécessaire ici, le frame est unique
+    return () => cancelAnimationFrame(raf);
   };
 
   // Référence pour détecter le changement d'ordre
@@ -1890,26 +1965,32 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
   // Mise à jour quand result.data change
   useEffect(() => {
-    
     // Extraire les données, quelle que soit la collection
     const collectionData = result.data?.home || result.data?.about_fr || result.data?.about_en || result.data?.construction_fr || result.data?.construction_en || result.data?.homeEn;
     const H = collectionData;
-    
+
     if (H && H.sections) {
-    // Créer une signature de l'ordre actuel
-    const currentOrder = H.sections
-      .map((s: any, i: number) => `${i}-${s?.__typename}`)
-      .join('|');
-    
-    // Si l'ordre a changé, réorganiser le DOM
-    if (previousOrderRef.current && previousOrderRef.current !== currentOrder) {
-      reorderSections(H.sections);
-    }
-    previousOrderRef.current = currentOrder;
-    
-    // Mettre à jour le contenu
-    updateDOM(result.data);
-      // Scanner après updateDOM pour capturer tous les éléments
+      // Créer une signature de l'ordre actuel
+      const currentOrder = H.sections
+        .map((s: any, i: number) => `${i}-${s?.__typename}`)
+        .join('|');
+
+      // Si l'ordre a changé, réorganiser le DOM
+      if (previousOrderRef.current && previousOrderRef.current !== currentOrder) {
+        reorderSections(H.sections);
+      }
+      previousOrderRef.current = currentOrder;
+
+      // Mettre à jour le contenu spécifique (mappings existants)
+      updateDOM(result.data);
+
+      // Patcher générique [data-bind] avec les données live (chemins libres)
+      const docRoot = pickDocRoot(result.data, docKey);
+      if (docRoot) {
+        patchBindsFromDoc(docRoot);
+      }
+
+      // Scanner après updateDOM pour capturer/compléter data-tina-field
       setTimeout(scanAndAddTinaFields, 100);
     } else {
       // Même sans données, scanner les data-bind pour ajouter data-tina-field
@@ -1943,6 +2024,77 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       setTimeout(scanAndAddTinaFields, 500);
       setTimeout(scanAndAddTinaFields, 1000);
     }
+  }, [result.form]);
+
+  // Rétablir un gestionnaire de clic léger pour forcer le focus du champ correct si Tina ne le fait pas
+  useEffect(() => {
+    const cms = (typeof window !== 'undefined') ? ((window as any).tinacms || (window as any).__tinacms) : null;
+
+    // Fonction de normalisation d'un chemin data-tina-field -> chemin de champ attendu par Tina
+    const normalizeFieldPath = (raw: string): string => {
+      if (!raw) return raw;
+      // Enlever éventuel préfixe fichier (ex: content/fr/home.json#sections.0.title)
+      const hashIndex = raw.indexOf('#');
+      if (hashIndex !== -1) raw = raw.slice(hashIndex + 1);
+      // Remplacer sections[0] par sections.0
+      raw = raw.replace(/sections\[(\d+)\]/g, 'sections.$1');
+      // Nettoyer doubles points
+      raw = raw.replace(/\.+/g, '.');
+      return raw;
+    };
+
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const editable = target.closest('[data-tina-field]') as HTMLElement | null;
+      if (!editable) return;
+      const attr = editable.getAttribute('data-tina-field');
+      if (!attr) return;
+      const fieldPath = normalizeFieldPath(attr);
+
+      // Si Tina gère déjà, ne pas dupliquer (heuristique: attribute "data-tina-managed")
+      if (editable.getAttribute('data-tina-managed') === '1') return;
+
+      let focused = false;
+      try {
+        if (cms) {
+          // Méthode directe setActiveField
+          if (typeof cms.setActiveField === 'function') {
+            cms.setActiveField(fieldPath);
+            focused = true;
+          } else if (cms.forms && typeof cms.forms.getAll === 'function') {
+            const forms = cms.forms.getAll();
+            const activeForm = (result as any).form ? (result as any).form : forms[0];
+            if (activeForm && typeof cms.forms.open === 'function') {
+              const formId = (activeForm as any).id || (activeForm as any).name;
+              try { cms.forms.open(formId, { field: fieldPath }); focused = true; } catch {}
+            }
+          }
+        }
+      } catch {}
+
+      if (!focused) {
+        // Fallback DOM: chercher un input correspondant dans la sidebar
+        const variants = [fieldPath, fieldPath.replace(/sections\.(\d+)\./, 'sections[$1].'), fieldPath.split('.').pop()!];
+        for (const v of variants) {
+          const sel = `input[name="${v}"], textarea[name="${v}"]`;
+          const candidate = document.querySelector(sel) as HTMLInputElement | HTMLTextAreaElement | null;
+          if (candidate) {
+            candidate.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => { try { candidate.focus(); candidate.select?.(); } catch {} }, 120);
+            focused = true;
+            break;
+          }
+        }
+      }
+
+      if (focused) {
+        editable.setAttribute('data-tina-managed', '1');
+      }
+    };
+
+    document.addEventListener('click', handleClick, false);
+    return () => document.removeEventListener('click', handleClick, false);
   }, [result.form]);
 
   return null;
