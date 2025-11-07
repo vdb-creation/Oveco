@@ -3,6 +3,15 @@ import { useEffect, useRef } from "react";
 import { useTina, tinaField } from "tinacms/dist/react";
 
 type Q = { query: string; variables: any; data: any };
+// Patch TS: étend le type retourné par useTina pour inclure "form" qui n'est pas présent dans les defs locales.
+// Permet d'accéder à result.form sans erreur TS2339.
+interface TinaUseResult {
+  data: any;
+  isClient?: boolean;
+  form?: any; // TinaCMS form instance si disponible
+  query?: string;
+  variables?: any;
+}
 
 const $$ = <T extends Element = HTMLElement>(sel: string) =>
   Array.from(document.querySelectorAll<T>(sel));
@@ -114,13 +123,13 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       
       return forms[0]?.id;
     }
-  });
+  }) as TinaUseResult; // Cast vers type étendu avec form
   
   console.log('[LiveBridge] useTina result:', {
     hasData: !!result.data,
     dataKeys: result.data ? Object.keys(result.data) : [],
-    hasForm: !!result.form,
-    formId: result.form ? (result.form as any).id : null
+    hasForm: !!(result as any).form,
+    formId: (result as any).form ? ((result as any).form as any).id : null
   });
   
   // Fonction pour trouver le document racine (selon fix.md)
@@ -783,7 +792,7 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     // Vérifier si le formulaire existe
     // Si pas de formulaire, utiliser le mode fallback pour permettre à TinaCMS de détecter les éléments
     // Le mode fallback est crucial en production où les requêtes GraphQL peuvent échouer
-    if (!result.form) {
+  if (!(result as any).form) {
       console.warn('[LiveBridge] Aucun formulaire TinaCMS trouvé. Mode fallback activé.');
       
       // Vérifier si on a des données valides pour essayer de convertir les chemins
@@ -863,7 +872,7 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       // Si le formulaire est disponible, on peut réécrire pour corriger le format
       // Sinon, on skip pour éviter de réécraser avec un format incorrect
       const hasExistingField = el.hasAttribute('data-tina-field');
-      if (hasExistingField && !result.form) {
+  if (hasExistingField && !(result as any).form) {
         skipCount++;
         return;
       }
@@ -1772,8 +1781,8 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
                       const forms = cms.forms.getAll();
                       
                       let formId: string | undefined;
-                      if (result.form) {
-                        formId = (result.form as any).id || (result.form as any).name;
+                      if ((result as any).form) {
+                        formId = ((result as any).form as any).id || ((result as any).form as any).name;
                       }
                       
                       if (!formId && forms.length > 0) {
@@ -2003,12 +2012,12 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
   // Re-scanner quand le formulaire devient disponible
   useEffect(() => {
-    if (result.form) {
+  if ((result as any).form) {
       console.log('[LiveBridge] Formulaire détecté, re-scan des éléments');
       
       // Debug: Afficher les champs disponibles dans le formulaire
       try {
-        const form = result.form as any;
+  const form = (result as any).form as any;
         const formFields = form.fields || form.getAllFields?.() || [];
         if (formFields.length > 0) {
           console.log('[LiveBridge] Champs disponibles dans le formulaire (premiers 10):', 
@@ -2024,7 +2033,7 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       setTimeout(scanAndAddTinaFields, 500);
       setTimeout(scanAndAddTinaFields, 1000);
     }
-  }, [result.form]);
+  }, [(result as any).form]);
 
   // Rétablir un gestionnaire de clic léger pour forcer le focus du champ correct si Tina ne le fait pas
   useEffect(() => {
