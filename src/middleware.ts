@@ -27,18 +27,18 @@ export const onRequest = defineMiddleware(async (context, next) => {
     // Permissions-Policy - Désactive les fonctionnalités non nécessaires
     'Permissions-Policy': 'geolocation=(), microphone=(), camera=()',
     
-    // Content Security Policy - Politique de sécurité du contenu
-    'Content-Security-Policy': [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "img-src 'self' data: https: blob:",
-      "font-src 'self' https://fonts.gstatic.com",
-      "connect-src 'self' https:",
-      "frame-ancestors 'self'",
-      "base-uri 'self'",
-      "form-action 'self'"
-    ].join('; ')
+      // Content Security Policy - Politique de sécurité du contenu
+      'Content-Security-Policy': [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+        "img-src 'self' data: https: blob:",
+        "font-src 'self' https://fonts.gstatic.com",
+        "connect-src 'self' https:",
+        "frame-ancestors 'self'",
+        "base-uri 'self'",
+        "form-action 'self' https://api.web3forms.com"
+      ].join('; ')
   };
 
   // Appliquer tous les headers
