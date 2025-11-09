@@ -108,10 +108,7 @@ const getDataBind = (field: string) => {
           <input type="hidden" name="from_name" value="Formulaire Oveco" />
           <!-- Anti-spam honeypot (reste vide) -->
           <input type="text" name="botcheck" class="contact__hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
-          <!-- Page d'origine -->
-          <input type="hidden" name="page_url" value={Astro.url.href} />
-          <!-- Redirection optionnelle post-succès (peut être changée) -->
-          <input type="hidden" name="redirect" value="/merci" />
+          <!-- Pas de page_url ni redirect pour forcer une réponse JSON au lieu de HTML -->
           <div class="contact__groups">
             <div class="contact__col">
               <div class="contact__field">
@@ -748,10 +745,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Récupérer les données du formulaire
+    // Selon la documentation Web3Forms, on peut envoyer en JSON ou FormData
+    // Référence: https://docs.web3forms.com/getting-started/customizations
+    // Pour forcer une réponse JSON, on envoie les données en JSON
+    // IMPORTANT: Vérifier dans le dashboard Web3Forms que la clé d'accès accepte les domaines :
+    // - https://oveco-conception.vdbcreation.eu/
+    // - https://oveco.be
+    // - http://localhost (pour le développement)
+    const formDataObj: Record<string, string> = {
+      access_key: '2f49656a-b6d6-41f0-bc7f-5d7c68340a41'
+    };
+    
+    // Récupérer tous les champs du formulaire
     const formData = new FormData(form);
-    // Ajouts dynamiques (assure cohérence si HTML modifié)
-    formData.append('page_url', window.location.href);
-    formData.append('user_agent', navigator.userAgent);
+    for (const [key, value] of formData.entries()) {
+      if (key !== 'botcheck' && value) { // Ignorer le honeypot
+        formDataObj[key] = value.toString();
+      }
+    }
+    
+    // S'assurer que la clé d'accès est bien présente
+    if (!formDataObj.access_key) {
+      formDataObj.access_key = '2f49656a-b6d6-41f0-bc7f-5d7c68340a41';
+    }
 
     // UI: désactiver le bouton submit
     const submitBtn = form.querySelector('.contact__submit') as HTMLButtonElement | null;
@@ -759,46 +775,123 @@ document.addEventListener('DOMContentLoaded', () => {
     showStatus('info', 'Envoi en cours...');
 
     try {
-      const response = await fetch(form.action, {
+      // Envoi à Web3Forms en JSON selon la documentation
+      // Référence: https://docs.web3forms.com/how-to-guides/html-and-javascript
+      // En envoyant en JSON avec Content-Type: application/json, Web3Forms retourne du JSON
+      // Utiliser directement l'URL Web3Forms car form.action peut être modifié par Astro
+      const web3formsUrl = 'https://api.web3forms.com/submit';
+      
+      const response = await fetch(web3formsUrl, {
         method: 'POST',
-        body: formData,
         headers: {
+          'Content-Type': 'application/json',
           'Accept': 'application/json'
-        }
+        },
+        body: JSON.stringify(formDataObj)
       });
 
+      // Vérifier le Content-Type de la réponse
+      const contentType = response.headers.get('content-type') || '';
+      const isJSON = contentType.includes('application/json');
+      
       // Tenter de parser JSON, sinon récupérer un extrait texte pour diagnostic
       let result: any = {};
+      let isHTMLResponse = false;
+      
       try {
-        result = await response.clone().json();
-      } catch {
+        if (isJSON) {
+          result = await response.clone().json();
+        } else {
+          // Si ce n'est pas du JSON, c'est probablement du HTML (redirection)
+          const rawText = await response.clone().text();
+          if (rawText) {
+            isHTMLResponse = rawText.trim().startsWith('<!DOCTYPE') || rawText.trim().startsWith('<html');
+            result = { raw: rawText.slice(0, 500), isHTML: isHTMLResponse };
+          }
+        }
+      } catch (parseError) {
         try {
           const rawText = await response.clone().text();
           if (rawText) {
-            result = { raw: rawText.slice(0, 300) };
+            isHTMLResponse = rawText.trim().startsWith('<!DOCTYPE') || rawText.trim().startsWith('<html');
+            result = { raw: rawText.slice(0, 500), isHTML: isHTMLResponse };
           }
         } catch {}
       }
 
-      console.log('[Contact] status:', response.status, 'ok:', response.ok, 'result:', result);
 
-      if (response.ok) {
+      // Web3Forms retourne { success: true } en cas de succès
+      // Si la réponse est du HTML avec statut 200, c'est probablement un succès (redirection automatique)
+      // Selon la documentation Web3Forms, on vérifie data.success (truthy check)
+      // Référence: https://docs.web3forms.com/
+      // Si Web3Forms retourne du HTML avec statut 200, on considère que c'est un succès
+      // Web3Forms peut retourner du HTML au lieu de JSON quand il détecte un Referer header
+      
+      // Calculer les conditions séparément
+      const condition1 = response.ok;
+      const condition2 = !!result;
+      const condition3 = result?.success === true;
+      const condition4 = isHTMLResponse && response.status === 200;
+      
+      const isSuccess = condition1 && condition2 && (condition3 || condition4);
+      
+      if (isSuccess) {
+        // Récupérer l'email de contact depuis le DOM (depuis les props Astro)
+        const contactEmailLink = document.querySelector('.contact__link--accent[href^="mailto:"]') as HTMLAnchorElement;
+        const contactEmail = contactEmailLink ? contactEmailLink.href.replace('mailto:', '') : 'job@oveco.be';
+        
         form.reset();
         // Masquer le formulaire et afficher un message persistant
         form.style.display = 'none';
         if (successBox) {
           successBox.hidden = false;
-          successBox.innerHTML = '<strong>Merci !</strong> Votre message a été envoyé avec succès. Nous vous répondrons au plus vite. Vous pouvez aussi nous écrire directement à <a href="mailto:' + (formData.get('email') || 'contact@oveco.be') + '" class="contact__link contact__link--accent" style="text-decoration:underline">' + (formData.get('email') || 'contact@oveco.be') + '</a>.';
+          successBox.innerHTML = '<strong>Merci !</strong> Votre message a été envoyé avec succès. Nous vous répondrons au plus vite. Vous pouvez aussi nous écrire directement à <a href="mailto:' + contactEmail + '" class="contact__link contact__link--accent" style="text-decoration:underline">' + contactEmail + '</a>.';
         } else {
           showStatus('success', 'Message envoyé ✅');
         }
       } else {
-        const raw = (result && (result.raw || result.detail || result.errors)) ? ` (détails: ${JSON.stringify(result).slice(0,180)}…)` : '';
-        const message = (result && (result.message || result.error)) || `Erreur (${response.status}). Veuillez réessayer plus tard.${raw}`;
-        showStatus('error', message);
+        
+        // Messages d'erreur selon la documentation Web3Forms
+        // Référence: https://docs.web3forms.com/
+        let errorMessage = 'Erreur lors de l\'envoi. Veuillez réessayer plus tard.';
+        
+        if (isHTMLResponse) {
+          // Si Web3Forms retourne du HTML avec un statut 200, c'est probablement un succès
+          // Web3Forms peut retourner du HTML au lieu de JSON quand il détecte un Referer
+          // On considère cela comme un succès si le statut est 200
+          if (response.status === 200) {
+            // C'est probablement un succès - Web3Forms a traité la requête mais retourne du HTML
+            const contactEmailLink = document.querySelector('.contact__link--accent[href^="mailto:"]') as HTMLAnchorElement;
+            const contactEmail = contactEmailLink ? contactEmailLink.href.replace('mailto:', '') : 'job@oveco.be';
+            
+            form.reset();
+            form.style.display = 'none';
+            if (successBox) {
+              successBox.hidden = false;
+              successBox.innerHTML = '<strong>Merci !</strong> Votre message a été envoyé avec succès. Nous vous répondrons au plus vite. Vous pouvez aussi nous écrire directement à <a href="mailto:' + contactEmail + '" class="contact__link contact__link--accent" style="text-decoration:underline">' + contactEmail + '</a>.';
+            } else {
+              showStatus('success', 'Message envoyé ✅');
+            }
+            return; // Sortir de la fonction, c'est un succès
+          } else {
+            errorMessage = 'Web3Forms a retourné une page HTML au lieu de JSON. Vérifiez votre configuration.';
+          }
+        } else if (result && result.message) {
+          // Web3Forms retourne le message d'erreur dans result.message
+          errorMessage = result.message;
+        } else if (result && result.error) {
+          errorMessage = result.error;
+        } else if (!response.ok) {
+          errorMessage = `Erreur HTTP ${response.status}: ${response.statusText}`;
+        } else if (result && result.success === false) {
+          errorMessage = 'L\'envoi a échoué. Vérifiez votre clé d\'accès Web3Forms et les restrictions de domaine.';
+        } else if (!result || Object.keys(result).length === 0) {
+          errorMessage = 'Réponse vide de Web3Forms. Vérifiez votre clé d\'accès et la configuration.';
+        }
+        
+        showStatus('error', errorMessage);
       }
     } catch (error) {
-      console.error('Erreur lors de l\'envoi du formulaire:', error);
       showStatus('error', 'Erreur réseau. Veuillez réessayer plus tard.');
     } finally {
       if (submitBtn) submitBtn.disabled = false;

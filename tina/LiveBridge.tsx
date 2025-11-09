@@ -98,13 +98,6 @@ const setAttr = (bind: string, attr: string, val?: string) =>
 export default function LiveBridge(props: { home: Q; docKey?: string }) {
   const { docKey } = props;
   
-  console.log('[LiveBridge] Initialisation - docKey:', docKey, 'home props:', {
-    hasData: !!props.home?.data,
-    dataKeys: props.home?.data ? Object.keys(props.home.data) : [],
-    hasQuery: !!props.home?.query,
-    hasVariables: !!props.home?.variables
-  });
-  
   const result = useTina({
     ...props.home,
     experimental___selectFormByFormId: (forms?: any[]) => {
@@ -124,13 +117,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       return forms[0]?.id;
     }
   }) as TinaUseResult; // Cast vers type étendu avec form
-  
-  console.log('[LiveBridge] useTina result:', {
-    hasData: !!result.data,
-    dataKeys: result.data ? Object.keys(result.data) : [],
-    hasForm: !!(result as any).form,
-    formId: (result as any).form ? ((result as any).form as any).id : null
-  });
   
   // Fonction pour trouver le document racine (selon fix.md)
   // Utilise docKey explicite si fourni, sinon cherche le premier objet avec sections
@@ -783,17 +769,13 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     const elementsWithBind = $$<HTMLElement>('[data-bind]');
     
     if (elementsWithBind.length === 0) {
-      console.warn('[LiveBridge] Aucun élément avec data-bind trouvé sur la page');
       return;
     }
-    
-    console.log(`[LiveBridge] ${elementsWithBind.length} éléments avec data-bind trouvés`);
     
     // Vérifier si le formulaire existe
     // Si pas de formulaire, utiliser le mode fallback pour permettre à TinaCMS de détecter les éléments
     // Le mode fallback est crucial en production où les requêtes GraphQL peuvent échouer
   if (!(result as any).form) {
-      console.warn('[LiveBridge] Aucun formulaire TinaCMS trouvé. Mode fallback activé.');
       
       // Vérifier si on a des données valides pour essayer de convertir les chemins
       const hasValidData = result.data && Object.keys(result.data).length > 0;
@@ -825,7 +807,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
           fallbackCount++;
         }
       });
-      console.log(`[LiveBridge] ${fallbackCount} éléments annotés avec data-tina-field (mode fallback)`);
       
       // En production, même sans données, on doit quand même ajouter les attributs
       // pour que TinaCMS puisse détecter les éléments éditables
@@ -844,18 +825,15 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     // Même sans formulaire, si on a des données, on peut préparer pour quand le formulaire sera disponible
     
     if (!result.data || Object.keys(result.data).length === 0) {
-      console.warn('[LiveBridge] result.data est vide, impossible de résoudre les chemins TinaCMS');
       return;
     }
     
     // Trouver le document racine avec docKey explicite
     const docRoot = pickDocRoot(result.data, docKey);
     if (!docRoot) {
-      console.warn('[LiveBridge] docRoot non trouvé. result.data:', Object.keys(result.data || {}), 'docKey:', docKey);
       return;
     }
     
-    console.log('[LiveBridge] docRoot trouvé avec', docRoot.sections?.length || 0, 'sections');
     
     let successCount = 0;
     let skipCount = 0;
@@ -1000,7 +978,6 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
           
           // Log pour debug: vérifier le format généré
           if (successCount <= 5) { // Log seulement les 5 premiers pour ne pas polluer
-            console.log(`[LiveBridge] Attribut ajouté: data-bind="${bind}" -> data-tina-field="${attr}"`);
           }
           
           // Propagation automatique vers les images et wrappers
@@ -1038,15 +1015,10 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         }
       } catch (err) {
         errorCount++;
-        console.debug('[LiveBridge] Erreur lors du traitement d\'un élément:', err);
       }
     });
     
     // Log uniforme pour toutes les pages
-    console.log(`[LiveBridge] Scan terminé: ${successCount} succès, ${skipCount} ignorés, ${errorCount} erreurs`);
-    if (errorCount > 0) {
-      console.warn('[LiveBridge] Certains éléments n\'ont pas pu être annotés avec data-tina-field');
-    }
   };
 
   // Pas de styles CSS personnalisés - TinaCMS utilise ses propres styles par défaut
@@ -2013,16 +1985,12 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
   // Re-scanner quand le formulaire devient disponible
   useEffect(() => {
   if ((result as any).form) {
-      console.log('[LiveBridge] Formulaire détecté, re-scan des éléments');
       
       // Debug: Afficher les champs disponibles dans le formulaire
       try {
   const form = (result as any).form as any;
         const formFields = form.fields || form.getAllFields?.() || [];
         if (formFields.length > 0) {
-          console.log('[LiveBridge] Champs disponibles dans le formulaire (premiers 10):', 
-            formFields.slice(0, 10).map((f: any) => f.name || f.path || f.key).filter(Boolean)
-          );
         }
       } catch (e) {
         // Ignorer les erreurs de debug
