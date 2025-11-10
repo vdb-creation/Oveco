@@ -18,18 +18,6 @@
         "overlay": true
       },
       "_template": "worksHero"
-    },
-    {
-      "subtitle": "Nous contacter",
-      "title": "Vous avez un projet similaire ?",
-      "description": "Contactez-nous pour discuter de votre projet d'auto-construction ou de rénovation écologique. Notre équipe est disponible pour répondre à toutes vos questions et vous proposer une solution adaptée à vos besoins.",
-      "contactInfo": {
-        "email": "contact@oveco.be",
-        "phone": "+32 473 / 68.99.02",
-        "location": "Région de Beauvechain, Belgique"
-      },
-      "formAction": "#contact",
-      "_template": "contact"
     }
   ]
 }

@@ -10,6 +10,11 @@ import Projects from '../../components/Projects.astro';
 import Contact from '../../components/Contact.astro';
 import Footer from '../../components/Footer.astro';
 import { getAllProjects, getProjectBySlug } from '../../lib/projects.ts';
+import { DEFAULT_FORM_FIELDS } from '../../types/contact.ts';
+
+// Utiliser les champs par défaut (sera mis à jour dynamiquement via globalComponents dans DynamicPage)
+// Ici on garde les défauts pour compatibilité, mais idéalement utiliser DynamicPage
+const formFieldsToUse = DEFAULT_FORM_FIELDS;
 
 // Génération des pages statiques
 export async function getStaticPaths() {
@@ -176,6 +181,7 @@ const pageDescription = project.metaDescription || project.excerpt || `Découvre
       location: "Région de Beauvechain, Belgique"
     }}
     formAction="#contact"
+    formFields={formFieldsToUse}
     sectionIndex={6}
   />
 

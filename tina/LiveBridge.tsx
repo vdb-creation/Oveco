@@ -69,11 +69,17 @@ function applyValue(el: HTMLElement, value: unknown) {
   el.textContent = text;
 }
 
-// Fonction pour ajouter data-tina-field aux éléments avec data-bind
-const addTinaField = (bind: string, fieldPath: string) => {
+// Nouvelle fonction : ajoute data-tina-field à partir de la RÉFÉRENCE OBJET réelle (pas d'un chemin string manuel)
+// Respecte fix.md : toujours utiliser tinaField(obj, prop) sur l'objet original de useTina().data
+const addLeafField = (bind: string, obj: any, prop: string) => {
+  if (!obj || typeof obj !== 'object') return;
   $$<HTMLElement>(`[data-bind="${bind}"]`).forEach((el) => {
-    // Ajouter data-tina-field pour que TinaCMS puisse détecter l'élément éditable
-    el.setAttribute("data-tina-field", fieldPath);
+    try {
+      const encoded = tinaField(obj, prop as any);
+      el.setAttribute('data-tina-field', encoded);
+    } catch {
+      // En cas d'erreur (champ absent de la query), on n'applique rien pour éviter faux focus
+    }
   });
 };
 
@@ -304,12 +310,11 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // HERO
       if (template === "hero") {
-        // Les chemins TinaCMS utilisent sections.INDEX.FIELD (sans le template et sans crochets)
-        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
-        addTinaField(`${prefix}.description`, `sections.${index}.description`);
-        addTinaField(`${prefix}.ctaText`, `sections.${index}.ctaText`);
-        addTinaField(`${prefix}.ctaUrl`, `sections.${index}.ctaUrl`);
+        addLeafField(`${prefix}.subtitle`, section, 'subtitle');
+        addLeafField(`${prefix}.title`, section, 'title');
+        addLeafField(`${prefix}.description`, section, 'description');
+        addLeafField(`${prefix}.ctaText`, section, 'ctaText');
+        addLeafField(`${prefix}.ctaUrl`, section, 'ctaUrl');
         
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
@@ -320,8 +325,13 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // SERVICES
       if (template === "services") {
+        // titre de section
+        addLeafField(`${prefix}.title`, section, 'title');
         setText(`${prefix}.title`, section.title);
+        // items (liste d'objets)
         (section.items || []).forEach((item: any, i: number) => {
+          addLeafField(`${prefix}.items.${i}.title`, item, 'title');
+          addLeafField(`${prefix}.items.${i}.description`, item, 'description');
           setText(`${prefix}.items.${i}.title`, item.title);
           setText(`${prefix}.items.${i}.description`, item.description);
         });
@@ -329,11 +339,11 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // WORKS HERO
       if (template === "workshero") {
-        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
-        addTinaField(`${prefix}.description`, `sections.${index}.description`);
-        addTinaField(`${prefix}.ctaLabel`, `sections.${index}.ctaLabel`);
-        addTinaField(`${prefix}.ctaHref`, `sections.${index}.ctaHref`);
+        addLeafField(`${prefix}.subtitle`, section, 'subtitle');
+        addLeafField(`${prefix}.title`, section, 'title');
+        addLeafField(`${prefix}.description`, section, 'description');
+        addLeafField(`${prefix}.ctaLabel`, section, 'ctaLabel');
+        addLeafField(`${prefix}.ctaHref`, section, 'ctaHref');
         
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
@@ -344,9 +354,9 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // EXPERTISE
       if (template === "expertise") {
-        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
-        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        addLeafField(`${prefix}.subtitle`, section, 'subtitle');
+        addLeafField(`${prefix}.title`, section, 'title');
+        addLeafField(`${prefix}.description`, section, 'description');
         
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
@@ -354,8 +364,8 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         
         // Gérer les items cards
         (section.cards || []).forEach((card: any, i: number) => {
-          addTinaField(`${prefix}.cards.${i}.title`, `sections.${index}.cards.${i}.title`);
-          addTinaField(`${prefix}.cards.${i}.description`, `sections.${index}.cards.${i}.description`);
+          addLeafField(`${prefix}.cards.${i}.title`, card, 'title');
+          addLeafField(`${prefix}.cards.${i}.description`, card, 'description');
           
           setText(`${prefix}.cards.${i}.title`, card.title);
           setText(`${prefix}.cards.${i}.description`, card.description);
@@ -364,14 +374,14 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // STATS
       if (template === "stats") {
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addLeafField(`${prefix}.title`, section, 'title');
         setText(`${prefix}.title`, section.title);
         
         // Gérer les items stats
         (section.stats || []).forEach((stat: any, i: number) => {
-          addTinaField(`${prefix}.stats.${i}.value`, `sections.${index}.stats.${i}.value`);
-          addTinaField(`${prefix}.stats.${i}.label`, `sections.${index}.stats.${i}.label`);
-          addTinaField(`${prefix}.stats.${i}.description`, `sections.${index}.stats.${i}.description`);
+          addLeafField(`${prefix}.stats.${i}.value`, stat, 'value');
+          addLeafField(`${prefix}.stats.${i}.label`, stat, 'label');
+          addLeafField(`${prefix}.stats.${i}.description`, stat, 'description');
           
           setText(`${prefix}.stats.${i}.value`, stat.value);
           setText(`${prefix}.stats.${i}.label`, stat.label);
@@ -381,11 +391,11 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // AUTOCONSTRUCTION
       if (template === "autoconstruction") {
-        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
-        addTinaField(`${prefix}.description`, `sections.${index}.description`);
-        addTinaField(`${prefix}.ctaLabel`, `sections.${index}.ctaLabel`);
-        addTinaField(`${prefix}.ctaHref`, `sections.${index}.ctaHref`);
+        addLeafField(`${prefix}.subtitle`, section, 'subtitle');
+        addLeafField(`${prefix}.title`, section, 'title');
+        addLeafField(`${prefix}.description`, section, 'description');
+        addLeafField(`${prefix}.ctaLabel`, section, 'ctaLabel');
+        addLeafField(`${prefix}.ctaHref`, section, 'ctaHref');
         
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
@@ -395,8 +405,8 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         
         // Gérer les items services
         (section.services || []).forEach((service: any, i: number) => {
-          addTinaField(`${prefix}.services.${i}.title`, `sections.${index}.services.${i}.title`);
-          addTinaField(`${prefix}.services.${i}.description`, `sections.${index}.services.${i}.description`);
+          addLeafField(`${prefix}.services.${i}.title`, service, 'title');
+          addLeafField(`${prefix}.services.${i}.description`, service, 'description');
           
           setText(`${prefix}.services.${i}.title`, service.title);
           setText(`${prefix}.services.${i}.description`, service.description);
@@ -405,11 +415,11 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // PROJECTS
       if (template === "projects") {
-        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
-        addTinaField(`${prefix}.description`, `sections.${index}.description`);
-        addTinaField(`${prefix}.linkText`, `sections.${index}.linkText`);
-        addTinaField(`${prefix}.linkUrl`, `sections.${index}.linkUrl`);
+        addLeafField(`${prefix}.subtitle`, section, 'subtitle');
+        addLeafField(`${prefix}.title`, section, 'title');
+        addLeafField(`${prefix}.description`, section, 'description');
+        addLeafField(`${prefix}.linkText`, section, 'linkText');
+        addLeafField(`${prefix}.linkUrl`, section, 'linkUrl');
         
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
@@ -420,11 +430,11 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // TESTIMONIALS
       if (template === "testimonials") {
-        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
-        addTinaField(`${prefix}.description`, `sections.${index}.description`);
-        addTinaField(`${prefix}.linkText`, `sections.${index}.linkText`);
-        addTinaField(`${prefix}.linkUrl`, `sections.${index}.linkUrl`);
+        addLeafField(`${prefix}.subtitle`, section, 'subtitle');
+        addLeafField(`${prefix}.title`, section, 'title');
+        addLeafField(`${prefix}.description`, section, 'description');
+        addLeafField(`${prefix}.linkText`, section, 'linkText');
+        addLeafField(`${prefix}.linkUrl`, section, 'linkUrl');
         
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
@@ -435,9 +445,9 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // CONTACT
       if (template === "contact") {
-        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
-        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        addLeafField(`${prefix}.subtitle`, section, 'subtitle');
+        addLeafField(`${prefix}.title`, section, 'title');
+        addLeafField(`${prefix}.description`, section, 'description');
         
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
@@ -446,9 +456,9 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // COMPETENCES
       if (template === "competences") {
-        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
-        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        addLeafField(`${prefix}.subtitle`, section, 'subtitle');
+        addLeafField(`${prefix}.title`, section, 'title');
+        addLeafField(`${prefix}.description`, section, 'description');
         
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
@@ -456,9 +466,9 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         
         // Gérer les items competences
         (section.competences || []).forEach((competence: any, i: number) => {
-          addTinaField(`${prefix}.competences.${i}.title`, `sections.${index}.competences.${i}.title`);
-          addTinaField(`${prefix}.competences.${i}.description`, `sections.${index}.competences.${i}.description`);
-          addTinaField(`${prefix}.competences.${i}.url`, `sections.${index}.competences.${i}.url`);
+          addLeafField(`${prefix}.competences.${i}.title`, competence, 'title');
+          addLeafField(`${prefix}.competences.${i}.description`, competence, 'description');
+          addLeafField(`${prefix}.competences.${i}.url`, competence, 'url');
           
           setText(`${prefix}.competences.${i}.title`, competence.title);
           setText(`${prefix}.competences.${i}.description`, competence.description);
@@ -468,15 +478,15 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // CERTIFICATIONS
       if (template === "certifications") {
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
-        addTinaField(`${prefix}.description`, `sections.${index}.description`);
+        addLeafField(`${prefix}.title`, section, 'title');
+        addLeafField(`${prefix}.description`, section, 'description');
         
         setText(`${prefix}.title`, section.title);
         setText(`${prefix}.description`, section.description);
         
         // Gérer les items cards
         (section.cards || []).forEach((card: any, i: number) => {
-          addTinaField(`${prefix}.cards.${i}.text`, `sections.${index}.cards.${i}.text`);
+          addLeafField(`${prefix}.cards.${i}.text`, card, 'text');
           
           setText(`${prefix}.cards.${i}.text`, card.text);
         });
@@ -484,34 +494,38 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // GALLERIE
       if (template === "gallerie") {
-        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
+        addLeafField(`${prefix}.subtitle`, section, 'subtitle');
+        addLeafField(`${prefix}.title`, section, 'title');
         
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
         
         // Gérer les items gallery
         (section.gallery || []).forEach((item: any, i: number) => {
-          addTinaField(`${prefix}.gallery.${i}.src`, `sections.${index}.gallery.${i}.src`);
+          addLeafField(`${prefix}.gallery.${i}.src`, item, 'src');
           // Note: pour les images, on ne peut pas vraiment setText, mais on peut ajouter le data-tina-field
         });
       }
 
       // TEXTIMAGE
       if (template === "textimage") {
-        addTinaField(`${prefix}.sectionSubtitle`, `sections.${index}.sectionSubtitle`);
-        addTinaField(`${prefix}.sectionTitle`, `sections.${index}.sectionTitle`);
-        addTinaField(`${prefix}.sectionDescription`, `sections.${index}.sectionDescription`);
-        addTinaField(`${prefix}.subtitle`, `sections.${index}.subtitle`);
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
-        addTinaField(`${prefix}.description`, `sections.${index}.description`);
-        addTinaField(`${prefix}.link.label`, `sections.${index}.link.label`);
-        addTinaField(`${prefix}.link.url`, `sections.${index}.link.url`);
-        addTinaField(`${prefix}.subtitle2`, `sections.${index}.subtitle2`);
-        addTinaField(`${prefix}.title2`, `sections.${index}.title2`);
-        addTinaField(`${prefix}.description2`, `sections.${index}.description2`);
-        addTinaField(`${prefix}.link2.label`, `sections.${index}.link2.label`);
-        addTinaField(`${prefix}.link2.url`, `sections.${index}.link2.url`);
+        addLeafField(`${prefix}.sectionSubtitle`, section, 'sectionSubtitle');
+        addLeafField(`${prefix}.sectionTitle`, section, 'sectionTitle');
+        addLeafField(`${prefix}.sectionDescription`, section, 'sectionDescription');
+        addLeafField(`${prefix}.subtitle`, section, 'subtitle');
+        addLeafField(`${prefix}.title`, section, 'title');
+        addLeafField(`${prefix}.description`, section, 'description');
+        if (section.link) {
+          addLeafField(`${prefix}.link.label`, section.link, 'label');
+          addLeafField(`${prefix}.link.url`, section.link, 'url');
+        }
+        addLeafField(`${prefix}.subtitle2`, section, 'subtitle2');
+        addLeafField(`${prefix}.title2`, section, 'title2');
+        addLeafField(`${prefix}.description2`, section, 'description2');
+        if (section.link2) {
+          addLeafField(`${prefix}.link2.label`, section.link2, 'label');
+          addLeafField(`${prefix}.link2.url`, section.link2, 'url');
+        }
         
         setText(`${prefix}.sectionSubtitle`, section.sectionSubtitle);
         setText(`${prefix}.sectionTitle`, section.sectionTitle);
@@ -530,11 +544,13 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // SIMPLECOMPETENCE
       if (template === "simplecompetence") {
-        addTinaField(`${prefix}.number`, `sections.${index}.number`);
-        addTinaField(`${prefix}.title`, `sections.${index}.title`);
-        addTinaField(`${prefix}.description`, `sections.${index}.description`);
-        addTinaField(`${prefix}.cta.label`, `sections.${index}.cta.label`);
-        addTinaField(`${prefix}.cta.url`, `sections.${index}.cta.url`);
+        addLeafField(`${prefix}.number`, section, 'number');
+        addLeafField(`${prefix}.title`, section, 'title');
+        addLeafField(`${prefix}.description`, section, 'description');
+        if (section.cta) {
+          addLeafField(`${prefix}.cta.label`, section.cta, 'label');
+          addLeafField(`${prefix}.cta.url`, section.cta, 'url');
+        }
         
         setText(`${prefix}.number`, section.number);
         setText(`${prefix}.title`, section.title);
@@ -545,11 +561,11 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
 
       // FOOTER
       if (template === "footer") {
-        addTinaField(`${prefix}.companyName`, `sections.${index}.companyName`);
+        addLeafField(`${prefix}.companyName`, section, 'companyName');
         setText(`${prefix}.companyName`, section.companyName);
         (section.links || []).forEach((link: any, i: number) => {
-          addTinaField(`${prefix}.links.${i}.label`, `sections.${index}.links.${i}.label`);
-          addTinaField(`${prefix}.links.${i}.href`, `sections.${index}.links.${i}.href`);
+          addLeafField(`${prefix}.links.${i}.label`, link, 'label');
+          addLeafField(`${prefix}.links.${i}.href`, link, 'href');
           setText(`${prefix}.links.${i}.label`, link.label);
           setAttr(`${prefix}.links.${i}.href`, "href", link.href || link.url);
         });

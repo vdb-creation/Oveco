@@ -172,18 +172,6 @@
       "_template": "testimonials"
     },
     {
-      "subtitle": "Contact us",
-      "title": "Ready to start self-building?",
-      "description": "Contact us to discuss your project and discover how we can support you.",
-      "contactInfo": {
-        "email": "contact@oveco.be",
-        "phone": "+32 473 / 68.99.02",
-        "location": "Beauvechain region"
-      },
-      "formAction": "#contact",
-      "_template": "contact"
-    },
-    {
       "copyrightYear": 2025,
       "companyName": "Oveco",
       "legalText": "All rights reserved | Legal notice | Privacy policy",

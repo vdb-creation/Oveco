@@ -3,18 +3,6 @@
   "description": "Oveco accompagne vos projets d'auto-construction et de rénovation écologique. Expertise en maisons passives et énergies renouvelables.",
   "sections": [
     {
-      "subtitle": "Nous contacter",
-      "title": "Vous avez une idée, un projet, ou simplement des questions ?",
-      "description": "Écrivez-nous ou appelez-nous, on sera ravi d'en discuter.",
-      "contactInfo": {
-        "email": "job@oveco.be",
-        "phone": "+32 473 / 68.99.02",
-        "location": "Région de Beauvechain"
-      },
-      "formAction": "#contact",
-      "_template": "contact"
-    },
-    {
       "subtitle": "l'auto-construction",
       "title": "Apprendre en faisant, construire en étant accompagné",
       "description": "Nous croyons que l'auto-construction est un moyen puissant de s'approprier son habitat.",

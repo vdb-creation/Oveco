@@ -141,6 +141,68 @@ export default defineConfig({
                 ],
               },
               { type: "string", name: "formAction", label: "Action du formulaire (URL)" },
+              {
+                type: "object",
+                name: "formFields",
+                label: "Champs du formulaire (5 champs requis)",
+                description: "Configurez les 5 champs de votre formulaire. Vous pouvez les réorganiser en les glissant-déposant dans la liste. Le type choisi définit automatiquement la validation.",
+                list: true,
+                ui: {
+                  itemProps: (item: any) => {
+                    return { label: `${item?.label || 'Champ sans nom'} (${item?.type || 'type inconnu'})` };
+                  },
+                  max: 5,
+                  min: 5,
+                },
+                fields: [
+                  {
+                    type: "string",
+                    name: "type",
+                    label: "Type de champ",
+                    description: "Choisissez le type qui correspond à l'information demandée. La validation est automatique.",
+                    required: true,
+                    options: [
+                      { label: "👤 Nom (validation : lettres, espaces, tirets)", value: "name" },
+                      { label: "📧 Email (validation : format email)", value: "email" },
+                      { label: "📞 Téléphone (validation : numéros + symboles)", value: "tel" },
+                      { label: "🌐 Site web (validation : format URL)", value: "url" },
+                      { label: "🔢 Nombre (validation : chiffres uniquement)", value: "number" },
+                      { label: "📮 Code postal (validation : 4-5 chiffres)", value: "postal-code" },
+                      { label: "🏢 Entreprise (validation : texte libre)", value: "company" },
+                      { label: "✏️ Texte libre (validation : minimum 2 caractères)", value: "text" },
+                      { label: "💬 Message long - Textarea (validation : minimum 10 caractères)", value: "textarea" },
+                      { label: "📍 Adresse postale (validation : minimum 5 caractères)", value: "address" },
+                      { label: "🏙️ Ville (validation : lettres, espaces, tirets)", value: "city" },
+                      { label: "🌍 Pays (validation : lettres, espaces, tirets)", value: "country" },
+                      { label: "📅 Date (validation : JJ/MM/AAAA ou AAAA-MM-JJ)", value: "date" },
+                      { label: "💰 Budget (validation : montants, 50K, 100000€)", value: "budget" },
+                      { label: "🏗️ Type de projet (validation : minimum 3 caractères)", value: "project-type" },
+                      { label: "📏 Surface en m² (validation : nombre + unité)", value: "surface" },
+                      { label: "⏱️ Délai / Échéance (validation : texte libre)", value: "timeline" },
+                      { label: "📋 Sujet (validation : minimum 3 caractères)", value: "subject" },
+                    ],
+                  },
+                  { 
+                    type: "string", 
+                    name: "label", 
+                    label: "Label du champ",
+                    description: "Le texte affiché au-dessus du champ (ex: 'Votre nom', 'Email')",
+                    required: true 
+                  },
+                  { 
+                    type: "string", 
+                    name: "placeholder", 
+                    label: "Texte d'exemple",
+                    description: "Le texte affiché dans le champ vide (ex: 'John Carter', 'exemple@email.com')"
+                  },
+                  { 
+                    type: "boolean", 
+                    name: "required", 
+                    label: "Champ obligatoire",
+                    description: "Si activé, l'utilisateur devra remplir ce champ pour envoyer le formulaire"
+                  },
+                ],
+              },
             ],
           },
           {
@@ -202,7 +264,13 @@ export default defineConfig({
                 fields: [
                   { type: "string", name: "subtitle", label: "Sous-titre" },
                   { type: "string", name: "title", label: "Titre" },
-                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  { 
+                    type: "string", 
+                    name: "description", 
+                    label: "Description", 
+                    ui: { component: "textarea" },
+                    description: "⚠️ Les champs du formulaire sont configurés dans Global Components > Contact pour garantir la cohérence sur tout le site."
+                  },
                   {
                     type: "object",
                     name: "contactInfo",
@@ -1398,11 +1466,31 @@ export default defineConfig({
                 label: "Contact",
                 ui: {
                   previewSrc: "/tina-previews/contact.png",
+                  defaultItem: {
+                    subtitle: "",
+                    title: "",
+                    description: "",
+                    contactInfo: { email: "", phone: "", location: "" },
+                    formAction: "",
+                    formFields: [
+                      { type: "name", label: "Name", placeholder: "John Carter", required: true },
+                      { type: "email", label: "Email", placeholder: "example@email.com", required: true },
+                      { type: "tel", label: "Phone", placeholder: "(123) 456 - 789", required: false },
+                      { type: "company", label: "Company", placeholder: "Oveco", required: false },
+                      { type: "textarea", label: "Message", placeholder: "Your message here...", required: true }
+                    ]
+                  }
                 },
                 fields: [
                   { type: "string", name: "subtitle", label: "Subtitle" },
                   { type: "string", name: "title", label: "Title" },
-                  { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+                  { 
+                    type: "string", 
+                    name: "description", 
+                    label: "Description", 
+                    ui: { component: "textarea" },
+                    description: "⚠️ Form fields are configured in Global Components > Contact to ensure consistency across the site."
+                  },
                   {
                     type: "object",
                     name: "contactInfo",

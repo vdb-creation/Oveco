@@ -3,9 +3,6 @@
   "description": "Homepage",
   "sections": [
     {
-      "_template": "contact"
-    },
-    {
       "subtitle": "oveco",
       "title": "Building the future",
       "description": "Engineers-installers by your side.",
@@ -222,18 +219,6 @@
         }
       ],
       "_template": "testimonials"
-    },
-    {
-      "subtitle": "Contact us",
-      "title": "Have an idea, a project, or simply questions?",
-      "description": "Write to us or call us, we'll be happy to discuss.",
-      "contactInfo": {
-        "email": "",
-        "phone": "",
-        "location": ""
-      },
-      "formAction": "#contact",
-      "_template": "contact"
     },
     {
       "copyrightYear": 2024,
