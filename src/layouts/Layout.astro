@@ -44,11 +44,25 @@ const forceLive = (
 // Détecter quelle collection/page utiliser selon l'URL pour LiveBridge
 let tinaDocKey: string | undefined = undefined;
 let tinaData: any = null;
+let globalComponentsData: any = null;
 
 if (forceLive) {
   try {
+    // Charger d'abord les globalComponents (nécessaire pour les data-bind)
+    if (client && client.queries && client.queries.globalComponents) {
+      try {
+        const globalFile = currentLang === 'en' ? 'components-en.json' : 'components.json';
+        globalComponentsData = await client.queries.globalComponents({ relativePath: globalFile });
+        console.log('[Layout] Global Components chargés:', globalComponentsData ? 'OK' : 'ERREUR');
+      } catch (e) {
+        console.warn('[Layout] Impossible de charger globalComponents:', e);
+      }
+    }
+    
     // Détecter la collection selon l'URL
     const pathname = Astro.url.pathname;
+    console.log('[Layout] Détection pathname:', pathname);
+    
     if (pathname.includes('/competences')) {
       tinaDocKey = currentLang === 'en' ? 'competences_en' : 'competences_fr';
     } else if (pathname.includes('/works')) {
@@ -111,6 +125,15 @@ if (forceLive) {
           tinaData = await client.queries.home({ relativePath: file });
         }
         console.log('[Layout] Données TinaCMS chargées:', tinaData ? 'OK' : 'ERREUR', tinaData?.data ? Object.keys(tinaData.data) : 'NULL');
+        
+        // Fusionner globalComponents dans tinaData pour que LiveBridge puisse résoudre les data-bind
+        if (globalComponentsData && tinaData) {
+          tinaData.data = {
+            ...tinaData.data,
+            globalComponents: globalComponentsData.data?.globalComponents
+          };
+          console.log('[Layout] globalComponents fusionnés dans tinaData');
+        }
       } catch (e) {
         console.warn('[Layout] Impossible de charger les données TinaCMS:', e);
         // LiveBridge peut fonctionner même sans données, il scannera les data-bind
@@ -357,8 +380,8 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-
       <LiveBridge client:only="react" home={tinaData || { data: {}, query: '', variables: {} }} docKey={tinaDocKey} />
     )}
     {import.meta.env.DEV && (
-      <script>
-        console.log('[Layout] LiveBridge chargé:', {forceLive}, 'tinaData:', {tinaData: tinaData ? 'OK' : 'NULL'}, 'docKey:', {tinaDocKey});
+      <script define:vars={{ forceLive, hasTinaData: !!tinaData, tinaDocKey }}>
+        console.log('[Layout] LiveBridge chargé:', forceLive, 'tinaData:', hasTinaData ? 'OK' : 'NULL', 'docKey:', tinaDocKey);
       </script>
     )}
 		

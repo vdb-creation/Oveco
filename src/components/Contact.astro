@@ -39,12 +39,17 @@ const {
   sectionIndex = 0
 } = Astro.props;
 
-// Pour les composants globaux (sectionIndex === -1), utiliser un chemin spécial
+// Générer le data-bind approprié selon le type de champ
 const getDataBind = (field: string) => {
   if (sectionIndex === -1) {
     return `globalComponents.contact.${field}`;
   }
   return `sections.${sectionIndex}.${field}`;
+};
+
+// TOUJOURS pointer vers globalComponents pour les formFields (source unique)
+const getFormFieldDataBind = (fieldIndex: number, property: string) => {
+  return `globalComponents.contact.formFields.${fieldIndex}.${property}`;
 };
 
 // Trier les champs par ordre et générer les IDs automatiquement
@@ -140,7 +145,7 @@ const getFieldAttributes = (field: FormField) => {
       <div class="contact__panel" aria-label="Formulaire de contact">
         <form class="contact__form" method="POST" action={formAction} novalidate>
           <!-- Web3Forms Access Key (public) -->
-          <input type="hidden" name="access_key" value="2f49656a-b6d6-41f0-bc7f-5d7c68340a41" />
+          <input type="hidden" name="access_key" value="c0bf4249-eab3-452c-93aa-ad5fc185f1ae" />
           <!-- Métadonnées utiles -->
           <input type="hidden" name="subject" value="Nouveau message depuis le site Oveco" />
           <input type="hidden" name="from_name" value="Formulaire Oveco" />
@@ -159,7 +164,7 @@ const getFieldAttributes = (field: FormField) => {
                   
                   return (
                     <div class="contact__field">
-                      <label class="contact__label" for={fieldId} data-bind={getDataBind(`formFields.${actualIndex}.label`)}>
+                      <label class="contact__label" for={fieldId} data-bind={getFormFieldDataBind(actualIndex, 'label')}>
                         {field.label} {field.required && <span class="required" aria-label="requis">*</span>}
                       </label>
                       <input 
@@ -175,7 +180,7 @@ const getFieldAttributes = (field: FormField) => {
                         aria-describedby={`${fieldId}-error`}
                         data-pattern={validation.regex}
                         data-error-message={validation.errorMessage}
-                        data-bind={getDataBind(`formFields.${actualIndex}.placeholder`)}
+                        data-bind={getFormFieldDataBind(actualIndex, 'placeholder')}
                         data-bind-attr="placeholder"
                       />
                       <div id={`${fieldId}-error`} class="contact__error" role="alert" aria-live="polite"></div>
@@ -195,7 +200,7 @@ const getFieldAttributes = (field: FormField) => {
                   
                   return (
                     <div class="contact__field">
-                      <label class="contact__label" for={fieldId} data-bind={getDataBind(`formFields.${actualIndex}.label`)}>
+                      <label class="contact__label" for={fieldId} data-bind={getFormFieldDataBind(actualIndex, 'label')}>
                         {field.label} {field.required && <span class="required" aria-label="requis">*</span>}
                       </label>
                       <input 
@@ -211,7 +216,7 @@ const getFieldAttributes = (field: FormField) => {
                         aria-describedby={`${fieldId}-error`}
                         data-pattern={validation.regex}
                         data-error-message={validation.errorMessage}
-                        data-bind={getDataBind(`formFields.${actualIndex}.placeholder`)}
+                        data-bind={getFormFieldDataBind(actualIndex, 'placeholder')}
                         data-bind-attr="placeholder"
                       />
                       <div id={`${fieldId}-error`} class="contact__error" role="alert" aria-live="polite"></div>
@@ -224,7 +229,7 @@ const getFieldAttributes = (field: FormField) => {
 
           {messageField && (
             <div class="contact__field contact__field--message">
-              <label class="contact__label" for={`contact-${messageField.id}`} data-bind={getDataBind(`formFields.${sortedFields.findIndex(f => f.id === messageField.id)}.label`)}>
+              <label class="contact__label" for={`contact-${messageField.id}`} data-bind={getFormFieldDataBind(sortedFields.findIndex(f => f.id === messageField.id), 'label')}>
                 {messageField.label} {messageField.required && <span class="required" aria-label="requis">*</span>}
               </label>
               <textarea 
@@ -238,7 +243,7 @@ const getFieldAttributes = (field: FormField) => {
                 aria-describedby={`contact-${messageField.id}-error`}
                 data-pattern={getFieldValidation(messageField).regex}
                 data-error-message={getFieldValidation(messageField).errorMessage}
-                data-bind={getDataBind(`formFields.${sortedFields.findIndex(f => f.id === messageField.id)}.placeholder`)}
+                data-bind={getFormFieldDataBind(sortedFields.findIndex(f => f.id === messageField.id), 'placeholder')}
                 data-bind-attr="placeholder"
               ></textarea>
               <div id={`contact-${messageField.id}-error`} class="contact__error" role="alert" aria-live="polite"></div>

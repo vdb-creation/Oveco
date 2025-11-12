@@ -180,6 +180,24 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
     if (!docRoot || !bind) return null;
     
     const raw = bind.split('.');
+    
+    // Support pour globalComponents (ex: globalComponents.contact.contactInfo.email)
+    if (raw[0] === 'globalComponents') {
+      // Chercher dans result.data.globalComponents
+      const globalComponents = result.data?.globalComponents;
+      if (!globalComponents) return null;
+      
+      const prop = raw[raw.length - 1]!;
+      
+      // Traverser le chemin dans globalComponents
+      let obj = tryTraverse(globalComponents, raw.slice(1, -1));
+      if (obj && prop in obj) {
+        return { obj, prop };
+      }
+      return null;
+    }
+    
+    // Support pour les sections (comportement existant)
     if (raw[0] !== 'sections' || raw.length < 2) return null;
     
     const prop = raw[raw.length - 1]!;
@@ -452,6 +470,31 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         setText(`${prefix}.subtitle`, section.subtitle);
         setText(`${prefix}.title`, section.title);
         setText(`${prefix}.description`, section.description);
+        
+        // Gérer contactInfo (email, phone, location)
+        if (section.contactInfo) {
+          addLeafField(`${prefix}.contactInfo.email`, section.contactInfo, 'email');
+          addLeafField(`${prefix}.contactInfo.phone`, section.contactInfo, 'phone');
+          addLeafField(`${prefix}.contactInfo.location`, section.contactInfo, 'location');
+          
+          setText(`${prefix}.contactInfo.email`, section.contactInfo.email);
+          setAttr(`${prefix}.contactInfo.email`, "href", section.contactInfo.email ? `mailto:${section.contactInfo.email}` : '');
+          setText(`${prefix}.contactInfo.phone`, section.contactInfo.phone);
+          setAttr(`${prefix}.contactInfo.phone`, "href", section.contactInfo.phone ? `tel:${section.contactInfo.phone.replace(/\s/g, '')}` : '');
+          setText(`${prefix}.contactInfo.location`, section.contactInfo.location);
+        }
+        
+        // Gérer formFields (champs de formulaire dynamiques)
+        if (section.formFields && Array.isArray(section.formFields)) {
+          section.formFields.forEach((field: any, i: number) => {
+            addLeafField(`${prefix}.formFields.${i}.label`, field, 'label');
+            addLeafField(`${prefix}.formFields.${i}.placeholder`, field, 'placeholder');
+            
+            setText(`${prefix}.formFields.${i}.label`, field.label);
+            // Pour placeholder, utiliser data-bind-attr
+            setAttr(`${prefix}.formFields.${i}.placeholder`, "placeholder", field.placeholder);
+          });
+        }
       }
 
       // COMPETENCES
@@ -571,6 +614,49 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
         });
       }
     });
+    
+    // Traiter les globalComponents si disponibles
+    const globalComponents = data?.globalComponents;
+    if (globalComponents) {
+      // Traiter le contact global
+      if (globalComponents.contact) {
+        const contact = globalComponents.contact;
+        const prefix = 'globalComponents.contact';
+        
+        // Champs de base
+        addLeafField(`${prefix}.subtitle`, contact, 'subtitle');
+        addLeafField(`${prefix}.title`, contact, 'title');
+        addLeafField(`${prefix}.description`, contact, 'description');
+        
+        setText(`${prefix}.subtitle`, contact.subtitle);
+        setText(`${prefix}.title`, contact.title);
+        setText(`${prefix}.description`, contact.description);
+        
+        // ContactInfo
+        if (contact.contactInfo) {
+          addLeafField(`${prefix}.contactInfo.email`, contact.contactInfo, 'email');
+          addLeafField(`${prefix}.contactInfo.phone`, contact.contactInfo, 'phone');
+          addLeafField(`${prefix}.contactInfo.location`, contact.contactInfo, 'location');
+          
+          setText(`${prefix}.contactInfo.email`, contact.contactInfo.email);
+          setAttr(`${prefix}.contactInfo.email`, "href", contact.contactInfo.email ? `mailto:${contact.contactInfo.email}` : '');
+          setText(`${prefix}.contactInfo.phone`, contact.contactInfo.phone);
+          setAttr(`${prefix}.contactInfo.phone`, "href", contact.contactInfo.phone ? `tel:${contact.contactInfo.phone.replace(/\s/g, '')}` : '');
+          setText(`${prefix}.contactInfo.location`, contact.contactInfo.location);
+        }
+        
+        // FormFields
+        if (contact.formFields && Array.isArray(contact.formFields)) {
+          contact.formFields.forEach((field: any, i: number) => {
+            addLeafField(`${prefix}.formFields.${i}.label`, field, 'label');
+            addLeafField(`${prefix}.formFields.${i}.placeholder`, field, 'placeholder');
+            
+            setText(`${prefix}.formFields.${i}.label`, field.label);
+            setAttr(`${prefix}.formFields.${i}.placeholder`, "placeholder", field.placeholder);
+          });
+        }
+      }
+    }
   };
 
   // Patcher générique des éléments [data-bind] (texte/attribut) avec les données live
@@ -586,7 +672,15 @@ export default function LiveBridge(props: { home: Q; docKey?: string }) {
       nodes.forEach((el) => {
         const bind = el.getAttribute('data-bind');
         if (!bind) return;
-        const val = getByBindPath(docRoot, bind);
+        
+        // Si le bind commence par globalComponents, chercher dans result.data.globalComponents
+        let val;
+        if (bind.startsWith('globalComponents.')) {
+          val = getByBindPath(result.data, bind);
+        } else {
+          val = getByBindPath(docRoot, bind);
+        }
+        
         if (val === undefined) return;
         applyValue(el, val);
       });
