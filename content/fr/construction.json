@@ -184,18 +184,6 @@
         }
       ],
       "_template": "projects"
-    },
-    {
-      "subtitle": "Nous contacter",
-      "title": "Prêt à créer votre habitat durable et autonome ?",
-      "description": "Contactez-nous pour discuter de votre projet d'auto-construction énergétique. Nous serons ravis de vous présenter notre méthode d'accompagnement et de vous aider à définir les étapes de votre projet.",
-      "contactInfo": {
-        "email": "contact@oveco.be",
-        "phone": "+32 473 / 68.99.02",
-        "location": "Région de Beauvechain, Belgique"
-      },
-      "formAction": "#contact",
-      "_template": "contact"
     }
   ]
 }

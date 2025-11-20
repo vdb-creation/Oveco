@@ -24,11 +24,19 @@ import {
 
 import SearchWorks from '../components/SearchWorks.astro';
 import WorksGrid from '../components/WorksGrid.astro';
-
-import { client } from '../../tina/__generated__/client';
 import LiveBridge from '../../tina/LiveBridge.tsx';
 import { getAllProjects, projectToCard } from '../lib/projects.ts';
 import { cache } from '../lib/cache.ts';
+
+// Utiliser le client généré en local, le wrapper en production
+let client: any;
+if (import.meta.env.DEV) {
+  const { client: generatedClient } = await import('../../tina/__generated__/client');
+  client = generatedClient;
+} else {
+  const { client: wrapperClient } = await import('../../tina/client-wrapper');
+  client = wrapperClient;
+}
 
 export interface Props {
   title?: string;
@@ -62,6 +70,15 @@ async function loadPageData(jsonFile: string, lang: string = 'fr') {
 const pageData = await cache.getPageData(jsonFile || 'home', lang);
 const pageContent = pageData || {};
 const sections = pageContent.sections || [];
+
+// Charger les composants globaux pour fallback
+let globalComponents: any = {};
+try {
+  const globalModule = await import(`../../content/global/components${lang === 'en' ? '-en' : ''}.json`);
+  globalComponents = globalModule.default || {};
+} catch (e) {
+  console.error('Erreur lors du chargement des composants globaux:', e);
+}
 
 // Charger les projets dynamiquement pour la page home avec cache
 let dynamicProjects: any[] = [];
@@ -122,28 +139,45 @@ if (forceLive) {
       throw new Error(`TinaCMS query "${queryName}" not found in client.queries`);
     }
     
-    // Utiliser la query appropriée
-    if (queryName === 'homeEn') {
-      tinaData = await client.queries.homeEn({ relativePath: file });
-    } else if (queryName === 'about_fr') {
-      tinaData = await client.queries.about_fr({ relativePath: file });
-    } else if (queryName === 'about_en') {
-      tinaData = await client.queries.about_en({ relativePath: file });
-    } else if (queryName === 'construction_fr') {
-      tinaData = await client.queries.construction_fr({ relativePath: file });
-    } else if (queryName === 'construction_en') {
-      tinaData = await client.queries.construction_en({ relativePath: file });
-    } else if (queryName === 'works_fr') {
-      tinaData = await client.queries.works_fr({ relativePath: file });
-    } else if (queryName === 'works_en') {
-      tinaData = await client.queries.works_en({ relativePath: file });
-    } else if (queryName === 'competences_fr') {
-      tinaData = await client.queries.competences_fr({ relativePath: file });
-    } else if (queryName === 'competences_en') {
-      tinaData = await client.queries.competences_en({ relativePath: file });
-    } else {
-      tinaData = await client.queries.home({ relativePath: file });
-    }
+    // Charger les globalComponents en parallèle avec la page
+    const [pageData, globalComponentsData] = await Promise.all([
+      // Query de la page
+      (async () => {
+        if (queryName === 'homeEn') {
+          return await client.queries.homeEn({ relativePath: file });
+        } else if (queryName === 'about_fr') {
+          return await client.queries.about_fr({ relativePath: file });
+        } else if (queryName === 'about_en') {
+          return await client.queries.about_en({ relativePath: file });
+        } else if (queryName === 'construction_fr') {
+          return await client.queries.construction_fr({ relativePath: file });
+        } else if (queryName === 'construction_en') {
+          return await client.queries.construction_en({ relativePath: file });
+        } else if (queryName === 'works_fr') {
+          return await client.queries.works_fr({ relativePath: file });
+        } else if (queryName === 'works_en') {
+          return await client.queries.works_en({ relativePath: file });
+        } else if (queryName === 'competences_fr') {
+          return await client.queries.competences_fr({ relativePath: file });
+        } else if (queryName === 'competences_en') {
+          return await client.queries.competences_en({ relativePath: file });
+        } else {
+          return await client.queries.home({ relativePath: file });
+        }
+      })(),
+      // Query des globalComponents
+      client.queries.globalComponents({ relativePath: `components.json` }).catch(() => null)
+    ]);
+    
+    // Fusionner les données
+    tinaData = {
+      ...pageData,
+      data: {
+        ...pageData.data,
+        // Ajouter les globalComponents aux données si disponibles
+        ...(globalComponentsData?.data || {})
+      }
+    };
   } catch (e) {
     console.error('TinaCMS query error:', e);
     console.log('Query name:', queryName, 'File:', file);
@@ -343,6 +377,8 @@ if (forceLive) {
           description2={section.description2}
           link2={section.link2}
           image2={section.image2}
+          icon1={section.icon1}
+          icon2={section.icon2}
         />
       );
     }
@@ -414,6 +450,24 @@ if (forceLive) {
           title={section.title}
           description={section.description}
           partners={partnersData}
+          sectionIndex={index}
+        />
+      );
+    }
+    
+    if (template === 'contact') {
+      // TOUJOURS utiliser les formFields des composants globaux (configuration centralisée)
+      // Les formFields de section sont ignorés pour garantir la cohérence
+      const contactFormFields = globalComponents?.contact?.formFields;
+      
+      return (
+        <Contact
+          subtitle={section.subtitle}
+          title={section.title}
+          description={section.description}
+          contactInfo={section.contactInfo}
+          formAction={section.formAction}
+          formFields={contactFormFields}
           sectionIndex={index}
         />
       );

@@ -1,0 +1,362 @@
+---
+/**
+ * Composant: WorkHero
+ * Nouveau hero pour la page work (projet individuel)
+ * Traduction du design Tailwind en CSS Astro optimisé
+ */
+
+import SmartImage from './SmartImage.astro';
+
+export interface Image {
+  src: string;
+  alt: string;
+  loading?: 'lazy' | 'eager';
+}
+
+export interface Props {
+  subtitle?: string;
+  title?: string;
+  description?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  image?: Image;
+  icon1?: Image;
+  icon2?: Image;
+  sectionIndex?: number;
+}
+
+const {
+  subtitle = "Type du projet",
+  title = "Création d’un habitat groupé en autoconstruction",
+  description = "Description courte du projet en question ipsum dolor sit amet consectetur adipiscing elit tortor eu egestas morbi sem vulputate etiam facilisis pellentesque ut quis.",
+  ctaLabel = "Nous contacter",
+  ctaHref = "#contact",
+  image = {
+    src: "https://placehold.co/377x416",
+    alt: "Illustration projet"
+  },
+  icon1,
+  icon2,
+  sectionIndex = 0
+} = Astro.props;
+
+// Valeurs par défaut pour les icônes si non fournies
+const defaultIcon1 = { src: "https://placehold.co/104x104", alt: "Icon 1" }; // Top left
+const defaultIcon2 = { src: "https://placehold.co/101x101", alt: "Icon 2" }; // Bottom right
+
+const safeIcon1 = icon1 || defaultIcon1;
+const safeIcon2 = icon2 || defaultIcon2;
+
+// Sécurisation de l'image principale
+const safeImage = image || { src: "https://placehold.co/377x416", alt: "Illustration projet" };
+
+---
+
+<section class="work-hero" aria-label="Présentation du projet">
+  <!-- Background Pattern qui dépasse -->
+  <div class="work-hero__bg-pattern"></div>
+
+  <div class="work-hero__container">
+    
+    <!-- Colonne Texte -->
+    <div class="work-hero__content">
+      <div class="work-hero__header">
+        <p class="work-hero__subtitle" data-bind={`sections.${sectionIndex}.subtitle`}>{subtitle}</p>
+        <h1 class="work-hero__title" data-bind={`sections.${sectionIndex}.title`}>{title}</h1>
+      </div>
+      
+      <p class="work-hero__description" data-bind={`sections.${sectionIndex}.description`}>{description}</p>
+      
+      <div class="work-hero__actions">
+        <a href={ctaHref} class="work-hero__cta" data-bind={`sections.${sectionIndex}.ctaHref`}>
+          <span data-bind={`sections.${sectionIndex}.ctaLabel`}>{ctaLabel}</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Colonne Visuelle -->
+    <div class="work-hero__visual">
+      <div class="work-hero__image-wrapper">
+        <SmartImage
+          cmsSrc={safeImage.src}
+          alt={safeImage.alt}
+          width={384} 
+          height={384}
+          class="work-hero__main-image"
+          loading="eager"
+          data-bind={`sections.${sectionIndex}.image.src`}
+        />
+      </div>
+      
+      <!-- Élément décoratif blanc (carré blanc derrière l'icône du bas) -->
+      <div class="work-hero__deco-box"></div>
+      
+      <!-- Icône bas droite -->
+      <div class="work-hero__icon work-hero__icon--bottom">
+        <SmartImage
+          cmsSrc={safeIcon2.src}
+          alt={safeIcon2.alt}
+          width={96}
+          height={96}
+          class="work-hero__icon-img"
+          data-bind={`sections.${sectionIndex}.icon2.src`}
+        />
+      </div>
+
+      <!-- Icône haut gauche -->
+      <div class="work-hero__icon work-hero__icon--top">
+        <SmartImage
+          cmsSrc={safeIcon1.src}
+          alt={safeIcon1.alt}
+          width={96}
+          height={96}
+          class="work-hero__icon-img"
+          data-bind={`sections.${sectionIndex}.icon1.src`}
+        />
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* Configuration des variables basées sur Tailwind et le design system */
+  :root {
+    /* --color-stone-50: #FAFAF9;  Ancienne valeur */
+    --color-bg-hero: #FFFEF7; /* Nouvelle valeur demandée */
+    --color-gray-500: #6B7280;
+    --color-gray-700: #334749;
+    --color-bg-cta: #334749; /* match gray-700 per design */
+    --color-text-cta: #FAFAF9; /* match stone-50 */
+    --font-nunito: 'Nunito Sans', sans-serif;
+  }
+
+  .work-hero {
+    width: 100%;
+    background-color: var(--color-bg-hero);
+    position: relative;
+    
+    /* px-20 py-10 -> padding: 2.5rem 5rem */
+    padding: clamp(2.5rem, 5vw, 5rem) clamp(1.5rem, 5vw, 5rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    /* overflow: visible pour laisser dépasser le pattern */
+    overflow: visible; 
+    z-index: 1;
+  }
+
+  /* Pattern de fond qui dépasse */
+  .work-hero__bg-pattern {
+    position: absolute;
+    top: -60px;
+    bottom: -60px;
+    left: 0;
+    right: 0;
+    background-image: url("/src/assets/imgs/BgGrille.svg");
+    background-repeat: repeat;
+    background-position: center;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .work-hero__container {
+    /* inline-flex justify-center items-center gap-24 */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(3rem, 6vw, 6rem); /* gap-24 is 6rem */
+    max-width: 1400px;
+    width: 100%;
+  }
+
+  /* Responsive: colonne sur mobile/tablette */
+  @media (max-width: 1024px) {
+    .work-hero__container {
+      flex-direction: column-reverse;
+      text-align: center;
+      gap: 3rem;
+    }
+  }
+
+  /* Colonne Texte */
+  .work-hero__content {
+    /* w-[656px] */
+    width: 100%;
+    max-width: 656px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start; /* Default left align */
+    gap: 1rem; /* gap-4 */
+  }
+
+  @media (max-width: 1024px) {
+    .work-hero__content {
+      align-items: center; /* Center on mobile */
+    }
+  }
+
+  .work-hero__header {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start; /* gap-1.5 */
+    gap: 0.375rem;
+  }
+
+  @media (max-width: 1024px) {
+    .work-hero__header {
+      align-items: center;
+    }
+  }
+
+  .work-hero__subtitle {
+    /* text-gray-500 text-xl font-bold uppercase leading-5 tracking-widest */
+    color: var(--color-gray-500);
+    font-family: var(--font-nunito);
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 700; /* font-bold */
+    text-transform: uppercase;
+    line-height: 1.25rem; /* leading-5 */
+    letter-spacing: 0.1em; /* tracking-widest */
+    margin: 0;
+  }
+
+  .work-hero__title {
+    /* text-gray-700 text-5xl font-extrabold leading-[57.34px] */
+    color: var(--color-gray-700);
+    font-family: var(--font-nunito);
+    font-size: clamp(2.5rem, 5vw, 3rem); /* text-5xl is 3rem */
+    font-weight: 800; /* font-extrabold */
+    line-height: 1.2; /* close to 57.34px */
+    margin: 0;
+  }
+
+  .work-hero__description {
+    /* text-gray-500 text-xl font-normal leading-7 */
+    align-self: stretch;
+    color: var(--color-gray-500);
+    font-family: var(--font-nunito);
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 400; /* font-normal */
+    line-height: 1.75rem; /* leading-7 */
+    margin: 0;
+  }
+
+  .work-hero__actions {
+    /* px-7 py-4 bg-gray-700 rounded-[30px] inline-flex justify-end items-center gap-2 */
+    /* Note: The parent div wraps the button. */
+    margin-top: 1rem;
+  }
+
+  .work-hero__cta {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.75rem; /* px-7 py-4 */
+    background-color: var(--color-bg-cta);
+    border-radius: 30px;
+    text-decoration: none;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+
+  .work-hero__cta:hover {
+    transform: translateY(-2px);
+    /* Optional hover state, e.g. slightly lighter or darker */
+    opacity: 0.9;
+  }
+
+  .work-hero__cta span {
+    /* text-stone-50 text-xl font-bold leading-6 */
+    color: var(--color-text-cta);
+    font-family: var(--font-nunito);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.5rem;
+    text-align: center;
+  }
+
+  /* Colonne Visuelle */
+  .work-hero__visual {
+    /* w-96 h-96 relative */
+    width: 24rem; /* 96 * 0.25rem = 24rem = 384px */
+    height: 24rem;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .work-hero__image-wrapper {
+    /* w-96 h-96 left-0 top-0 absolute rounded-[30px] overflow-hidden */
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 30px;
+    overflow: hidden;
+    background-color: #e5e7eb; /* Placeholder gray */
+  }
+
+  .work-hero__main-image {
+    /* w-96 h-96 left-0 top-0 absolute */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Deco Box */
+  .work-hero__deco-box {
+    /* w-16 h-20 left-[412.53px] top-[440.50px] absolute bg-stone-50 */
+    width: 4rem; /* w-16 */
+    height: 5rem; /* h-20 */
+    position: absolute;
+    background-color: var(--color-bg-hero); /* Utilise la même couleur que le fond */
+    /* Positioning relative to bottom-right corner approximately? 
+       Original: left-[412px] top-[440px] relative to what? 
+       If container is w-96 (384px), 412px is +28px to the right.
+       Top 440px is +56px from bottom (384px).
+       So it's roughly bottom right offset.
+    */
+    right: -2rem;
+    bottom: -2rem;
+    z-index: 1;
+    /* Adjust to match visual intent */
+    border-radius: 0 0 20px 0; /* Maybe? */
+  }
+
+  /* Icon Bottom Right */
+  .work-hero__icon--bottom {
+    /* w-24 h-24 left-[425.62px] top-[455.62px] */
+    width: 6rem; /* w-24 */
+    height: 6rem;
+    position: absolute;
+    right: -3rem; /* Approx based on 425 vs 384 width */
+    bottom: -3rem; /* Approx */
+    z-index: 2;
+  }
+
+  /* Icon Top Left */
+  .work-hero__icon--top {
+    /* w-24 h-24 left-[-30px] top-[-23px] */
+    width: 6rem;
+    height: 6rem;
+    position: absolute;
+    left: -1.875rem; /* -30px */
+    top: -1.4375rem; /* -23px */
+    z-index: 2;
+  }
+
+  .work-hero__icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+</style>

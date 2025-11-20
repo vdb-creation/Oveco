@@ -19,6 +19,8 @@ export interface Project {
   status?: string;
   heroImage?: string;
   thumbnail?: string;
+  heroIcon1?: string;
+  heroIcon2?: string;
   gallery?: Array<{
     image: string;
     alt?: string;

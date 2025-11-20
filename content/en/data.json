@@ -3,18 +3,6 @@
   "description": "Oveco supports your self-building and ecological renovation projects. Expertise in passive houses and renewable energy.",
   "sections": [
     {
-      "subtitle": "Contact us",
-      "title": "Do you have an idea, a project, or simply questions?",
-      "description": "Write to us or call us, we'll be happy to discuss it.",
-      "contactInfo": {
-        "email": "job@oveco.be",
-        "phone": "+32 473 / 68.99.02",
-        "location": "Beauvechain region"
-      },
-      "formAction": "#contact",
-      "_template": "contact"
-    },
-    {
       "subtitle": "self-build",
       "title": "Learn by doing, build while being supported",
       "description": "We believe that self-build is a powerful way to take ownership of your habitat.",

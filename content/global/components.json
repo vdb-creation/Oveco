@@ -35,7 +35,39 @@
       "phone": "+32 473 / 68.99.02",
       "location": "Région de Beauvechain, Belgique"
     },
-    "formAction": "#contact"
+    "formAction": "#contact",
+    "formFields": [
+      {
+        "type": "name",
+        "label": "Nom",
+        "placeholder": "Jean Dupont",
+        "required": true
+      },
+      {
+        "type": "email",
+        "label": "Email",
+        "placeholder": "exemple@email.com",
+        "required": true
+      },
+      {
+        "type": "budget",
+        "label": "Votre budget",
+        "placeholder": "100K€",
+        "required": true
+      },
+      {
+        "type": "company",
+        "label": "Entreprise",
+        "placeholder": "Oveco",
+        "required": false
+      },
+      {
+        "type": "textarea",
+        "label": "Message",
+        "placeholder": "Votre message ici...",
+        "required": true
+      }
+    ]
   },
   "footer": {
     "copyrightYear": 2024,

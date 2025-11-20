@@ -23,7 +23,39 @@
       "phone": "+32 473 / 68.99.02",
       "location": "Beauvechain region, Belgium"
     },
-    "formAction": "#contact"
+    "formAction": "#contact",
+    "formFields": [
+      {
+        "type": "name",
+        "label": "Name",
+        "placeholder": "John Carter",
+        "required": true
+      },
+      {
+        "type": "email",
+        "label": "Email",
+        "placeholder": "example@email.com",
+        "required": true
+      },
+      {
+        "type": "tel",
+        "label": "Phone",
+        "placeholder": "(123) 456 - 789",
+        "required": false
+      },
+      {
+        "type": "company",
+        "label": "Company",
+        "placeholder": "Oveco",
+        "required": false
+      },
+      {
+        "type": "textarea",
+        "label": "Message",
+        "placeholder": "Your message here...",
+        "required": true
+      }
+    ]
   },
   "footer": {
     "copyrightYear": 2024,

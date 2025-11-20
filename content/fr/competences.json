@@ -290,18 +290,6 @@
         }
       ],
       "_template": "projects"
-    },
-    {
-      "subtitle": "Nous contacter",
-      "title": "Vous avez un projet nécessitant nos compétences ?",
-      "description": "Contactez-nous pour discuter de votre projet et découvrir comment nous pouvons vous accompagner dans le développement de vos compétences techniques.",
-      "contactInfo": {
-        "email": "contact@oveco.be",
-        "phone": "+32 473 / 68.99.02",
-        "location": "Région de Beauvechain, Belgique"
-      },
-      "formAction": "#contact",
-      "_template": "contact"
     }
   ]
 }

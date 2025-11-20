@@ -6,7 +6,19 @@ import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 import { getGlobalComponents } from '../lib/global-components.ts';
 import LiveBridge from '../../tina/LiveBridge.tsx';
-import { client } from '../../tina/__generated__/client';
+// Utiliser le client généré en local, le wrapper en production
+let client: any;
+if (import.meta.env.DEV) {
+  // En local, utiliser directement le client généré (import statique)
+  const clientModule = await import('../../tina/__generated__/client');
+  client = clientModule.client || clientModule.default;
+  console.log('[Layout] Client généré chargé en local:', client ? 'OK' : 'ERREUR');
+  console.log('[Layout] Queries disponibles:', client?.queries ? Object.keys(client.queries).length : 0);
+  console.log('[Layout] Client URL:', (client as any)?.url || 'N/A');
+} else {
+  const { client: wrapperClient } = await import('../../tina/client-wrapper');
+  client = wrapperClient;
+}
 
 // Détecter la langue depuis l'URL
 function detectLanguage(url: URL): 'fr' | 'en' {
@@ -32,11 +44,25 @@ const forceLive = (
 // Détecter quelle collection/page utiliser selon l'URL pour LiveBridge
 let tinaDocKey: string | undefined = undefined;
 let tinaData: any = null;
+let globalComponentsData: any = null;
 
 if (forceLive) {
   try {
+    // Charger d'abord les globalComponents (nécessaire pour les data-bind)
+    if (client && client.queries && client.queries.globalComponents) {
+      try {
+        const globalFile = currentLang === 'en' ? 'components-en.json' : 'components.json';
+        globalComponentsData = await client.queries.globalComponents({ relativePath: globalFile });
+        console.log('[Layout] Global Components chargés:', globalComponentsData ? 'OK' : 'ERREUR');
+      } catch (e) {
+        console.warn('[Layout] Impossible de charger globalComponents:', e);
+      }
+    }
+    
     // Détecter la collection selon l'URL
     const pathname = Astro.url.pathname;
+    console.log('[Layout] Détection pathname:', pathname);
+    
     if (pathname.includes('/competences')) {
       tinaDocKey = currentLang === 'en' ? 'competences_en' : 'competences_fr';
     } else if (pathname.includes('/works')) {
@@ -52,6 +78,10 @@ if (forceLive) {
     }
     
     // Essayer de charger les données TinaCMS si le client est disponible
+    console.log('[Layout] forceLive:', forceLive, 'client:', client ? 'OK' : 'NULL', 'tinaDocKey:', tinaDocKey);
+    console.log('[Layout] client.queries:', client?.queries ? Object.keys(client.queries) : 'NULL');
+    console.log('[Layout] Query disponible pour', tinaDocKey, ':', client?.queries?.[tinaDocKey] ? 'OUI' : 'NON');
+    
     if (client && client.queries && tinaDocKey && client.queries[tinaDocKey]) {
       try {
         // Détecter le fichier JSON selon la collection
@@ -93,6 +123,16 @@ if (forceLive) {
           tinaData = await client.queries.competences_en({ relativePath: file });
         } else {
           tinaData = await client.queries.home({ relativePath: file });
+        }
+        console.log('[Layout] Données TinaCMS chargées:', tinaData ? 'OK' : 'ERREUR', tinaData?.data ? Object.keys(tinaData.data) : 'NULL');
+        
+        // Fusionner globalComponents dans tinaData pour que LiveBridge puisse résoudre les data-bind
+        if (globalComponentsData && tinaData) {
+          tinaData.data = {
+            ...tinaData.data,
+            globalComponents: globalComponentsData.data?.globalComponents
+          };
+          console.log('[Layout] globalComponents fusionnés dans tinaData');
         }
       } catch (e) {
         console.warn('[Layout] Impossible de charger les données TinaCMS:', e);
@@ -338,6 +378,11 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow, max-image-
     {forceLive && (
       // Utiliser client:only pour éviter le rendu SSR React qui provoque l'erreur de hooks (dispatcher null)
       <LiveBridge client:only="react" home={tinaData || { data: {}, query: '', variables: {} }} docKey={tinaDocKey} />
+    )}
+    {import.meta.env.DEV && (
+      <script define:vars={{ forceLive, hasTinaData: !!tinaData, tinaDocKey }}>
+        console.log('[Layout] LiveBridge chargé:', forceLive, 'tinaData:', hasTinaData ? 'OK' : 'NULL', 'docKey:', tinaDocKey);
+      </script>
     )}
 		
 		<Nabar 
