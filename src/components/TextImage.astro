@@ -193,12 +193,11 @@ if (import.meta.env.DEV) {
           data-bind={`sections.${sectionIndex}.image.src`}
         />
         {icon1Src && (
-          <SmartImage
-            cmsSrc={icon1Src}
+          <img
+            src={icon1Src}
             alt={Astro.props.icon1?.alt || ''}
-            width={100}
-            height={100}
-            context="default"
+            width="100"
+            height="100"
             loading="lazy"
             class="oveco__icon oveco__icon--house"
             aria-hidden="true"
@@ -206,12 +205,11 @@ if (import.meta.env.DEV) {
           />
         )}
         {icon2Src && (
-          <SmartImage
-            cmsSrc={icon2Src}
+          <img
+            src={icon2Src}
             alt={Astro.props.icon2?.alt || ''}
-            width={104}
-            height={104}
-            context="default"
+            width="104"
+            height="104"
             loading="lazy"
             class="oveco__icon oveco__icon--pencil"
             aria-hidden="true"
@@ -253,12 +251,11 @@ if (import.meta.env.DEV) {
             data-bind={`sections.${sectionIndex}.image2.src`}
           />
           {icon1Src && (
-            <SmartImage
-              cmsSrc={icon1Src}
+            <img
+              src={icon1Src}
               alt={Astro.props.icon1?.alt || ''}
-              width={100}
-              height={100}
-              context="default"
+              width="100"
+              height="100"
               loading="lazy"
               class="oveco__icon oveco__icon--house"
               aria-hidden="true"
@@ -266,12 +263,11 @@ if (import.meta.env.DEV) {
             />
           )}
           {icon2Src && (
-            <SmartImage
-              cmsSrc={icon2Src}
+            <img
+              src={icon2Src}
               alt={Astro.props.icon2?.alt || ''}
-              width={104}
-              height={104}
-              context="default"
+              width="104"
+              height="104"
               loading="lazy"
               class="oveco__icon oveco__icon--pencil"
               aria-hidden="true"
@@ -652,9 +648,9 @@ section.oveco-section,
 }
 
 .oveco__icon {
-  position: absolute;
+  position: absolute !important;
   display: block;
-  z-index: 3;
+  z-index: 3 !important;
   object-fit: contain;
 }
 
@@ -666,19 +662,19 @@ section.oveco-section,
   transform-origin: top left;
 }
 
+.oveco__icon--pencil {
+  width: 104px !important;
+  height: 104px !important;
+  left: 8px;
+  top: 61px;
+}
+
 @media (max-width: 768px) {
   .oveco__icon--house {
     left: 70%;
     top: 75%;
     transform: scale(0.8);
   }
-}
-
-.oveco__icon--pencil {
-  width: 104px !important;
-  height: 104px !important;
-  left: 8px;
-  top: 61px;
 }
 
 @media (max-width: 768px) {

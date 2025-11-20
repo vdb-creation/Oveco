@@ -3086,6 +3086,8 @@ export default defineConfig({
           // Images
           { type: "image", name: "heroImage", label: "Image principale" },
           { type: "image", name: "thumbnail", label: "Miniature (pour les cartes)" },
+          { type: "image", name: "heroIcon1", label: "Icône Hero (Haut Gauche)" },
+          { type: "image", name: "heroIcon2", label: "Icône Hero (Bas Droite)" },
           {
             type: "object",
             name: "gallery",

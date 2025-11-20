@@ -45,11 +45,11 @@
         "alt": "Équipe Oveco accompagnant un projet d'auto-construction"
       },
       "icon1": {
-        "src": "/uploads/icons/maison.webp",
+        "src": "/uploads/icons/crayon.webp",
         "alt": "Icône maison"
       },
       "icon2": {
-        "src": "/uploads/icons/crayon.webp",
+        "src": "/uploads/icons/maison.webp",
         "alt": "Icône conception"
       },
       "reverse": false,

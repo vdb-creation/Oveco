@@ -6,6 +6,7 @@
 // Composants migrés et optimisés ✅
 export { default as Autoconstruction } from './Autoconstruction.astro';
 export { default as WorksHero } from './WorksHero.astro';
+export { default as WorkHero } from './WorkHero.astro';
 export { default as Contact } from './Contact.astro';
 export { default as Expertise } from './Expertise.astro';
 export { default as Stats } from './Stats.astro';

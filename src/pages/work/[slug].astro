@@ -1,14 +1,12 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Nabar from '../../components/Nabar.astro';
-import WorksHero from '../../components/WorksHero.astro';
+import WorkHero from '../../components/WorkHero.astro';
 import Competences from '../../components/Competences.astro';
 import TextImage from '../../components/TextImage.astro';
 import Stats from '../../components/Stats.astro';
 import Gallerie from '../../components/Gallerie.astro';
 import Projects from '../../components/Projects.astro';
 import Contact from '../../components/Contact.astro';
-import Footer from '../../components/Footer.astro';
 import { getAllProjects, getProjectBySlug } from '../../lib/projects.ts';
 import { DEFAULT_FORM_FIELDS } from '../../types/contact.ts';
 
@@ -105,18 +103,17 @@ const pageDescription = project.metaDescription || project.excerpt || `Découvre
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <!-- Navigation -->
-  <Nabar />
 
   <!-- Hero Section Projet -->
-  <WorksHero 
+  <WorkHero 
     subtitle={project.category}
     title={project.title}
     description={project.excerpt || project.description || ''}
     ctaLabel="Nous contacter"
     ctaHref="#contact"
-    mediaLeft={project.heroImage ? { src: project.heroImage, alt: project.title } : { src: "/uploads/imgs/maison-toit.webp", alt: "Image projet" }}
-    mediaRight={project.thumbnail ? { src: project.thumbnail, alt: project.title } : { src: "/uploads/imgs/maison-build.webp", alt: "Image projet" }}
+    image={project.heroImage ? { src: project.heroImage, alt: project.title } : { src: "/uploads/imgs/maison-toit.webp", alt: "Image projet" }}
+    icon1={project.heroIcon1 ? { src: project.heroIcon1, alt: "Icon 1" } : undefined}
+    icon2={project.heroIcon2 ? { src: project.heroIcon2, alt: "Icon 2" } : undefined}
     sectionIndex={0}
   />
 
@@ -185,12 +182,6 @@ const pageDescription = project.metaDescription || project.excerpt || `Découvre
     sectionIndex={6}
   />
 
-  <!-- Footer -->
-  <Footer 
-    copyrightYear={new Date().getFullYear()}
-    companyName="Oveco"
-    legalText="Tous droits réservés"
-  />
 </Layout>
 
 <style>
@@ -209,5 +200,18 @@ const pageDescription = project.metaDescription || project.excerpt || `Découvre
   .work-page {
     /* Ajustements mobile si nécessaire */
   }
+}
+</style>
+
+<style is:global>
+/* Fix Navbar on Work pages to match new design */
+.navbar {
+  position: relative !important;
+  background-color: #FFFEF7 !important;
+}
+
+/* Hide Layout Contact because we use a custom one inside main */
+main + .contact-section {
+  display: none !important;
 }
 </style>
