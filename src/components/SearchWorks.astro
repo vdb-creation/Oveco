@@ -38,7 +38,7 @@ const competences = Array.from(allCompetences).sort();
           type="text"
           id="search-works-input"
           class="search-works__input-real"
-          placeholder="Chercher un projet"
+          placeholder=""
           aria-label="Rechercher un projet"
         />
         <div class="search-works__icon-wrapper" aria-hidden="true">
@@ -47,6 +47,13 @@ const competences = Array.from(allCompetences).sort();
             <path d="M11 11L14 14" stroke="#5C6D6F" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
         </div>
+        <!-- Bouton reset (visible si texte) -->
+        <button type="button" id="search-works-reset" class="search-works__reset" aria-label="Effacer la recherche" hidden>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.5 3.5L3.5 10.5" stroke="#5C6D6F" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M3.5 3.5L10.5 10.5" stroke="#5C6D6F" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
       </div>
 
       <!-- Tags des compétences -->
@@ -73,9 +80,10 @@ const competences = Array.from(allCompetences).sort();
 </section>
 
 <script>
-  // Système de filtrage par recherche et tags
+  // Système de filtrage par recherche et tags avec URL Sync et Debounce
   function initSearchWorks() {
     const searchInput = document.getElementById('search-works-input') as HTMLInputElement;
+    const resetButton = document.getElementById('search-works-reset') as HTMLButtonElement;
     const tags = document.querySelectorAll('.search-works__tag') as NodeListOf<HTMLButtonElement>;
     const projectsGrid = document.querySelector('[data-works-grid]') as HTMLElement;
     
@@ -87,7 +95,82 @@ const competences = Array.from(allCompetences).sort();
     let selectedTags: string[] = [];
     let searchQuery: string = '';
 
-    // Fonction de filtrage
+    // Debounce function
+    function debounce(func: Function, wait: number) {
+      let timeout: any;
+      return function executedFunction(...args: any[]) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    // Mettre à jour l'URL
+    function updateURL() {
+      const url = new URL(window.location.href);
+      
+      if (searchQuery) {
+        url.searchParams.set('q', searchQuery);
+      } else {
+        url.searchParams.delete('q');
+      }
+
+      if (selectedTags.length > 0) {
+        url.searchParams.set('tags', selectedTags.join(','));
+      } else {
+        url.searchParams.delete('tags');
+      }
+
+      window.history.replaceState({}, '', url);
+    }
+
+    // Lire l'URL
+    function readURL() {
+      const params = new URLSearchParams(window.location.search);
+      searchQuery = params.get('q') || '';
+      const tagsParam = params.get('tags');
+      selectedTags = tagsParam ? tagsParam.split(',') : [];
+
+      // Restaurer l'état UI
+      if (searchInput) {
+        searchInput.value = searchQuery;
+        // Gérer le label
+        const wrapper = searchInput.closest('.search-works__search-box');
+        const labelWrapper = wrapper?.querySelector('.search-works__input-label-wrapper') as HTMLElement;
+        if (searchQuery && labelWrapper) {
+          labelWrapper.style.opacity = '0';
+          labelWrapper.style.width = '0';
+        }
+        toggleResetButton();
+      }
+
+      tags.forEach(tag => {
+        const tagValue = tag.getAttribute('data-tag') || '';
+        if (selectedTags.includes(tagValue)) {
+          tag.classList.add('search-works__tag--active');
+        } else {
+          tag.classList.remove('search-works__tag--active');
+        }
+      });
+
+      filterProjects();
+    }
+
+    // Afficher/Masquer le bouton reset
+    function toggleResetButton() {
+      if (resetButton) {
+        if (searchQuery.length > 0) {
+          resetButton.hidden = false;
+        } else {
+          resetButton.hidden = true;
+        }
+      }
+    }
+
+    // Fonction de filtrage principale
     function filterProjects() {
       const cards = projectsGrid.querySelectorAll('.projects__card') as NodeListOf<HTMLElement>;
       let visibleCount = 0;
@@ -95,76 +178,137 @@ const competences = Array.from(allCompetences).sort();
       cards.forEach((card) => {
         const cardElement = card as HTMLElement;
         
-        // Récupérer les données depuis les attributs data-project-* sur la carte
+        // Récupérer les données
         const cardProjectTitle = card.getAttribute('data-project-title') || '';
         const cardProjectType = card.getAttribute('data-project-type') || '';
         const cardProjectDescription = card.getAttribute('data-project-description') || '';
         const cardProjectClient = card.getAttribute('data-project-client') || '';
         const cardCompetences = card.getAttribute('data-competences') || '';
         
-        // Récupérer depuis le DOM si les attributs ne sont pas disponibles (fallback)
+        // Fallback DOM
         const cardTitle = cardProjectTitle || card.querySelector('.projects__card-title')?.textContent?.toLowerCase() || '';
         const cardDescription = cardProjectDescription || card.querySelector('.projects__card-description')?.textContent?.toLowerCase() || '';
         const cardType = cardProjectType || card.querySelector('.projects__card-type')?.textContent?.toLowerCase() || '';
         const cardClient = cardProjectClient || card.querySelector('.projects__card-client')?.textContent?.toLowerCase() || '';
         
-        // Vérifier la recherche textuelle
+        // Vérifier la recherche textuelle (plus flexible: split par mots)
         const searchLower = searchQuery.toLowerCase();
-        const matchesSearch = !searchQuery || 
-          cardTitle.includes(searchLower) ||
-          cardDescription.includes(searchLower) ||
-          cardType.includes(searchLower) ||
-          cardClient.includes(searchLower) ||
-          cardCompetences.includes(searchLower);
+        const searchTerms = searchLower.split(' ').filter(t => t.length > 0);
+        
+        const matchesSearch = searchTerms.length === 0 || searchTerms.every(term => 
+          cardTitle.includes(term) ||
+          cardDescription.includes(term) ||
+          cardType.includes(term) ||
+          cardClient.includes(term) ||
+          cardCompetences.includes(term)
+        );
 
-        // Vérifier les tags (compétences)
+        // Vérifier les tags (ET logique ou OU logique ? Ici OU: si un des tags sélectionnés est présent)
+        // Si on veut un filtrage strict (tous les tags présents), changer .some() en .every()
         let matchesTags = true;
         if (selectedTags.length > 0) {
-          // Vérifier si au moins un tag sélectionné correspond
+          // Logique "OU" : affiche si le projet a au moins un des tags sélectionnés
+          // Logique "ET" : affiche si le projet a tous les tags sélectionnés
+          // Pour des compétences, souvent "OU" est plus permissif, mais "ET" est plus précis.
+          // Utilisons "OU" pour être moins restrictif par défaut
           matchesTags = selectedTags.some(tag => {
             const tagLower = tag.toLowerCase();
             return cardCompetences.includes(tagLower) ||
                    cardType.includes(tagLower) ||
-                   cardTitle.includes(tagLower) ||
-                   cardDescription.includes(tagLower);
+                   cardTitle.includes(tagLower);
           });
         }
 
-        // Afficher ou masquer la carte
+        // Appliquer la visibilité
         if (matchesSearch && matchesTags) {
           cardElement.style.display = '';
+          // Petite animation d'apparition
+          cardElement.style.opacity = '1';
+          cardElement.style.transform = 'translateY(0)';
           visibleCount++;
         } else {
           cardElement.style.display = 'none';
+          cardElement.style.opacity = '0';
         }
       });
 
-      // Afficher un message si aucun résultat
+      // Gestion message "Aucun résultat"
       let noResultsMsg = projectsGrid.querySelector('.search-works__no-results');
       if (visibleCount === 0) {
         if (!noResultsMsg) {
-          noResultsMsg = document.createElement('p');
+          noResultsMsg = document.createElement('div');
           noResultsMsg.className = 'search-works__no-results';
-          noResultsMsg.textContent = 'Aucun projet ne correspond à votre recherche.';
+          noResultsMsg.innerHTML = `
+            <p>Aucun projet ne correspond à votre recherche.</p>
+            <button class="search-works__clear-btn">Tout effacer</button>
+          `;
           projectsGrid.appendChild(noResultsMsg);
+          
+          // Ajouter event sur le bouton "Tout effacer"
+          noResultsMsg.querySelector('.search-works__clear-btn')?.addEventListener('click', clearAllFilters);
         }
       } else {
         noResultsMsg?.remove();
       }
     }
 
-    // Écouter les changements de recherche
+    function clearAllFilters() {
+      searchQuery = '';
+      selectedTags = [];
+      if (searchInput) {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input')); // Déclencher le reset UI
+        // Reset label
+        const wrapper = searchInput.closest('.search-works__search-box');
+        const labelWrapper = wrapper?.querySelector('.search-works__input-label-wrapper') as HTMLElement;
+        if (labelWrapper) {
+          labelWrapper.style.opacity = '1';
+          labelWrapper.style.width = 'auto';
+        }
+      }
+      tags.forEach(t => t.classList.remove('search-works__tag--active'));
+      updateURL();
+      filterProjects();
+    }
+
+    // Event Listeners
+    const debouncedFilter = debounce(() => {
+      updateURL();
+      filterProjects();
+    }, 300);
+
     searchInput.addEventListener('input', (e) => {
       searchQuery = (e.target as HTMLInputElement).value;
-      filterProjects();
+      toggleResetButton();
+      debouncedFilter();
     });
 
-    // Gérer les tags
+    // Reset button (croix dans l'input)
+    if (resetButton) {
+      resetButton.addEventListener('click', () => {
+        searchQuery = '';
+        searchInput.value = '';
+        searchInput.focus();
+        toggleResetButton();
+        
+        // Reset label visibility
+        const wrapper = searchInput.closest('.search-works__search-box');
+        const labelWrapper = wrapper?.querySelector('.search-works__input-label-wrapper') as HTMLElement;
+        if (labelWrapper) {
+          labelWrapper.style.opacity = '1';
+          labelWrapper.style.width = 'auto';
+        }
+        
+        updateURL();
+        filterProjects();
+      });
+    }
+
+    // Tags
     tags.forEach((tag) => {
       tag.addEventListener('click', () => {
         const tagValue = tag.getAttribute('data-tag') || '';
         
-        // Toggle du tag
         if (selectedTags.includes(tagValue)) {
           selectedTags = selectedTags.filter(t => t !== tagValue);
           tag.classList.remove('search-works__tag--active');
@@ -173,17 +317,25 @@ const competences = Array.from(allCompetences).sort();
           tag.classList.add('search-works__tag--active');
         }
         
+        updateURL();
         filterProjects();
       });
     });
+
+    // Init
+    readURL();
   }
 
   // Initialiser
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initSearchWorks);
   } else {
-    setTimeout(initSearchWorks, 100);
+    // Petit délai pour s'assurer que le DOM Astro est prêt
+    setTimeout(initSearchWorks, 50);
   }
+  
+  // Réinitialiser lors des navigations Astro (View Transitions)
+  document.addEventListener('astro:page-load', initSearchWorks);
 </script>
 
 <style>
@@ -193,60 +345,12 @@ const competences = Array.from(allCompetences).sort();
   padding: 50px 0;
 }
 
-@media (max-width: 1200px) {
-  .search-works-section {
-    padding: 45px 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .search-works-section {
-    padding: 40px 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .search-works-section {
-    padding: 35px 0;
-  }
-}
-
 .search-works__container {
   width: 100%;
   max-width: 1589px;
   margin: 0 auto;
   padding: 0 109px;
   box-sizing: border-box;
-}
-
-@media (max-width: 1400px) {
-  .search-works__container {
-    padding: 0 80px;
-  }
-}
-
-@media (max-width: 1200px) {
-  .search-works__container {
-    padding: 0 60px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .search-works__container {
-    padding: 0 40px;
-  }
-}
-
-@media (max-width: 768px) {
-  .search-works__container {
-    padding: 0 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .search-works__container {
-    padding: 0 1rem;
-  }
 }
 
 .search-works__wrapper {
@@ -260,37 +364,11 @@ const competences = Array.from(allCompetences).sort();
   flex-wrap: wrap;
 }
 
-@media (max-width: 1200px) {
-  .search-works__wrapper {
-    gap: 30px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .search-works__wrapper {
-    gap: 24px;
-  }
-}
-
-@media (max-width: 768px) {
-  .search-works__wrapper {
-    flex-direction: column;
-    gap: 24px;
-    align-items: stretch;
-  }
-}
-
-@media (max-width: 480px) {
-  .search-works__wrapper {
-    gap: 20px;
-  }
-}
-
-/* Barre de recherche - Style amélioré et responsive */
+/* Barre de recherche */
 .search-works__search-box {
-  padding: 14px 20px 14px 20px;
+  padding: 14px 20px;
   background: #FFFEF8;
-  border: 1.5px solid #5C6D6F;
+  border: 1.5px solid #E5E7EB; /* Gris plus doux par défaut */
   border-radius: 50px;
   display: flex;
   justify-content: flex-start;
@@ -301,37 +379,17 @@ const competences = Array.from(allCompetences).sort();
   max-width: 400px;
   min-height: 48px;
   box-sizing: border-box;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.search-works__search-box:hover {
+  border-color: #B0B8B9;
 }
 
 .search-works__search-box:focus-within {
   border-color: #048B9A;
-  box-shadow: 0 0 0 3px rgba(4, 139, 154, 0.1);
-}
-
-@media (max-width: 1200px) {
-  .search-works__search-box {
-    max-width: 100%;
-    min-width: 280px;
-  }
-}
-
-@media (max-width: 768px) {
-  .search-works__search-box {
-    max-width: 100%;
-    min-width: auto;
-    padding: 12px 18px;
-    gap: 10px;
-    min-height: 44px;
-  }
-}
-
-@media (max-width: 480px) {
-  .search-works__search-box {
-    padding: 10px 16px;
-    gap: 8px;
-    min-height: 42px;
-  }
+  box-shadow: 0 4px 12px rgba(4, 139, 154, 0.1);
 }
 
 .search-works__input-label-wrapper {
@@ -341,124 +399,77 @@ const competences = Array.from(allCompetences).sort();
   flex-shrink: 0;
   position: relative;
   z-index: 0;
+  transition: all 0.2s ease;
 }
 
 .search-works__input-label {
   color: #5C6D6F;
   font-size: 16px;
-  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  font-family: "Nunito Sans Variable", sans-serif;
   font-weight: 400;
-  line-height: 1.2;
   margin: 0;
   white-space: nowrap;
   pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-@media (max-width: 480px) {
-  .search-works__input-label {
-    font-size: 14px;
-  }
 }
 
 .search-works__input-real {
   position: absolute;
   left: 20px;
   top: 0;
-  width: calc(100% - 72px);
+  width: calc(100% - 80px); /* Espace pour icone et reset */
   height: 100%;
   background: transparent;
   border: none;
   outline: none;
   color: #334749;
   font-size: 16px;
-  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
-  font-weight: 400;
-  line-height: 1.2;
+  font-family: "Nunito Sans Variable", sans-serif;
+  font-weight: 600;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   z-index: 1;
 }
 
-.search-works__input-real::placeholder {
-  color: #9CA3AF;
-  opacity: 0.7;
-}
-
-.search-works__input-real:focus,
-.search-works__input-real:not(:placeholder-shown) {
-  padding-left: 0;
-  left: 20px;
-}
-
 .search-works__input-real:focus ~ .search-works__input-label-wrapper,
 .search-works__input-real:not(:placeholder-shown) ~ .search-works__input-label-wrapper {
   opacity: 0;
-  pointer-events: none;
   width: 0;
   overflow: hidden;
-}
-
-@media (max-width: 768px) {
-  .search-works__input-real {
-    left: 18px;
-    width: calc(100% - 66px);
-    font-size: 15px;
-  }
-  
-  .search-works__input-real:focus,
-  .search-works__input-real:not(:placeholder-shown) {
-    left: 18px;
-  }
-}
-
-@media (max-width: 480px) {
-  .search-works__input-real {
-    left: 16px;
-    width: calc(100% - 58px);
-    font-size: 14px;
-  }
-  
-  .search-works__input-real:focus,
-  .search-works__input-real:not(:placeholder-shown) {
-    left: 16px;
-  }
 }
 
 .search-works__icon-wrapper {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: absolute; /* Fixe à droite */
+  right: 20px;
   pointer-events: none;
-  position: relative;
   z-index: 0;
 }
 
-.search-works__icon-wrapper svg {
-  width: 100%;
-  height: 100%;
-  display: block;
+.search-works__reset {
+  position: absolute;
+  right: 45px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5C6D6F;
+  z-index: 2;
+  border-radius: 50%;
+  transition: background 0.2s;
 }
 
-@media (max-width: 768px) {
-  .search-works__icon-wrapper {
-    width: 18px;
-    height: 18px;
-  }
+.search-works__reset:hover {
+  background-color: rgba(0,0,0,0.05);
+  color: #334749;
 }
 
-@media (max-width: 480px) {
-  .search-works__icon-wrapper {
-    width: 16px;
-    height: 16px;
-  }
-}
-
-/* Tags - Style amélioré et responsive */
+/* Tags */
 .search-works__tags {
   display: flex;
   justify-content: flex-end;
@@ -469,126 +480,96 @@ const competences = Array.from(allCompetences).sort();
   max-width: 600px;
 }
 
-@media (max-width: 1200px) {
-  .search-works__tags {
-    max-width: 100%;
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 768px) {
-  .search-works__tags {
-    gap: 6px;
-  }
-}
-
-@media (max-width: 480px) {
-  .search-works__tags {
-    gap: 6px;
-  }
-}
-
 .search-works__tag {
   padding: 8px 16px;
   background: #FFFEF8;
-  border: 1px solid #5C6D6F;
+  border: 1px solid #E5E7EB;
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
+  font-family: "Nunito Sans Variable", sans-serif;
+  color: #5C6D6F;
+  font-size: 14px;
 }
 
 .search-works__tag:hover {
-  background: #f9f9f4;
   border-color: #048B9A;
+  color: #048B9A;
   transform: translateY(-1px);
 }
 
-.search-works__tag:focus {
-  outline: 2px solid #048B9A;
-  outline-offset: 2px;
-}
-
-.search-works__tag:active {
-  transform: translateY(0);
-}
-
-.search-works__tag-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0;
-}
-
-.search-works__tag-text {
-  color: #5C6D6F;
-  font-size: 14px;
-  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
-  font-weight: 400;
-  line-height: 1.2;
-  white-space: nowrap;
-  transition: color 0.2s ease;
-}
-
-@media (max-width: 480px) {
-  .search-works__tag {
-    padding: 6px 12px;
-    border-radius: 16px;
-  }
-  
-  .search-works__tag-text {
-    font-size: 13px;
-  }
-}
-
 .search-works__tag--active {
-  background: #334749;
-  border-color: #334749;
+  background: #048B9A;
+  border-color: #048B9A;
+  color: #FFFEF8 !important;
+}
+
+.search-works__tag--active:hover {
+  background: #037480;
+  border-color: #037480;
+  color: #FFFEF8 !important;
 }
 
 .search-works__tag--active .search-works__tag-text {
   color: #FFFEF8;
 }
 
-.search-works__tag--active:hover {
-  background: #2a3a3c;
-  border-color: #2a3a3c;
-  transform: translateY(-1px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .search-works__tag,
-  .search-works__search-box {
-    transition: none;
-  }
-  
-  .search-works__tag:hover {
-    transform: none;
-  }
-  
-  .search-works__tag--active:hover {
-    transform: none;
-  }
-}
-
-.search-works__no-tags {
-  color: #9CA3AF;
-  font-size: 14px;
-  font-style: italic;
-}
-
-.search-works__no-results {
+/* No results */
+:global(.search-works__no-results) {
   grid-column: 1 / -1;
-  text-align: center;
-  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 60px 20px;
   color: #5C6D6F;
-  font-size: 16px;
-  font-family: "Nunito Sans Variable", "Nunito Sans", system-ui, -apple-system, sans-serif;
+  font-family: "Nunito Sans Variable", sans-serif;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+:global(.search-works__clear-btn) {
+  background: none;
+  border: 1px solid #5C6D6F;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #5C6D6F;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+:global(.search-works__clear-btn:hover) {
+  background: #5C6D6F;
+  color: #fff;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .search-works__container { padding: 0 60px; }
+}
+
+@media (max-width: 900px) {
+  .search-works__wrapper { 
+    flex-direction: column; 
+    align-items: center;
+    gap: 24px;
+  }
+  .search-works__search-box { max-width: 100%; }
+  .search-works__tags { justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  .search-works__container { padding: 0 20px; }
+  .search-works-section { padding: 30px 0; }
 }
 </style>
-
